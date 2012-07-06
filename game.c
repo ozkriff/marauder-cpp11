@@ -575,6 +575,9 @@ static void init_ui_opengl(void) {
   load_texture(DATA("floor.png"), &floor_texture);
   load_texture(DATA("tank.png"), &unit_texture);
   init_pathfinding_module();
+  va_map.v = NULL;
+  va_map.ub_c = NULL;
+  va_map.count = 0;
   build_map_array();
   va_pick.v = NULL;
   va_pick.count = 0;
