@@ -87,9 +87,11 @@ static void build_map_array(void) {
   va_map.count = MAP_X * MAP_Y * 6;
   if (va_map.v) {
     free(va_map.v);
+    va_map.v = NULL;
   }
   if (va_map.t) {
     free(va_map.t);
+    va_map.t = NULL;
   }
   va_map.v = ALLOCATE(va_map.count, V3f);
   va_map.t = ALLOCATE(va_map.count, V2f);
@@ -124,6 +126,7 @@ static void build_walkable_array(Va *v) {
   v->count = MAP_X * MAP_Y * 2; /* TODO calculate real count */
   if (v->v) {
     free(v->v);
+    v->v = NULL;
   }
   v->v = ALLOCATE(v->count, V3f);
   while (inboard(&p)) {
@@ -410,9 +413,11 @@ static void build_picking_tiles_array(Va *va) {
   va->count = MAP_X * MAP_Y * 4;
   if (va->v) {
     free(va->v);
+    va->v = NULL;
   }
   if (va->ub_c) {
     free(va->ub_c);
+    va->ub_c = NULL;
   }
   va->v = ALLOCATE(va->count, V3f);
   va->ub_c = ALLOCATE(va->count * 3, GLubyte);
