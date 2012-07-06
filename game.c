@@ -585,7 +585,6 @@ static void init_ui_opengl(void) {
   clean_map();
   va_walkable_map.v = NULL;
   va_walkable_map.count = 0;
-  build_walkable_array(&va_walkable_map);
   init_units();
 }
 
