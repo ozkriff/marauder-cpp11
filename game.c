@@ -148,7 +148,6 @@ static void build_walkable_array(Va *v) {
   while (inboard(&p)) {
     Tile *t = tile(&p);
     assert(t);
-    /* if (t->cost < 100 && t->parent != D_NONE) { */
     if (t->parent != D_NONE && t->cost < 50) {
       V2f pos1, pos2;
       V2i p2;
