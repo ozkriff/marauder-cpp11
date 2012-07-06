@@ -527,6 +527,25 @@ static void init_camera(void){
   camera.zoom = 50.0f;
 }
 
+static void init_units(void) {
+  {
+    units.head = NULL;
+    units.tail = NULL;
+    units.count = 0;
+    selected_unit = NULL;
+  }
+  {
+    V2i p1 = {1, 1};
+    V2i p2 = {2, 2};
+    V2i p3 = {10, 13};
+    V2i p4 = {3, 5};
+    add_unit(p1);
+    add_unit(p2);
+    add_unit(p3);
+    add_unit(p4);
+  }
+}
+
 /* TODO */
 static void init_ui_opengl(void) {
   srand(time(NULL));
@@ -564,22 +583,7 @@ static void init_ui_opengl(void) {
   va_walkable_map.v = NULL;
   va_walkable_map.count = 0;
   build_walkable_array(&va_walkable_map);
-  {
-    units.head = NULL;
-    units.tail = NULL;
-    units.count = 0;
-    selected_unit = NULL;
-  }
-  {
-    V2i p1 = {1, 1};
-    V2i p2 = {2, 2};
-    V2i p3 = {10, 13};
-    V2i p4 = {3, 5};
-    add_unit(p1);
-    add_unit(p2);
-    add_unit(p3);
-    add_unit(p4);
-  }
+  init_units();
 }
 
 static void cleanup_opengl_ui(void) {
