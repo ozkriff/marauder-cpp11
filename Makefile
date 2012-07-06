@@ -8,8 +8,8 @@ LDFLAGS += -lSDL -lSDL_image
 LDFLAGS += -lGL -lGLU
 LDFLAGS += -lm
 all: rusty_armies
-objects = game.o list.o obj.o misc.o va.o v2i.o v2f.o v3f.o \
-  gl.o camera.o path.o dir.o math.o line2f.o
+objects = game.o list.o obj.o misc.o va.o v2i.o v2f.o \
+  v3f.o gl.o camera.o path.o dir.o math.o line2f.o
 rusty_armies: $(objects)
 	$(CC) $(CFLAGS) $(objects) $(LDFLAGS) -o rusty_armies
 va.o: va.h
