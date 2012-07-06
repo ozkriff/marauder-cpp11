@@ -370,7 +370,7 @@ static void process_key_down_event(
       break;
     }
     case SDLK_EQUALS: {
-      action_points += 10;
+      action_points += 1;
       if (selected_unit) {
         fill_map(&selected_unit->pos);
         build_walkable_array(&va_walkable_map);
@@ -378,7 +378,7 @@ static void process_key_down_event(
       break;
     }
     case SDLK_MINUS: {
-      action_points -= 10;
+      action_points -= 1;
       if (selected_unit) {
         fill_map(&selected_unit->pos);
         build_walkable_array(&va_walkable_map);
