@@ -5,6 +5,7 @@
 #include <math.h>
 #include "bool.h"
 #include "v2f.h"
+#include "math.h"
 
 void fixnum(int min, int max, int *n) {
   assert(n);
