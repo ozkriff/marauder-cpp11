@@ -521,10 +521,10 @@ static void init_ui_opengl(void) {
   is_dragging_map = false;
   action_points = 5;
   init_camera();
-  obj_read(&test_obj_model, DATA("test_tank.obj"));
+  obj_read(&test_obj_model, DATA("tank.obj"));
   obj_build(&va_obj, &test_obj_model);
   load_texture(DATA("floor.png"), &floor_texture);
-  load_texture(DATA("test_tank.png"), &unit_texture);
+  load_texture(DATA("tank.png"), &unit_texture);
   init_pathfinding_module();
   build_map_array();
   va_pick.v = NULL;
