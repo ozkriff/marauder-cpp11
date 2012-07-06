@@ -7,7 +7,7 @@ typedef enum {
   D_NONE, D_ERROR, D_COUNT
 } Dir;
 
-extern int directions[D_COUNT - 1][2];
+extern V2i dir_to_pos_diff[8];
 
 void neib(V2i *neib, const V2i* pos, Dir i);
 Dir m2dir(const V2i *a, const V2i *b);

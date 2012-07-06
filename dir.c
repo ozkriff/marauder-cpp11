@@ -7,8 +7,7 @@
 #include "v2i.h"
 #include "dir.h"
 
-/* TODO rename! */
-int directions[D_COUNT - 1][2] = {
+V2i dir_to_pos_diff[8] = {
   {1, 0},
   {1, 1},
   {0, 1},
@@ -27,7 +26,7 @@ Dir m2dir(const V2i *a, const V2i *b) {
   dx = b->x - a->x;
   dy = b->y - a->y;
   for (i = 0; i < 16; i++) {
-    if (dx == directions[i][0] && dy == directions[i][1])
+    if (dx == dir_to_pos_diff[i].x && dy == dir_to_pos_diff[i].y)
       return (Dir)i;
   }
   return D_ERROR;
@@ -44,7 +43,7 @@ void neib(V2i *neib, const V2i* pos, Dir i) {
         "Wrong direction: pos:[%d %d %d] dir:%d\n",
         pos->x, pos->y, i);
   }
-  dx = directions[i][0];
-  dy = directions[i][1];
+  dx = dir_to_pos_diff[i].x;
+  dy = dir_to_pos_diff[i].y;
   set_v2i(neib, pos->x + dx, pos->y + dy);
 }
