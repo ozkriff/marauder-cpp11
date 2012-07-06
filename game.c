@@ -26,6 +26,11 @@
 
 #define DATA(x) "../data/" x
 
+typedef enum {
+  UM_NORMAL,
+  UM_MOVING
+} Unit_mode;
+
 #define TILE_SIZE 6.0f
 #define TILE_SIZE_2 (TILE_SIZE / 2.0f)
 
@@ -33,6 +38,11 @@ static Tile map[MAP_Y][MAP_X];
 
 int action_points;
 
+static Unit_mode unit_mode;
+static int last_move_index;
+static int current_move_index;
+static List move_path;
+static int move_speed;
 static V2i win_size;
 static V2i mouse_pos;
 static V2i active_tile_pos;
@@ -267,12 +277,88 @@ static void draw_units(void) {
   Node *node;
   FOR_EACH_NODE(units, node) {
     Unit *u = node->data;
-#if 0
     if (unit_mode == UM_MOVING && u == selected_unit) {
       continue;
     }
-#endif
     draw_unit_at(&u->pos);
+  }
+}
+
+static void get_current_moving_nodes(V2i *from, V2i *to) {
+  Node *node;
+  int i = current_move_index;
+  assert(from);
+  assert(to);
+  FOR_EACH_NODE(move_path, node) {
+    i -= move_speed;
+    if (i < 0) {
+      break;
+    }
+  }
+  *from = *(V2i*)node->data;
+  *to = *(V2i*)node->next->data;
+}
+
+static void end_movement(const V2i *pos) {
+  assert(pos);
+  while (move_path.count > 0) {
+    delete_node(&move_path, move_path.head);
+  }
+  unit_mode = UM_NORMAL;
+  selected_unit->pos = *pos;
+  fill_map(pos);
+  build_walkable_array(&va_walkable_map);
+}
+
+static float get_rot_angle(const V2f *a, const V2f *b) {
+  float distance, angle;
+  V2f diff_2;
+  assert(a);
+  assert(b);
+  diff_2.x = (float)pow(b->x - a->x, 2);
+  diff_2.y = (float)pow(b->y - a->y, 2);
+  distance = (float)sqrt(diff_2.x + diff_2.y);
+  angle = rad2deg((float)asin((b->x - a->x) / distance));
+  if (b->y - a->y > 0) {
+    angle = -(180 + angle);
+  }
+  return angle;
+}
+
+static void draw_moving_unit(void) {
+  V2i from_i, to_i;
+  V2f from_f, to_f;
+  int node_index;
+  V2f diff;
+  V2f p;
+  get_current_moving_nodes(&from_i, &to_i);
+  v2i_to_v2f(&from_f, &from_i);
+  v2i_to_v2f(&to_f, &to_i);
+  node_index = current_move_index % move_speed;
+  diff.x = (to_f.x - from_f.x) / move_speed;
+  diff.y = (to_f.y - from_f.y) / move_speed;
+  p.x = from_f.x + diff.x * node_index;
+  p.y = from_f.y + diff.y * node_index;
+  glPushMatrix();
+  glTranslatef(p.x, p.y, 0.0f);
+  glRotatef(90, 0, 0, 1);
+  glRotatef(get_rot_angle(&from_f, &to_f), 0, 0, 1);
+  glEnable(GL_TEXTURE_2D);
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  {
+    glBindTexture(GL_TEXTURE_2D, unit_texture);
+    glTexCoordPointer(2, GL_FLOAT, 0, va_obj.t);
+    glVertexPointer(3, GL_FLOAT, 0, va_obj.v);
+    glDrawArrays(GL_TRIANGLES, 0, va_obj.count);
+  }
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  glDisable(GL_TEXTURE_2D);
+  glDisableClientState(GL_VERTEX_ARRAY);
+  glPopMatrix();
+  current_move_index++;
+  if (current_move_index == last_move_index) {
+    end_movement(&to_i);
   }
 }
 
@@ -281,6 +367,9 @@ static void draw(void) {
   set_camera(&camera);
   draw_map();
   draw_units();
+  if (unit_mode == UM_MOVING) {
+    draw_moving_unit();
+  }
   SDL_GL_SwapBuffers();
 }
 
@@ -295,16 +384,23 @@ static void process_mouse_button_down_event(
   {
     int max_cost = 25;
     Unit *u = unit_at(&active_tile_pos);
+    Tile *t = tile(&active_tile_pos);
     if (u) {
       selected_unit = u;
       fill_map(&active_tile_pos);
       build_walkable_array(&va_walkable_map);
     } else if (selected_unit) {
-      if (tile(&active_tile_pos)->cost < max_cost) {
-        selected_unit->pos = active_tile_pos;
-        fill_map(&active_tile_pos);
-        build_walkable_array(&va_walkable_map);
+      if (t->cost < max_cost && t->parent != D_NONE) {
+        fill_map(&selected_unit->pos);
+        move_path = get_path(active_tile_pos);
+        unit_mode = UM_MOVING;
+        current_move_index = 0;
+        last_move_index = (move_path.count - 1) * move_speed;
+        free(va_walkable_map.v);
+        va_walkable_map.v = NULL;
+        va_walkable_map.count = 0;
       }
+
     }
   }
 }
@@ -586,6 +682,11 @@ static void init_ui_opengl(void) {
   va_walkable_map.v = NULL;
   va_walkable_map.count = 0;
   init_units();
+  unit_mode = UM_NORMAL;
+  move_speed = 10;
+  move_path.head = NULL;
+  move_path.tail = NULL;
+  move_path.count = 0;
 }
 
 static void cleanup_opengl_ui(void) {
