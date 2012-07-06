@@ -371,10 +371,18 @@ static void process_key_down_event(
     }
     case SDLK_EQUALS: {
       action_points += 10;
+      if (selected_unit) {
+        fill_map(&selected_unit->pos);
+        build_walkable_array(&va_walkable_map);
+      }
       break;
     }
     case SDLK_MINUS: {
       action_points -= 10;
+      if (selected_unit) {
+        fill_map(&selected_unit->pos);
+        build_walkable_array(&va_walkable_map);
+      }
       break;
     }
     default: {
