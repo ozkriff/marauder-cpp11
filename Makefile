@@ -7,11 +7,12 @@ CFLAGS += -Werror
 LDFLAGS += -lSDL -lSDL_image
 LDFLAGS += -lGL -lGLU
 LDFLAGS += -lm
-all: rusty_armies
+binname = rusty_armies
+all: $(binname)
 objects = game.o list.o obj.o misc.o va.o v2i.o v2f.o \
   v3f.o gl.o camera.o path.o dir.o math.o line2f.o
-rusty_armies: $(objects)
-	$(CC) $(CFLAGS) $(objects) $(LDFLAGS) -o rusty_armies
+$(binname): $(objects)
+	$(CC) $(CFLAGS) $(objects) $(LDFLAGS) -o $(binname)
 va.o: va.h
 v2i.o: v2i.h
 v2f.o: v2f.h
@@ -29,4 +30,4 @@ misc.o: list.h misc.h
 obj.o: bool.h list.h v2f.h v3f.h math.h va.h obj.h misc.h
 path.o: bool.h list.h v2i.h misc.h dir.h game.h
 clean:
-	rm rusty_armies $(objects) tags -f
+	rm $(binname) $(objects) tags -f
