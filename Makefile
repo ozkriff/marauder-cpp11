@@ -1,5 +1,6 @@
 CC=gcc
 CFLAGS += -g
+CFLAGS += -std=c89
 CFLAGS += -Wall -Wextra --pedantic
 CFLAGS += -Werror
 #CFLAGS += -pg
