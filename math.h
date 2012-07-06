@@ -1,5 +1,9 @@
 /* See LICENSE file for copyright and license details. */
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846264338327
+#endif
+
 void fixnum(int min, int max, int *n);
 int rnd(int min, int max);
 float deg2rad(float deg);
