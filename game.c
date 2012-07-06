@@ -603,7 +603,6 @@ int main(int ac, char **av) {
   UNUSED(av);
   UNUSED(draw_line);
   UNUSED(draw_units_at_f);
-  UNUSED(unit_at);
   do_ui_opengl();
   return 0;
 }
