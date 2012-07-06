@@ -119,14 +119,30 @@ static void build_map_array(void) {
   }
 }
 
+static int calculate_walkable_tiles_count(void) {
+  V2i p = {0, 0};
+  int count = 0;
+  while (inboard(&p)) {
+    Tile *t = tile(&p);
+    if (t->parent != D_NONE && t->cost != 30000) {
+      count++;
+    }
+    inc_v2i(&p);
+  }
+  return count;
+}
+
 static void build_walkable_array(Va *v) {
   V2i p = {0, 0};
   int i = 0; /* tile's index */
   assert(v);
-  v->count = MAP_X * MAP_Y * 2; /* TODO calculate real count */
   if (v->v) {
     free(v->v);
     v->v = NULL;
+  }
+  v->count = calculate_walkable_tiles_count() * 3;
+  if (v->count == 0) {
+    return;
   }
   v->v = ALLOCATE(v->count, V3f);
   while (inboard(&p)) {
