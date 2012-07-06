@@ -571,17 +571,7 @@ static void init_ui_opengl(void) {
   va_pick.v = NULL;
   va_pick.count = 0;
   build_picking_tiles_array(&va_pick);
-  {
-    V2i p = {0, 0};
-    while(inboard(&p)) {
-      Tile *t = tile(&p);
-      assert(t);
-      t->cost = 30000;
-      t->parent = D_NONE;
-      t->is_path = false;
-      inc_v2i(&p);
-    }
-  }
+  clean_map();
   va_walkable_map.v = NULL;
   va_walkable_map.count = 0;
   build_walkable_array(&va_walkable_map);

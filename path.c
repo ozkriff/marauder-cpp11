@@ -93,7 +93,7 @@ static void process_neibor(const V2i *p1, const V2i *p2) {
   }
 }
 
-static void clean_map(void) {
+void clean_map(void) {
   V2i p = {0, 0};
   while (inboard(&p)) {
     Tile *t = tile(&p);
