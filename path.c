@@ -46,7 +46,7 @@ static void push(const V2i *m, Dir parent, float newcost) {
 
 static bool is_queue_empty(const PathQueue *q) {
   assert(q);
-  return q->head != q->tail;
+  return q->head == q->tail;
 }
 
 static V2i pop(void) {
@@ -121,11 +121,10 @@ static void try_to_push_neibors(const V2i *m) {
 void fill_map(const V2i *pos) {
   assert(pos);
   assert(inboard(pos));
-  /* assert(q.size == 0); */
-  /* assert(is_queue_empty(&q)); */
+  assert(is_queue_empty(&q));
   clean_map();
   push(pos, D_NONE, 0); /* Push start position. */
-  while (is_queue_empty(&q)) {
+  while (!is_queue_empty(&q)) {
     V2i p = pop();
     try_to_push_neibors(&p);
   }
@@ -145,6 +144,5 @@ List get_path(V2i pos) {
   /* Add start position. */
   push_node(&path, COPY_TO_HEAP(&pos, V2i));
   tile(&pos)->is_path = true;
-  assert(q.size == 0);
   return path;
 }
