@@ -43,10 +43,10 @@ bool max_f(float a, float b) {
 
 void fix_angle(float *angle) {
   assert(angle);
-  if (*angle < 0) {
-    *angle = 0;
-  } else if (*angle > 360) {
-    *angle = 360;
+  if (*angle < 0.0f) {
+    *angle += 360.0f;
+  } else if (*angle > 360.0f) {
+    *angle -= 360.0f;
   }
 }
 
