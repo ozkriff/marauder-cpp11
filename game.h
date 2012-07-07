@@ -18,8 +18,8 @@ typedef struct {
   Dir dir;
 } Tile;
 
-#define MAP_X 50
-#define MAP_Y 50
+#define MAP_X 20
+#define MAP_Y 20
 
 void inc_v2i(V2i *pos);
 
