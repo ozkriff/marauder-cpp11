@@ -431,6 +431,24 @@ static void process_key_down_event(
       done = true;
       break;
     }
+    case SDLK_t: {
+      Tile *t = tile(&active_tile_pos);
+      t->obstacle = !t->obstacle;
+      build_map_array();
+      if (selected_unit) {
+        fill_map(&selected_unit->pos);
+        build_walkable_array(&va_walkable_map);
+      }
+      break;
+    }
+    case SDLK_u: {
+      add_unit(active_tile_pos);
+      if (selected_unit) {
+        fill_map(&selected_unit->pos);
+        build_walkable_array(&va_walkable_map);
+      }
+      break;
+    }
     case SDLK_d: {
       camera.z_angle += 15;
       fix_angle(&camera.z_angle);
