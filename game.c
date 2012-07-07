@@ -92,7 +92,7 @@ static void v2i_to_v2f(V2f *f, const V2i *i) {
 }
 
 static void build_map_array(void) {
-  V2i p = {0, 0};
+  V2i p;
   int i = 0; /* tile's index */
   va_map.count = MAP_X * MAP_Y * 6;
   if (va_map.v) {
@@ -105,7 +105,7 @@ static void build_map_array(void) {
   }
   va_map.v = ALLOCATE(va_map.count, V3f);
   va_map.t = ALLOCATE(va_map.count, V2f);
-  while (inboard(&p)) {
+  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
     Tile *t = tile(&p);
     float n = TILE_SIZE_2;
     V2f pos;
@@ -125,25 +125,23 @@ static void build_map_array(void) {
     set_xy(va_map.t, 3, i, 1, 1, 1);
     set_xy(va_map.t, 3, i, 2, 0, 1);
     i++;
-    inc_v2i(&p);
   }
 }
 
 static int calculate_walkable_tiles_count(void) {
-  V2i p = {0, 0};
+  V2i p;
   int count = 0;
-  while (inboard(&p)) {
+  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
     Tile *t = tile(&p);
     if (t->parent != D_NONE && t->cost != 30000) {
       count++;
     }
-    inc_v2i(&p);
   }
   return count;
 }
 
 static void build_walkable_array(Va *v) {
-  V2i p = {0, 0};
+  V2i p;
   int i = 0; /* tile's index */
   assert(v);
   if (v->v) {
@@ -155,7 +153,7 @@ static void build_walkable_array(Va *v) {
     return;
   }
   v->v = ALLOCATE(v->count, V3f);
-  while (inboard(&p)) {
+  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
     Tile *t = tile(&p);
     assert(t);
     if (t->parent != D_NONE && t->cost < 50) {
@@ -170,7 +168,6 @@ static void build_walkable_array(Va *v) {
         i++;
       }
     }
-    inc_v2i(&p);
   }
 }
 
@@ -528,7 +525,7 @@ static void sdl_events(void) {
 }
 
 static void build_picking_tiles_array(Va *va) {
-  V2i p = {0, 0};
+  V2i p;
   int i = 0; /* tile index */
   assert(va);
   va->count = MAP_X * MAP_Y * 4;
@@ -542,7 +539,7 @@ static void build_picking_tiles_array(Va *va) {
   }
   va->v = ALLOCATE(va->count, V3f);
   va->ub_c = ALLOCATE(va->count * 3, GLubyte);
-  while (inboard(&p)) {
+  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
     float n = TILE_SIZE_2;
     V2f pos;
     v2i_to_v2f(&pos, &p);
@@ -555,7 +552,6 @@ static void build_picking_tiles_array(Va *va) {
     set_rgb(va->ub_c, 4, i, 2, (GLubyte)p.x, (GLubyte)p.y, 1);
     set_rgb(va->ub_c, 4, i, 3, (GLubyte)p.x, (GLubyte)p.y, 1);
     i++;
-    inc_v2i(&p);
   }
 }
 

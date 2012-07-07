@@ -94,14 +94,13 @@ static void process_neibor(const V2i *p1, const V2i *p2) {
 }
 
 void clean_map(void) {
-  V2i p = {0, 0};
-  while (inboard(&p)) {
+  V2i p;
+  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
     Tile *t = tile(&p);
     assert(t);
     t->cost = 30000;
     t->parent = D_NONE;
     t->is_path = false;
-    inc_v2i(&p);
   }
 }
 
