@@ -671,7 +671,7 @@ static void init_ui_opengl(void) {
       32, SDL_OPENGL | SDL_GL_DOUBLEBUFFER);
   init_opengl();
   is_dragging_map = false;
-  action_points = 5;
+  action_points = 24;
   init_camera();
   obj_read(&test_obj_model, DATA("tank.obj"));
   obj_build(&va_obj, &test_obj_model);
