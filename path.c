@@ -85,7 +85,7 @@ static void process_neibor(const V2i *p1, const V2i *p2) {
   assert(t2);
 #if 1
   {
-    if (unit_at(p2))
+    if (unit_at(p2) || t2->obstacle)
       return;
   }
 #endif

@@ -109,6 +109,9 @@ static void build_map_array(void) {
     Tile *t = tile(&p);
     float n = TILE_SIZE_2;
     V2f pos;
+    if (t->obstacle) {
+      continue;
+    }
     v2i_to_v2f(&pos, &p);
     assert(t);
     set_xy(va_map.v, 3, i, 0, pos.x - n, pos.y - n);
@@ -648,6 +651,14 @@ static void init_units(void) {
   }
 }
 
+static void init_obstacles(void) {
+  V2i p;
+  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+    Tile *t = tile(&p);
+    t->obstacle = ((rand() % 100) > 85);
+  }
+}
+
 /* TODO */
 static void init_ui_opengl(void) {
   srand(time(NULL));
@@ -670,7 +681,6 @@ static void init_ui_opengl(void) {
   va_map.v = NULL;
   va_map.ub_c = NULL;
   va_map.count = 0;
-  build_map_array();
   va_pick.v = NULL;
   va_pick.count = 0;
   build_picking_tiles_array(&va_pick);
@@ -683,6 +693,8 @@ static void init_ui_opengl(void) {
   move_path.head = NULL;
   move_path.tail = NULL;
   move_path.count = 0;
+  init_obstacles();
+  build_map_array();
 }
 
 static void cleanup_opengl_ui(void) {
