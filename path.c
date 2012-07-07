@@ -85,6 +85,8 @@ static void process_neibor(const V2i *p1, const V2i *p2) {
   assert(t2);
 #if 1
   {
+    if (unit_at(p2))
+      return;
   }
 #endif
   newcost = t1->cost + get_tile_cost(p1, p2);

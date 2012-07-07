@@ -171,7 +171,7 @@ static void build_walkable_array(Va *v) {
   }
 }
 
-static Unit* unit_at(const V2i *pos) {
+Unit* unit_at(const V2i *pos) {
   Node *node;
   assert(pos);
   FOR_EACH_NODE(units, node) {
