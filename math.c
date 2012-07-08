@@ -7,6 +7,15 @@
 #include "v2f.h"
 #include "math.h"
 
+void swap_int(int *a, int *b) {
+  int tmp;
+  assert(a);
+  assert(b);
+  tmp = *a;
+  *a = *b;
+  *b = tmp;
+}
+
 void fixnum(int min, int max, int *n) {
   assert(n);
   if (*n < min) {
