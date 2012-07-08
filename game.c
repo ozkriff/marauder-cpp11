@@ -23,6 +23,7 @@
 #include "path.h"
 #include "game.h"
 #include "gl.h"
+#include "los.h"
 
 #define DATA(x) "../data/" x
 
