@@ -218,14 +218,6 @@ static void draw_map(void) {
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-static void draw_line(const Line2f *line) {
-  assert(line);
-  glBegin(GL_LINES);
-  glVertex2f(line->a.x, line->a.y);
-  glVertex2f(line->b.x, line->b.y);
-  glEnd();
-}
-
 static void draw_unit_model(void) {
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
