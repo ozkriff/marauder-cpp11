@@ -83,12 +83,8 @@ static void process_neibor(const V2i *p1, const V2i *p2) {
   Tile *t2 = tile(p2);
   assert(t1);
   assert(t2);
-#if 1
-  {
-    if (unit_at(p2) || t2->obstacle)
-      return;
-  }
-#endif
+  if (unit_at(p2) || t2->obstacle)
+    return;
   newcost = t1->cost + get_tile_cost(p1, p2);
   if (t2->cost > newcost && newcost <= action_points) {
     push(p2, m2dir(p2, p1), newcost);
