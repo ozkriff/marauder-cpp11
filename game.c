@@ -192,6 +192,7 @@ static void add_unit(V2i p) {
   set_node(n, u);
   push_node(&units, n);
   u->pos = p;
+  u->dir = (Dir)rnd(0, 7);
 }
 
 static void draw_map(void) {
@@ -264,6 +265,7 @@ static void draw_unit(const Unit *u) {
   glColor3f(1, 0, 0);
   glPushMatrix();
   glTranslatef(f.x, f.y, 0);
+  glRotatef((u->dir + 4) * 45.0f, 0, 0, 1);
   draw_unit_model();
   glPopMatrix();
 }
@@ -353,6 +355,7 @@ static void draw_moving_unit(void) {
   glPopMatrix();
   current_move_index++;
   if (current_move_index == last_move_index) {
+    selected_unit->dir = m2dir(&from_i, &to_i);
     end_movement(&to_i);
   }
 }
