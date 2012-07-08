@@ -688,9 +688,9 @@ static void init_opengl(void) {
 static void init_camera(void){
   camera.x_angle = 45.0f;
   camera.z_angle = 45.0f;
-  camera.pos.x = 0;
-  camera.pos.y = 0;
-  camera.zoom = 50.0f;
+  camera.pos.x = -20;
+  camera.pos.y = -20;
+  camera.zoom = 100.0f;
 }
 
 static void init_units(void) {
