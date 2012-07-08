@@ -258,7 +258,7 @@ static void draw_map(void) {
   glDisableClientState(GL_VERTEX_ARRAY);
 
   glEnableClientState(GL_VERTEX_ARRAY);
-  glColor3f(1.0f, 0.0f, 0.0f);
+  glColor3f(0.0f, 0.3f, 1.0f);
   glVertexPointer(3, GL_FLOAT, 0, va_walkable_map.v);
   glDrawArrays(GL_LINES, 0, va_walkable_map.count);
   glDisableClientState(GL_VERTEX_ARRAY);
