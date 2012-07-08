@@ -339,8 +339,7 @@ static void draw_moving_unit(void) {
   p.y = from_f.y + diff.y * node_index;
   glPushMatrix();
   glTranslatef(p.x, p.y, 0.0f);
-  glRotatef(90, 0, 0, 1);
-  glRotatef(get_rot_angle(&from_f, &to_f), 0, 0, 1);
+  glRotatef((m2dir(&from_i, &to_i) + 4) * 45.0f, 0, 0, 1);
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -750,6 +749,7 @@ int main(int ac, char **av) {
   UNUSED(av);
   UNUSED(draw_line);
   UNUSED(draw_units_at_f);
+  UNUSED(get_rot_angle);
   do_ui_opengl();
   return 0;
 }
