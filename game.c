@@ -238,15 +238,6 @@ static void draw_unit_model(void) {
   glDisable(GL_TEXTURE_2D);
 }
 
-static void draw_unit_at_f(const V2f *p) {
-  assert(p);
-  glColor3f(1, 0, 0);
-  glPushMatrix();
-  glTranslatef(p->x, p->y, 0);
-  draw_unit_model();
-  glPopMatrix();
-}
-
 static void draw_units_at_f(const V2f *p, int n) {
   int i;
   assert(p);
@@ -266,11 +257,15 @@ static void draw_units_at_f(const V2f *p, int n) {
   glPopMatrix();
 }
 
-static void draw_unit_at(const V2i *p) {
+static void draw_unit(const Unit *u) {
   V2f f;
-  assert(p);
-  v2i_to_v2f(&f, p);
-  draw_unit_at_f(&f);
+  assert(u);
+  v2i_to_v2f(&f, &u->pos);
+  glColor3f(1, 0, 0);
+  glPushMatrix();
+  glTranslatef(f.x, f.y, 0);
+  draw_unit_model();
+  glPopMatrix();
 }
 
 static void draw_units(void) {
@@ -280,7 +275,7 @@ static void draw_units(void) {
     if (unit_mode == UM_MOVING && u == selected_unit) {
       continue;
     }
-    draw_unit_at(&u->pos);
+    draw_unit(u);
   }
 }
 
