@@ -724,7 +724,6 @@ static void do_ui_opengl(void) {
 int main(int ac, char **av) {
   UNUSED(ac);
   UNUSED(av);
-  UNUSED(draw_line);
   UNUSED(draw_units_at_f);
   do_ui_opengl();
   return 0;
