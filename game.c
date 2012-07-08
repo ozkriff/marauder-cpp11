@@ -55,6 +55,7 @@ static GLuint floor_texture;
 static GLuint unit_texture;
 static Obj_model test_obj_model;
 static Va va_map;
+static Va va_obstacles;
 static Va va_walkable_map;
 static Va va_obj;
 static Va va_pick;
@@ -111,6 +112,46 @@ static void build_map_array(Va *v) {
     float n = TILE_SIZE_2;
     V2f pos;
     if (t->obstacle) {
+      continue;
+    }
+    v2i_to_v2f(&pos, &p);
+    assert(t);
+    set_xy(v->v, 3, i, 0, pos.x - n, pos.y - n);
+    set_xy(v->v, 3, i, 1, pos.x + n, pos.y - n);
+    set_xy(v->v, 3, i, 2, pos.x + n, pos.y + n);
+    set_xy(v->t, 3, i, 0, 0, 0);
+    set_xy(v->t, 3, i, 1, 1, 0);
+    set_xy(v->t, 3, i, 2, 1, 1);
+    i++;
+    set_xy(v->v, 3, i, 0, pos.x - n, pos.y - n);
+    set_xy(v->v, 3, i, 1, pos.x + n, pos.y + n);
+    set_xy(v->v, 3, i, 2, pos.x - n, pos.y + n);
+    set_xy(v->t, 3, i, 0, 0, 0);
+    set_xy(v->t, 3, i, 1, 1, 1);
+    set_xy(v->t, 3, i, 2, 0, 1);
+    i++;
+  }
+}
+
+static void build_obstacles_array(Va *v) {
+  V2i p;
+  int i = 0; /* tile's index */
+  v->count = MAP_X * MAP_Y * 6;
+  if (v->v) {
+    free(v->v);
+    v->v = NULL;
+  }
+  if (v->t) {
+    free(v->t);
+    v->t = NULL;
+  }
+  v->v = ALLOCATE(v->count, V3f);
+  v->t = ALLOCATE(v->count, V2f);
+  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+    Tile *t = tile(&p);
+    float n = TILE_SIZE_2;
+    V2f pos;
+    if (!t->obstacle) {
       continue;
     }
     v2i_to_v2f(&pos, &p);
@@ -206,6 +247,11 @@ static void draw_map(void) {
   glTexCoordPointer(2, GL_FLOAT, 0, va_map.t);
   glVertexPointer(2, GL_FLOAT, 0, va_map.v);
   glDrawArrays(GL_TRIANGLES, 0, va_map.count);
+
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glTexCoordPointer(2, GL_FLOAT, 0, va_obstacles.t);
+  glVertexPointer(2, GL_FLOAT, 0, va_obstacles.v);
+  glDrawArrays(GL_TRIANGLES, 0, va_obstacles.count);
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisable(GL_TEXTURE_2D);
@@ -431,6 +477,7 @@ static void process_key_down_event(
       Tile *t = tile(&active_tile_pos);
       t->obstacle = !t->obstacle;
       build_map_array(&va_map);
+      build_obstacles_array(&va_obstacles);
       if (selected_unit) {
         fill_map(&selected_unit->pos);
         build_walkable_array(&va_walkable_map);
@@ -709,6 +756,7 @@ static void init_ui_opengl(void) {
   move_path.count = 0;
   init_obstacles();
   build_map_array(&va_map);
+  build_obstacles_array(&va_obstacles);
 }
 
 static void cleanup_opengl_ui(void) {
