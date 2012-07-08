@@ -398,7 +398,6 @@ static void process_mouse_button_down_event(
         va_walkable_map.v = NULL;
         va_walkable_map.count = 0;
       }
-
     }
   }
 }
