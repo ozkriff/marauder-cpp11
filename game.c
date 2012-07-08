@@ -701,14 +701,16 @@ static void init_units(void) {
     selected_unit = NULL;
   }
   {
-    V2i p1 = {1, 1};
-    V2i p2 = {2, 2};
-    V2i p3 = {10, 13};
-    V2i p4 = {3, 5};
-    add_unit(p1);
-    add_unit(p2);
-    add_unit(p3);
-    add_unit(p4);
+    int i;
+    for (i = 0; i < 20; i++) {
+      V2i p;
+      set_v2i(&p, rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
+      if (!tile(&p)->obstacle && !unit_at(&p)) {
+        add_unit(p);
+      } else {
+        i--;
+      }
+    }
   }
 }
 
