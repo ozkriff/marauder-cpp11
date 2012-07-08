@@ -4,6 +4,7 @@
 #define M_PI 3.14159265358979323846264338327
 #endif
 
+float get_rot_angle(const V2f *a, const V2f *b);
 void fixnum(int min, int max, int *n);
 int rnd(int min, int max);
 float deg2rad(float deg);

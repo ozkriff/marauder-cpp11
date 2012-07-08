@@ -308,21 +308,6 @@ static void end_movement(const V2i *pos) {
   build_walkable_array(&va_walkable_map);
 }
 
-static float get_rot_angle(const V2f *a, const V2f *b) {
-  float distance, angle;
-  V2f diff_2;
-  assert(a);
-  assert(b);
-  diff_2.x = (float)pow(b->x - a->x, 2);
-  diff_2.y = (float)pow(b->y - a->y, 2);
-  distance = (float)sqrt(diff_2.x + diff_2.y);
-  angle = rad2deg((float)asin((b->x - a->x) / distance));
-  if (b->y - a->y > 0) {
-    angle = -(180 + angle);
-  }
-  return angle;
-}
-
 static void draw_moving_unit(void) {
   V2i from_i, to_i;
   V2f from_f, to_f;
@@ -749,7 +734,6 @@ int main(int ac, char **av) {
   UNUSED(av);
   UNUSED(draw_line);
   UNUSED(draw_units_at_f);
-  UNUSED(get_rot_angle);
   do_ui_opengl();
   return 0;
 }
