@@ -92,20 +92,20 @@ static void v2i_to_v2f(V2f *f, const V2i *i) {
   f->y = i->y * TILE_SIZE;
 }
 
-static void build_map_array(void) {
+static void build_map_array(Va *v) {
   V2i p;
   int i = 0; /* tile's index */
-  va_map.count = MAP_X * MAP_Y * 6;
-  if (va_map.v) {
-    free(va_map.v);
-    va_map.v = NULL;
+  v->count = MAP_X * MAP_Y * 6;
+  if (v->v) {
+    free(v->v);
+    v->v = NULL;
   }
-  if (va_map.t) {
-    free(va_map.t);
-    va_map.t = NULL;
+  if (v->t) {
+    free(v->t);
+    v->t = NULL;
   }
-  va_map.v = ALLOCATE(va_map.count, V3f);
-  va_map.t = ALLOCATE(va_map.count, V2f);
+  v->v = ALLOCATE(v->count, V3f);
+  v->t = ALLOCATE(v->count, V2f);
   for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
     Tile *t = tile(&p);
     float n = TILE_SIZE_2;
@@ -115,19 +115,19 @@ static void build_map_array(void) {
     }
     v2i_to_v2f(&pos, &p);
     assert(t);
-    set_xy(va_map.v, 3, i, 0, pos.x - n, pos.y - n);
-    set_xy(va_map.v, 3, i, 1, pos.x + n, pos.y - n);
-    set_xy(va_map.v, 3, i, 2, pos.x + n, pos.y + n);
-    set_xy(va_map.t, 3, i, 0, 0, 0);
-    set_xy(va_map.t, 3, i, 1, 1, 0);
-    set_xy(va_map.t, 3, i, 2, 1, 1);
+    set_xy(v->v, 3, i, 0, pos.x - n, pos.y - n);
+    set_xy(v->v, 3, i, 1, pos.x + n, pos.y - n);
+    set_xy(v->v, 3, i, 2, pos.x + n, pos.y + n);
+    set_xy(v->t, 3, i, 0, 0, 0);
+    set_xy(v->t, 3, i, 1, 1, 0);
+    set_xy(v->t, 3, i, 2, 1, 1);
     i++;
-    set_xy(va_map.v, 3, i, 0, pos.x - n, pos.y - n);
-    set_xy(va_map.v, 3, i, 1, pos.x + n, pos.y + n);
-    set_xy(va_map.v, 3, i, 2, pos.x - n, pos.y + n);
-    set_xy(va_map.t, 3, i, 0, 0, 0);
-    set_xy(va_map.t, 3, i, 1, 1, 1);
-    set_xy(va_map.t, 3, i, 2, 0, 1);
+    set_xy(v->v, 3, i, 0, pos.x - n, pos.y - n);
+    set_xy(v->v, 3, i, 1, pos.x + n, pos.y + n);
+    set_xy(v->v, 3, i, 2, pos.x - n, pos.y + n);
+    set_xy(v->t, 3, i, 0, 0, 0);
+    set_xy(v->t, 3, i, 1, 1, 1);
+    set_xy(v->t, 3, i, 2, 0, 1);
     i++;
   }
 }
@@ -430,7 +430,7 @@ static void process_key_down_event(
     case SDLK_t: {
       Tile *t = tile(&active_tile_pos);
       t->obstacle = !t->obstacle;
-      build_map_array();
+      build_map_array(&va_map);
       if (selected_unit) {
         fill_map(&selected_unit->pos);
         build_walkable_array(&va_walkable_map);
@@ -708,7 +708,7 @@ static void init_ui_opengl(void) {
   move_path.tail = NULL;
   move_path.count = 0;
   init_obstacles();
-  build_map_array();
+  build_map_array(&va_map);
 }
 
 static void cleanup_opengl_ui(void) {
