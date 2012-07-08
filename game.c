@@ -224,7 +224,7 @@ static void draw_line(const Line2f *line) {
   glEnd();
 }
 
-static void draw_unit(void) {
+static void draw_unit_model(void) {
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -243,7 +243,7 @@ static void draw_unit_at_f(const V2f *p) {
   glColor3f(1, 0, 0);
   glPushMatrix();
   glTranslatef(p->x, p->y, 0);
-  draw_unit();
+  draw_unit_model();
   glPopMatrix();
 }
 
@@ -260,7 +260,7 @@ static void draw_units_at_f(const V2f *p, int n) {
     glPushMatrix();
     glRotatef(i * 360.0f / (float)n, 0, 0, 1);
     glTranslatef(TILE_SIZE_2 * 1.6f, TILE_SIZE_2 * 1.6f, 0);
-    draw_unit();
+    draw_unit_model();
     glPopMatrix();
   }
   glPopMatrix();
