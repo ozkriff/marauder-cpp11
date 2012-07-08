@@ -748,13 +748,13 @@ static void init_ui_opengl(void) {
   clean_map();
   va_walkable_map.v = NULL;
   va_walkable_map.count = 0;
-  init_units();
   unit_mode = UM_NORMAL;
   move_speed = 10;
   move_path.head = NULL;
   move_path.tail = NULL;
   move_path.count = 0;
   init_obstacles();
+  init_units();
   build_map_array(&va_map);
   build_obstacles_array(&va_obstacles);
 }
