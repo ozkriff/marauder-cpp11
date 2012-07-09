@@ -696,18 +696,16 @@ static void init_camera(void){
 }
 
 static void init_units(void) {
+  int i;
   units = empty_list;
   selected_unit = NULL;
-  {
-    int i;
-    for (i = 0; i < 20; i++) {
-      V2i p;
-      set_v2i(&p, rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
-      if (!tile(&p)->obstacle && !unit_at(&p)) {
-        add_unit(p);
-      } else {
-        i--;
-      }
+  for (i = 0; i < 20; i++) {
+    V2i p;
+    set_v2i(&p, rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
+    if (!tile(&p)->obstacle && !unit_at(&p)) {
+      add_unit(p);
+    } else {
+      i--;
     }
   }
 }
