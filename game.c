@@ -370,6 +370,7 @@ static void draw_moving_unit(void) {
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   {
+    glColor3f(1, 1, 1);
     glBindTexture(GL_TEXTURE_2D, unit_texture);
     glTexCoordPointer(2, GL_FLOAT, 0, va_obj.t);
     glVertexPointer(3, GL_FLOAT, 0, va_obj.v);
