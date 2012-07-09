@@ -10,7 +10,6 @@ typedef struct {
 
 typedef struct {
   Unit *unit_id;
-  bool is_path;
   bool obstacle;
   /* TODO: move to pathfinding */
   int cost;

@@ -98,7 +98,6 @@ void clean_map(void) {
     assert(t);
     t->cost = 30000;
     t->parent = D_NONE;
-    t->is_path = false;
   }
 }
 
@@ -134,12 +133,10 @@ List get_path(V2i pos) {
   assert(inboard(&pos));
   while (tile(&pos)->cost != 0) {
     push_node(&path, COPY_TO_HEAP(&pos, V2i));
-    tile(&pos)->is_path = true;
     dir = tile(&pos)->parent;
     neib(&pos, &pos, dir);
   }
   /* Add start position. */
   push_node(&path, COPY_TO_HEAP(&pos, V2i));
-  tile(&pos)->is_path = true;
   return path;
 }
