@@ -32,6 +32,9 @@ typedef enum {
   UM_MOVING
 } Unit_mode;
 
+static const Va empty_va = {NULL, NULL, NULL, 0};
+static const List empty_list = {NULL, NULL, 0};
+
 #define TILE_SIZE 6.0f
 #define TILE_SIZE_2 (TILE_SIZE / 2.0f)
 
@@ -418,8 +421,7 @@ static void process_mouse_button_down_event(
         current_move_index = 0;
         last_move_index = (move_path.count - 1) * move_speed;
         free(va_walkable_map.v);
-        va_walkable_map.v = NULL;
-        va_walkable_map.count = 0;
+        va_walkable_map = empty_va;
       }
     }
   }
@@ -694,12 +696,8 @@ static void init_camera(void){
 }
 
 static void init_units(void) {
-  {
-    units.head = NULL;
-    units.tail = NULL;
-    units.count = 0;
-    selected_unit = NULL;
-  }
+  units = empty_list;
+  selected_unit = NULL;
   {
     int i;
     for (i = 0; i < 20; i++) {
@@ -741,20 +739,14 @@ static void init_ui_opengl(void) {
   load_texture(DATA("floor.png"), &floor_texture);
   load_texture(DATA("tank.png"), &unit_texture);
   init_pathfinding_module();
-  va_map.v = NULL;
-  va_map.ub_c = NULL;
-  va_map.count = 0;
-  va_pick.v = NULL;
-  va_pick.count = 0;
+  va_map = empty_va;
+  va_pick = empty_va;
   build_picking_tiles_array(&va_pick);
   clean_map();
-  va_walkable_map.v = NULL;
-  va_walkable_map.count = 0;
+  va_walkable_map = empty_va;
   unit_mode = UM_NORMAL;
   move_speed = 10;
-  move_path.head = NULL;
-  move_path.tail = NULL;
-  move_path.count = 0;
+  move_path = empty_list;
   init_obstacles();
   init_units();
   build_map_array(&va_map);
