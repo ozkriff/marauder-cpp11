@@ -448,6 +448,24 @@ static void kill_unit(Unit *u) {
   delete_node(&units, data2node(units, u));
 }
 
+static void shoot(void) {
+  LosData br;
+  V2i p = {0, 0};
+  Unit *u = unit_at(&active_tile_pos);
+  if (!selected_unit || !u)
+    return;
+  /* calculate line of sight */
+  los_init(&br, &selected_unit->pos,
+      &active_tile_pos);
+  los_get_next(&br, &p); /* Skip shooting unit. */
+  do {
+    if (unit_at(&p) || tile(&p)->obstacle)
+      return;
+    los_get_next(&br, &p);
+  } while (!los_is_finished(&br));
+  kill_unit(u);
+}
+
 static void process_key_down_event(
     const SDL_KeyboardEvent *e)
 {
@@ -459,21 +477,7 @@ static void process_key_down_event(
       break;
     }
     case SDLK_f: {
-      Unit *u = unit_at(&active_tile_pos);
-      if (selected_unit && u) {
-        V2i p = {0, 0};
-        /* calculate line of sight */
-        LosData br;
-        los_init(&br, &selected_unit->pos,
-            &active_tile_pos);
-        los_get_next(&br, &p); /* Skip shooting unit. */
-        do {
-          if (unit_at(&p) || tile(&p)->obstacle)
-            return;
-          los_get_next(&br, &p);
-        } while (!los_is_finished(&br));
-        kill_unit(u);
-      }
+      shoot();
       break;
     }
     case SDLK_t: {
