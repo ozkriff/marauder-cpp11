@@ -68,9 +68,9 @@ static int get_tile_cost(const V2i *t, const V2i *nb) {
   dy = abs(t->y - nb->y);
   assert(dx <= 1);
   assert(dy <= 1);
-  if (dx != 0) 
+  if (dx != 0)
     cost++;
-  if (dy != 0) 
+  if (dy != 0)
     cost++;
   return cost;
 }
