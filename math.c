@@ -42,6 +42,7 @@ void fixnum(int min, int max, int *n) {
 
 int rnd(int min, int max) {
   assert(min < max);
+  max++;
   if (max != min) {
     return rand() % (max - min) + min;
   } else {
