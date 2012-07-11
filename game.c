@@ -888,9 +888,22 @@ static void init_players(void) {
   init_local_players(2, id);
 }
 
+static void init_logic(void) {
+  srand(time(NULL));
+  action_points = 24;
+  init_pathfinding_module();
+  clean_map();
+  move_path = empty_list;
+  players = empty_list;
+  init_players();
+  init_obstacles();
+  init_units();
+  calculate_fow();
+}
+
 /* TODO */
 static void init_ui_opengl(void) {
-  srand(time(NULL));
+  init_logic();
   done = false;
   set_v2i(&win_size, 400, 200);
   set_v2i(&active_tile_pos, 0, 0);
@@ -900,29 +913,20 @@ static void init_ui_opengl(void) {
       32, SDL_OPENGL | SDL_GL_DOUBLEBUFFER);
   init_opengl();
   is_dragging_map = false;
-  action_points = 24;
   init_camera();
   obj_read(&test_obj_model, DATA("tank.obj"));
   obj_build(&va_obj, &test_obj_model);
   load_texture(DATA("floor.png"), &floor_texture);
   load_texture(DATA("tank.png"), &unit_texture);
-  init_pathfinding_module();
   va_map = empty_va;
   va_pick = empty_va;
   build_picking_tiles_array(&va_pick);
-  clean_map();
   va_walkable_map = empty_va;
   unit_mode = UM_NORMAL;
   move_speed = 10;
-  move_path = empty_list;
-  players = empty_list;
-  init_players();
-  init_obstacles();
-  init_units();
   build_map_array(&va_map);
   build_obstacles_array(&va_obstacles);
   va_fow = empty_va;
-  calculate_fow();
   build_fow_array(&va_fow);
 }
 
