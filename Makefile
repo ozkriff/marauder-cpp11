@@ -16,21 +16,23 @@ objects = game.o list.o obj.o misc.o va.o v2i.o v2f.o \
 $(binname): $(objects)
 	$(CC) $(CFLAGS) $(objects) $(LDFLAGS) -o $(binname)
 va.o: va.h
-v2i.o: v2i.h
+v2i.o: bool.h v2i.h
 v2f.o: v2f.h
 v3f.o: v3f.h
 camera.o: bool.h list.h misc.h v2f.h v2i.h dir.h math.h \
   camera.h
 dir.o: bool.h list.h misc.h v2i.h dir.h
 game.o: bool.h list.h v2i.h v3f.h v2f.h math.h dir.h \
-  line2f.h va.h obj.h misc.h camera.h path.h game.h gl.h
+  line2f.h va.h obj.h misc.h camera.h game.h path.h \
+  gl.h los.h
 gl.o: bool.h gl.h list.h misc.h
 line2f.o: v2f.h line2f.h
 list.o: bool.h list.h
 math.o: bool.h v2f.h
 misc.o: list.h misc.h
-obj.o: bool.h list.h v2f.h v3f.h math.h va.h obj.h misc.h
+obj.o: bool.h list.h v2i.h v2f.h v3f.h math.h va.h \
+  obj.h misc.h
 path.o: bool.h list.h v2i.h misc.h dir.h game.h
-los.o: los.h
+los.o: bool.h v2i.h v2f.h los.h math.h
 clean:
 	rm $(binname) $(objects) tags -f
