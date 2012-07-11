@@ -225,13 +225,21 @@ static bool is_los_clear(const V2i *p1, const V2i *p2) {
   return true;
 }
 
+static void clean_fow(void) {
+  V2i p;
+  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+    Tile *t = tile(&p);
+    t->fow = 0;
+  }
+}
+
 static void calculate_fow(void) {
   V2i p;
   assert(current_player);
+  clean_fow();
   for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
     Tile *t = tile(&p);
     Node *node;
-    t->fow = 0;
     FOR_EACH_NODE(units, node) {
       Unit *u = node->data;
       bool is_player_ok = (u->player_id == current_player->id);
@@ -893,6 +901,7 @@ static void init_logic(void) {
   action_points = 24;
   init_pathfinding_module();
   clean_map();
+  clean_fow();
   move_path = empty_list;
   players = empty_list;
   init_players();
