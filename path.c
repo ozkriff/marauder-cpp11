@@ -75,6 +75,30 @@ static int get_tile_cost(const V2i *t, const V2i *nb) {
   return cost;
 }
 
+static bool can_move_there(const V2i *p1, const V2i *p2) {
+  V2i neib_l, neib_r;
+  Dir d;
+  assert(p1);
+  assert(p2);
+  d = m2dir(p1, p2);
+  if (!dir_is_diagonal(d)) {
+    return true;
+  }
+  get_dir_neib(&neib_l, p1, p2, -1);
+  get_dir_neib(&neib_r, p1, p2, +1);
+#if 1
+  if ((inboard(&neib_l) && tile(&neib_l)->obstacle)
+      || (inboard(&neib_r) && tile(&neib_r)->obstacle))
+#else
+  if ((inboard(&neib_l) && tile(&neib_l)->obstacle)
+      && (inboard(&neib_r) && tile(&neib_r)->obstacle))
+#endif
+  {
+    return false;
+  }
+  return true;
+}
+
 /* TODO rename */
 /* p1 - orig_pos, p2 - neib pos */
 static void process_neibor(const V2i *p1, const V2i *p2) {
@@ -83,8 +107,11 @@ static void process_neibor(const V2i *p1, const V2i *p2) {
   Tile *t2 = tile(p2);
   assert(t1);
   assert(t2);
-  if (unit_at(p2) || t2->obstacle)
+  if (unit_at(p2) || t2->obstacle
+      || !can_move_there(p1, p2))
+  {
     return;
+  }
   newcost = t1->cost + get_tile_cost(p1, p2);
   if (t2->cost > newcost && newcost <= action_points) {
     push(p2, m2dir(p2, p1), newcost);

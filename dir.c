@@ -52,3 +52,24 @@ bool dir_is_diagonal(Dir d) {
   return d != D_UP && d != D_RIGHT
       && d != D_DOWN && d != D_LEFT;
 }
+
+/* TODO rename */
+void get_dir_neib(
+    V2i *n, const V2i *p1, const V2i *p2, int add_me)
+{
+  int d;
+  assert(n);
+  assert(p1);
+  assert(p2);
+  assert(add_me >= -7);
+  assert(add_me <= 7);
+  d = (int)m2dir(p1, p2) + add_me;
+  while (d > 7) {
+    d -= 8;
+  }
+  while (d < 0) {
+    d += 8;
+  }
+  assert(d >= 0 && d <= 7);
+  neib(n, p1, (Dir)d);
+}
