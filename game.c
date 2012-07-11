@@ -520,6 +520,8 @@ static void draw(void) {
   SDL_GL_SwapBuffers();
 }
 
+static void shoot(void); /* TODO */
+
 static void process_mouse_button_down_event(
     const SDL_MouseButtonEvent *e)
 {
@@ -541,7 +543,9 @@ static void process_mouse_button_down_event(
       fill_map(selected_unit);
       build_walkable_array(&va_walkable_map);
     } else if (selected_unit) {
-      if (t->cost < max_cost && t->parent != D_NONE) {
+      if (u && u->player_id != current_player->id) {
+        shoot();
+      } else if (t->cost < max_cost && t->parent != D_NONE) {
         fill_map(selected_unit);
         move_path = get_path(active_tile_pos);
         unit_mode = UM_MOVING;
@@ -606,10 +610,6 @@ static void process_key_down_event(
     case SDLK_ESCAPE:
     case SDLK_q: {
       done = true;
-      break;
-    }
-    case SDLK_f: {
-      shoot();
       break;
     }
     case SDLK_c: {
