@@ -501,20 +501,20 @@ static void kill_unit(Unit *u) {
 }
 
 static void shoot(void) {
-  LosData br;
+  LosData los_data;
   V2i p = {0, 0};
   Unit *u = unit_at(&active_tile_pos);
   if (!selected_unit || !u)
     return;
   /* calculate line of sight */
-  los_init(&br, &selected_unit->pos,
+  los_init(&los_data, &selected_unit->pos,
       &active_tile_pos);
-  los_get_next(&br, &p); /* Skip shooting unit. */
+  los_get_next(&los_data, &p); /* Skip shooting unit. */
   do {
     if (unit_at(&p) || tile(&p)->obstacle)
       return;
-    los_get_next(&br, &p);
-  } while (!los_is_finished(&br));
+    los_get_next(&los_data, &p);
+  } while (!los_is_finished(&los_data));
   kill_unit(u);
 }
 
