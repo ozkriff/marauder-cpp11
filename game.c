@@ -20,8 +20,8 @@
 #include "obj.h"
 #include "misc.h"
 #include "camera.h"
-#include "path.h"
 #include "game.h"
+#include "path.h"
 #include "gl.h"
 #include "los.h"
 
@@ -395,7 +395,7 @@ static void end_movement(const V2i *pos) {
   }
   unit_mode = UM_NORMAL;
   selected_unit->pos = *pos;
-  fill_map(pos);
+  fill_map(selected_unit);
   build_walkable_array(&va_walkable_map);
 }
 
@@ -464,11 +464,11 @@ static void process_mouse_button_down_event(
     assert(current_player);
     if (u && u->player_id == current_player->id) {
       selected_unit = u;
-      fill_map(&active_tile_pos);
+      fill_map(selected_unit);
       build_walkable_array(&va_walkable_map);
     } else if (selected_unit) {
       if (t->cost < max_cost && t->parent != D_NONE) {
-        fill_map(&selected_unit->pos);
+        fill_map(selected_unit);
         move_path = get_path(active_tile_pos);
         unit_mode = UM_MOVING;
         current_move_index = 0;
@@ -538,7 +538,7 @@ static void process_key_down_event(
       build_map_array(&va_map);
       build_obstacles_array(&va_obstacles);
       if (selected_unit) {
-        fill_map(&selected_unit->pos);
+        fill_map(selected_unit);
         build_walkable_array(&va_walkable_map);
       }
       break;
@@ -559,7 +559,7 @@ static void process_key_down_event(
     case SDLK_u: {
       add_unit(active_tile_pos, current_player->id);
       if (selected_unit) {
-        fill_map(&selected_unit->pos);
+        fill_map(selected_unit);
         build_walkable_array(&va_walkable_map);
       }
       break;
@@ -601,7 +601,7 @@ static void process_key_down_event(
     case SDLK_EQUALS: {
       action_points += 1;
       if (selected_unit) {
-        fill_map(&selected_unit->pos);
+        fill_map(selected_unit);
         build_walkable_array(&va_walkable_map);
       }
       break;
@@ -609,7 +609,7 @@ static void process_key_down_event(
     case SDLK_MINUS: {
       action_points -= 1;
       if (selected_unit) {
-        fill_map(&selected_unit->pos);
+        fill_map(selected_unit);
         build_walkable_array(&va_walkable_map);
       }
       break;

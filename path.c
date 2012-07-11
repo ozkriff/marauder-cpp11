@@ -114,12 +114,11 @@ static void try_to_push_neibors(const V2i *m) {
   }
 }
 
-void fill_map(const V2i *pos) {
-  assert(pos);
-  assert(inboard(pos));
+void fill_map(const Unit *u) {
+  assert(u);
   assert(is_queue_empty(&q));
   clean_map();
-  push(pos, D_NONE, 0); /* Push start position. */
+  push(&u->pos, D_NONE, 0); /* Push start position. */
   while (!is_queue_empty(&q)) {
     V2i p = pop();
     try_to_push_neibors(&p);
