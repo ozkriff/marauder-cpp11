@@ -6,6 +6,7 @@
 #include <GL/gl.h>
 #include "bool.h"
 #include "list.h"
+#include "v2i.h"
 #include "v2f.h"
 #include "v3f.h"
 #include "math.h"

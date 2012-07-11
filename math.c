@@ -5,6 +5,7 @@
 #include <math.h>
 #include "bool.h"
 #include "v2f.h"
+#include "v2i.h"
 #include "math.h"
 
 float get_rot_angle(const V2f *a, const V2f *b) {
@@ -82,6 +83,15 @@ float dist(const V2f *a, const V2f *b) {
   dx = abs(b->x - a->x);
   dy = abs(b->y - a->y);
   return (float)sqrt(pow(dx, 2) + pow(dy, 2));
+}
+
+int dist_i(const V2i *a, const V2i *b) {
+  int dx, dy;
+  assert(a);
+  assert(b);
+  dx = abs(b->x - a->x);
+  dy = abs(b->y - a->y);
+  return (int)sqrt(pow(dx, 2) + pow(dy, 2));
 }
 
 void rotate_point_around_point(
