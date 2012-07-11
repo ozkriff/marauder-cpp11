@@ -532,6 +532,14 @@ static void process_key_down_event(
       shoot();
       break;
     }
+    case SDLK_c: {
+      V2f unit_pos;
+      if (!selected_unit)
+        return;
+      v2i_to_v2f(&unit_pos, &selected_unit->pos);
+      set_v2f(&camera.pos, -unit_pos.x, -unit_pos.y);
+      break;
+    }
     case SDLK_t: {
       Tile *t = tile(&active_tile_pos);
       t->obstacle = !t->obstacle;
