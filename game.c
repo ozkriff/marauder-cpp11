@@ -533,6 +533,9 @@ static void process_mouse_button_down_event(
     Unit *u = unit_at(&active_tile_pos);
     Tile *t = tile(&active_tile_pos);
     assert(current_player);
+    if (unit_mode != UM_NORMAL) {
+      return;
+    }
     if (u && u->player_id == current_player->id) {
       selected_unit = u;
       fill_map(selected_unit);
