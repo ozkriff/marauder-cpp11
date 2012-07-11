@@ -244,10 +244,22 @@ static void calculate_fow(void) {
   }
 }
 
+static int calculate_fogged_tiles_count(void) {
+  int n = 0;
+  V2i p;
+  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+    Tile *t = tile(&p);
+    if (t->fow == 0) {
+      n++;
+    }
+  }
+  return n;
+}
+
 static void build_fow_array(Va *v) {
   V2i p;
   int i = 0; /* tile's index */
-  v->count = MAP_X * MAP_Y * 6; /* TODO */
+  v->count = calculate_fogged_tiles_count() * 6;
   if (v->v) {
     free(v->v);
     v->v = NULL;
