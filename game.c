@@ -66,6 +66,7 @@ static Va va_obstacles;
 static Va va_walkable_map;
 static Va va_obj;
 static Va va_pick;
+static Va va_fow; /* fog of war */
 static List units;
 static Unit *selected_unit;
 
@@ -211,6 +212,66 @@ static int calculate_walkable_tiles_count(void) {
   return count;
 }
 
+static bool is_los_clear(const V2i *p1, const V2i *p2) {
+  LosData los_data;
+  V2i p = {0, 0};
+  los_init(&los_data, p1, p2);
+  do {
+    /* TODO variable p has wrong value here! */
+    if (unit_at(&p) || tile(&p)->obstacle)
+      return false;
+    los_get_next(&los_data, &p);
+  } while (!los_is_finished(&los_data));
+  return true;
+}
+
+static void calculate_fow(void) {
+  V2i p;
+  assert(current_player);
+  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+    Tile *t = tile(&p);
+    Node *node;
+    t->fow = 0;
+    FOR_EACH_NODE(units, node) {
+      Unit *u = node->data;
+      bool is_player_ok = (u->player_id == current_player->id);
+      bool is_distance_ok = is_los_clear(&p, &u->pos);
+      bool is_los_ok = (dist_i(&p, &u->pos) < 9);
+      if (is_player_ok && is_distance_ok && is_los_ok) {
+        t->fow++;
+      }
+    }
+  }
+}
+
+static void build_fow_array(Va *v) {
+  V2i p;
+  int i = 0; /* tile's index */
+  v->count = MAP_X * MAP_Y * 6; /* TODO */
+  if (v->v) {
+    free(v->v);
+    v->v = NULL;
+  }
+  v->v = ALLOCATE(v->count, V3f);
+  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+    Tile *t = tile(&p);
+    float n = TILE_SIZE_2;
+    V2f pos;
+    if (t->fow > 0)
+      continue;
+    v2i_to_v2f(&pos, &p);
+    assert(t);
+    set_xyz(v->v, 3, i, 0, pos.x - n, pos.y - n, 0.05f);
+    set_xyz(v->v, 3, i, 1, pos.x + n, pos.y - n, 0.05f);
+    set_xyz(v->v, 3, i, 2, pos.x + n, pos.y + n, 0.05f);
+    i++;
+    set_xyz(v->v, 3, i, 0, pos.x - n, pos.y - n, 0.05f);
+    set_xyz(v->v, 3, i, 1, pos.x + n, pos.y + n, 0.05f);
+    set_xyz(v->v, 3, i, 2, pos.x - n, pos.y + n, 0.05f);
+    i++;
+  }
+}
+
 static void build_walkable_array(Va *v) {
   V2i p;
   int i = 0; /* tile's index */
@@ -264,6 +325,8 @@ static void add_unit(V2i p, int player_id) {
   u->pos = p;
   u->player_id = player_id;
   u->dir = (Dir)rnd(0, 7);
+  calculate_fow();
+  build_fow_array(&va_fow);
 }
 
 static void draw_map(void) {
@@ -290,6 +353,12 @@ static void draw_map(void) {
   glColor3f(0.0f, 0.3f, 1.0f);
   glVertexPointer(3, GL_FLOAT, 0, va_walkable_map.v);
   glDrawArrays(GL_LINES, 0, va_walkable_map.count);
+  glDisableClientState(GL_VERTEX_ARRAY);
+
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glColor4f(0.0f, 0.0f, 0.0f, 0.2f);
+  glVertexPointer(3, GL_FLOAT, 0, va_fow.v);
+  glDrawArrays(GL_TRIANGLES, 0, va_fow.count);
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
@@ -397,6 +466,8 @@ static void end_movement(const V2i *pos) {
   selected_unit->pos = *pos;
   fill_map(selected_unit);
   build_walkable_array(&va_walkable_map);
+  calculate_fow();
+  build_fow_array(&va_fow);
 }
 
 static void draw_moving_unit(void) {
@@ -498,6 +569,12 @@ static void process_mouse_motion_event(
 
 static void kill_unit(Unit *u) {
   delete_node(&units, data2node(units, u));
+  if (selected_unit) {
+    fill_map(selected_unit);
+    build_walkable_array(&va_walkable_map);
+    calculate_fow();
+    build_fow_array(&va_fow);
+  }
 }
 
 static void shoot(void) {
@@ -548,6 +625,8 @@ static void process_key_down_event(
       if (selected_unit) {
         fill_map(selected_unit);
         build_walkable_array(&va_walkable_map);
+        calculate_fow();
+        build_fow_array(&va_fow);
       }
       break;
     }
@@ -562,6 +641,8 @@ static void process_key_down_event(
       clean_map();
       free(va_walkable_map.v);
       va_walkable_map = empty_va;
+      calculate_fow();
+      build_fow_array(&va_fow);
       break;
     }
     case SDLK_u: {
@@ -762,7 +843,9 @@ static void init_opengl(void) {
   glClearColor(0, 0, 0, 1);
   glEnable(GL_TEXTURE_2D);
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_ALPHA_TEST);
   glAlphaFunc(GL_GREATER, 0.0f);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 static void init_camera(void){
@@ -834,6 +917,9 @@ static void init_ui_opengl(void) {
   init_units();
   build_map_array(&va_map);
   build_obstacles_array(&va_obstacles);
+  va_fow = empty_va;
+  calculate_fow();
+  build_fow_array(&va_fow);
 }
 
 static void cleanup_opengl_ui(void) {

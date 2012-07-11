@@ -16,6 +16,7 @@ typedef struct {
   int cost;
   Dir parent;
   Dir dir;
+  int fow; /* how many units see this tile */
 } Tile;
 
 #define MAP_X 20
