@@ -43,3 +43,10 @@ void set_rgb(GLubyte *colors, int n, int i, int vi,
   color[1] = g;
   color[2] = b;
 }
+
+void set_rgb_i(GLubyte *colors, int n, int i, int vi,
+    int r, int g, int b)
+{
+  set_rgb(colors, n, i, vi,
+    (GLubyte)r, (GLubyte)g, (GLubyte)b);
+}

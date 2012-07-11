@@ -618,10 +618,10 @@ static void build_picking_tiles_array(Va *va) {
     set_xy(va->v, 4, i, 1, pos.x + n, pos.y - n);
     set_xy(va->v, 4, i, 2, pos.x + n, pos.y + n);
     set_xy(va->v, 4, i, 3, pos.x - n, pos.y + n);
-    set_rgb(va->ub_c, 4, i, 0, (GLubyte)p.x, (GLubyte)p.y, 1);
-    set_rgb(va->ub_c, 4, i, 1, (GLubyte)p.x, (GLubyte)p.y, 1);
-    set_rgb(va->ub_c, 4, i, 2, (GLubyte)p.x, (GLubyte)p.y, 1);
-    set_rgb(va->ub_c, 4, i, 3, (GLubyte)p.x, (GLubyte)p.y, 1);
+    set_rgb_i(va->ub_c, 4, i, 0, p.x, p.y, 1);
+    set_rgb_i(va->ub_c, 4, i, 1, p.x, p.y, 1);
+    set_rgb_i(va->ub_c, 4, i, 2, p.x, p.y, 1);
+    set_rgb_i(va->ub_c, 4, i, 3, p.x, p.y, 1);
     i++;
   }
 }
