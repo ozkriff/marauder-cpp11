@@ -563,15 +563,6 @@ static void process_mouse_motion_event(
 {
   assert(e);
   set_v2i(&mouse_pos, (int)e->x, (int)e->y);
-#if 0
-  V2i v;
-  assert(e);
-  v.x = e->x / TILE_SIZE;
-  v.y = e->y / TILE_SIZE;
-  if (inboard(&v)) {
-    fill_map(&v);
-  }
-#endif
 }
 
 static void kill_unit(Unit *u) {
