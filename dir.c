@@ -47,3 +47,8 @@ void neib(V2i *neib, const V2i* pos, Dir i) {
   dy = dir_to_pos_diff[i].y;
   set_v2i(neib, pos->x + dx, pos->y + dy);
 }
+
+bool dir_is_diagonal(Dir d) {
+  return d != D_UP && d != D_RIGHT
+      && d != D_DOWN && d != D_LEFT;
+}
