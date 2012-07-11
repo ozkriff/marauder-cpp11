@@ -520,7 +520,33 @@ static void draw(void) {
   SDL_GL_SwapBuffers();
 }
 
-static void shoot(void); /* TODO */
+static void kill_unit(Unit *u) {
+  delete_node(&units, data2node(units, u));
+  if (selected_unit) {
+    fill_map(selected_unit);
+    build_walkable_array(&va_walkable_map);
+    calculate_fow();
+    build_fow_array(&va_fow);
+  }
+}
+
+static void shoot(void) {
+  LosData los_data;
+  V2i p = {0, 0};
+  Unit *u = unit_at(&active_tile_pos);
+  if (!selected_unit || !u)
+    return;
+  /* calculate line of sight */
+  los_init(&los_data, &selected_unit->pos,
+      &active_tile_pos);
+  los_get_next(&los_data, &p); /* Skip shooting unit. */
+  do {
+    if (unit_at(&p) || tile(&p)->obstacle)
+      return;
+    los_get_next(&los_data, &p);
+  } while (!los_is_finished(&los_data));
+  kill_unit(u);
+}
 
 static void process_mouse_button_down_event(
     const SDL_MouseButtonEvent *e)
@@ -563,34 +589,6 @@ static void process_mouse_motion_event(
 {
   assert(e);
   set_v2i(&mouse_pos, (int)e->x, (int)e->y);
-}
-
-static void kill_unit(Unit *u) {
-  delete_node(&units, data2node(units, u));
-  if (selected_unit) {
-    fill_map(selected_unit);
-    build_walkable_array(&va_walkable_map);
-    calculate_fow();
-    build_fow_array(&va_fow);
-  }
-}
-
-static void shoot(void) {
-  LosData los_data;
-  V2i p = {0, 0};
-  Unit *u = unit_at(&active_tile_pos);
-  if (!selected_unit || !u)
-    return;
-  /* calculate line of sight */
-  los_init(&los_data, &selected_unit->pos,
-      &active_tile_pos);
-  los_get_next(&los_data, &p); /* Skip shooting unit. */
-  do {
-    if (unit_at(&p) || tile(&p)->obstacle)
-      return;
-    los_get_next(&los_data, &p);
-  } while (!los_is_finished(&los_data));
-  kill_unit(u);
 }
 
 static void process_key_down_event(
