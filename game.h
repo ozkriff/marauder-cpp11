@@ -3,6 +3,7 @@
 typedef struct {
   int type_id;
   int id;
+  int player_id;
   Dir dir;
   int action_points;
   V2i pos;

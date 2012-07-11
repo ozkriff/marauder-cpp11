@@ -32,6 +32,10 @@ typedef enum {
   UM_MOVING
 } Unit_mode;
 
+typedef struct {
+  int id;
+} Player;
+
 static const Va empty_va = {NULL, NULL, NULL, 0};
 static const List empty_list = {NULL, NULL, 0};
 
@@ -64,6 +68,25 @@ static Va va_obj;
 static Va va_pick;
 static List units;
 static Unit *selected_unit;
+
+static Player *current_player;
+static List players;
+
+void create_local_human(int id) {
+  Player *p = ALLOCATE(1, Player);
+  Node *n = ALLOCATE(1, Node);
+  set_node(n, p);
+  push_node(&players, n);
+  p->id = id;
+}
+
+void init_local_players(int n, int *ids) {
+  int i;
+  for (i = 0; i < n; i++) {
+    create_local_human(ids[i]);
+  }
+  current_player = players.tail->data;
+}
 
 bool inboard(const V2i *p) {
   assert(p);
@@ -231,12 +254,15 @@ Unit* unit_at(const V2i *pos) {
   return NULL;
 }
 
-static void add_unit(V2i p) {
+static void add_unit(V2i p, int player_id) {
   Unit *u = ALLOCATE(1, Unit);
   Node *n = ALLOCATE(1, Node);
+  assert(inboard(&p));
+  assert(player_id >= 0 && player_id < 16);
   set_node(n, u);
   push_node(&units, n);
   u->pos = p;
+  u->player_id = player_id;
   u->dir = (Dir)rnd(0, 7);
 }
 
@@ -281,6 +307,29 @@ static void draw_unit_model(void) {
   glDisable(GL_TEXTURE_2D);
 }
 
+static void draw_unit_circle(const Unit *u) {
+  float v[4 * 3];
+  float n = TILE_SIZE_2 * 0.9f;
+  assert(u);
+  if (u->player_id == 0) {
+    glColor3f(1, 0, 0);
+  } else if (u->player_id == 1) {
+    glColor3f(0, 0, 1);
+  } else {
+    die("draw_unit_circle(): You need more colors!");
+  }
+  set_xyz(v, 2, 0, 0, +n, +n, 0.1f);
+  set_xyz(v, 2, 0, 1, +n, -n, 0.1f);
+  set_xyz(v, 2, 1, 0, -n, -n, 0.1f);
+  set_xyz(v, 2, 1, 1, -n, +n, 0.1f);
+  glLineWidth(2);
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glVertexPointer(3, GL_FLOAT, 0, v);
+  glDrawArrays(GL_LINE_LOOP, 0, 4);
+  glDisableClientState(GL_VERTEX_ARRAY);
+  glLineWidth(1);
+}
+
 static void draw_units_at_f(const V2f *p, int n) {
   int i;
   assert(p);
@@ -309,6 +358,7 @@ static void draw_unit(const Unit *u) {
   glTranslatef(f.x, f.y, 0);
   glRotatef((u->dir + 4) * 45.0f, 0, 0, 1);
   draw_unit_model();
+  draw_unit_circle(u);
   glPopMatrix();
 }
 
@@ -379,6 +429,7 @@ static void draw_moving_unit(void) {
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisable(GL_TEXTURE_2D);
   glDisableClientState(GL_VERTEX_ARRAY);
+  draw_unit_circle(selected_unit);
   glPopMatrix();
   current_move_index++;
   if (current_move_index == last_move_index) {
@@ -410,7 +461,8 @@ static void process_mouse_button_down_event(
     int max_cost = 25;
     Unit *u = unit_at(&active_tile_pos);
     Tile *t = tile(&active_tile_pos);
-    if (u) {
+    assert(current_player);
+    if (u && u->player_id == current_player->id) {
       selected_unit = u;
       fill_map(&active_tile_pos);
       build_walkable_array(&va_walkable_map);
@@ -491,8 +543,21 @@ static void process_key_down_event(
       }
       break;
     }
+    case SDLK_e: {
+      /* end turn */
+      Node *n = data2node(players, current_player)->next;
+      if (n)
+        current_player = n->data;
+      else
+        current_player = players.head->data;
+      selected_unit = NULL;
+      clean_map();
+      free(va_walkable_map.v);
+      va_walkable_map = empty_va;
+      break;
+    }
     case SDLK_u: {
-      add_unit(active_tile_pos);
+      add_unit(active_tile_pos, current_player->id);
       if (selected_unit) {
         fill_map(&selected_unit->pos);
         build_walkable_array(&va_walkable_map);
@@ -708,7 +773,7 @@ static void init_units(void) {
     V2i p;
     set_v2i(&p, rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
     if (!tile(&p)->obstacle && !unit_at(&p)) {
-      add_unit(p);
+      add_unit(p, rnd(0, 1));
     } else {
       i--;
     }
@@ -721,6 +786,11 @@ static void init_obstacles(void) {
     Tile *t = tile(&p);
     t->obstacle = ((rand() % 100) > 85);
   }
+}
+
+static void init_players(void) {
+  int id[] = {0, 1};
+  init_local_players(2, id);
 }
 
 /* TODO */
@@ -750,6 +820,8 @@ static void init_ui_opengl(void) {
   unit_mode = UM_NORMAL;
   move_speed = 10;
   move_path = empty_list;
+  players = empty_list;
+  init_players();
   init_obstacles();
   init_units();
   build_map_array(&va_map);
