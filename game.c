@@ -908,11 +908,13 @@ static void init_ui_opengl(void) {
   set_v2i(&win_size, 400, 200);
   set_v2i(&active_tile_pos, 0, 0);
   set_v2i(&mouse_pos, 0, 0);
+  unit_mode = UM_NORMAL;
+  move_speed = 10;
+  is_dragging_map = false;
   SDL_Init(SDL_INIT_EVERYTHING);
   screen = SDL_SetVideoMode(win_size.x, win_size.y,
       32, SDL_OPENGL | SDL_GL_DOUBLEBUFFER);
   init_opengl();
-  is_dragging_map = false;
   init_camera();
   obj_read(&test_obj_model, DATA("tank.obj"));
   obj_build(&va_obj, &test_obj_model);
@@ -920,13 +922,11 @@ static void init_ui_opengl(void) {
   load_texture(DATA("tank.png"), &unit_texture);
   va_map = empty_va;
   va_pick = empty_va;
-  build_picking_tiles_array(&va_pick);
   va_walkable_map = empty_va;
-  unit_mode = UM_NORMAL;
-  move_speed = 10;
+  va_fow = empty_va;
+  build_picking_tiles_array(&va_pick);
   build_map_array(&va_map);
   build_obstacles_array(&va_obstacles);
-  va_fow = empty_va;
   build_fow_array(&va_fow);
 }
 
