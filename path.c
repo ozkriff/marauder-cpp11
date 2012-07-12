@@ -132,7 +132,7 @@ static void try_to_push_neibors(const V2i *m) {
   Dir i;
   assert(m);
   assert(inboard(m));
-  for (i = D_UP; i <= D_UP_LEFT; i++) {
+  for (i = D_N; i <= D_NW; i++) {
     V2i neib_m;
     neib(&neib_m, m, i);
     if (inboard(&neib_m)) {

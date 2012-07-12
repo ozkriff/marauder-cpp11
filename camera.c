@@ -25,22 +25,21 @@ void move_camera(Camera *c, Dir d) {
   float angle;
   float in_radians;
   assert(c);
-  assert(d == D_UP || d == D_RIGHT
-     || d == D_DOWN || d == D_LEFT);
+  assert(d == D_N || d == D_E || d == D_S || d == D_W);
   switch (d) {
-    case D_UP: {
+    case D_N: {
       angle = 0.0f;
       break;
     }
-    case D_DOWN: {
+    case D_S: {
       angle = 180.0f;
       break;
     }
-    case D_LEFT: {
+    case D_W: {
       angle = 90.0f;
       break;
     }
-    case D_RIGHT: {
+    case D_E: {
       angle = 270.0f;
       break;
     }

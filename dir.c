@@ -49,8 +49,7 @@ void neib(V2i *neib, const V2i* pos, Dir i) {
 }
 
 bool dir_is_diagonal(Dir d) {
-  return d != D_UP && d != D_RIGHT
-      && d != D_DOWN && d != D_LEFT;
+  return d != D_N && d != D_E && d != D_S && d != D_W;
 }
 
 /* TODO rename */

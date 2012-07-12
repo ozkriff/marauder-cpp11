@@ -684,19 +684,19 @@ static void process_key_down_event(
       break;
     }
     case SDLK_UP: {
-      move_camera(&camera, D_UP);
+      move_camera(&camera, D_N);
       break;
     }
     case SDLK_DOWN: {
-      move_camera(&camera, D_DOWN);
+      move_camera(&camera, D_S);
       break;
     }
     case SDLK_LEFT: {
-      move_camera(&camera, D_LEFT);
+      move_camera(&camera, D_W);
       break;
     }
     case SDLK_RIGHT: {
-      move_camera(&camera, D_RIGHT);
+      move_camera(&camera, D_E);
       break;
     }
     case SDLK_EQUALS: {

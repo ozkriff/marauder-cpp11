@@ -1,9 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
-/* up right down left */
 typedef enum {
-  D_UP, D_UP_RIGHT, D_RIGHT, D_DOWN_RIGHT,
-  D_DOWN, D_DOWN_LEFT, D_LEFT, D_UP_LEFT,
+  D_N, D_NE, D_E, D_SE,
+  D_S, D_SW, D_W, D_NW,
   D_NONE, D_ERROR, D_COUNT
 } Dir;
 
