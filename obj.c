@@ -15,7 +15,7 @@
 #include "misc.h"
 
 /* TODO "usemtl filename" */
-void obj_read(Obj_model *m, char *filename) {
+void obj_read(ObjModel *m, char *filename) {
   char buffer[100];
   FILE *file;
   int v_i = 0;
@@ -47,7 +47,7 @@ void obj_read(Obj_model *m, char *filename) {
   m->vertexes = ALLOCATE(m->v_count, V3f);
   m->normals = ALLOCATE(m->n_count, V3f);
   m->text_coords = ALLOCATE(m->t_count, V2f);
-  m->faces = ALLOCATE(m->f_count, Obj_triangle);
+  m->faces = ALLOCATE(m->f_count, ObjTriangle);
   while (fgets(buffer, 100, file)) {
     if (buffer[0] == 'v' && buffer[1] == ' ') {
       /* Vertex coords */
@@ -83,7 +83,7 @@ void obj_read(Obj_model *m, char *filename) {
     } else if (buffer[0] == 'f' && buffer [1] == ' ') {
       /* Faces */
       int items;
-      Obj_triangle *t;
+      ObjTriangle *t;
       int slash_count = 0;
       int i;
       for (i = 2; buffer[i] != ' '; i++)
@@ -125,7 +125,7 @@ void obj_read(Obj_model *m, char *filename) {
   fclose(file);
 }
 
-void obj_debug_print(Obj_model *m) {
+void obj_debug_print(ObjModel *m) {
   int i;
   for (i = 0; i < m->v_count; i++) {
     V3f *v = m->vertexes + i;
@@ -136,7 +136,7 @@ void obj_debug_print(Obj_model *m) {
     printf("t %f %f\n", v->x, v->y);
   }
   for (i = 0; i < m->f_count; i++) {
-    Obj_triangle *f = m->faces + i;
+    ObjTriangle *f = m->faces + i;
     printf("f %d/%d/%d %d/%d/%d %d/%d/%d\n",
         f->v[0], f->t[0], f->n[0],
         f->v[1], f->t[1], f->n[1],
@@ -144,7 +144,7 @@ void obj_debug_print(Obj_model *m) {
   }
 }
 
-void obj_build(Va *va, const Obj_model *model) {
+void obj_build(Va *va, const ObjModel *model) {
   int i, j;
   assert(va);
   assert(model);
@@ -152,7 +152,7 @@ void obj_build(Va *va, const Obj_model *model) {
   va->v = ALLOCATE(va->count, V3f);
   va->t = ALLOCATE(va->count, V2f);
   for (i = 0; i < model->f_count; i++) {
-    Obj_triangle *tri = model->faces + i;
+    ObjTriangle *tri = model->faces + i;
     for (j = 0; j < 3; j++) {
       int vert_id = tri->v[j] - 1;
       int tex_id = tri->t[j] - 1;

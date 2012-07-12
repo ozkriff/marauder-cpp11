@@ -30,7 +30,7 @@
 typedef enum {
   UM_NORMAL,
   UM_MOVING
-} Unit_mode;
+} UnitMode;
 
 typedef struct {
   int id;
@@ -46,7 +46,7 @@ static Tile map[MAP_Y][MAP_X];
 
 int action_points;
 
-static Unit_mode unit_mode;
+static UnitMode unit_mode;
 static int last_move_index;
 static int current_move_index;
 static List move_path;
@@ -60,7 +60,7 @@ static bool done;
 static Camera camera;
 static GLuint floor_texture;
 static GLuint unit_texture;
-static Obj_model obj_unit;
+static ObjModel obj_unit;
 static Va va_map;
 static Va va_obstacles;
 static Va va_walkable_map;
