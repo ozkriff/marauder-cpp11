@@ -243,8 +243,8 @@ static void calculate_fow(void) {
     FOR_EACH_NODE(units, node) {
       Unit *u = node->data;
       bool is_player_ok = (u->player_id == current_player->id);
-      bool is_distance_ok = is_los_clear(&p, &u->pos);
-      bool is_los_ok = (dist_i(&p, &u->pos) < 9);
+      bool is_distance_ok = (dist_i(&p, &u->pos) < 9);
+      bool is_los_ok = is_los_clear(&p, &u->pos);
       if (is_player_ok && is_distance_ok && is_los_ok) {
         t->fow++;
       }
