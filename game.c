@@ -910,6 +910,17 @@ static void init_logic(void) {
   calculate_fow();
 }
 
+static void init_vertex_arrays(void) {
+  va_map = empty_va;
+  va_pick = empty_va;
+  va_walkable_map = empty_va;
+  va_fow = empty_va;
+  build_picking_tiles_array(&va_pick);
+  build_map_array(&va_map);
+  build_obstacles_array(&va_obstacles);
+  build_fow_array(&va_fow);
+}
+
 /* TODO */
 static void init_ui_opengl(void) {
   init_logic();
@@ -929,14 +940,7 @@ static void init_ui_opengl(void) {
   obj_build(&va_obj, &obj_unit);
   load_texture(DATA("floor.png"), &floor_texture);
   load_texture(DATA("tank.png"), &unit_texture);
-  va_map = empty_va;
-  va_pick = empty_va;
-  va_walkable_map = empty_va;
-  va_fow = empty_va;
-  build_picking_tiles_array(&va_pick);
-  build_map_array(&va_map);
-  build_obstacles_array(&va_obstacles);
-  build_fow_array(&va_fow);
+  init_vertex_arrays();
 }
 
 static void cleanup_opengl_ui(void) {
