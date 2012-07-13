@@ -667,12 +667,12 @@ static void process_key_down_event(
     }
     case SDLK_d: {
       camera.z_angle += 15;
-      fix_angle(&camera.z_angle);
+      clamp_angle(&camera.z_angle);
       break;
     }
     case SDLK_a: {
       camera.z_angle -= 15;
-      fix_angle(&camera.z_angle);
+      clamp_angle(&camera.z_angle);
       break;
     }
     case SDLK_w: {

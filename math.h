@@ -5,11 +5,11 @@
 #endif
 
 float get_rot_angle(const V2f *a, const V2f *b);
-void fixnum(int min, int max, int *n);
+void clamp_int(int *n, int min, int max);
 int rnd(int min, int max);
 float deg2rad(float deg);
 float rad2deg(float rad);
-void fix_angle(float *angle);
+void clamp_angle(float *angle);
 bool min_f(float a, float b);
 bool max_f(float a, float b);
 float dist(const V2f *a, const V2f *b);

@@ -32,7 +32,7 @@ void swap_int(int *a, int *b) {
   *b = tmp;
 }
 
-void fixnum(int min, int max, int *n) {
+void clamp_int(int *n, int min, int max) {
   assert(n);
   if (*n < min) {
     *n = min;
@@ -67,7 +67,7 @@ bool max_f(float a, float b) {
   return (a < b) ? b : a;
 }
 
-void fix_angle(float *angle) {
+void clamp_angle(float *angle) {
   assert(angle);
   if (*angle < 0.0f) {
     *angle += 360.0f;
