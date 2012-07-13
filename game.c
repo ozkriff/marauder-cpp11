@@ -634,11 +634,11 @@ static void process_key_down_event(
       t->obstacle = !t->obstacle;
       build_map_array(&va_map);
       build_obstacles_array(&va_obstacles);
+      calculate_fow();
+      build_fow_array(&va_fow);
       if (selected_unit) {
         fill_map(selected_unit);
         build_walkable_array(&va_walkable_map);
-        calculate_fow();
-        build_fow_array(&va_fow);
       }
       break;
     }
