@@ -101,7 +101,6 @@ Tile* tile(const V2i *p) {
   return &(map[p->y][p->x]);
 }
 
-/* TODO rename */
 void inc_v2i(V2i *pos) {
   assert(pos);
   assert(inboard(pos));
@@ -942,7 +941,6 @@ static void init_vertex_arrays(void) {
   build_fow_array(&va_fow);
 }
 
-/* TODO */
 static void init_ui_opengl(void) {
   init_logic();
   done = false;
