@@ -555,21 +555,14 @@ static void kill_unit(Unit *u) {
 }
 
 static void shoot(void) {
-  LosData los_data;
-  V2i p = {0, 0};
   Unit *u = unit_at(&active_tile_pos);
   if (!selected_unit || !u)
     return;
-  /* calculate line of sight */
-  los_init(&los_data, &selected_unit->pos,
-      &active_tile_pos);
-  los_get_next(&los_data, &p); /* Skip shooting unit. */
-  do {
-    if (unit_at(&p) || tile(&p)->obstacle)
-      return;
-    los_get_next(&los_data, &p);
-  } while (!los_is_finished(&los_data));
-  kill_unit(u);
+  if (is_los_clear(
+      &selected_unit->pos, &active_tile_pos))
+  {
+    kill_unit(u);
+  }
 }
 
 static void process_mouse_button_down_event(
