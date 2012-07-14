@@ -214,14 +214,15 @@ static int calculate_walkable_tiles_count(void) {
 
 static bool is_los_clear(const V2i *p1, const V2i *p2) {
   LosData los_data;
-  V2i p = {0, 0};
+  V2i p = *p1;
   los_init(&los_data, p1, p2);
-  do {
+  los_get_next(&los_data, &p);
+  while (!los_is_finished(&los_data)) {
     /* TODO variable p has wrong value here! */
     if (unit_at(&p) || tile(&p)->obstacle)
       return false;
     los_get_next(&los_data, &p);
-  } while (!los_is_finished(&los_data));
+  }
   return true;
 }
 
