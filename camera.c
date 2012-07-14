@@ -25,7 +25,7 @@ void move_camera(Camera *c, Dir d) {
   float angle;
   float in_radians;
   assert(c);
-  assert(d == D_N || d == D_E || d == D_S || d == D_W);
+  assert(!dir_is_diagonal(d));
   switch (d) {
     case D_N: {
       angle = 0.0f;
