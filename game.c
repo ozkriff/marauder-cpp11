@@ -458,6 +458,9 @@ static void draw_units(void) {
     if (unit_mode == UM_MOVING && u == selected_unit) {
       continue;
     }
+    if (tile(&u->pos)->fow == 0) {
+      continue;
+    }
     draw_unit(u);
   }
 }
