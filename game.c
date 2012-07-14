@@ -218,7 +218,6 @@ static bool is_los_clear(const V2i *p1, const V2i *p2) {
   los_init(&los_data, p1, p2);
   los_get_next(&los_data, &p);
   while (!los_is_finished(&los_data)) {
-    /* TODO variable p has wrong value here! */
     if (unit_at(&p) || tile(&p)->obstacle)
       return false;
     los_get_next(&los_data, &p);
