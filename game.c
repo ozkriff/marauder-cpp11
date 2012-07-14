@@ -677,10 +677,12 @@ static void process_key_down_event(
     }
     case SDLK_w: {
       camera.zoom -= 10;
+      clamp_f(&camera.zoom, 30, 200);
       break;
     }
     case SDLK_s: {
       camera.zoom += 10;
+      clamp_f(&camera.zoom, 30, 200);
       break;
     }
     case SDLK_UP: {
