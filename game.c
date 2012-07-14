@@ -609,6 +609,12 @@ static void process_mouse_motion_event(
 {
   assert(e);
   set_v2i(&mouse_pos, (int)e->x, (int)e->y);
+  if (is_dragging_map) {
+    camera.z_angle -= e->xrel;
+    camera.x_angle -= e->yrel;
+    clamp_angle(&camera.z_angle);
+    clamp_angle(&camera.x_angle);
+  }
 }
 
 static void process_key_down_event(
@@ -746,8 +752,25 @@ static void process_sdl_event(const SDL_Event *e) {
       process_mouse_motion_event(&e->motion);
       break;
     }
+    case SDL_MOUSEBUTTONUP: {
+      if (e->button.button == SDL_BUTTON_RIGHT) {
+        is_dragging_map = false;
+      }
+      if (e->button.button == SDL_BUTTON_WHEELUP) {
+        camera.zoom -= 5;
+        clamp_f(&camera.zoom, 30, 200);
+      } else if (e->button.button == SDL_BUTTON_WHEELDOWN) {
+        camera.zoom += 5;
+        clamp_f(&camera.zoom, 30, 200);
+      }
+      break;
+    }
     case SDL_MOUSEBUTTONDOWN: {
-      process_mouse_button_down_event(&e->button);
+      if (e->button.button == SDL_BUTTON_RIGHT) {
+        is_dragging_map = true;
+      } else if (e->button.button == SDL_BUTTON_LEFT) {
+        process_mouse_button_down_event(&e->button);
+      }
       break;
     }
     default: {
