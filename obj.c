@@ -93,26 +93,16 @@ void obj_read(ObjModel *m, char *filename) {
       t = m->faces + f_i;
       if (slash_count == 1) {
         items = sscanf(buffer, "f %d/%d %d/%d %d/%d",
-            &t->v[0],
-            &t->t[0],
-            &t->v[1],
-            &t->t[1],
-            &t->v[2],
-            &t->t[2]);
+            &t->v[0], &t->t[0], &t->v[1],
+            &t->t[1], &t->v[2], &t->t[2]);
         if (items != 6) {
           die("f: items != 6\n");
         }
       } else if (slash_count == 2) {
         items = sscanf(buffer, "f %d/%d/%d %d/%d/%d %d/%d/%d",
-            &t->v[0],
-            &t->t[0],
-            &t->n[0],
-            &t->v[1],
-            &t->t[1],
-            &t->n[1],
-            &t->v[2],
-            &t->t[2],
-            &t->n[2]);
+            &t->v[0], &t->t[0], &t->n[0],
+            &t->v[1], &t->t[1], &t->n[1],
+            &t->v[2], &t->t[2], &t->n[2]);
         if (items != 9) {
           die("f: items != 9\n");
         }
