@@ -77,26 +77,25 @@ static int get_tile_cost(const V2i *t, const V2i *nb) {
 
 static bool can_move_there(const V2i *p1, const V2i *p2) {
   V2i neib_left, neib_right;
-  Dir d;
+  bool is_left_blocked, is_right_blocked;
   assert(p1);
   assert(p2);
-  d = m2dir(p1, p2);
-  if (!dir_is_diagonal(d)) {
+  assert(inboard(p1));
+  assert(inboard(p2));
+  if (!dir_is_diagonal(m2dir(p1, p2))) {
     return true;
   }
   get_dir_neib(&neib_left, p1, p2, -1);
   get_dir_neib(&neib_right, p1, p2, +1);
-#if 1
-  if ((inboard(&neib_left) && tile(&neib_left)->obstacle)
-      || (inboard(&neib_right) && tile(&neib_right)->obstacle))
+  is_left_blocked = inboard(&neib_left)
+      && tile(&neib_left)->obstacle;
+  is_right_blocked = inboard(&neib_right)
+      && tile(&neib_right)->obstacle;
+#if 0
+  return !is_left_blocked && !is_right_blocked;
 #else
-  if ((inboard(&neib_left) && tile(&neib_left)->obstacle)
-      && (inboard(&neib_right) && tile(&neib_right)->obstacle))
+  return !is_left_blocked || !is_right_blocked;
 #endif
-  {
-    return false;
-  }
-  return true;
 }
 
 /* TODO rename */
