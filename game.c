@@ -840,10 +840,26 @@ static void draw_for_picking(void) {
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
+static void scroll_map(void) {
+  const V2i *p = &mouse_pos;
+  int offset = 15;
+  if (p->x < offset) {
+    move_camera(&camera, D_W);
+  } else if(p->x > screen->w - offset) {
+    move_camera(&camera, D_E);
+  }
+  if (p->y < offset) {
+    move_camera(&camera, D_N);
+  } else if(p->y > screen->h - offset) {
+    move_camera(&camera, D_S);
+  }
+}
+
 static void mainloop(void) {
   while (!done) {
     sdl_events();
     /* logic(); */
+    scroll_map();
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     draw_for_picking();
