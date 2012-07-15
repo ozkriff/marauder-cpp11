@@ -7,7 +7,6 @@
 #include <time.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
-#include <SDL/SDL_image.h>
 #include "bool.h"
 #include "list.h"
 #include "v2i.h"
