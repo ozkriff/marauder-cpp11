@@ -1,6 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 #include <assert.h>
+#include <stdlib.h>
 #include "bool.h"
 #include "list.h"
 #include "misc.h"
@@ -79,4 +80,12 @@ Dir opposite_dir(Dir d) {
     tmp -= 8;
   }
   return (Dir)tmp;
+}
+
+int dir_diff(Dir d0, Dir d1) {
+  int diff = abs(d0 - d1);
+  if (diff > 4) {
+    diff = 8 - diff;
+  }
+  return diff;
 }
