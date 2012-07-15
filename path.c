@@ -76,7 +76,7 @@ static int get_tile_cost(const V2i *t, const V2i *nb) {
 }
 
 static bool can_move_there(const V2i *p1, const V2i *p2) {
-  V2i neib_l, neib_r;
+  V2i neib_left, neib_right;
   Dir d;
   assert(p1);
   assert(p2);
@@ -84,14 +84,14 @@ static bool can_move_there(const V2i *p1, const V2i *p2) {
   if (!dir_is_diagonal(d)) {
     return true;
   }
-  get_dir_neib(&neib_l, p1, p2, -1);
-  get_dir_neib(&neib_r, p1, p2, +1);
+  get_dir_neib(&neib_left, p1, p2, -1);
+  get_dir_neib(&neib_right, p1, p2, +1);
 #if 1
-  if ((inboard(&neib_l) && tile(&neib_l)->obstacle)
-      || (inboard(&neib_r) && tile(&neib_r)->obstacle))
+  if ((inboard(&neib_left) && tile(&neib_left)->obstacle)
+      || (inboard(&neib_right) && tile(&neib_right)->obstacle))
 #else
-  if ((inboard(&neib_l) && tile(&neib_l)->obstacle)
-      && (inboard(&neib_r) && tile(&neib_r)->obstacle))
+  if ((inboard(&neib_left) && tile(&neib_left)->obstacle)
+      && (inboard(&neib_right) && tile(&neib_right)->obstacle))
 #endif
   {
     return false;
