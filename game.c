@@ -627,7 +627,7 @@ static void process_key_down_event(
       if (!selected_unit)
         return;
       v2i_to_v2f(&unit_pos, &selected_unit->pos);
-      set_v2f(&camera.pos, -unit_pos.x, -unit_pos.y);
+      set_v2f(&camera.pos, unit_pos.x, unit_pos.y);
       break;
     }
     case SDLK_t: {
@@ -899,8 +899,8 @@ static void init_opengl(void) {
 static void init_camera(void){
   camera.x_angle = 45.0f;
   camera.z_angle = 45.0f;
-  camera.pos.x = -20;
-  camera.pos.y = -20;
+  camera.pos.x = 20;
+  camera.pos.y = 20;
   camera.zoom = 100.0f;
 }
 

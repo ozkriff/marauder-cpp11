@@ -17,7 +17,7 @@ void set_camera(const Camera *c) {
   glTranslatef(0, 0, -(c->zoom));
   glRotatef(c->x_angle, -1, 0, 0);
   glRotatef(c->z_angle, 0, 0, 1);
-  glTranslatef(c->pos.x, c->pos.y, 0);
+  glTranslatef(-c->pos.x, -c->pos.y, 0);
 }
 
 void move_camera(Camera *c, Dir d) {
@@ -50,6 +50,6 @@ void move_camera(Camera *c, Dir d) {
   }
   speed = c->zoom / 20.0f;
   in_radians = deg2rad(c->z_angle + angle);
-  c->pos.x -= (float)sin(in_radians) * speed;
-  c->pos.y -= (float)cos(in_radians) * speed;
+  c->pos.x += (float)sin(in_radians) * speed;
+  c->pos.y += (float)cos(in_radians) * speed;
 }
