@@ -72,3 +72,11 @@ void get_dir_neib(
   assert(d >= 0 && d <= 7);
   neib(n, p1, (Dir)d);
 }
+
+Dir opposite_dir(Dir d) {
+  int tmp = (int)d + 4;
+  if (tmp >= 8) {
+    tmp -= 8;
+  }
+  return (Dir)tmp;
+}
