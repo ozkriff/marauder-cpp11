@@ -595,7 +595,7 @@ static void process_mouse_motion_event(
     camera.z_angle -= e->xrel;
     camera.x_angle -= e->yrel;
     clamp_angle(&camera.z_angle);
-    clamp_angle(&camera.x_angle);
+    clamp_f(&camera.x_angle, 0, 50);
   }
 }
 
