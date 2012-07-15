@@ -508,19 +508,7 @@ static void draw_moving_unit(void) {
   glPushMatrix();
   glTranslatef(p.x, p.y, 0.0f);
   glRotatef((m2dir(&from_i, &to_i) + 4) * 45.0f, 0, 0, 1);
-  glEnable(GL_TEXTURE_2D);
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  {
-    glColor3f(1, 1, 1);
-    glBindTexture(GL_TEXTURE_2D, unit_texture);
-    glTexCoordPointer(2, GL_FLOAT, 0, va_obj.t);
-    glVertexPointer(3, GL_FLOAT, 0, va_obj.v);
-    glDrawArrays(GL_TRIANGLES, 0, va_obj.count);
-  }
-  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-  glDisable(GL_TEXTURE_2D);
-  glDisableClientState(GL_VERTEX_ARRAY);
+  draw_unit_model();
   draw_unit_circle(selected_unit);
   glPopMatrix();
   current_move_index++;
