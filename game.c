@@ -839,6 +839,16 @@ static void scroll_map(void) {
   } else if(p->y > screen->h - offset) {
     move_camera(&camera, D_S);
   }
+  if (camera.pos.x > MAP_X * TILE_SIZE) {
+    camera.pos.x = MAP_X * TILE_SIZE;
+  } else if (camera.pos.x < 0) {
+    camera.pos.x = 0;
+  }
+  if (camera.pos.y > MAP_Y * TILE_SIZE) {
+    camera.pos.y = MAP_Y * TILE_SIZE;
+  } else if (camera.pos.y < 0) {
+    camera.pos.y = 0;
+  }
 }
 
 static void mainloop(void) {
