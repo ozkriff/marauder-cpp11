@@ -574,7 +574,7 @@ static void process_mouse_button_down_event(
         shoot();
       } else if (t->cost < max_cost && t->parent != D_NONE) {
         fill_map(selected_unit);
-        move_path = get_path(active_tile_pos);
+        get_path(&move_path, active_tile_pos);
         unit_mode = UM_MOVING;
         current_move_index = 0;
         last_move_index = (move_path.count - 1) * move_speed;

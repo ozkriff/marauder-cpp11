@@ -152,16 +152,18 @@ void fill_map(const Unit *u) {
 }
 
 /* TODO rewrite */
-List get_path(V2i pos) {
-  List path = {NULL, NULL, 0};
+void get_path(List *path, V2i pos) {
   Dir dir;
+  assert(path);
+  assert(!path->head);
+  assert(!path->tail);
+  assert(path->count == 0);
   assert(inboard(&pos));
   while (tile(&pos)->cost != 0) {
-    push_node(&path, COPY_TO_HEAP(&pos, V2i));
+    push_node(path, COPY_TO_HEAP(&pos, V2i));
     dir = tile(&pos)->parent;
     neib(&pos, &pos, dir);
   }
   /* Add start position. */
-  push_node(&path, COPY_TO_HEAP(&pos, V2i));
-  return path;
+  push_node(path, COPY_TO_HEAP(&pos, V2i));
 }
