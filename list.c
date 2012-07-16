@@ -5,6 +5,8 @@
 #include "bool.h"
 #include "list.h"
 
+const List empty_list = {NULL, NULL, 0};
+
 /* Create in heap node that points to 'data'
   and return pointer to rhis node. */
 void set_node(Node *n, void *data) {
