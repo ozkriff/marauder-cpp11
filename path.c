@@ -178,7 +178,8 @@ void fill_map(const Unit *u) {
   assert(u);
   assert(is_queue_empty(&q));
   clean_map();
-  push(&u->pos, D_NONE, 0, u->dir); /* Push start position. */
+  /* Push start position. */
+  push(&u->pos, D_NONE, 0, u->dir);
   while (!is_queue_empty(&q)) {
     V2i p = pop();
     try_to_push_neibors(u, &p);
