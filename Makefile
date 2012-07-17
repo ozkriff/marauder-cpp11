@@ -1,10 +1,10 @@
-CC=gcc
+CC = gcc
 CFLAGS += -g
 CFLAGS += -std=c89
 CFLAGS += -Wall -Wextra --pedantic
 CFLAGS += -Werror
 #CFLAGS += -pg
-#CFLAGS=-O3
+#CFLAGS += -O3
 LDFLAGS += -lSDL -lSDL_image
 LDFLAGS += -lGL -lGLU
 LDFLAGS += -lm
