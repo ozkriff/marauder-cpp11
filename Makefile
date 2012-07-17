@@ -4,6 +4,7 @@ CFLAGS += -std=c89
 CFLAGS += -Wall -Wextra --pedantic
 CFLAGS += -Werror
 #CFLAGS += -pg
+#CFLAGS += -DNDEBUG
 #CFLAGS += -O3
 LDFLAGS += -lSDL -lSDL_image
 LDFLAGS += -lGL -lGLU
