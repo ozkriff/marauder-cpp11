@@ -14,7 +14,6 @@
 #include "v2f.h"
 #include "math.h"
 #include "dir.h"
-#include "line2f.h"
 #include "va.h"
 #include "obj.h"
 #include "misc.h"
