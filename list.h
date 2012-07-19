@@ -13,7 +13,7 @@ typedef struct {
   int count;
 } List;
 
-const List empty_list;
+extern const List empty_list;
 
 void insert_node(List *list, Node *node, Node *after);
 Node* extruct_node(List *list, Node *node);
