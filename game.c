@@ -415,25 +415,6 @@ static void draw_unit_circle(const Unit *u) {
   glLineWidth(1);
 }
 
-static void draw_units_at_f(const V2f *p, int n) {
-  int i;
-  assert(p);
-  assert(n > 1);
-  glColor3f(1, 0, 0);
-  glPushMatrix();
-  glTranslatef(p->x, p->y, 0);
-  /* glRotatef(90, 1, 0, 0); */
-  glScalef(0.5f, 0.5f, 0.5f);
-  for (i = 0; i < n; i++) {
-    glPushMatrix();
-    glRotatef(i * 360.0f / (float)n, 0, 0, 1);
-    glTranslatef(TILE_SIZE_2 * 1.6f, TILE_SIZE_2 * 1.6f, 0);
-    draw_unit_model();
-    glPopMatrix();
-  }
-  glPopMatrix();
-}
-
 static void draw_unit(const Unit *u) {
   V2f f;
   assert(u);
@@ -986,7 +967,6 @@ static void do_ui_opengl(void) {
 int main(int ac, char **av) {
   UNUSED(ac);
   UNUSED(av);
-  UNUSED(draw_units_at_f);
   do_ui_opengl();
   return 0;
 }
