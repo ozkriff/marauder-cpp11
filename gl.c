@@ -9,7 +9,7 @@
 #include "list.h"
 #include "misc.h"
 
-bool load_texture(char *filename, GLuint *id) {
+bool load_texture(GLuint *id, char *filename) {
   GLenum texture_format;
   GLint n_of_colors;
   SDL_Surface *surface;

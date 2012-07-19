@@ -968,8 +968,8 @@ static void init_ui_opengl(void) {
   init_camera();
   obj_read(&obj_unit, DATA("tank.obj"));
   obj_build(&va_obj, &obj_unit);
-  load_texture(DATA("floor.png"), &floor_texture);
-  load_texture(DATA("tank.png"), &unit_texture);
+  load_texture(&floor_texture, DATA("floor.png"));
+  load_texture(&unit_texture, DATA("tank.png"));
   init_vertex_arrays();
 }
 
