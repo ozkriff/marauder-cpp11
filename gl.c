@@ -17,10 +17,12 @@ bool load_texture(GLuint *id, const char *filename) {
   surface = IMG_Load(filename);
   if (surface) {
     if ((surface->w & (surface->w - 1)) != 0) {
-      die("image's width is not a power of 2\n");
+      die("gl.c: load_texture(): "
+          "image's width is not a power of 2\n");
     }
     if ((surface->h & (surface->h - 1)) != 0) {
-      die("image's height is not a power of 2\n");
+      die("gl.c: load_texture(): "
+          "image's height is not a power of 2\n");
     }
     n_of_colors = surface->format->BytesPerPixel;
     if (n_of_colors == 4) {
@@ -38,7 +40,8 @@ bool load_texture(GLuint *id, const char *filename) {
         texture_format = GL_BGR;
       }
     } else {
-      die("the image is not truecolor.."
+      die("gl.c: load_texture(): "
+          "the image is not truecolor.."
           "  this will probably break\n");
     }
     glGenTextures(1, id);

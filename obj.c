@@ -57,7 +57,7 @@ void obj_read(ObjModel *m, const char *filename) {
       items = sscanf(buffer, "v %f %f %f",
           &v->x, &v->y, &v->z);
       if (items != 3) {
-        die("v: items != 3\n");
+        die("obj_read(): vertex coords: items != 3\n");
       }
       v_i++;
     } else if (buffer[0] == 'v' && buffer[1] == 'n') {
@@ -67,7 +67,7 @@ void obj_read(ObjModel *m, const char *filename) {
       items = sscanf(buffer, "vn %f %f %f",
           &norm->x, &norm->y, &norm->z);
       if (items != 3) {
-        die("vn: items != 3\n");
+        die("obj_read(): vertex normals: items != 3\n");
       }
       n_i++;
     } else if (buffer[0] == 'v' && buffer[1] == 't') {
@@ -77,7 +77,7 @@ void obj_read(ObjModel *m, const char *filename) {
       items = sscanf(buffer, "vt %f %f", &tex->x, &tex->y);
       tex->y = 1.0f - tex->y; /* flip vertically */
       if (items != 2) {
-        die("vt: items != 2\n");
+        die("obj_read(): texture coords: items != 2\n");
       }
       t_i++;
     } else if (buffer[0] == 'f' && buffer [1] == ' ') {
@@ -96,7 +96,7 @@ void obj_read(ObjModel *m, const char *filename) {
             &t->v[0], &t->t[0], &t->v[1],
             &t->t[1], &t->v[2], &t->t[2]);
         if (items != 6) {
-          die("f: items != 6\n");
+          die("obj_read(): faces: items != 6\n");
         }
       } else if (slash_count == 2) {
         items = sscanf(buffer, "f %d/%d/%d %d/%d/%d %d/%d/%d",
@@ -104,10 +104,10 @@ void obj_read(ObjModel *m, const char *filename) {
             &t->v[1], &t->t[1], &t->n[1],
             &t->v[2], &t->t[2], &t->n[2]);
         if (items != 9) {
-          die("f: items != 9\n");
+          die("obj_read(): faces: items != 9\n");
         }
       } else {
-        die("f: error\n");
+        die("obj_read(): faces: bad format\n");
       }
       f_i++;
     }

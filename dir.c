@@ -40,7 +40,7 @@ void neib(V2i *neib, const V2i* pos, Dir i) {
   assert(pos);
   assert(neib);
   if (i == D_NONE || i == D_ERROR) {
-    die("misc: neib(): "
+    die("dir.c: neib(): "
         "Wrong direction: pos:[%d %d %d] dir:%d\n",
         pos->x, pos->y, i);
   }
