@@ -4,6 +4,8 @@
 #include <SDL/SDL_opengl.h>
 #include "va.h"
 
+const Va empty_va = {NULL, NULL, NULL, 0};
+
 void set_xy(float *coords, int n, int i, int vi,
     float x, float y)
 {

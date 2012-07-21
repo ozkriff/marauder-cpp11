@@ -34,8 +34,6 @@ typedef struct {
   int id;
 } Player;
 
-static const Va empty_va = {NULL, NULL, NULL, 0};
-
 #define TILE_SIZE 6.0f
 #define TILE_SIZE_2 (TILE_SIZE / 2.0f)
 

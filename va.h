@@ -8,6 +8,8 @@ typedef struct {
   int count; /* vertices count */
 } Va;
 
+extern const Va empty_va;
+
 void set_xy(float *coords, int n, int i, int vi,
     float x, float y);
 void set_xyz(float *verts, int n, int i, int vi,
