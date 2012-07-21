@@ -27,7 +27,10 @@ void die(const char *message, ...) {
 }
 
 void* copy_to_heap(const void *data, int size) {
-  void *tmp = calloc(1, size);
+  void *tmp;
+  assert(data);
+  assert(size > 0);
+  tmp = calloc(1, size);
   memcpy(tmp, data, (unsigned int)size);
   return tmp;
 }
