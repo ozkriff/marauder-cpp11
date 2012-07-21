@@ -15,7 +15,7 @@
 #include "misc.h"
 
 /* TODO "usemtl filename" */
-void obj_read(ObjModel *m, char *filename) {
+void obj_read(ObjModel *m, const char *filename) {
   char buffer[100];
   FILE *file;
   int v_i = 0;

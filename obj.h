@@ -19,5 +19,5 @@ typedef struct {
 } ObjModel;
 
 void obj_build(Va *va, const ObjModel *model);
-void obj_read(ObjModel *m, char *filename);
+void obj_read(ObjModel *m, const char *filename);
 void obj_debug_print(ObjModel *m);
