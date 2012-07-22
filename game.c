@@ -666,22 +666,6 @@ static void process_key_down_event(
       move_camera(&camera, D_E);
       break;
     }
-    case SDLK_EQUALS: {
-      action_points += 1;
-      if (selected_unit) {
-        fill_map(selected_unit);
-        build_walkable_array(&va_walkable_map);
-      }
-      break;
-    }
-    case SDLK_MINUS: {
-      action_points -= 1;
-      if (selected_unit) {
-        fill_map(selected_unit);
-        build_walkable_array(&va_walkable_map);
-      }
-      break;
-    }
     default: {
       printf("process_key_down_event(): "
           "Unknown key (%d, 0x%x) was pressed.\n",
