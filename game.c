@@ -531,35 +531,29 @@ static void shoot(void) {
 static void process_mouse_button_down_event(
     const SDL_MouseButtonEvent *e)
 {
-  V2i v;
+  int max_cost = 25;
+  Unit *u = unit_at(&active_tile_pos);
+  Tile *t = tile(&active_tile_pos);
+  assert(current_player);
   assert(e);
-  v.x = e->x / TILE_SIZE;
-  v.y = e->y / TILE_SIZE;
-  UNUSED(v);
-  {
-    int max_cost = 25;
-    Unit *u = unit_at(&active_tile_pos);
-    Tile *t = tile(&active_tile_pos);
-    assert(current_player);
-    if (unit_mode != UM_NORMAL) {
-      return;
-    }
-    if (u && u->player_id == current_player->id) {
-      selected_unit = u;
+  if (unit_mode != UM_NORMAL) {
+    return;
+  }
+  if (u && u->player_id == current_player->id) {
+    selected_unit = u;
+    fill_map(selected_unit);
+    build_walkable_array(&va_walkable_map);
+  } else if (selected_unit) {
+    if (u && u->player_id != current_player->id) {
+      shoot();
+    } else if (t->cost < max_cost && t->parent != D_NONE) {
       fill_map(selected_unit);
-      build_walkable_array(&va_walkable_map);
-    } else if (selected_unit) {
-      if (u && u->player_id != current_player->id) {
-        shoot();
-      } else if (t->cost < max_cost && t->parent != D_NONE) {
-        fill_map(selected_unit);
-        get_path(&move_path, active_tile_pos);
-        unit_mode = UM_MOVING;
-        current_move_index = 0;
-        last_move_index = (move_path.count - 1) * move_speed;
-        free(va_walkable_map.v);
-        va_walkable_map = empty_va;
-      }
+      get_path(&move_path, active_tile_pos);
+      unit_mode = UM_MOVING;
+      current_move_index = 0;
+      last_move_index = (move_path.count - 1) * move_speed;
+      free(va_walkable_map.v);
+      va_walkable_map = empty_va;
     }
   }
 }
