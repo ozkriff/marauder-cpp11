@@ -882,7 +882,7 @@ static void init_units(void) {
   int i;
   units = empty_list;
   selected_unit = NULL;
-  for (i = 0; i < 20; i++) {
+  for (i = 0; i < 8; i++) {
     V2i p;
     set_v2i(&p, rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
     if (!tile(&p)->obstacle && !unit_at(&p)) {
