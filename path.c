@@ -133,6 +133,7 @@ static void process_neibor(
     const Unit *u, const V2i *p1, const V2i *p2)
 {
   int newcost;
+  int ap;
   Tile *t1 = tile(p1);
   Tile *t2 = tile(p2);
   assert(t1);
@@ -144,7 +145,8 @@ static void process_neibor(
     return;
   }
   newcost = t1->cost + get_tile_cost(u, p1, p2);
-  if (t2->cost > newcost && newcost <= get_unit_type(u->type_id)->action_points) {
+  ap = get_unit_type(u->type_id)->action_points;
+  if (t2->cost > newcost && newcost <= ap) {
     push(p2, m2dir(p2, p1), newcost, m2dir(p1, p2));
   }
 }
