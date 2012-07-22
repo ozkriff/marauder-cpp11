@@ -14,7 +14,8 @@ LDFLAGS += -lm
 binname = rusty_armies
 all: $(binname)
 objects = game.o list.o obj.o misc.o va.o v2i.o v2f.o \
-  v3f.o gl.o camera.o path.o dir.o math.o los.o
+  v3f.o gl.o camera.o path.o dir.o math.o los.o \
+  unit_type.o
 $(binname): $(objects)
 	$(CC) $(CFLAGS) $(objects) $(LDFLAGS) -o $(binname)
 va.o: va.h
@@ -34,5 +35,6 @@ obj.o: bool.h list.h v2i.h v2f.h v3f.h math.h va.h \
   obj.h misc.h
 path.o: bool.h list.h v2i.h misc.h dir.h game.h
 los.o: bool.h v2i.h v2f.h los.h math.h
+unit_type.o: unit_type.h bool.h
 clean:
 	rm $(binname) $(objects) tags -f

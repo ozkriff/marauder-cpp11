@@ -18,6 +18,7 @@
 #include "obj.h"
 #include "misc.h"
 #include "camera.h"
+#include "unit_type.h"
 #include "game.h"
 #include "path.h"
 #include "gl.h"
@@ -39,8 +40,6 @@ typedef struct {
 
 static Tile map[MAP_Y][MAP_X];
 
-int action_points;
-
 static UnitMode unit_mode;
 static int last_move_index;
 static int current_move_index;
@@ -54,17 +53,16 @@ static bool is_dragging_map;
 static bool done;
 static Camera camera;
 static GLuint floor_texture;
-static GLuint unit_texture;
-static ObjModel obj_unit;
 static Va va_map;
 static Va va_obstacles;
 static Va va_walkable_map;
-static Va va_obj;
 static Va va_pick;
 static Va va_fow; /* fog of war */
 static List units;
 static Unit *selected_unit;
-
+static ObjModel obj_units[UNIT_COUNT];
+static Va va_units[UNIT_COUNT];
+static GLuint texture_units[UNIT_COUNT];
 static Player *current_player;
 static List players;
 
@@ -236,8 +234,9 @@ static void calculate_fow(void) {
     Node *node;
     FOR_EACH_NODE(units, node) {
       Unit *u = node->data;
+      int max_dist = get_unit_type(u->type_id)->range_of_vision;
       bool is_player_ok = (u->player_id == current_player->id);
-      bool is_distance_ok = (dist_i(&p, &u->pos) < 9);
+      bool is_distance_ok = (dist_i(&p, &u->pos) < max_dist);
       bool is_los_ok = is_los_clear(&p, &u->pos);
       if (is_player_ok && is_distance_ok && is_los_ok) {
         t->fow++;
@@ -339,6 +338,7 @@ static void add_unit(V2i p, int player_id) {
   u->pos = p;
   u->player_id = player_id;
   u->dir = (Dir)rnd(0, 7);
+  u->type_id = rnd(0, UNIT_COUNT - 1);
   calculate_fow();
   build_fow_array(&va_fow);
 }
@@ -376,15 +376,16 @@ static void draw_map(void) {
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-static void draw_unit_model(void) {
+static void draw_unit_model(const Unit *u) {
+  assert(u);
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glBindTexture(GL_TEXTURE_2D, unit_texture);
+  glBindTexture(GL_TEXTURE_2D, texture_units[u->type_id]);
   glColor3f(1, 1, 1);
-  glTexCoordPointer(2, GL_FLOAT, 0, va_obj.t);
-  glVertexPointer(3, GL_FLOAT, 0, va_obj.v);
-  glDrawArrays(GL_TRIANGLES, 0, va_obj.count);
+  glTexCoordPointer(2, GL_FLOAT, 0, va_units[u->type_id].t);
+  glVertexPointer(3, GL_FLOAT, 0, va_units[u->type_id].v);
+  glDrawArrays(GL_TRIANGLES, 0, va_units[u->type_id].count);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_TEXTURE_2D);
@@ -421,7 +422,7 @@ static void draw_unit(const Unit *u) {
   glPushMatrix();
   glTranslatef(f.x, f.y, 0);
   glRotatef((u->dir + 4) * 45.0f, 0, 0, 1);
-  draw_unit_model();
+  draw_unit_model(u);
   draw_unit_circle(u);
   glPopMatrix();
 }
@@ -485,7 +486,7 @@ static void draw_moving_unit(void) {
   glPushMatrix();
   glTranslatef(p.x, p.y, 0.0f);
   glRotatef((m2dir(&from_i, &to_i) + 4) * 45.0f, 0, 0, 1);
-  draw_unit_model();
+  draw_unit_model(selected_unit);
   draw_unit_circle(selected_unit);
   glPopMatrix();
   current_move_index++;
@@ -892,8 +893,8 @@ static void init_players(void) {
 
 static void init_logic(void) {
   srand(time(NULL));
-  action_points = 24;
   init_pathfinding_module();
+  init_unit_types();
   clean_map();
   clean_fow();
   move_path = empty_list;
@@ -915,6 +916,15 @@ static void init_vertex_arrays(void) {
   build_fow_array(&va_fow);
 }
 
+static void load_unit_resources(void) {
+  load_texture(&texture_units[UNIT_TANK], DATA("tank.png"));
+  load_texture(&texture_units[UNIT_TRUCK], DATA("truck.png"));
+  obj_read(&obj_units[UNIT_TANK], DATA("tank.obj"));
+  obj_read(&obj_units[UNIT_TRUCK], DATA("truck.obj"));
+  obj_build(&va_units[UNIT_TANK], &obj_units[UNIT_TANK]);
+  obj_build(&va_units[UNIT_TRUCK], &obj_units[UNIT_TRUCK]);
+}
+
 static void init_ui_opengl(void) {
   init_logic();
   done = false;
@@ -929,10 +939,8 @@ static void init_ui_opengl(void) {
       32, SDL_OPENGL | SDL_GL_DOUBLEBUFFER);
   init_opengl();
   init_camera();
-  obj_read(&obj_unit, DATA("tank.obj"));
-  obj_build(&va_obj, &obj_unit);
   load_texture(&floor_texture, DATA("floor.png"));
-  load_texture(&unit_texture, DATA("tank.png"));
+  load_unit_resources();
   init_vertex_arrays();
 }
 
