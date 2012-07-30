@@ -9,6 +9,7 @@
 #include <SDL/SDL_opengl.h>
 #include "bool.h"
 #include "list.h"
+#include "config.h"
 #include "v2i.h"
 #include "v3f.h"
 #include "v2f.h"
@@ -24,7 +25,10 @@
 #include "gl.h"
 #include "los.h"
 
-#define DATA(x) "../data/" x
+#ifndef DATA_DIR
+#error DATA_DIR undefined!
+#endif
+#define DATA(x) (DATA_DIR "/" x)
 
 typedef enum {
   UM_NORMAL,
@@ -943,7 +947,7 @@ static void load_unit_resources(void) {
 static void init_ui_opengl(void) {
   init_logic();
   done = false;
-  set_v2i(&win_size, 400, 200);
+  set_v2i(&win_size, WIN_WIDTH, WIN_HEIGHT);
   set_v2i(&active_tile_pos, 0, 0);
   set_v2i(&mouse_pos, 0, 0);
   unit_mode = UM_NORMAL;

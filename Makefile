@@ -26,7 +26,8 @@ camera.o: bool.h list.h misc.h v2f.h v2i.h dir.h math.h \
   camera.h
 dir.o: bool.h list.h misc.h v2i.h dir.h
 game.o: bool.h list.h v2i.h v3f.h v2f.h math.h dir.h \
-  va.h obj.h misc.h camera.h game.h path.h gl.h los.h
+  va.h obj.h misc.h camera.h game.h path.h gl.h los.h \
+  config.h
 gl.o: bool.h gl.h list.h misc.h
 list.o: bool.h list.h
 math.o: bool.h v2f.h
