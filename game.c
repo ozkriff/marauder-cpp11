@@ -57,7 +57,7 @@ static Va va_map;
 static Va va_obstacles;
 static Va va_walkable_map;
 static Va va_pick;
-static Va va_fow; /* fog of war */
+static Va va_fog_of_war;
 static List units;
 static Unit *selected_unit;
 static ObjModel obj_units[UNIT_COUNT];
@@ -340,7 +340,7 @@ static void add_unit(V2i p, int player_id) {
   u->dir = CAST(rnd(0, 7), Dir);
   u->type_id = rnd(0, UNIT_COUNT - 1);
   calculate_fow();
-  build_fow_array(&va_fow);
+  build_fow_array(&va_fog_of_war);
 }
 
 static void draw_map(void) {
@@ -371,8 +371,8 @@ static void draw_map(void) {
 
   glEnableClientState(GL_VERTEX_ARRAY);
   glColor4f(0.0f, 0.0f, 0.0f, 0.2f);
-  glVertexPointer(3, GL_FLOAT, 0, va_fow.v);
-  glDrawArrays(GL_TRIANGLES, 0, va_fow.count);
+  glVertexPointer(3, GL_FLOAT, 0, va_fog_of_war.v);
+  glDrawArrays(GL_TRIANGLES, 0, va_fog_of_war.count);
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
@@ -466,7 +466,7 @@ static void end_movement(const V2i *pos) {
   fill_map(selected_unit);
   build_walkable_array(&va_walkable_map);
   calculate_fow();
-  build_fow_array(&va_fow);
+  build_fow_array(&va_fog_of_war);
 }
 
 static void draw_moving_unit(void) {
@@ -513,7 +513,7 @@ static void kill_unit(Unit *u) {
     fill_map(selected_unit);
     build_walkable_array(&va_walkable_map);
     calculate_fow();
-    build_fow_array(&va_fow);
+    build_fow_array(&va_fog_of_war);
   }
 }
 
@@ -595,7 +595,7 @@ static void process_key_down_event(
       build_map_array(&va_map);
       build_obstacles_array(&va_obstacles);
       calculate_fow();
-      build_fow_array(&va_fow);
+      build_fow_array(&va_fog_of_war);
       if (selected_unit) {
         fill_map(selected_unit);
         build_walkable_array(&va_walkable_map);
@@ -614,7 +614,7 @@ static void process_key_down_event(
       FREE(&va_walkable_map.v);
       va_walkable_map = empty_va;
       calculate_fow();
-      build_fow_array(&va_fow);
+      build_fow_array(&va_fog_of_war);
       break;
     }
     case SDLK_u: {
@@ -903,11 +903,11 @@ static void init_vertex_arrays(void) {
   va_map = empty_va;
   va_pick = empty_va;
   va_walkable_map = empty_va;
-  va_fow = empty_va;
+  va_fog_of_war = empty_va;
   build_picking_tiles_array(&va_pick);
   build_map_array(&va_map);
   build_obstacles_array(&va_obstacles);
-  build_fow_array(&va_fow);
+  build_fow_array(&va_fog_of_war);
 }
 
 static void load_unit_resources(void) {
