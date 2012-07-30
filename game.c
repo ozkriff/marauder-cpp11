@@ -337,7 +337,7 @@ static void add_unit(V2i p, int player_id) {
   push_node(&units, n);
   u->pos = p;
   u->player_id = player_id;
-  u->dir = (Dir)rnd(0, 7);
+  u->dir = CAST(rnd(0, 7), Dir);
   u->type_id = rnd(0, UNIT_COUNT - 1);
   calculate_fow();
   build_fow_array(&va_fow);
@@ -452,8 +452,8 @@ static void get_current_moving_nodes(V2i *from, V2i *to) {
       break;
     }
   }
-  *from = *(V2i*)node->data;
-  *to = *(V2i*)node->next->data;
+  *from = *CAST(node->data, V2i*);
+  *to = *CAST(node->next->data, V2i*);
 }
 
 static void end_movement(const V2i *pos) {

@@ -13,8 +13,8 @@ void* my_alloc(int count, int size) {
   unsigned int u_size;
   assert(count > 0);
   assert(size > 0);
-  u_count = (unsigned int)count;
-  u_size = (unsigned int)size;
+  u_count = CAST(count, unsigned int);
+  u_size = CAST(size, unsigned int);
   return calloc(u_count, u_size);
 }
 
@@ -31,7 +31,7 @@ void* copy_to_heap(const void *data, int size) {
   assert(data);
   assert(size > 0);
   tmp = calloc(1, size);
-  memcpy(tmp, data, (unsigned int)size);
+  memcpy(tmp, data, CAST(size, unsigned int));
   return tmp;
 }
 
