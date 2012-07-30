@@ -870,7 +870,7 @@ static void init_opengl(void) {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-static void init_camera(void){
+static void init_camera(void) {
   camera.x_angle = 45.0f;
   camera.z_angle = 45.0f;
   camera.pos.x = 20;
