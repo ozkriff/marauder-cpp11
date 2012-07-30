@@ -44,7 +44,7 @@ void* copy_to_heap(const void *data, int size) {
 
 Node* create_node(const void *data, int size) {
   void *newdata = copy_to_heap(data, size);
-  Node *n = calloc(1, sizeof(Node));
+  Node *n = ALLOCATE(1, Node);
   set_node(n, newdata);
   return n;
 }
