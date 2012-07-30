@@ -126,7 +126,7 @@ static void build_map_array(Va *v) {
   }
   v->v = ALLOCATE(v->count, V3f);
   v->t = ALLOCATE(v->count, V2f);
-  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+  FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     float n = TILE_SIZE_2;
     V2f pos;
@@ -166,7 +166,7 @@ static void build_obstacles_array(Va *v) {
   }
   v->v = ALLOCATE(v->count, V3f);
   v->t = ALLOCATE(v->count, V2f);
-  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+  FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     float n = TILE_SIZE_2;
     V2f pos;
@@ -195,7 +195,7 @@ static void build_obstacles_array(Va *v) {
 static int calculate_walkable_tiles_count(void) {
   V2i p;
   int count = 0;
-  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+  FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     if (t->parent != D_NONE && t->cost != 30000) {
       count++;
@@ -219,7 +219,7 @@ static bool is_los_clear(const V2i *p1, const V2i *p2) {
 
 static void clean_fow(void) {
   V2i p;
-  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+  FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     t->fow = 0;
   }
@@ -229,7 +229,7 @@ static void calculate_fow(void) {
   V2i p;
   assert(current_player);
   clean_fow();
-  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+  FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     Node *node;
     FOR_EACH_NODE(units, node) {
@@ -248,7 +248,7 @@ static void calculate_fow(void) {
 static int calculate_fogged_tiles_count(void) {
   int n = 0;
   V2i p;
-  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+  FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     if (t->fow == 0) {
       n++;
@@ -266,7 +266,7 @@ static void build_fow_array(Va *v) {
     v->v = NULL;
   }
   v->v = ALLOCATE(v->count, V3f);
-  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+  FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     float n = TILE_SIZE_2;
     V2f pos;
@@ -298,7 +298,7 @@ static void build_walkable_array(Va *v) {
     return;
   }
   v->v = ALLOCATE(v->count, V3f);
-  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+  FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     assert(t);
     if (t->parent != D_NONE && t->cost < 50) {
@@ -739,7 +739,7 @@ static void build_picking_tiles_array(Va *va) {
   }
   va->v = ALLOCATE(va->count, V3f);
   va->ub_c = ALLOCATE(va->count * 3, GLubyte);
-  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+  FOR_EACH_TILE(&p) {
     float n = TILE_SIZE_2;
     V2f pos;
     v2i_to_v2f(&pos, &p);
@@ -874,7 +874,7 @@ static void init_units(void) {
 
 static void init_obstacles(void) {
   V2i p;
-  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+  FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     t->obstacle = ((rand() % 100) > 85);
   }

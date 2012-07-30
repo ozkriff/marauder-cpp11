@@ -153,7 +153,7 @@ static void process_neibor(
 
 void clean_map(void) {
   V2i p;
-  for (set_v2i(&p, 0, 0); inboard(&p); inc_v2i(&p)) {
+  FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     assert(t);
     t->cost = 30000;

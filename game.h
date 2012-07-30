@@ -27,3 +27,6 @@ void inc_v2i(V2i *pos);
 Tile* tile(const V2i *p);
 bool inboard(const V2i *p);
 Unit* unit_at(const V2i *pos);
+
+#define FOR_EACH_TILE(p) \
+  for (set_v2i(p, 0, 0); inboard(p); inc_v2i(p))
