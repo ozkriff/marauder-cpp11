@@ -397,7 +397,7 @@ static void draw_unit_circle(const Unit *u) {
   assert(u);
   if (u->player_id == 0) {
     glColor3f(1, 0, 0);
-  } else if (u->player_id == 1) {
+  } elif (u->player_id == 1) {
     glColor3f(0, 0, 1);
   } else {
     die("draw_unit_circle(): You need more colors!");
@@ -543,10 +543,10 @@ static void process_mouse_button_down_event(
     selected_unit = u;
     fill_map(selected_unit);
     build_walkable_array(&va_walkable_map);
-  } else if (selected_unit) {
+  } elif (selected_unit) {
     if (u && u->player_id != current_player->id) {
       shoot();
-    } else if (t->cost < max_cost && t->parent != D_NONE) {
+    } elif (t->cost < max_cost && t->parent != D_NONE) {
       fill_map(selected_unit);
       get_path(&move_path, active_tile_pos);
       unit_mode = UM_MOVING;
@@ -697,7 +697,7 @@ static void process_sdl_event(const SDL_Event *e) {
       if (e->button.button == SDL_BUTTON_WHEELUP) {
         camera.zoom -= 5;
         clamp_f(&camera.zoom, 30, 200);
-      } else if (e->button.button == SDL_BUTTON_WHEELDOWN) {
+      } elif (e->button.button == SDL_BUTTON_WHEELDOWN) {
         camera.zoom += 5;
         clamp_f(&camera.zoom, 30, 200);
       }
@@ -706,7 +706,7 @@ static void process_sdl_event(const SDL_Event *e) {
     case SDL_MOUSEBUTTONDOWN: {
       if (e->button.button == SDL_BUTTON_RIGHT) {
         is_dragging_map = true;
-      } else if (e->button.button == SDL_BUTTON_LEFT) {
+      } elif (e->button.button == SDL_BUTTON_LEFT) {
         process_mouse_button_down_event(&e->button);
       }
       break;
@@ -788,22 +788,22 @@ static void scroll_map(void) {
   int offset = 15;
   if (p->x < offset) {
     move_camera(&camera, D_W);
-  } else if(p->x > screen->w - offset) {
+  } elif(p->x > screen->w - offset) {
     move_camera(&camera, D_E);
   }
   if (p->y < offset) {
     move_camera(&camera, D_N);
-  } else if(p->y > screen->h - offset) {
+  } elif(p->y > screen->h - offset) {
     move_camera(&camera, D_S);
   }
   if (camera.pos.x > MAP_X * TILE_SIZE) {
     camera.pos.x = MAP_X * TILE_SIZE;
-  } else if (camera.pos.x < 0) {
+  } elif (camera.pos.x < 0) {
     camera.pos.x = 0;
   }
   if (camera.pos.y > MAP_Y * TILE_SIZE) {
     camera.pos.y = MAP_Y * TILE_SIZE;
-  } else if (camera.pos.y < 0) {
+  } elif (camera.pos.y < 0) {
     camera.pos.y = 0;
   }
 }

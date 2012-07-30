@@ -14,3 +14,4 @@ void* copy_to_heap(const void *data, int size);
 
 #define UNUSED(x) ((void)x)
 #define CAST(data, type) ((type)(data))
+#define elif else if
