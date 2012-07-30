@@ -560,7 +560,6 @@ static void shoot(void) {
 static void process_mouse_button_down_event(
     const SDL_MouseButtonEvent *e)
 {
-  int max_cost = 25;
   V2i p;
   Button *b;
   Unit *u;
@@ -583,9 +582,12 @@ static void process_mouse_button_down_event(
     fill_map(selected_unit);
     build_walkable_array(&va_walkable_map);
   } elif (selected_unit) {
+    const Unit_type *type = get_unit_type(
+        selected_unit->type_id);
+    int ap = type->action_points;
     if (u && u->player_id != current_player->id) {
       shoot();
-    } elif (t->cost < max_cost && t->parent != D_NONE) {
+    } elif (t->cost <= ap && t->parent != D_NONE) {
       fill_map(selected_unit);
       get_path(&move_path, active_tile_pos);
       unit_mode = UM_MOVING;
