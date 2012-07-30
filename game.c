@@ -7,6 +7,7 @@
 #include <time.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
+#include <SDL/SDL_ttf.h>
 #include "bool.h"
 #include "list.h"
 #include "config.h"
@@ -24,6 +25,7 @@
 #include "path.h"
 #include "gl.h"
 #include "los.h"
+#include "widgets.h"
 
 #ifndef DATA_DIR
 #error DATA_DIR undefined!
@@ -69,6 +71,7 @@ static Va va_units[UNIT_COUNT];
 static GLuint texture_units[UNIT_COUNT];
 static Player *current_player;
 static List players;
+static TTF_Font *font;
 
 void create_local_human(int id) {
   Player *p = ALLOCATE(1, Player);
@@ -526,6 +529,7 @@ static void draw(void) {
   set_camera(&camera);
   draw_map();
   draw_units();
+  draw_buttons();
   if (unit_mode == UM_MOVING) {
     draw_moving_unit();
   }
@@ -557,8 +561,18 @@ static void process_mouse_button_down_event(
     const SDL_MouseButtonEvent *e)
 {
   int max_cost = 25;
-  Unit *u = unit_at(&active_tile_pos);
-  Tile *t = tile(&active_tile_pos);
+  V2i p;
+  Button *b;
+  Unit *u;
+  Tile *t;
+  set_v2i(&p, CAST(e->x, int), CAST(e->y, int));
+  b = v2i_to_button(p);
+  if (b) {
+    b->callback();
+    return;
+  }
+  u = unit_at(&active_tile_pos);
+  t = tile(&active_tile_pos);
   assert(current_player);
   assert(e);
   if (unit_mode != UM_NORMAL) {
@@ -944,6 +958,16 @@ static void load_unit_resources(void) {
   obj_build(&va_units[UNIT_TRUCK], &obj_units[UNIT_TRUCK]);
 }
 
+static void on_test_button(void) {
+  printf("BUTTON CLICKED\n");
+}
+
+static void add_buttons(void) {
+  V2i pos = {10, 10};
+  (void)add_button(font, &pos, "[CLICK ME!]",
+      on_test_button);
+}
+
 static void init_ui_opengl(void) {
   init_logic();
   done = false;
@@ -958,6 +982,9 @@ static void init_ui_opengl(void) {
       32, SDL_OPENGL | SDL_GL_DOUBLEBUFFER);
   init_opengl();
   init_camera();
+  init_widgets();
+  font = open_font(DEFAULT_FONT, 10);
+  add_buttons();
   load_texture(&floor_texture, DATA("floor.png"));
   load_unit_resources();
   init_vertex_arrays();
