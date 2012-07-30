@@ -4,7 +4,7 @@ CC = gcc
 CFLAGS += -g
 CFLAGS += -std=c89
 CFLAGS += -Wall -Wextra --pedantic
-CFLAGS += -Werror
+#CFLAGS += -Werror
 #CFLAGS += -pg
 #CFLAGS += -DNDEBUG
 #CFLAGS += -O3
