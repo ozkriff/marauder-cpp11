@@ -339,17 +339,27 @@ Unit* id2unit(int id) {
   return NULL;
 }
 
+static int get_new_unit_id(void) {
+  if (units.count > 0) {
+    Unit *last= units.tail->data;
+    return last->id + 1;
+  } else {
+    return 0;
+  }
+}
+
 static void add_unit(V2i p, int player_id) {
   Unit *u = ALLOCATE(1, Unit);
   Node *n = ALLOCATE(1, Node);
   assert(inboard(&p));
   assert(player_id >= 0 && player_id < 16);
-  set_node(n, u);
-  push_node(&units, n);
+  u->id = get_new_unit_id();
   u->pos = p;
   u->player_id = player_id;
   u->dir = CAST(rnd(0, 7), Dir);
   u->type_id = rnd(0, UNIT_COUNT - 1);
+  set_node(n, u);
+  push_node(&units, n);
   calculate_fow();
   build_fow_array(&va_fog_of_war);
 }
