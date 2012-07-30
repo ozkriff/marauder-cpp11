@@ -4,6 +4,9 @@ void* my_alloc(int count, int size);
 #define ALLOCATE(count, type) \
   my_alloc(count, sizeof(type))
 
+void my_free(void **mem);
+#define FREE(mem) my_free(CAST(mem, void**))
+
 void die(const char *message, ...);
 
 #define COPY_TO_HEAP(data, type) \

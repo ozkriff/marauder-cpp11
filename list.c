@@ -1,9 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 
 #include <assert.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include "bool.h"
 #include "list.h"
+#include "misc.h"
 
 const List empty_list = {NULL, NULL, 0};
 
@@ -59,8 +60,8 @@ Node* extruct_node(List *list, Node *node) {
 /* Delete data and node. */
 void delete_node(List *list, Node *node) {
   Node *tmp = extruct_node(list, node);
-  free(tmp->data);
-  free(tmp);
+  FREE(&tmp->data);
+  FREE(&tmp);
 }
 
 /* Extruct node from list, delete node,
@@ -68,7 +69,7 @@ void delete_node(List *list, Node *node) {
 void* extruct_data(List *list, Node *node) {
   Node *tmp = extruct_node(list, node);
   void *data = node->data;
-  free(tmp);
+  FREE(&tmp);
   return data;
 }
 

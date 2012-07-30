@@ -18,6 +18,13 @@ void* my_alloc(int count, int size) {
   return calloc(u_count, u_size);
 }
 
+void my_free(void **mem) {
+  assert(mem);
+  assert(*mem);
+  free(*mem);
+  *mem = NULL;
+}
+
 void die(const char *message, ...) {
   va_list arg_list;
   va_start(arg_list, message);

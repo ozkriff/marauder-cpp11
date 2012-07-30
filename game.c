@@ -117,11 +117,11 @@ static void build_map_array(Va *v) {
   int i = 0; /* tile's index */
   v->count = MAP_X * MAP_Y * 6;
   if (v->v) {
-    free(v->v);
+    FREE(&v->v);
     v->v = NULL;
   }
   if (v->t) {
-    free(v->t);
+    FREE(&v->t);
     v->t = NULL;
   }
   v->v = ALLOCATE(v->count, V3f);
@@ -157,11 +157,11 @@ static void build_obstacles_array(Va *v) {
   int i = 0; /* tile's index */
   v->count = MAP_X * MAP_Y * 6;
   if (v->v) {
-    free(v->v);
+    FREE(&v->v);
     v->v = NULL;
   }
   if (v->t) {
-    free(v->t);
+    FREE(&v->t);
     v->t = NULL;
   }
   v->v = ALLOCATE(v->count, V3f);
@@ -262,7 +262,7 @@ static void build_fow_array(Va *v) {
   int i = 0; /* tile's index */
   v->count = calculate_fogged_tiles_count() * 6;
   if (v->v) {
-    free(v->v);
+    FREE(&v->v);
     v->v = NULL;
   }
   v->v = ALLOCATE(v->count, V3f);
@@ -290,7 +290,7 @@ static void build_walkable_array(Va *v) {
   int i = 0; /* tile's index */
   assert(v);
   if (v->v) {
-    free(v->v);
+    FREE(&v->v);
     v->v = NULL;
   }
   v->count = calculate_walkable_tiles_count() * 3;
@@ -552,7 +552,7 @@ static void process_mouse_button_down_event(
       unit_mode = UM_MOVING;
       current_move_index = 0;
       last_move_index = (move_path.count - 1) * move_speed;
-      free(va_walkable_map.v);
+      FREE(&va_walkable_map.v);
       va_walkable_map = empty_va;
     }
   }
@@ -611,7 +611,7 @@ static void process_key_down_event(
         current_player = players.head->data;
       selected_unit = NULL;
       clean_map();
-      free(va_walkable_map.v);
+      FREE(&va_walkable_map.v);
       va_walkable_map = empty_va;
       calculate_fow();
       build_fow_array(&va_fow);
@@ -730,11 +730,11 @@ static void build_picking_tiles_array(Va *va) {
   assert(va);
   va->count = MAP_X * MAP_Y * 4;
   if (va->v) {
-    free(va->v);
+    FREE(&va->v);
     va->v = NULL;
   }
   if (va->ub_c) {
-    free(va->ub_c);
+    FREE(&va->ub_c);
     va->ub_c = NULL;
   }
   va->v = ALLOCATE(va->count, V3f);
