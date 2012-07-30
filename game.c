@@ -328,6 +328,17 @@ Unit* unit_at(const V2i *pos) {
   return NULL;
 }
 
+Unit* id2unit(int id) {
+  Node *node;
+  FOR_EACH_NODE(units, node) {
+    Unit *u = node->data;
+    if (u->id == id) {
+      return u;
+    }
+  }
+  return NULL;
+}
+
 static void add_unit(V2i p, int player_id) {
   Unit *u = ALLOCATE(1, Unit);
   Node *n = ALLOCATE(1, Node);
