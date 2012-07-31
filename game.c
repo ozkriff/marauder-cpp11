@@ -574,6 +574,7 @@ static void process_mouse_button_down_event(
   t = tile(&active_tile_pos);
   assert(current_player);
   assert(e);
+  UNUSED(e);
   if (unit_mode != UM_NORMAL) {
     return;
   }
