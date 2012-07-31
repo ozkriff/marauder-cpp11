@@ -49,7 +49,8 @@ static Tile map[MAP_Y][MAP_X];
 static UnitMode unit_mode;
 static int last_move_index;
 static int current_move_index;
-static List move_path;
+static V2i *move_path;
+static int move_path_length;
 static int move_speed;
 static V2i win_size;
 static V2i mouse_pos;
@@ -470,25 +471,24 @@ static void draw_units(void) {
 }
 
 static void get_current_moving_nodes(V2i *from, V2i *to) {
-  Node *node;
   int i = current_move_index;
+  int j; /* node id */
   assert(from);
   assert(to);
-  FOR_EACH_NODE(move_path, node) {
+  for (j = 0; j < move_path_length - 1; j++) {
     i -= move_speed;
     if (i < 0) {
       break;
     }
   }
-  *from = *CAST(node->data, V2i*);
-  *to = *CAST(node->next->data, V2i*);
+  *from = move_path[j];
+  *to = move_path[j + 1];
 }
 
 static void end_movement(const V2i *pos) {
   assert(pos);
-  while (move_path.count > 0) {
-    delete_node(&move_path, move_path.head);
-  }
+  free (move_path);
+  move_path_length = 0;
   unit_mode = UM_NORMAL;
   selected_unit->pos = *pos;
   fill_map(selected_unit);
@@ -589,10 +589,12 @@ static void process_mouse_button_down_event(
       shoot();
     } elif (t->cost <= ap && t->parent != D_NONE) {
       fill_map(selected_unit);
-      get_path(&move_path, active_tile_pos);
+      move_path_length = get_path_length(active_tile_pos);
+      move_path = ALLOCATE(move_path_length, V2i);
+      get_path(move_path, move_path_length, active_tile_pos);
       unit_mode = UM_MOVING;
       current_move_index = 0;
-      last_move_index = (move_path.count - 1) * move_speed;
+      last_move_index = (move_path_length - 1) * move_speed;
       FREE(&va_walkable_map.v);
       va_walkable_map = empty_va;
     }
@@ -932,7 +934,7 @@ static void init_logic(void) {
   init_unit_types();
   clean_map();
   clean_fow();
-  move_path = empty_list;
+  move_path = NULL;
   players = empty_list;
   init_players();
   init_obstacles();

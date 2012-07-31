@@ -189,19 +189,29 @@ void fill_map(const Unit *u) {
   }
 }
 
-/* TODO rewrite */
-void get_path(List *path, V2i pos) {
+void get_path(V2i *path, int length, V2i pos) {
   Dir dir;
+  int i = length - 1;
   assert(path);
-  assert(!path->head);
-  assert(!path->tail);
-  assert(path->count == 0);
   assert(inboard(&pos));
   while (tile(&pos)->cost != 0) {
-    push_node(path, COPY_TO_HEAP(&pos, V2i));
+    path[i] = pos;
+    dir = tile(&pos)->parent;
+    neib(&pos, &pos, dir);
+    i--;
+  }
+  /* Add start position. */
+  path[i] = pos;
+}
+
+int get_path_length(V2i pos) {
+  Dir dir;
+  int length = 1;
+  assert(inboard(&pos));
+  while (tile(&pos)->cost != 0) {
+    length++;
     dir = tile(&pos)->parent;
     neib(&pos, &pos, dir);
   }
-  /* Add start position. */
-  push_node(path, COPY_TO_HEAP(&pos, V2i));
+  return length;
 }
