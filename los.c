@@ -12,8 +12,7 @@
 
 /* Wikipedia: Bresenham's line algorithm */
 
-void los_init(LosData *br, const V2i *a, const V2i *b)
-{
+void los_init(LosData *br, const V2i *a, const V2i *b) {
   assert(br);
   assert(a);
   assert(b);
@@ -40,8 +39,7 @@ bool los_is_finished(LosData *br) {
   return br->pos.x >= br->b.x;
 }
 
-void los_get_next(LosData *br, V2i *next_pos)
-{
+void los_get_next(LosData *br, V2i *next_pos) {
   assert(br);
   assert(next_pos);
   br->error -= br->delta.y;
