@@ -529,10 +529,10 @@ static void draw(void) {
   set_camera(&camera);
   draw_map();
   draw_units();
-  draw_buttons();
   if (unit_mode == UM_MOVING) {
     draw_moving_unit();
   }
+  draw_buttons();
   SDL_GL_SwapBuffers();
 }
 
