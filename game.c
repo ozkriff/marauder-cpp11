@@ -349,7 +349,7 @@ Unit* id2unit(int id) {
 
 static int get_new_unit_id(void) {
   if (units.count > 0) {
-    Unit *last= units.tail->data;
+    Unit *last = units.head->data;
     return last->id + 1;
   } else {
     return 0;
