@@ -22,36 +22,39 @@
 #include "camera.h"
 #include "unit_type.h"
 #include "game.h"
+#include "event_move.h"
+#include "event_end_turn.h"
+#include "event.h"
 #include "path.h"
 #include "gl.h"
 #include "los.h"
 #include "widgets.h"
+#include "game_private.h"
+#include "ui_event_move.h"
+#include "ui_event.h"
 
 #ifndef DATA_DIR
 #error DATA_DIR undefined!
 #endif
 #define DATA(x) (DATA_DIR "/" x)
 
-typedef enum {
-  UM_NORMAL,
-  UM_MOVING
-} UnitMode;
-
-typedef struct {
-  int id;
-} Player;
-
 #define TILE_SIZE 6.0f
 #define TILE_SIZE_2 (TILE_SIZE / 2.0f)
 
-static Tile map[MAP_Y][MAP_X];
+/* Core */
+List players;
+Event const *current_event;
+Player *current_player;
+Unit *selected_unit;
 
-static UnitMode unit_mode;
-static int last_move_index;
-static int current_move_index;
-static V2i *move_path;
-static int move_path_length;
-static int move_speed;
+/* User interface */
+UnitMode unit_mode;
+int last_move_index;
+int current_move_index;
+Va va_walkable_map;
+Va va_fog_of_war;
+
+static Tile map[MAP_Y][MAP_X];
 static V2i win_size;
 static V2i mouse_pos;
 static V2i active_tile_pos;
@@ -62,16 +65,11 @@ static Camera camera;
 static GLuint floor_texture;
 static Va va_map;
 static Va va_obstacles;
-static Va va_walkable_map;
 static Va va_pick;
-static Va va_fog_of_war;
 static List units;
-static Unit *selected_unit;
 static ObjModel obj_units[UNIT_COUNT];
 static Va va_units[UNIT_COUNT];
 static GLuint texture_units[UNIT_COUNT];
-static Player *current_player;
-static List players;
 static TTF_Font *font;
 
 void create_local_human(int id) {
@@ -80,6 +78,7 @@ void create_local_human(int id) {
   set_node(n, p);
   push_node(&players, n);
   p->id = id;
+  p->last_event_id = HAVE_NOT_SEEN_ANY_EVENTS;
 }
 
 void init_local_players(int n, int *ids) {
@@ -112,7 +111,7 @@ void inc_v2i(V2i *pos) {
   }
 }
 
-static void v2i_to_v2f(V2f *f, const V2i *i) {
+void v2i_to_v2f(V2f *f, const V2i *i) {
   assert(f);
   assert(i);
   assert(inboard(i));
@@ -233,7 +232,7 @@ static void clean_fow(void) {
   }
 }
 
-static void calculate_fow(void) {
+void calculate_fow(void) {
   V2i p;
   assert(current_player);
   clean_fow();
@@ -265,7 +264,7 @@ static int calculate_fogged_tiles_count(void) {
   return n;
 }
 
-static void build_fow_array(Va *v) {
+void build_fow_array(Va *v) {
   V2i p;
   int i = 0; /* tile's index */
   v->count = calculate_fogged_tiles_count() * 6;
@@ -293,7 +292,7 @@ static void build_fow_array(Va *v) {
   }
 }
 
-static void build_walkable_array(Va *v) {
+void build_walkable_array(Va *v) {
   V2i p;
   int i = 0; /* tile's index */
   assert(v);
@@ -405,7 +404,7 @@ static void draw_map(void) {
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-static void draw_unit_model(const Unit *u) {
+void draw_unit_model(const Unit *u) {
   assert(u);
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -420,7 +419,7 @@ static void draw_unit_model(const Unit *u) {
   glDisable(GL_TEXTURE_2D);
 }
 
-static void draw_unit_circle(const Unit *u) {
+void draw_unit_circle(const Unit *u) {
   float v[4 * 3];
   float n = TILE_SIZE_2 * 0.9f;
   assert(u);
@@ -460,7 +459,9 @@ static void draw_units(void) {
   Node *node;
   FOR_EACH_NODE(units, node) {
     Unit *u = node->data;
-    if (unit_mode == UM_MOVING && u == selected_unit) {
+    if (unit_mode == UM_MOVING
+        && event_filter_unit(current_event, u))
+    {
       continue;
     }
     if (tile(&u->pos)->fow == 0) {
@@ -470,67 +471,13 @@ static void draw_units(void) {
   }
 }
 
-static void get_current_moving_nodes(V2i *from, V2i *to) {
-  int i = current_move_index;
-  int j; /* node id */
-  assert(from);
-  assert(to);
-  for (j = 0; j < move_path_length - 1; j++) {
-    i -= move_speed;
-    if (i < 0) {
-      break;
-    }
-  }
-  *from = move_path[j];
-  *to = move_path[j + 1];
-}
-
-static void end_movement(const V2i *pos) {
-  assert(pos);
-  free (move_path);
-  move_path_length = 0;
-  unit_mode = UM_NORMAL;
-  selected_unit->pos = *pos;
-  fill_map(selected_unit);
-  build_walkable_array(&va_walkable_map);
-  calculate_fow();
-  build_fow_array(&va_fog_of_war);
-}
-
-static void draw_moving_unit(void) {
-  V2i from_i, to_i;
-  V2f from_f, to_f;
-  int node_index;
-  V2f diff;
-  V2f p;
-  get_current_moving_nodes(&from_i, &to_i);
-  v2i_to_v2f(&from_f, &from_i);
-  v2i_to_v2f(&to_f, &to_i);
-  node_index = current_move_index % move_speed;
-  diff.x = (to_f.x - from_f.x) / move_speed;
-  diff.y = (to_f.y - from_f.y) / move_speed;
-  p.x = from_f.x + diff.x * node_index;
-  p.y = from_f.y + diff.y * node_index;
-  glPushMatrix();
-  glTranslatef(p.x, p.y, 0.0f);
-  glRotatef((m2dir(&from_i, &to_i) + 4) * 45.0f, 0, 0, 1);
-  draw_unit_model(selected_unit);
-  draw_unit_circle(selected_unit);
-  glPopMatrix();
-  current_move_index++;
-  if (current_move_index == last_move_index) {
-    selected_unit->dir = m2dir(&from_i, &to_i);
-    end_movement(&to_i);
-  }
-}
-
 static void draw(void) {
   glLoadIdentity();
   set_camera(&camera);
   draw_map();
   draw_units();
   if (unit_mode == UM_MOVING) {
-    draw_moving_unit();
+    event_draw(current_event);
   }
   draw_buttons();
   SDL_GL_SwapBuffers();
@@ -589,13 +536,8 @@ static void process_mouse_button_down_event(
     if (u && u->player_id != current_player->id) {
       shoot();
     } elif (t->cost <= ap && t->parent != D_NONE) {
-      fill_map(selected_unit);
-      move_path_length = get_path_length(active_tile_pos);
-      move_path = ALLOCATE(move_path_length, V2i);
-      get_path(move_path, move_path_length, active_tile_pos);
-      unit_mode = UM_MOVING;
-      current_move_index = 0;
-      last_move_index = (move_path_length - 1) * move_speed;
+      generate_event_move(selected_unit, &active_tile_pos);
+      /* TODO: Move this to ui_event_move? */
       FREE(&va_walkable_map.v);
       va_walkable_map = empty_va;
     }
@@ -647,18 +589,7 @@ static void process_key_down_event(
       break;
     }
     case SDLK_e: {
-      /* end turn */
-      Node *n = data2node(players, current_player)->next;
-      if (n)
-        current_player = n->data;
-      else
-        current_player = players.head->data;
-      selected_unit = NULL;
-      clean_map();
-      FREE(&va_walkable_map.v);
-      va_walkable_map = empty_va;
-      calculate_fow();
-      build_fow_array(&va_fog_of_war);
+      generate_event_end_turn();
       break;
     }
     case SDLK_u: {
@@ -711,6 +642,26 @@ static void process_key_down_event(
           e->keysym.sym, e->keysym.sym);
       break;
     }
+  }
+}
+
+static void screen_scenario_main_events(void) {
+  current_event = get_next_event();
+  last_move_index = get_last_event_index(current_event);
+  unit_mode = UM_MOVING;
+  current_move_index = 0;
+  /* TODO: Remove this hack */
+  if (current_event->t == E_END_TURN) {
+    apply_event(current_event);
+    unit_mode = UM_NORMAL;
+  }
+}
+
+static void logic(void) {
+  while (unit_mode == UM_NORMAL
+      && unshown_events_left())
+  {
+    screen_scenario_main_events();
   }
 }
 
@@ -855,7 +806,7 @@ static void scroll_map(void) {
 static void mainloop(void) {
   while (!done) {
     sdl_events();
-    /* logic(); */
+    logic();
     scroll_map();
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -933,9 +884,9 @@ static void init_logic(void) {
   srand(time(NULL));
   init_pathfinding_module();
   init_unit_types();
+  init_events();
   clean_map();
   clean_fow();
-  move_path = NULL;
   players = empty_list;
   init_players();
   init_obstacles();
@@ -980,7 +931,6 @@ static void init_ui_opengl(void) {
   set_v2i(&active_tile_pos, 0, 0);
   set_v2i(&mouse_pos, 0, 0);
   unit_mode = UM_NORMAL;
-  move_speed = 10;
   is_dragging_map = false;
   SDL_Init(SDL_INIT_EVERYTHING);
   screen = SDL_SetVideoMode(win_size.x, win_size.y,

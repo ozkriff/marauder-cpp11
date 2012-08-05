@@ -10,6 +10,11 @@ typedef struct {
 } Unit;
 
 typedef struct {
+  int id;
+  int last_event_id;
+} Player;
+
+typedef struct {
   Unit *unit;
   bool obstacle;
   /* TODO: move to pathfinding */
@@ -30,3 +35,6 @@ Unit* unit_at(const V2i *pos);
 
 #define FOR_EACH_TILE(p) \
   for (set_v2i(p, 0, 0); inboard(p); inc_v2i(p))
+
+/* Player.last_event_id */
+#define HAVE_NOT_SEEN_ANY_EVENTS (-1)

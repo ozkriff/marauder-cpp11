@@ -15,7 +15,8 @@ binname = rusty_armies
 all: $(binname)
 objects = game.o list.o obj.o misc.o va.o v2i.o v2f.o \
   v3f.o gl.o camera.o path.o dir.o math.o los.o \
-  unit_type.o widgets.o
+  unit_type.o widgets.o event.o event_move.o \
+  ui_event.o event_end_turn.o ui_event_move.o
 $(binname): $(objects)
 	$(CC) $(CFLAGS) $(objects) $(LDFLAGS) -o $(binname)
 va.o: va.h
@@ -39,5 +40,10 @@ los.o: bool.h v2i.h v2f.h los.h math.h
 unit_type.o: unit_type.h bool.h
 widgets.o: widgets.h bool.h list.h v2i.h v2f.h math.h \
   config.h misc.h gl.h va.h
+event_move.o: event_move.h
+event_end_turn.o: event_end_turn.h
+ui_event_move.o: ui_event_move.h
+event.o: event.h
+ui_event.o: ui_event.h
 clean:
 	rm $(binname) $(objects) tags -f
