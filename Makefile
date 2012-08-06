@@ -16,7 +16,8 @@ all: $(binname)
 objects = game.o list.o obj.o misc.o va.o v2i.o v2f.o \
   v3f.o gl.o camera.o path.o dir.o math.o los.o \
   unit_type.o widgets.o event.o event_move.o \
-  ui_event.o event_end_turn.o ui_event_move.o
+  ui_event.o event_end_turn.o ui_event_move.o \
+  core.o core_math.o
 $(binname): $(objects)
 	$(CC) $(CFLAGS) $(objects) $(LDFLAGS) -o $(binname)
 va.o: va.h
@@ -29,6 +30,8 @@ dir.o: bool.h list.h misc.h v2i.h dir.h
 game.o: bool.h list.h v2i.h v3f.h v2f.h math.h dir.h \
   va.h obj.h misc.h camera.h game.h path.h gl.h los.h \
   config.h
+core.o: bool.h list.h v2i.h math.h dir.h misc.h core.h \
+  path.h los.h config.h
 gl.o: bool.h gl.h list.h misc.h
 list.o: bool.h list.h
 math.o: bool.h v2f.h
@@ -45,5 +48,6 @@ event_end_turn.o: event_end_turn.h
 ui_event_move.o: ui_event_move.h
 event.o: event.h
 ui_event.o: ui_event.h
+core_math.o: core_math.h
 clean:
 	rm $(binname) $(objects) tags -f

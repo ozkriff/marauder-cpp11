@@ -9,13 +9,13 @@
 #include "v2f.h"
 #include "dir.h"
 #include "unit_type.h"
-#include "game.h"
+#include "core.h"
 #include "event_move.h"
 #include "event_end_turn.h"
 #include "event.h"
 #include "path.h"
 #include "va.h"
-#include "game_private.h"
+#include "core_private.h"
 #include "ui_game_private.h"
 
 static int get_move_legth(const V2i *from, const V2i *to) {

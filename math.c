@@ -5,7 +5,6 @@
 #include <math.h>
 #include "bool.h"
 #include "v2f.h"
-#include "v2i.h"
 #include "math.h"
 
 float get_rot_angle(const V2f *a, const V2f *b) {
@@ -23,40 +22,12 @@ float get_rot_angle(const V2f *a, const V2f *b) {
   return angle;
 }
 
-void swap_int(int *a, int *b) {
-  int tmp;
-  assert(a);
-  assert(b);
-  tmp = *a;
-  *a = *b;
-  *b = tmp;
-}
-
-void clamp_int(int *n, int min, int max) {
-  assert(n);
-  if (*n < min) {
-    *n = min;
-  } else if (*n > max) {
-    *n = max;
-  }
-}
-
 void clamp_f(float *n, float min, float max) {
   assert(n);
   if (*n < min) {
     *n = min;
   } else if (*n > max) {
     *n = max;
-  }
-}
-
-int rnd(int min, int max) {
-  assert(min < max);
-  max++;
-  if (max != min) {
-    return rand() % (max - min) + min;
-  } else {
-    return max;
   }
 }
 
@@ -92,15 +63,6 @@ float dist(const V2f *a, const V2f *b) {
   dx = abs(b->x - a->x);
   dy = abs(b->y - a->y);
   return (float)sqrt(pow(dx, 2) + pow(dy, 2));
-}
-
-int dist_i(const V2i *a, const V2i *b) {
-  int dx, dy;
-  assert(a);
-  assert(b);
-  dx = abs(b->x - a->x);
-  dy = abs(b->y - a->y);
-  return (int)sqrt(pow(dx, 2) + pow(dy, 2));
 }
 
 void rotate_point_around_point(

@@ -8,7 +8,7 @@
 #include "v2i.h"
 #include "v2f.h"
 #include "los.h"
-#include "math.h"
+#include "core_math.h"
 
 /* Wikipedia: Bresenham's line algorithm */
 

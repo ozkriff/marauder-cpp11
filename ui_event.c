@@ -12,11 +12,11 @@
 #include "dir.h"
 #include "va.h"
 #include "misc.h"
-#include "game.h"
+#include "core.h"
 #include "event_move.h"
 #include "event_end_turn.h"
 #include "event.h"
-#include "game_private.h"
+#include "core_private.h"
 #include "ui_event_move.h"
 
 bool event_filter_unit(const Event *e, const Unit *u) {

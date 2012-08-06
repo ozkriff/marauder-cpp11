@@ -8,13 +8,13 @@
 #include "dir.h"
 #include "misc.h"
 #include "unit_type.h"
-#include "game.h"
+#include "core.h"
 #include "event_move.h"
 #include "event_end_turn.h"
 #include "event.h"
 #include "path.h"
 #include "los.h"
-#include "game_private.h"
+#include "core_private.h"
 
 static List events;
 

@@ -7,7 +7,7 @@
 #include "v2i.h"
 #include "misc.h"
 #include "dir.h"
-#include "game.h"
+#include "core.h"
 #include "unit_type.h"
 
 typedef struct {

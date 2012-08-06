@@ -7,12 +7,12 @@
 #include "v2i.h"
 #include "dir.h"
 #include "unit_type.h"
-#include "game.h"
+#include "core.h"
 #include "event_move.h"
 #include "event_end_turn.h"
 #include "event.h"
 #include "path.h"
-#include "game_private.h"
+#include "core_private.h"
 
 void generate_event_move(
     const Unit *u, const V2i *destination)
