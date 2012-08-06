@@ -53,7 +53,7 @@ static V2i win_size;
 static V2i mouse_pos;
 static V2i active_tile_pos;
 static SDL_Surface *screen;
-static bool is_dragging_map;
+static bool is_rotating_camera;
 static bool done;
 static Camera camera;
 static GLuint floor_texture;
@@ -395,7 +395,7 @@ static void process_mouse_motion_event(
 {
   assert(e);
   set_v2i(&mouse_pos, (int)e->x, (int)e->y);
-  if (is_dragging_map) {
+  if (is_rotating_camera) {
     camera.z_angle -= e->xrel;
     camera.x_angle -= e->yrel;
     clamp_angle(&camera.z_angle);
@@ -533,7 +533,7 @@ static void process_sdl_event(const SDL_Event *e) {
     }
     case SDL_MOUSEBUTTONUP: {
       if (e->button.button == SDL_BUTTON_RIGHT) {
-        is_dragging_map = false;
+        is_rotating_camera = false;
       }
       if (e->button.button == SDL_BUTTON_WHEELUP) {
         camera.zoom -= 5;
@@ -546,7 +546,7 @@ static void process_sdl_event(const SDL_Event *e) {
     }
     case SDL_MOUSEBUTTONDOWN: {
       if (e->button.button == SDL_BUTTON_RIGHT) {
-        is_dragging_map = true;
+        is_rotating_camera = true;
       } elif (e->button.button == SDL_BUTTON_LEFT) {
         process_mouse_button_down_event(&e->button);
       }
@@ -735,7 +735,7 @@ static void init_ui_opengl(void) {
   set_v2i(&active_tile_pos, 0, 0);
   set_v2i(&mouse_pos, 0, 0);
   unit_mode = UM_NORMAL;
-  is_dragging_map = false;
+  is_rotating_camera = false;
   SDL_Init(SDL_INIT_EVERYTHING);
   screen = SDL_SetVideoMode(win_size.x, win_size.y,
       32, SDL_OPENGL | SDL_GL_DOUBLEBUFFER);
