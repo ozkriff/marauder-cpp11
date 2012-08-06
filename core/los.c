@@ -11,45 +11,45 @@
 
 /* Wikipedia: Bresenham's line algorithm */
 
-void los_init(LosData *br, const V2i *a, const V2i *b) {
-  assert(br);
+void los_init(LosData *data, const V2i *a, const V2i *b) {
+  assert(data);
   assert(a);
   assert(b);
-  br->a = *a;
-  br->b = *b;
-  br->is_steep = abs(b->y - a->y) > abs(b->x - a->x);
-  if (br->is_steep) {
-    swap_int(&br->a.x, &br->a.y);
-    swap_int(&br->b.x, &br->b.y);
+  data->a = *a;
+  data->b = *b;
+  data->is_steep = abs(b->y - a->y) > abs(b->x - a->x);
+  if (data->is_steep) {
+    swap_int(&data->a.x, &data->a.y);
+    swap_int(&data->b.x, &data->b.y);
   }
-  if (br->a.x > br->b.x) {
-    swap_int(&br->a.x, &br->b.x);
-    swap_int(&br->a.y, &br->b.y);
+  if (data->a.x > data->b.x) {
+    swap_int(&data->a.x, &data->b.x);
+    swap_int(&data->a.y, &data->b.y);
   }
-  br->delta.x = br->b.x - br->a.x;
-  br->delta.y = abs(br->b.y - br->a.y);
-  br->error = br->delta.x >> 1;
-  br->pos = br->a;
-  br->ystep = (br->a.y < br->b.y) ? 1 : -1;
+  data->delta.x = data->b.x - data->a.x;
+  data->delta.y = abs(data->b.y - data->a.y);
+  data->error = data->delta.x >> 1;
+  data->pos = data->a;
+  data->ystep = (data->a.y < data->b.y) ? 1 : -1;
 }
 
-bool los_is_finished(LosData *br) {
-  assert(br);
-  return br->pos.x >= br->b.x;
+bool los_is_finished(LosData *data) {
+  assert(data);
+  return data->pos.x >= data->b.x;
 }
 
-void los_get_next(LosData *br, V2i *next_pos) {
-  assert(br);
+void los_get_next(LosData *data, V2i *next_pos) {
+  assert(data);
   assert(next_pos);
-  br->error -= br->delta.y;
-  if (br->error < 0) {
-    br->pos.y += br->ystep;
-    br->error += br->delta.x;
+  data->error -= data->delta.y;
+  if (data->error < 0) {
+    data->pos.y += data->ystep;
+    data->error += data->delta.x;
   }
-  br->pos.x++;
-  if (!br->is_steep) {
-    set_v2i(next_pos, br->pos.x, br->pos.y);
+  data->pos.x++;
+  if (!data->is_steep) {
+    set_v2i(next_pos, data->pos.x, data->pos.y);
   } else {
-    set_v2i(next_pos, br->pos.y, br->pos.x);
+    set_v2i(next_pos, data->pos.y, data->pos.x);
   }
 }
