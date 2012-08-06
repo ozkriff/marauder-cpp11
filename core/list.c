@@ -2,9 +2,9 @@
 
 #include <assert.h>
 #include <stdlib.h>
-#include "bool.h"
-#include "list.h"
-#include "misc.h"
+#include "core/bool.h"
+#include "core/list.h"
+#include "core/misc.h"
 
 const List empty_list = {NULL, NULL, 0};
 

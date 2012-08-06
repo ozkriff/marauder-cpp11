@@ -2,21 +2,21 @@
 
 #include <assert.h>
 #include <SDL/SDL_opengl.h>
-#include "bool.h"
-#include "list.h"
-#include "misc.h"
-#include "v2i.h"
-#include "v2f.h"
-#include "dir.h"
-#include "unit_type.h"
-#include "core.h"
-#include "event_move.h"
-#include "event_end_turn.h"
-#include "event.h"
-#include "path.h"
-#include "va.h"
-#include "core_private.h"
-#include "ui_game_private.h"
+#include "core/bool.h"
+#include "core/list.h"
+#include "core/misc.h"
+#include "core/v2i.h"
+#include "core/dir.h"
+#include "core/unit_type.h"
+#include "core/core.h"
+#include "core/event/move.h"
+#include "core/event/end_turn.h"
+#include "core/event.h"
+#include "core/path.h"
+#include "core/core_private.h"
+#include "ui_opengl/v2f.h"
+#include "ui_opengl/va.h"
+#include "ui_opengl/game_private.h"
 
 static int get_move_legth(const V2i *from, const V2i *to) {
   Dir d = m2dir(from, to);

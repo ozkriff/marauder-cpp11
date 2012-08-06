@@ -2,18 +2,18 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include "bool.h"
-#include "list.h"
-#include "misc.h"
-#include "v2i.h"
-#include "dir.h"
-#include "unit_type.h"
-#include "core.h"
-#include "event_end_turn.h"
-#include "event_move.h"
-#include "event.h"
-#include "path.h"
-#include "core_private.h"
+#include "core/bool.h"
+#include "core/list.h"
+#include "core/misc.h"
+#include "core/v2i.h"
+#include "core/dir.h"
+#include "core/unit_type.h"
+#include "core/core.h"
+#include "core/event/end_turn.h"
+#include "core/event/move.h"
+#include "core/event.h"
+#include "core/path.h"
+#include "core/core_private.h"
 
 void apply_event_end_turn(const EventEndturn *e) {
   Node *nd;

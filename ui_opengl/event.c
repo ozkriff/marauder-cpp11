@@ -3,21 +3,21 @@
 #include <assert.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
-#include "bool.h"
-#include "list.h"
-#include "v2i.h"
-#include "v3f.h"
-#include "v2f.h"
-#include "math.h"
-#include "dir.h"
-#include "va.h"
-#include "misc.h"
-#include "core.h"
-#include "event_move.h"
-#include "event_end_turn.h"
-#include "event.h"
-#include "core_private.h"
-#include "ui_event_move.h"
+#include "core/bool.h"
+#include "core/list.h"
+#include "core/v2i.h"
+#include "core/dir.h"
+#include "core/core.h"
+#include "core/event/move.h"
+#include "core/event/end_turn.h"
+#include "core/misc.h"
+#include "core/event.h"
+#include "core/core_private.h"
+#include "ui_opengl/v2f.h"
+#include "ui_opengl/v3f.h"
+#include "ui_opengl/math.h"
+#include "ui_opengl/va.h"
+#include "ui_opengl/event/move.h"
 
 bool event_filter_unit(const Event *e, const Unit *u) {
   assert(e);

@@ -4,10 +4,10 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 #include <SDL/SDL_image.h>
-#include "bool.h"
-#include "gl.h"
-#include "list.h"
-#include "misc.h"
+#include "core/bool.h"
+#include "core/list.h"
+#include "core/misc.h"
+#include "ui_opengl/gl.h"
 
 bool load_texture(GLuint *id, const char *filename) {
   GLenum texture_format;

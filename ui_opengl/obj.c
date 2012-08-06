@@ -4,15 +4,15 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <GL/gl.h>
-#include "bool.h"
-#include "list.h"
-#include "v2i.h"
-#include "v2f.h"
-#include "v3f.h"
-#include "math.h"
-#include "va.h"
-#include "obj.h"
-#include "misc.h"
+#include "core/bool.h"
+#include "core/list.h"
+#include "core/v2i.h"
+#include "core/misc.h"
+#include "ui_opengl/v2f.h"
+#include "ui_opengl/v3f.h"
+#include "ui_opengl/math.h"
+#include "ui_opengl/va.h"
+#include "ui_opengl/obj.h"
 
 /* TODO "usemtl filename" */
 void obj_read(ObjModel *m, const char *filename) {

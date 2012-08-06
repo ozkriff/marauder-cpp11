@@ -4,16 +4,16 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_opengl.h>
-#include "bool.h"
-#include "list.h"
-#include "v2i.h"
-#include "v2f.h"
-#include "math.h"
-#include "config.h"
-#include "misc.h"
-#include "gl.h"
-#include "va.h"
-#include "widgets.h"
+#include "core/bool.h"
+#include "core/list.h"
+#include "core/v2i.h"
+#include "core/misc.h"
+#include "ui_opengl/v2f.h"
+#include "ui_opengl/math.h"
+#include "ui_opengl/gl.h"
+#include "ui_opengl/va.h"
+#include "ui_opengl/widgets.h"
+#include "ui_opengl/config.h"
 
 static List buttons;
 

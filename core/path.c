@@ -2,13 +2,13 @@
 
 #include <stdlib.h>
 #include <assert.h>
-#include "bool.h"
-#include "list.h"
-#include "v2i.h"
-#include "misc.h"
-#include "dir.h"
-#include "core.h"
-#include "unit_type.h"
+#include "core/bool.h"
+#include "core/list.h"
+#include "core/v2i.h"
+#include "core/misc.h"
+#include "core/dir.h"
+#include "core/core.h"
+#include "core/unit_type.h"
 
 typedef struct {
   V2i *v;

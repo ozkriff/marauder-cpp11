@@ -4,11 +4,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include "bool.h"
-#include "v2i.h"
-#include "v2f.h"
-#include "los.h"
-#include "core_math.h"
+#include "core/bool.h"
+#include "core/v2i.h"
+#include "core/los.h"
+#include "core/math.h"
 
 /* Wikipedia: Bresenham's line algorithm */
 

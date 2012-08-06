@@ -1,8 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
 #include <assert.h>
-#include "bool.h"
-#include "v2i.h"
+#include "core/bool.h"
+#include "core/v2i.h"
 
 void set_v2i(V2i *v, int x, int y) {
   assert(v);

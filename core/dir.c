@@ -2,11 +2,11 @@
 
 #include <assert.h>
 #include <stdlib.h>
-#include "bool.h"
-#include "list.h"
-#include "misc.h"
-#include "v2i.h"
-#include "dir.h"
+#include "core/bool.h"
+#include "core/list.h"
+#include "core/misc.h"
+#include "core/v2i.h"
+#include "core/dir.h"
 
 V2i dir_to_pos_diff[8] = {
   {1, 0},

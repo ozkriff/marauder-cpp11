@@ -3,14 +3,14 @@
 #include <assert.h>
 #include <math.h>
 #include <SDL/SDL_opengl.h>
-#include "bool.h"
-#include "list.h"
-#include "misc.h"
-#include "v2f.h"
-#include "v2i.h"
-#include "dir.h"
-#include "math.h"
-#include "camera.h"
+#include "core/bool.h"
+#include "core/list.h"
+#include "core/v2i.h"
+#include "core/misc.h"
+#include "core/dir.h"
+#include "ui_opengl/v2f.h"
+#include "ui_opengl/math.h"
+#include "ui_opengl/camera.h"
 
 void set_camera(const Camera *c) {
   assert(c);

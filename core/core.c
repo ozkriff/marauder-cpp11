@@ -5,21 +5,20 @@
 #include <string.h>
 #include <assert.h>
 #include <time.h>
-#include "bool.h"
-#include "list.h"
-#include "config.h"
-#include "v2i.h"
-#include "core_math.h"
-#include "dir.h"
-#include "misc.h"
-#include "unit_type.h"
-#include "core.h"
-#include "event_move.h"
-#include "event_end_turn.h"
-#include "event.h"
-#include "path.h"
-#include "los.h"
-#include "core_private.h"
+#include "core/bool.h"
+#include "core/list.h"
+#include "core/v2i.h"
+#include "core/math.h"
+#include "core/dir.h"
+#include "core/misc.h"
+#include "core/unit_type.h"
+#include "core/core.h"
+#include "core/event/move.h"
+#include "core/event/end_turn.h"
+#include "core/event.h"
+#include "core/path.h"
+#include "core/los.h"
+#include "core/core_private.h"
 
 List players;
 Event const *current_event;

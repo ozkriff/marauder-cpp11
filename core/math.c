@@ -3,9 +3,9 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <math.h>
-#include "bool.h"
-#include "v2i.h"
-#include "core_math.h"
+#include "core/bool.h"
+#include "core/v2i.h"
+#include "core/math.h"
 
 int dist_i(const V2i *a, const V2i *b) {
   int dx, dy;

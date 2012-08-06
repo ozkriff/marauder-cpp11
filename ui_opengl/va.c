@@ -2,7 +2,7 @@
 
 #include <assert.h>
 #include <SDL/SDL_opengl.h>
-#include "va.h"
+#include "ui_opengl/va.h"
 
 const Va empty_va = {NULL, NULL, NULL, 0};
 

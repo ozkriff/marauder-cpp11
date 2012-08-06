@@ -5,8 +5,8 @@
 #include <stdarg.h>
 #include <assert.h>
 #include <string.h>
-#include "list.h"
-#include "misc.h"
+#include "core/list.h"
+#include "core/misc.h"
 
 void* my_alloc(int count, int size) {
   unsigned int u_count;

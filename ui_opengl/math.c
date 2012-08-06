@@ -3,9 +3,9 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <math.h>
-#include "bool.h"
-#include "v2f.h"
-#include "math.h"
+#include "core/bool.h"
+#include "ui_opengl/v2f.h"
+#include "ui_opengl/math.h"
 
 float get_rot_angle(const V2f *a, const V2f *b) {
   float distance, angle;
