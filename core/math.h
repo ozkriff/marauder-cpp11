@@ -1,4 +1,4 @@
-/* TODO CORE MATH */
+/* See LICENSE file for copyright and license details. */
 
 int dist_i(const V2i *a, const V2i *b);
 int rnd(int min, int max);
