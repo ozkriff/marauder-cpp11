@@ -9,7 +9,8 @@
 const List empty_list = {NULL, NULL, 0};
 
 /* Create in heap node that points to 'data'
-  and return pointer to rhis node. */
+ * and return pointer to rhis node.
+ */
 void set_node(Node *n, void *data) {
   assert(n);
   assert(data);
@@ -19,7 +20,8 @@ void set_node(Node *n, void *data) {
 }
 
 /* If 'after' is NULL, then 'node' will be added at the head
-  of the list, else it will be added following 'after'. */
+ * of the list, else it will be added following 'after'.
+ */
 void insert_node(List *list, Node *node, Node *after) {
   if (after) {
     node->next = after->next;
@@ -65,7 +67,8 @@ void delete_node(List *list, Node *node) {
 }
 
 /* Extruct node from list, delete node,
-  return pointer to data. */
+ * return pointer to data.
+ */
 void* extruct_data(List *list, Node *node) {
   Node *tmp = extruct_node(list, node);
   void *data = node->data;
