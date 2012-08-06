@@ -15,7 +15,7 @@
 #include "core/path.h"
 #include "core/core_private.h"
 #include "ui_opengl/v2f.h"
-#include "ui_opengl/va.h"
+#include "ui_opengl/vertex_array.h"
 #include "ui_opengl/game_private.h"
 
 static int get_move_legth(const V2i *from, const V2i *to) {

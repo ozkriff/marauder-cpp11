@@ -25,7 +25,7 @@
 #include "ui_opengl/v3f.h"
 #include "ui_opengl/v2f.h"
 #include "ui_opengl/math.h"
-#include "ui_opengl/va.h"
+#include "ui_opengl/vertex_array.h"
 #include "ui_opengl/obj.h"
 #include "ui_opengl/camera.h"
 #include "ui_opengl/game.h"
@@ -46,8 +46,8 @@
 UnitMode unit_mode;
 int last_move_index;
 int current_move_index;
-Va va_walkable_map;
-Va va_fog_of_war;
+VertexArray va_walkable_map;
+VertexArray va_fog_of_war;
 
 static V2i win_size;
 static V2i mouse_pos;
@@ -57,11 +57,11 @@ static bool is_dragging_map;
 static bool done;
 static Camera camera;
 static GLuint floor_texture;
-static Va va_map;
-static Va va_obstacles;
-static Va va_pick;
+static VertexArray va_map;
+static VertexArray va_obstacles;
+static VertexArray va_pick;
 static ObjModel obj_units[UNIT_COUNT];
-static Va va_units[UNIT_COUNT];
+static VertexArray va_units[UNIT_COUNT];
 static GLuint texture_units[UNIT_COUNT];
 static TTF_Font *font;
 
@@ -73,7 +73,7 @@ void v2i_to_v2f(V2f *f, const V2i *i) {
   f->y = i->y * TILE_SIZE;
 }
 
-static void build_map_array(Va *v) {
+static void build_map_array(VertexArray *v) {
   V2i p;
   int i = 0; /* tile's index */
   v->count = MAP_X * MAP_Y * 6;
@@ -113,7 +113,7 @@ static void build_map_array(Va *v) {
   }
 }
 
-static void build_obstacles_array(Va *v) {
+static void build_obstacles_array(VertexArray *v) {
   V2i p;
   int i = 0; /* tile's index */
   v->count = MAP_X * MAP_Y * 6;
@@ -177,7 +177,7 @@ static int calculate_fogged_tiles_count(void) {
   return n;
 }
 
-void build_fow_array(Va *v) {
+void build_fow_array(VertexArray *v) {
   V2i p;
   int i = 0; /* tile's index */
   v->count = calculate_fogged_tiles_count() * 6;
@@ -205,7 +205,7 @@ void build_fow_array(Va *v) {
   }
 }
 
-void build_walkable_array(Va *v) {
+void build_walkable_array(VertexArray *v) {
   V2i p;
   int i = 0; /* tile's index */
   assert(v);
@@ -385,7 +385,7 @@ static void process_mouse_button_down_event(
       generate_event_move(selected_unit, &active_tile_pos);
       /* TODO: Move this to ui_event_move? */
       FREE(&va_walkable_map.v);
-      va_walkable_map = empty_va;
+      va_walkable_map = empty_vertex_array;
     }
   }
 }
@@ -565,7 +565,7 @@ static void sdl_events(void) {
   }
 }
 
-static void build_picking_tiles_array(Va *va) {
+static void build_picking_tiles_array(VertexArray *va) {
   V2i p;
   int i = 0; /* tile index */
   assert(va);
@@ -699,10 +699,10 @@ static void init_camera(void) {
 }
 
 static void init_vertex_arrays(void) {
-  va_map = empty_va;
-  va_pick = empty_va;
-  va_walkable_map = empty_va;
-  va_fog_of_war = empty_va;
+  va_map = empty_vertex_array;
+  va_pick = empty_vertex_array;
+  va_walkable_map = empty_vertex_array;
+  va_fog_of_war = empty_vertex_array;
   build_picking_tiles_array(&va_pick);
   build_map_array(&va_map);
   build_obstacles_array(&va_obstacles);

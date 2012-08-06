@@ -11,7 +11,7 @@
 #include "ui_opengl/v2f.h"
 #include "ui_opengl/v3f.h"
 #include "ui_opengl/math.h"
-#include "ui_opengl/va.h"
+#include "ui_opengl/vertex_array.h"
 #include "ui_opengl/obj.h"
 
 /* TODO "usemtl filename" */
@@ -134,7 +134,7 @@ void obj_debug_print(ObjModel *m) {
   }
 }
 
-void obj_build(Va *va, const ObjModel *model) {
+void obj_build(VertexArray *va, const ObjModel *model) {
   int i, j;
   assert(va);
   assert(model);

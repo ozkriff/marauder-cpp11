@@ -18,7 +18,7 @@ all: $(binname)
 ui_opengl_objects = \
   ui_opengl/game.o \
   ui_opengl/obj.o \
-  ui_opengl/va.o \
+  ui_opengl/vertex_array.o \
   ui_opengl/v2f.o \
   ui_opengl/v3f.o \
   ui_opengl/gl.o \
@@ -54,7 +54,7 @@ ui_opengl/camera.o: \
 ui_opengl/widgets.o: \
   core/bool.h core/list.h core/v2i.h core/misc.h \
   ui_opengl/v2f.h ui_opengl/math.h ui_opengl/gl.h \
-  ui_opengl/va.h ui_opengl/widgets.h ui_opengl/config.h
+  ui_opengl/vertex_array.h ui_opengl/widgets.h ui_opengl/config.h
 ui_opengl/math.o: \
   core/bool.h ui_opengl/v2f.h ui_opengl/math.h
 ui_opengl/v3f.o: \
@@ -66,7 +66,7 @@ ui_opengl/event.o: \
   core/core.h core/event/move.h core/event/end_turn.h \
   core/misc.h core/event.h core/core_private.h \
   ui_opengl/v2f.h ui_opengl/v3f.h ui_opengl/math.h \
-  ui_opengl/va.h ui_opengl/event/move.h
+  ui_opengl/vertex_array.h ui_opengl/event/move.h
 ui_opengl/v2f.o: \
   ui_opengl/v2f.h
 ui_opengl/game.o: \
@@ -75,22 +75,22 @@ ui_opengl/game.o: \
   core/event/move.h core/event/end_turn.h core/event.h \
   core/core_private.h core/path.h core/los.h \
   ui_opengl/v3f.h ui_opengl/v2f.h ui_opengl/math.h \
-  ui_opengl/va.h ui_opengl/obj.h ui_opengl/camera.h \
+  ui_opengl/vertex_array.h ui_opengl/obj.h ui_opengl/camera.h \
   ui_opengl/game.h ui_opengl/gl.h ui_opengl/widgets.h \
   ui_opengl/event/move.h ui_opengl/event.h \
   ui_opengl/config.h
 ui_opengl/obj.o: \
   core/bool.h core/list.h core/v2i.h core/misc.h \
   ui_opengl/v2f.h ui_opengl/v3f.h ui_opengl/math.h \
-  ui_opengl/va.h ui_opengl/obj.h
+  ui_opengl/vertex_array.h ui_opengl/obj.h
 ui_opengl/event/move.o: \
   core/bool.h core/list.h core/misc.h core/v2i.h \
   core/dir.h core/unit_type.h core/core.h \
   core/event/move.h core/event/end_turn.h core/event.h \
   core/path.h core/core_private.h ui_opengl/v2f.h \
-  ui_opengl/va.h ui_opengl/game_private.h
-ui_opengl/va.o: \
-  ui_opengl/va.h
+  ui_opengl/vertex_array.h ui_opengl/game_private.h
+ui_opengl/vertex_array.o: \
+  ui_opengl/vertex_array.h
 core/los.o: \
   core/bool.h core/v2i.h core/los.h core/math.h
 core/math.o: \

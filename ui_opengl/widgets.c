@@ -11,7 +11,7 @@
 #include "ui_opengl/v2f.h"
 #include "ui_opengl/math.h"
 #include "ui_opengl/gl.h"
-#include "ui_opengl/va.h"
+#include "ui_opengl/vertex_array.h"
 #include "ui_opengl/widgets.h"
 #include "ui_opengl/config.h"
 

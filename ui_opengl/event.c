@@ -16,7 +16,7 @@
 #include "ui_opengl/v2f.h"
 #include "ui_opengl/v3f.h"
 #include "ui_opengl/math.h"
-#include "ui_opengl/va.h"
+#include "ui_opengl/vertex_array.h"
 #include "ui_opengl/event/move.h"
 
 bool event_filter_unit(const Event *e, const Unit *u) {

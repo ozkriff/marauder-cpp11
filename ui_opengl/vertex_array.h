@@ -6,9 +6,9 @@ typedef struct {
   float *t; /* [opt] texture coordinates */
   GLubyte *ub_c; /* [opt] colors */
   int count; /* vertices count */
-} Va;
+} VertexArray;
 
-extern const Va empty_va;
+extern const VertexArray empty_vertex_array;
 
 void set_xy(float *coords, int n, int i, int vi,
     float x, float y);

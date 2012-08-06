@@ -2,9 +2,9 @@
 
 #include <assert.h>
 #include <SDL/SDL_opengl.h>
-#include "ui_opengl/va.h"
+#include "ui_opengl/vertex_array.h"
 
-const Va empty_va = {NULL, NULL, NULL, 0};
+const VertexArray empty_vertex_array = {NULL, NULL, NULL, 0};
 
 void set_xy(float *coords, int n, int i, int vi,
     float x, float y)
