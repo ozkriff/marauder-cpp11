@@ -27,8 +27,11 @@ Dir m2dir(const V2i *a, const V2i *b) {
   dx = b->x - a->x;
   dy = b->y - a->y;
   for (i = 0; i < 8; i++) {
-    if (dx == dir_to_pos_diff[i].x && dy == dir_to_pos_diff[i].y)
+    if (dx == dir_to_pos_diff[i].x
+        && dy == dir_to_pos_diff[i].y)
+    {
       return (Dir)i;
+    }
   }
   return D_ERROR;
 }
