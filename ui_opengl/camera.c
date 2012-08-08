@@ -50,6 +50,6 @@ void move_camera(Camera *c, Dir d) {
   }
   speed = c->zoom / 20.0f;
   in_radians = deg2rad(c->z_angle + angle);
-  c->pos.x += (float)sin(in_radians) * speed;
-  c->pos.y += (float)cos(in_radians) * speed;
+  c->pos.x += CAST(sin(in_radians), float) * speed;
+  c->pos.y += CAST(cos(in_radians), float) * speed;
 }
