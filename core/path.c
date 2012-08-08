@@ -33,7 +33,7 @@ void init_pathfinding_module(void) {
 }
 
 static void push(
-    const V2i *m, Dir parent, float newcost, Dir dir)
+    const V2i *m, Dir parent, int newcost, Dir dir)
 {
   Tile *t;
   assert(m);
@@ -76,7 +76,7 @@ static Dir get_parent_dir (const Unit *u, const V2i *m){
 static int get_tile_cost(
     const Unit *u, const V2i *t, const V2i *nb)
 {
-  float cost = 1;
+  int cost = 1;
   int dx, dy;
   Dir d, d2, d_diff;
   assert(t);
