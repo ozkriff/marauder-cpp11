@@ -57,7 +57,7 @@ ui_opengl/game.o: \
   ui_opengl/widgets.h ui_opengl/event/move.h \
   ui_opengl/event.h ui_opengl/config.h
 ui_opengl/obj.o: \
-  core/bool.h core/list.h core/v2i.h core/misc.h \
+  core/bool.h core/list.h core/v2i.h core/dir.h core/misc.h \
   ui_opengl/v2f.h ui_opengl/v3f.h ui_opengl/math.h \
   ui_opengl/vertex_array.h ui_opengl/obj.h
 ui_opengl/vertex_array.o: \
@@ -72,7 +72,7 @@ ui_opengl/camera.o: \
   core/bool.h core/list.h core/v2i.h core/misc.h core/dir.h \
   ui_opengl/v2f.h ui_opengl/math.h ui_opengl/camera.h
 ui_opengl/widgets.o: \
-  core/bool.h core/list.h core/v2i.h core/misc.h \
+  core/bool.h core/list.h core/v2i.h core/dir.h core/misc.h \
   ui_opengl/v2f.h ui_opengl/math.h ui_opengl/gl.h \
   ui_opengl/vertex_array.h ui_opengl/widgets.h \
   ui_opengl/config.h
@@ -83,7 +83,8 @@ ui_opengl/event.o: \
   ui_opengl/v3f.h ui_opengl/math.h ui_opengl/vertex_array.h \
   ui_opengl/event/move.h
 ui_opengl/math.o: \
-  core/bool.h ui_opengl/v2f.h ui_opengl/math.h
+  core/bool.h core/v2i.h core/dir.h ui_opengl/v2f.h \
+  ui_opengl/math.h
 ui_opengl/event/move.o: \
   core/bool.h core/list.h core/misc.h core/v2i.h core/dir.h \
   core/unit_type.h core/core.h core/event/move.h \

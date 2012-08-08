@@ -14,3 +14,4 @@ bool max_f(float a, float b);
 float dist(const V2f *a, const V2f *b);
 void rotate_point_around_point(
     V2f *p, float angle, const V2f *o);
+float dir_to_angle(Dir d);

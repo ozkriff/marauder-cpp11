@@ -22,34 +22,11 @@ void set_camera(const Camera *c) {
 
 void move_camera(Camera *c, Dir d) {
   float speed;
-  float angle;
   float in_radians;
   assert(c);
   assert(!dir_is_diagonal(d));
-  switch (d) {
-    case D_N: {
-      angle = 0.0f;
-      break;
-    }
-    case D_S: {
-      angle = 180.0f;
-      break;
-    }
-    case D_W: {
-      angle = 90.0f;
-      break;
-    }
-    case D_E: {
-      angle = 270.0f;
-      break;
-    }
-    default: {
-      die("game.c: move_camera(): "
-          "Unknown direction\n");
-    }
-  }
   speed = c->zoom / 20.0f;
-  in_radians = deg2rad(c->z_angle + angle);
+  in_radians = deg2rad(c->z_angle + dir_to_angle(d));
   c->pos.x += CAST(sin(in_radians), float) * speed;
   c->pos.y += CAST(cos(in_radians), float) * speed;
 }

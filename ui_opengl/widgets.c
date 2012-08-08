@@ -7,6 +7,7 @@
 #include "core/bool.h"
 #include "core/list.h"
 #include "core/v2i.h"
+#include "core/dir.h"
 #include "core/misc.h"
 #include "ui_opengl/v2f.h"
 #include "ui_opengl/math.h"

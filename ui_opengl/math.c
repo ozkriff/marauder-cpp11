@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include "core/bool.h"
+#include "core/v2i.h"
+#include "core/dir.h"
 #include "ui_opengl/v2f.h"
 #include "ui_opengl/math.h"
 
@@ -81,4 +83,9 @@ void rotate_point_around_point(
   dy = old.y - o->y;
   p->x = cs * dx - sn * dy + o->x;
   p->y = sn * dx + cs * dy + o->y;
+}
+
+float dir_to_angle(Dir d) {
+  assert(d < 8);
+  return (360 / 8) * d;
 }
