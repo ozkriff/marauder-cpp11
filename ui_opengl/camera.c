@@ -26,7 +26,7 @@ void move_camera(Camera *c, Dir d) {
   assert(c);
   assert(!dir_is_diagonal(d));
   speed = c->zoom / 20.0f;
-  in_radians = deg2rad(c->z_angle + dir_to_angle(d));
+  in_radians = deg2rad(c->z_angle - dir_to_angle(d));
   c->pos.x += CAST(sin(in_radians), float) * speed;
   c->pos.y += CAST(cos(in_radians), float) * speed;
 }
