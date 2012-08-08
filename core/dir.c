@@ -8,7 +8,7 @@
 #include "core/v2i.h"
 #include "core/dir.h"
 
-V2i dir_to_pos_diff[8] = {
+static V2i dir_to_pos_diff[8] = {
   {1, 0},
   {1, 1},
   {0, 1},

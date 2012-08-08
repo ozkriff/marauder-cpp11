@@ -6,8 +6,6 @@ typedef enum {
   D_NONE, D_ERROR, D_COUNT
 } Dir;
 
-extern V2i dir_to_pos_diff[8];
-
 void neib(V2i *neib, const V2i* pos, Dir i);
 Dir m2dir(const V2i *a, const V2i *b);
 bool dir_is_diagonal(Dir d);
