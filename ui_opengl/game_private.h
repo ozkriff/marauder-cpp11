@@ -5,7 +5,7 @@
 /* TODO: Rename */
 typedef enum {
   UM_NORMAL,
-  UM_MOVING
+  UM_SHOW_EVENT
 } UnitMode;
 
 extern UnitMode unit_mode;

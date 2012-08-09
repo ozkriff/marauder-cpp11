@@ -325,7 +325,7 @@ static void draw_units(void) {
   Node *node;
   FOR_EACH_NODE(units, node) {
     Unit *u = node->data;
-    if (unit_mode == UM_MOVING
+    if (unit_mode == UM_SHOW_EVENT
         && event_filter_unit(current_event, u))
     {
       continue;
@@ -342,7 +342,7 @@ static void draw(void) {
   set_camera(&camera);
   draw_map();
   draw_units();
-  if (unit_mode == UM_MOVING) {
+  if (unit_mode == UM_SHOW_EVENT) {
     event_draw(current_event);
   }
   draw_buttons();
@@ -495,7 +495,7 @@ static void process_key_down_event(
 static void screen_scenario_main_events(void) {
   current_event = get_next_event();
   last_move_index = get_last_event_index(current_event);
-  unit_mode = UM_MOVING;
+  unit_mode = UM_SHOW_EVENT;
   current_move_index = 0;
   /* TODO: Remove this hack */
   if (current_event->t == E_END_TURN) {
