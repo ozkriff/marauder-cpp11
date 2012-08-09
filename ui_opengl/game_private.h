@@ -2,6 +2,12 @@
 
 /* User interface */
 
+/* TODO: Rename */
+typedef enum {
+  UM_NORMAL,
+  UM_MOVING
+} UnitMode;
+
 extern UnitMode unit_mode;
 extern int last_move_index;
 extern int current_move_index;
