@@ -63,8 +63,12 @@ bool load_texture(GLuint *id, const char *filename) {
         filename);
     return false;
   }
-  assert(is_power_of_two(surface->w));
-  assert(is_power_of_two(surface->h));
+  if (is_power_of_two(surface->w)
+      || is_power_of_two(surface->h))
+  {
+    die("ui_opengl/gl.c: load_texture(): "
+        "image's height or width is not a power of 2\n");
+  }
   n_of_colors = surface->format->BytesPerPixel;
   texture_format = get_texture_format(surface, n_of_colors);
   glGenTextures(1, id);
