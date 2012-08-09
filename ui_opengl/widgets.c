@@ -124,9 +124,7 @@ void draw_button(Button *b) {
   glPopMatrix();
 }
 
-/* TODO split */
-void draw_buttons(void) {
-  Node *node;
+static void set_2d_widgets_drawing_mode_on(void) {
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -138,10 +136,9 @@ void draw_buttons(void) {
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
-  FOR_EACH_NODE(buttons, node) {
-    Button *b = node->data;
-    draw_button(b);
-  }
+}
+
+static void set_2d_widgets_drawing_mode_off(void) {
   glPopMatrix();
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
@@ -149,6 +146,16 @@ void draw_buttons(void) {
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
   glEnable(GL_DEPTH_TEST);
+}
+
+void draw_buttons(void) {
+  Node *node;
+  set_2d_widgets_drawing_mode_on();
+  FOR_EACH_NODE(buttons, node) {
+    Button *b = node->data;
+    draw_button(b);
+  }
+  set_2d_widgets_drawing_mode_off();
 }
 
 TTF_Font* open_font(char *font_name, int size) {
