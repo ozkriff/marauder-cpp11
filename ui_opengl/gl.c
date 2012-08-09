@@ -58,23 +58,21 @@ bool load_texture(GLuint *id, const char *filename) {
   SDL_Surface *surface;
   assert(id);
   surface = IMG_Load(filename);
-  /* TODO: if (!surface) { die(); } */
-  if (surface) {
-    assert(is_power_of_two(surface->w));
-    assert(is_power_of_two(surface->h));
-    n_of_colors = surface->format->BytesPerPixel;
-    texture_format = get_texture_format(surface, n_of_colors);
-    glGenTextures(1, id);
-    glBindTexture(GL_TEXTURE_2D, *id);
-    set_texture_parameters();
-    glTexImage2D(GL_TEXTURE_2D, 0, n_of_colors,
-        surface->w, surface->h, 0,
-        texture_format, GL_UNSIGNED_BYTE, surface->pixels);
-  } else {
+  if (!surface) {
     die("gl.c: load_texture(): Can't load file '%s'\n",
         filename);
     return false;
   }
+  assert(is_power_of_two(surface->w));
+  assert(is_power_of_two(surface->h));
+  n_of_colors = surface->format->BytesPerPixel;
+  texture_format = get_texture_format(surface, n_of_colors);
+  glGenTextures(1, id);
+  glBindTexture(GL_TEXTURE_2D, *id);
+  set_texture_parameters();
+  glTexImage2D(GL_TEXTURE_2D, 0, n_of_colors,
+      surface->w, surface->h, 0,
+      texture_format, GL_UNSIGNED_BYTE, surface->pixels);
   if (surface) {
     SDL_FreeSurface(surface);
   }
