@@ -2,13 +2,12 @@
 
 /* User interface */
 
-/* TODO: Rename */
 typedef enum {
-  UM_NORMAL,
-  UM_SHOW_EVENT
-} UnitMode;
+  UI_MODE_NORMAL,
+  UI_MODE_SHOW_EVENT
+} UIMode;
 
-extern UnitMode unit_mode;
+extern UIMode ui_mode;
 extern int last_move_index;
 extern int current_move_index;
 extern VertexArray va_walkable_map;

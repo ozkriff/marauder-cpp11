@@ -44,7 +44,7 @@
 #define TILE_SIZE 6.0f
 #define TILE_SIZE_2 (TILE_SIZE / 2.0f)
 
-UnitMode unit_mode;
+UIMode ui_mode;
 int last_move_index;
 int current_move_index;
 VertexArray va_walkable_map;
@@ -325,7 +325,7 @@ static void draw_units(void) {
   Node *node;
   FOR_EACH_NODE(units, node) {
     Unit *u = node->data;
-    if (unit_mode == UM_SHOW_EVENT
+    if (ui_mode == UI_MODE_SHOW_EVENT
         && event_filter_unit(current_event, u))
     {
       continue;
@@ -342,7 +342,7 @@ static void draw(void) {
   set_camera(&camera);
   draw_map();
   draw_units();
-  if (unit_mode == UM_SHOW_EVENT) {
+  if (ui_mode == UI_MODE_SHOW_EVENT) {
     event_draw(current_event);
   }
   draw_buttons();
@@ -367,7 +367,7 @@ static void process_mouse_button_down_event(
   assert(current_player);
   assert(e);
   UNUSED(e);
-  if (unit_mode != UM_NORMAL) {
+  if (ui_mode != UI_MODE_NORMAL) {
     return;
   }
   if (u && u->player_id == current_player->id) {
@@ -495,17 +495,17 @@ static void process_key_down_event(
 static void screen_scenario_main_events(void) {
   current_event = get_next_event();
   last_move_index = get_last_event_index(current_event);
-  unit_mode = UM_SHOW_EVENT;
+  ui_mode = UI_MODE_SHOW_EVENT;
   current_move_index = 0;
   /* TODO: Remove this hack */
   if (current_event->t == E_END_TURN) {
     apply_event(current_event);
-    unit_mode = UM_NORMAL;
+    ui_mode = UI_MODE_NORMAL;
   }
 }
 
 static void logic(void) {
-  while (unit_mode == UM_NORMAL
+  while (ui_mode == UI_MODE_NORMAL
       && unshown_events_left())
   {
     screen_scenario_main_events();
@@ -735,7 +735,7 @@ static void init_ui_opengl(void) {
   set_v2i(&win_size, WIN_WIDTH, WIN_HEIGHT);
   set_v2i(&active_tile_pos, 0, 0);
   set_v2i(&mouse_pos, 0, 0);
-  unit_mode = UM_NORMAL;
+  ui_mode = UI_MODE_NORMAL;
   is_rotating_camera = false;
   SDL_Init(SDL_INIT_EVERYTHING);
   screen = SDL_SetVideoMode(win_size.x, win_size.y,

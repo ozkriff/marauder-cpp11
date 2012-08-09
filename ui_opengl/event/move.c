@@ -59,7 +59,7 @@ static void end_movement(const V2i *pos) {
   Unit *u;
   assert(pos);
   u = id2unit(current_event->e.move.unit_id);
-  unit_mode = UM_NORMAL;
+  ui_mode = UI_MODE_NORMAL;
   u->pos = *pos;
   if (selected_unit) {
     fill_map(u);
