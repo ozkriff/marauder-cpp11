@@ -4,7 +4,6 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_opengl.h>
-#include "core/bool.h"
 #include "core/list.h"
 #include "core/v2i.h"
 #include "core/dir.h"

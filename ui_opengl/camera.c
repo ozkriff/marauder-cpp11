@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <math.h>
 #include <SDL/SDL_opengl.h>
-#include "core/bool.h"
 #include "core/list.h"
 #include "core/v2i.h"
 #include "core/misc.h"

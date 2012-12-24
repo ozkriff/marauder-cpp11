@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <GL/gl.h>
-#include "core/bool.h"
 #include "core/list.h"
 #include "core/v2i.h"
 #include "core/dir.h"

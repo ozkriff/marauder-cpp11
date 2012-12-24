@@ -1,7 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
 #include <assert.h>
-#include "core/bool.h"
 #include "core/v2i.h"
 
 void set_v2i(V2i *v, int x, int y) {

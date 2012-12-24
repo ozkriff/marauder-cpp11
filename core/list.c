@@ -2,7 +2,6 @@
 
 #include <assert.h>
 #include <stdlib.h>
-#include "core/bool.h"
 #include "core/list.h"
 #include "core/misc.h"
 

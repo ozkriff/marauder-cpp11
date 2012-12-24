@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include "core/bool.h"
 #include "core/v2i.h"
 #include "core/los.h"
 #include "core/math.h"

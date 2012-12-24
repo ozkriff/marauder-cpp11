@@ -5,7 +5,6 @@
 #include <string.h>
 #include <assert.h>
 #include <time.h>
-#include "core/bool.h"
 #include "core/list.h"
 #include "core/v2i.h"
 #include "core/math.h"

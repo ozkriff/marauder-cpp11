@@ -2,7 +2,6 @@
 
 #include <stdlib.h>
 #include <assert.h>
-#include "core/bool.h"
 #include "core/list.h"
 #include "core/v2i.h"
 #include "core/misc.h"
@@ -164,13 +163,13 @@ void clean_map(void) {
 static void try_to_push_neibors(
     const Unit *u, const V2i *m)
 {
-  Dir i;
+  int i;
   assert(m);
   assert(inboard(m));
   assert(u);
   for (i = D_N; i <= D_NW; i++) {
     V2i neib_m;
-    neib(&neib_m, m, i);
+    neib(&neib_m, m, (Dir)i);
     if (inboard(&neib_m)) {
       process_neibor(u, m, &neib_m);
     }

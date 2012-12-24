@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <math.h>
-#include "core/bool.h"
 #include "core/v2i.h"
 #include "core/dir.h"
 #include "ui_opengl/v2f.h"
