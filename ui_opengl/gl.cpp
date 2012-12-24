@@ -4,7 +4,6 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 #include <SDL/SDL_image.h>
-#include "core/list.h"
 #include "core/misc.h"
 #include "ui_opengl/gl.h"
 

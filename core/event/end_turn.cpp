@@ -2,7 +2,6 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include "core/list.h"
 #include "core/misc.h"
 #include "core/v2i.h"
 #include "core/dir.h"
@@ -15,10 +14,9 @@
 #include "core/core_private.h"
 
 void apply_event_end_turn(const EventEndturn *e) {
-  Node *nd;
   assert(e);
-  FOR_EACH_NODE(players, nd) {
-    Player *p = (Player *)nd->data;
+  // FOR_EACH_NODE(players, nd) {
+  for (auto p : players) {
     if (p->id == e->new_id) {
       if (current_player->id == e->old_id) {
         current_player = p;

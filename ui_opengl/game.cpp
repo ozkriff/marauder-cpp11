@@ -8,7 +8,6 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 #include <SDL/SDL_ttf.h>
-#include "core/list.h"
 #include "core/v2i.h"
 #include "core/math.h"
 #include "core/dir.h"
@@ -321,9 +320,7 @@ static void draw_unit(const Unit *u) {
 }
 
 static void draw_units(void) {
-  Node *node;
-  FOR_EACH_NODE(units, node) {
-    Unit *u = (Unit *)node->data;
+  for (auto u : units) {
     if (ui_mode == UI_MODE_SHOW_EVENT
         && event_filter_unit(current_event, u))
     {

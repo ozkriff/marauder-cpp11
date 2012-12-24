@@ -2,7 +2,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
-#include "core/list.h"
+#include <list>
 #include "core/v2i.h"
 #include "core/dir.h"
 #include "core/misc.h"
@@ -15,10 +15,9 @@
 #include "core/los.h"
 #include "core/core_private.h"
 
-static List events;
+static std::list<Event*> events;
 
 void init_events(void) {
-  events = empty_list;
 }
 
 static void undo_event(const Event *e) {
@@ -43,14 +42,18 @@ static void undo_event(const Event *e) {
 
 /* Undo all events that this player have not seen yet */
 void undo_unshown_events(void) {
-  Node *node = events.tail;
-  while (node) {
-    Event *e = (Event *)node->data;
-    if (e->id == current_player->last_event_id) {
+  if (events.size() == 0) {
+    return;
+  }
+  std::list<Event*>::iterator i = events.end();
+  --i;
+  while (i != events.begin()) {
+    auto event = *i;
+    if (event->id == current_player->last_event_id) {
       break;
     }
-    undo_event(e);
-    node = node->prev;
+    undo_event(event);
+    --i;
   }
 }
 
@@ -76,25 +79,25 @@ void apply_event(const Event *e) {
 }
 
 /* TODO: rename. */
-static Node* get_next_event_node(void) {
-  Node *node;
+static Event* get_next_event_node(void) {
+  // Node *node;
   int id = current_player->last_event_id; /* shortcut */
-  if (events.count == 0) {
-    return NULL;
+  if (events.size() == 0) {
+    return nullptr;
   }
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
-    return events.head;
+    return events.front();
   }
   /* find last seen event */
-  FOR_EACH_NODE(events, node) {
-    Event *e = (Event *)node->data;
+  Event *e = nullptr;
+  for (auto e : events) {
     if (e->id == id)
       break;
   }
-  if (!node) {
-    return NULL;
+  if (!e) {
+    return nullptr;
   } else {
-    return node->next;
+    return getNext(events, e);
   }
 }
 
@@ -117,25 +120,26 @@ bool is_event_visible(const Event *e) {
 
 /* TODO simplify */
 void apply_invisible_events(void) {
-  Node *node = get_next_event_node();
-  while (node) {
-    Event *e = (Event *)node->data;
+  Event* e = get_next_event_node();
+  while (e) {
+    assert(e);
     if (!is_event_visible(e)) {
       apply_event(e);
     } else {
       break;
     }
-    node = node->next;
+    e = getNext(events, e);
+    assert(e);
   }
 }
 
 /* TODO: Called before get_next_event */
 bool unshown_events_left(void) {
   apply_invisible_events();
-  if (events.count == 0) {
+  if (events.size() == 0) {
     return false;
   } else {
-    Event *e = (Event *)events.tail->data;
+    auto e = events.back();
     return e->id != current_player->last_event_id;
   }
 }
@@ -143,32 +147,25 @@ bool unshown_events_left(void) {
 /* Always called after apply_invisible_events */
 Event* get_next_event(void) {
   int id = current_player->last_event_id; /* shortcut */
-  Node *node;
-  assert(events.count > 0);
+  assert(events.size() > 0);
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
-    return CAST(events.head->data, Event*);
+    return events.front();
   }
-  FOR_EACH_NODE(events, node) {
-    if (CAST(node->data, Event*)->id == id) {
-      return CAST(node->next->data, Event*);
+  for (auto e : events) {
+    if (e->id == id) {
+      return getNext(events, e);
     }
   }
   return NULL;
 }
 
 static int get_new_event_id(void) {
-  if (events.count > 0) {
-    Event *last = (Event *)events.tail->data;
-    return last->id + 1;
+  if (events.size() > 0) {
+    auto lastEvent = events.back();
+    return lastEvent->id + 1;
   } else {
     return 0;
   }
-}
-
-static void add_event_local(Event *data) {
-  Node *n = new Node;
-  set_node(n, data);
-  add_node_to_tail(&events, n);
 }
 
 static void event2log(const Event *e) {
@@ -186,7 +183,7 @@ static void send_event(const Event *e) {
 void add_event(Event *e) {
   assert(e);
   e->id = get_new_event_id();
-  add_event_local(e);
+  events.push_back(e);
   event2log(e);
 #if 0
   /* TODO */

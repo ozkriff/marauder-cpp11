@@ -2,7 +2,6 @@
 
 #include <stdlib.h>
 #include <assert.h>
-#include "core/list.h"
 #include "core/v2i.h"
 #include "core/misc.h"
 #include "core/dir.h"

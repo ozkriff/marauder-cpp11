@@ -1,7 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
 #include <assert.h>
-#include "core/list.h"
 #include "core/misc.h"
 #include "core/v2i.h"
 #include "core/dir.h"

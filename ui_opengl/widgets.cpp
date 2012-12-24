@@ -1,10 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 
 #include <assert.h>
+#include <list>
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_opengl.h>
-#include "core/list.h"
 #include "core/v2i.h"
 #include "core/dir.h"
 #include "core/misc.h"
@@ -15,7 +15,7 @@
 #include "ui_opengl/widgets.h"
 #include "ui_opengl/config.h"
 
-static List buttons;
+std::list<Button*> buttons;
 
 GLuint ttf_gl_print(TTF_Font *f, const char *text, V2i *size) {
   SDL_Color Color = {255, 255, 255, 0};
@@ -41,9 +41,7 @@ void change_button_text(Button *b, char *text) {
 }
 
 void change_button_text_by_id(int id, char *text) {
-  Node *node;
-  FOR_EACH_NODE(buttons, node) {
-    Button *b = (Button *)node->data;
+  for (auto b : buttons) {
     if (b->id == id) {
       change_button_text(b, text);
       return;
@@ -52,9 +50,8 @@ void change_button_text_by_id(int id, char *text) {
 }
 
 static int get_new_button_id(void) {
-  if (buttons.count > 0) {
-    Button *last = (Button *)buttons.tail->data;
-    return last->id + 1;
+  if (buttons.size() > 0) {
+    return buttons.back()->id + 1;
   } else {
     return 0;
   }
@@ -63,15 +60,13 @@ static int get_new_button_id(void) {
 int add_button(TTF_Font *f, const V2i *pos,
     const char *text, ButtonCallback callback)
 {
-  Button *b = new Button;
-  Node *n = new Node;
-  int id = get_new_button_id();
-  set_node(n, b);
-  add_node_to_tail(&buttons, n);
+  auto b = new Button;
+  buttons.push_back(b);
   assert(text);
   assert(f);
   assert(pos);
   b->f = f;
+  int id = get_new_button_id();
   b->id = id;
   b->pos = *pos;
   b->text = strdup(text);
@@ -81,9 +76,7 @@ int add_button(TTF_Font *f, const V2i *pos,
 }
 
 Button* v2i_to_button(V2i pos) {
-  Node *node;
-  FOR_EACH_NODE(buttons, node) {
-    Button *b = (Button *)node->data;
+  for (auto b : buttons) {
     if (pos.x >= b->pos.x
         && pos.y >= b->pos.y
         && pos.x <= b->pos.x + b->size.x
@@ -91,7 +84,7 @@ Button* v2i_to_button(V2i pos) {
       return b;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 void draw_button(Button *b) {
@@ -148,10 +141,8 @@ static void set_2d_widgets_drawing_mode_off(void) {
 }
 
 void draw_buttons(void) {
-  Node *node;
   set_2d_widgets_drawing_mode_on();
-  FOR_EACH_NODE(buttons, node) {
-    Button *b = (Button *)node->data;
+  for (auto b : buttons) {
     draw_button(b);
   }
   set_2d_widgets_drawing_mode_off();
@@ -169,5 +160,5 @@ TTF_Font* open_font(const char *font_name, int size) {
 
 void init_widgets(void) {
   TTF_Init();
-  buttons = empty_list;
+  // buttons = empty_list;
 }

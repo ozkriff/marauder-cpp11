@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
-#include "core/list.h"
 #include "core/v2i.h"
 #include "core/dir.h"
 #include "core/core.h"

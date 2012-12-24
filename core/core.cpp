@@ -5,7 +5,6 @@
 #include <string.h>
 #include <assert.h>
 #include <time.h>
-#include "core/list.h"
 #include "core/v2i.h"
 #include "core/math.h"
 #include "core/dir.h"
@@ -19,19 +18,17 @@
 #include "core/los.h"
 #include "core/core_private.h"
 
-List players;
+std::list<Player*> players;
 Event const *current_event;
 Player *current_player;
 Unit *selected_unit;
-List units;
+std::list<Unit*> units;
 
 static Tile map[MAP_Y][MAP_X];
 
 void create_local_human(int id) {
-  Player *p = new Player;
-  Node *n = new Node;
-  set_node(n, p);
-  push_node(&players, n);
+  auto p = new Player;
+  players.push_back(p);
   p->id = id;
   p->last_event_id = HAVE_NOT_SEEN_ANY_EVENTS;
 }
@@ -41,7 +38,7 @@ void init_local_players(int n, int *ids) {
   for (i = 0; i < n; i++) {
     create_local_human(ids[i]);
   }
-  current_player = (Player *)players.tail->data;
+  current_player = players.back();
 }
 
 bool inboard(const V2i *p) {
@@ -94,9 +91,7 @@ void calculate_fow(void) {
   clean_fow();
   FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
-    Node *node;
-    FOR_EACH_NODE(units, node) {
-      Unit *u = (Unit *)node->data;
+    for (auto u : units) {
       int max_dist = get_unit_type(u->type_id)->range_of_vision;
       bool is_player_ok = (u->player_id == current_player->id);
       bool is_distance_ok = (dist_i(&p, &u->pos) < max_dist);
@@ -109,10 +104,8 @@ void calculate_fow(void) {
 }
 
 Unit* unit_at(const V2i *pos) {
-  Node *node;
   assert(pos);
-  FOR_EACH_NODE(units, node) {
-    Unit *u = (Unit *)node->data;
+  for (auto u : units) {
     if (v2i_is_equal(&u->pos, pos)) {
       return u;
     }
@@ -121,9 +114,7 @@ Unit* unit_at(const V2i *pos) {
 }
 
 Unit* id2unit(int id) {
-  Node *node;
-  FOR_EACH_NODE(units, node) {
-    Unit *u = (Unit *)node->data;
+  for (auto u : units) {
     if (u->id == id) {
       return u;
     }
@@ -132,17 +123,16 @@ Unit* id2unit(int id) {
 }
 
 static int get_new_unit_id(void) {
-  if (units.count > 0) {
-    Unit *last = (Unit *)units.head->data;
-    return last->id + 1;
+  if (units.size() > 0) {
+    auto lastUnit = units.back();
+    return lastUnit->id + 1;
   } else {
     return 0;
   }
 }
 
 void add_unit(V2i p, int player_id) {
-  Unit *u = new Unit;
-  Node *n = new Node;
+  auto u = new Unit;
   assert(inboard(&p));
   assert(player_id >= 0 && player_id < 16);
   u->id = get_new_unit_id();
@@ -150,8 +140,7 @@ void add_unit(V2i p, int player_id) {
   u->player_id = player_id;
   u->dir = CAST(rnd(0, 7), Dir);
   u->type_id = rnd(0, UNIT_COUNT - 1);
-  set_node(n, u);
-  push_node(&units, n);
+  units.push_back(u);
   calculate_fow();
 #if 0
   build_fow_array(&va_fog_of_war);
@@ -159,7 +148,9 @@ void add_unit(V2i p, int player_id) {
 }
 
 static void kill_unit(Unit *u) {
-  delete_node(&units, data2node(units, u));
+  // delete_node(&units, data2node(units, u));
+  units.remove(u);
+  delete u;
   if (selected_unit) {
     fill_map(selected_unit);
     calculate_fow();
@@ -178,7 +169,6 @@ void shoot(Unit *shooter, Unit *target) {
 
 static void init_units(void) {
   int i;
-  units = empty_list;
   selected_unit = NULL;
   for (i = 0; i < 8; i++) {
     V2i p;
@@ -211,7 +201,6 @@ void init_logic(void) {
   init_events();
   clean_map();
   clean_fow();
-  players = empty_list;
   init_players();
   init_obstacles();
   init_units();
