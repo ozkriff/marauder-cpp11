@@ -14,12 +14,3 @@ void die(const char *message, ...) {
   va_end(arg_list);
   exit(EXIT_FAILURE);
 }
-
-#if 0
-Node* create_node(const void *data, int size) {
-  void *newdata = copy_to_heap(data, size);
-  Node *n = new Node;
-  set_node(n, newdata);
-  return n;
-}
-#endif
