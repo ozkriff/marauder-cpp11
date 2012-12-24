@@ -3,15 +3,15 @@
 CC = g++
 #CC = tcc
 #CC = clang
-CFLAGS += -I.
-CFLAGS += -g
-CFLAGS += -fpermissive
-#CFLAGS += -std=c89
-#CFLAGS += -Wall -Wextra --pedantic
-#CFLAGS += -Werror
-#CFLAGS += -pg
-#CFLAGS += -DNDEBUG
-#CFLAGS += -O3
+CXXFLAGS += -I.
+CXXFLAGS += -g
+CXXFLAGS += -fpermissive
+#CXXFLAGS += -std=c89
+#CXXFLAGS += -Wall -Wextra --pedantic
+#CXXFLAGS += -Werror
+#CXXFLAGS += -pg
+#CXXFLAGS += -DNDEBUG
+#CXXFLAGS += -O3
 LDFLAGS += -lSDL -lSDL_image -lSDL_ttf
 LDFLAGS += -lGL -lGLU
 LDFLAGS += -lm
