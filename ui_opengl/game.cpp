@@ -661,7 +661,7 @@ static void mainloop(void) {
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     draw();
-    SDL_Delay(1000.0f / 24.0f);
+    // SDL_Delay(1000.0f / 24.0f);
   }
 }
 
