@@ -10,21 +10,23 @@
 #include "ui_opengl/math.h"
 #include "ui_opengl/camera.h"
 
-void set_camera(const Camera *c) {
-  assert(c);
-  glTranslatef(0, 0, -(c->zoom));
-  glRotatef(c->x_angle, -1, 0, 0);
-  glRotatef(c->z_angle, 0, 0, 1);
-  glTranslatef(-c->pos.x, -c->pos.y, 0);
+Camera::Camera() {
 }
 
-void move_camera(Camera *c, Dir d) {
-  float speed;
-  float in_radians;
-  assert(c);
+Camera::~Camera() {
+}
+
+void Camera::set() {
+  glTranslatef(0, 0, -zoom);
+  glRotatef(x_angle, -1, 0, 0);
+  glRotatef(z_angle, 0, 0, 1);
+  glTranslatef(-pos.x, -pos.y, 0);
+}
+
+void Camera::move(Dir d) {
   assert(!dir_is_diagonal(d));
-  speed = c->zoom / 20.0f;
-  in_radians = deg2rad(c->z_angle - dir_to_angle(d));
-  c->pos.x += static_cast<float>(sin(in_radians)) * speed;
-  c->pos.y += static_cast<float>(cos(in_radians)) * speed;
+  float speed = zoom / 20.0f;
+  float in_radians = deg2rad(z_angle - dir_to_angle(d));
+  pos.x += static_cast<float>(sin(in_radians)) * speed;
+  pos.y += static_cast<float>(cos(in_radians)) * speed;
 }

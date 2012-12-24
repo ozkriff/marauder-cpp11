@@ -335,7 +335,7 @@ static void draw_units(void) {
 
 static void draw(void) {
   glLoadIdentity();
-  set_camera(&camera);
+  camera.set();
   draw_map();
   draw_units();
   if (ui_mode == UI_MODE_SHOW_EVENT) {
@@ -464,19 +464,19 @@ static void process_key_down_event(
       break;
     }
     case SDLK_UP: {
-      move_camera(&camera, D_N);
+      camera.move(D_N);
       break;
     }
     case SDLK_DOWN: {
-      move_camera(&camera, D_S);
+      camera.move(D_S);
       break;
     }
     case SDLK_LEFT: {
-      move_camera(&camera, D_W);
+      camera.move(D_W);
       break;
     }
     case SDLK_RIGHT: {
-      move_camera(&camera, D_E);
+      camera.move(D_E);
       break;
     }
     default: {
@@ -611,7 +611,7 @@ static bool pick_tile(V2i *p, const V2i *mouse_pos) {
 
 static void draw_for_picking(void) {
   glLoadIdentity();
-  set_camera(&camera);
+  camera.set();
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_COLOR_ARRAY);
   glColorPointer(3, GL_UNSIGNED_BYTE, 0, va_pick.ub_c);
@@ -625,14 +625,14 @@ static void scroll_map(void) {
   const V2i *p = &mouse_pos;
   int offset = 15;
   if (p->x < offset) {
-    move_camera(&camera, D_W);
+    camera.move(D_W);
   } else if(p->x > screen->w - offset) {
-    move_camera(&camera, D_E);
+    camera.move(D_E);
   }
   if (p->y < offset) {
-    move_camera(&camera, D_N);
+    camera.move(D_N);
   } else if(p->y > screen->h - offset) {
-    move_camera(&camera, D_S);
+    camera.move(D_S);
   }
   if (camera.pos.x > MAP_X * TILE_SIZE) {
     camera.pos.x = MAP_X * TILE_SIZE;
