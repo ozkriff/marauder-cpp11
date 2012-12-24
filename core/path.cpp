@@ -21,7 +21,7 @@ static PathQueue q;
 void init_path_queue (PathQueue *q, int size) {
   assert(size > 0);
   assert(q);
-  q->v = ALLOCATE(size, V2i);
+  q->v = new V2i[size];
   q->tail = 0;
   q->head = 0;
   q->size = size;
@@ -91,7 +91,7 @@ static int get_tile_cost(
     cost++;
   d = m2dir(t, nb);
   d2 = get_parent_dir(u, t);
-  d_diff = dir_diff(d, d2);
+  d_diff = (Dir)dir_diff(d, d2);
   switch (d_diff) {
     case 0: break;
     case 1: cost += 3; break;

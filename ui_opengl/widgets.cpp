@@ -17,7 +17,7 @@
 
 static List buttons;
 
-GLuint ttf_gl_print(TTF_Font *f, char *text, V2i *size) {
+GLuint ttf_gl_print(TTF_Font *f, const char *text, V2i *size) {
   SDL_Color Color = {255, 255, 255, 0};
   SDL_Surface *s = TTF_RenderUTF8_Blended(f, text, Color);
   GLuint id;
@@ -43,7 +43,7 @@ void change_button_text(Button *b, char *text) {
 void change_button_text_by_id(int id, char *text) {
   Node *node;
   FOR_EACH_NODE(buttons, node) {
-    Button *b = node->data;
+    Button *b = (Button *)node->data;
     if (b->id == id) {
       change_button_text(b, text);
       return;
@@ -53,7 +53,7 @@ void change_button_text_by_id(int id, char *text) {
 
 static int get_new_button_id(void) {
   if (buttons.count > 0) {
-    Button *last= buttons.tail->data;
+    Button *last = (Button *)buttons.tail->data;
     return last->id + 1;
   } else {
     return 0;
@@ -61,10 +61,10 @@ static int get_new_button_id(void) {
 }
 
 int add_button(TTF_Font *f, const V2i *pos,
-    char *text, ButtonCallback callback)
+    const char *text, ButtonCallback callback)
 {
-  Button *b = ALLOCATE(1, Button);
-  Node *n = ALLOCATE(1, Node);
+  Button *b = new Button;
+  Node *n = new Node;
   int id = get_new_button_id();
   set_node(n, b);
   add_node_to_tail(&buttons, n);
@@ -74,7 +74,7 @@ int add_button(TTF_Font *f, const V2i *pos,
   b->f = f;
   b->id = id;
   b->pos = *pos;
-  b->text = text;
+  b->text = strdup(text);
   b->texture_id = ttf_gl_print(f, text, &b->size);
   b->callback = callback;
   return id;
@@ -83,7 +83,7 @@ int add_button(TTF_Font *f, const V2i *pos,
 Button* v2i_to_button(V2i pos) {
   Node *node;
   FOR_EACH_NODE(buttons, node) {
-    Button *b = node->data;
+    Button *b = (Button *)node->data;
     if (pos.x >= b->pos.x
         && pos.y >= b->pos.y
         && pos.x <= b->pos.x + b->size.x
@@ -151,13 +151,13 @@ void draw_buttons(void) {
   Node *node;
   set_2d_widgets_drawing_mode_on();
   FOR_EACH_NODE(buttons, node) {
-    Button *b = node->data;
+    Button *b = (Button *)node->data;
     draw_button(b);
   }
   set_2d_widgets_drawing_mode_off();
 }
 
-TTF_Font* open_font(char *font_name, int size) {
+TTF_Font* open_font(const char *font_name, int size) {
   TTF_Font *f = TTF_OpenFont(font_name, size);
   if (!f) {
     die("open_font(): "

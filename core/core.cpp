@@ -28,8 +28,8 @@ List units;
 static Tile map[MAP_Y][MAP_X];
 
 void create_local_human(int id) {
-  Player *p = ALLOCATE(1, Player);
-  Node *n = ALLOCATE(1, Node);
+  Player *p = new Player;
+  Node *n = new Node;
   set_node(n, p);
   push_node(&players, n);
   p->id = id;
@@ -41,7 +41,7 @@ void init_local_players(int n, int *ids) {
   for (i = 0; i < n; i++) {
     create_local_human(ids[i]);
   }
-  current_player = players.tail->data;
+  current_player = (Player *)players.tail->data;
 }
 
 bool inboard(const V2i *p) {
@@ -96,7 +96,7 @@ void calculate_fow(void) {
     Tile *t = tile(&p);
     Node *node;
     FOR_EACH_NODE(units, node) {
-      Unit *u = node->data;
+      Unit *u = (Unit *)node->data;
       int max_dist = get_unit_type(u->type_id)->range_of_vision;
       bool is_player_ok = (u->player_id == current_player->id);
       bool is_distance_ok = (dist_i(&p, &u->pos) < max_dist);
@@ -112,7 +112,7 @@ Unit* unit_at(const V2i *pos) {
   Node *node;
   assert(pos);
   FOR_EACH_NODE(units, node) {
-    Unit *u = node->data;
+    Unit *u = (Unit *)node->data;
     if (v2i_is_equal(&u->pos, pos)) {
       return u;
     }
@@ -123,7 +123,7 @@ Unit* unit_at(const V2i *pos) {
 Unit* id2unit(int id) {
   Node *node;
   FOR_EACH_NODE(units, node) {
-    Unit *u = node->data;
+    Unit *u = (Unit *)node->data;
     if (u->id == id) {
       return u;
     }
@@ -133,7 +133,7 @@ Unit* id2unit(int id) {
 
 static int get_new_unit_id(void) {
   if (units.count > 0) {
-    Unit *last = units.head->data;
+    Unit *last = (Unit *)units.head->data;
     return last->id + 1;
   } else {
     return 0;
@@ -141,8 +141,8 @@ static int get_new_unit_id(void) {
 }
 
 void add_unit(V2i p, int player_id) {
-  Unit *u = ALLOCATE(1, Unit);
-  Node *n = ALLOCATE(1, Node);
+  Unit *u = new Unit;
+  Node *n = new Node;
   assert(inboard(&p));
   assert(player_id >= 0 && player_id < 16);
   u->id = get_new_unit_id();

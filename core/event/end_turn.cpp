@@ -18,7 +18,7 @@ void apply_event_end_turn(const EventEndturn *e) {
   Node *nd;
   assert(e);
   FOR_EACH_NODE(players, nd) {
-    Player *p = nd->data;
+    Player *p = (Player *)nd->data;
     if (p->id == e->new_id) {
       if (current_player->id == e->old_id) {
         current_player = p;
@@ -34,7 +34,7 @@ void apply_event_end_turn(const EventEndturn *e) {
 }
 
 void generate_event_end_turn(void) {
-  Event *e = ALLOCATE(1, Event);
+  Event *e = new Event;
   int players_count = 2; /* TODO */
   int new_id = current_player->id + 1;
   if (new_id == players_count) {

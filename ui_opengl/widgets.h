@@ -14,10 +14,10 @@ typedef struct {
 } Button;
 
 void init_widgets(void);
-TTF_Font* open_font(char *font_name, int size);
+TTF_Font* open_font(const char *font_name, int size);
 Button* v2i_to_button(V2i pos);
 int add_button(TTF_Font *f, const V2i *pos,
-    char *text, ButtonCallback callback);
+    const char *text, ButtonCallback callback);
 void draw_buttons(void);
 void change_button_text(Button *b, char *text);
 void change_button_text_by_id(int id, char *text);

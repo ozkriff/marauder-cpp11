@@ -16,7 +16,7 @@
 void generate_event_move(
     const Unit *u, const V2i *destination)
 {
-  Event *e = ALLOCATE(1, Event);
+  Event *e = new Event;
   EventMove *m = &e->e.move;
   int ap = get_unit_type(u->type_id)->action_points;
   if (tile(destination)->cost > ap) {
@@ -25,7 +25,7 @@ void generate_event_move(
   e->t = E_MOVE;
   m->initial_direction = u->dir;
   m->length = get_path_length(*destination);
-  m->path = ALLOCATE(m->length, V2i);
+  m->path = new V2i[m->length];
   get_path(m->path, m->length, *destination);
   m->unit_id = u->id;
   add_event(e);

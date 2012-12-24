@@ -44,10 +44,10 @@ void obj_read(ObjModel *m, const char *filename) {
     }
   }
   rewind(file);
-  m->vertexes = ALLOCATE(m->v_count, V3f);
-  m->normals = ALLOCATE(m->n_count, V3f);
-  m->text_coords = ALLOCATE(m->t_count, V2f);
-  m->faces = ALLOCATE(m->f_count, ObjTriangle);
+  m->vertexes = new V3f[m->v_count];
+  m->normals = new V3f[m->n_count];
+  m->text_coords = new V2f[m->t_count];
+  m->faces = new ObjTriangle[m->f_count];
   while (fgets(buffer, 100, file)) {
     if (buffer[0] == 'v' && buffer[1] == ' ') {
       /* Vertex coords */
@@ -139,8 +139,8 @@ void obj_build(VertexArray *va, const ObjModel *model) {
   assert(va);
   assert(model);
   va->count = model->f_count * 3;
-  va->v = ALLOCATE(va->count, V3f);
-  va->t = ALLOCATE(va->count, V2f);
+  va->v = (float *)new V3f[va->count];
+  va->t = (float *)new V2f[va->count];
   for (i = 0; i < model->f_count; i++) {
     ObjTriangle *tri = model->faces + i;
     for (j = 0; j < 3; j++) {

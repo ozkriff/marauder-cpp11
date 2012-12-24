@@ -85,8 +85,8 @@ static void build_map_array(VertexArray *v) {
     FREE(&v->t);
     v->t = NULL;
   }
-  v->v = ALLOCATE(v->count, V3f);
-  v->t = ALLOCATE(v->count, V2f);
+  v->v = (float*)new V3f[v->count];
+  v->t = (float*)new V2f[v->count];
   FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     float n = TILE_SIZE_2;
@@ -125,8 +125,8 @@ static void build_obstacles_array(VertexArray *v) {
     FREE(&v->t);
     v->t = NULL;
   }
-  v->v = ALLOCATE(v->count, V3f);
-  v->t = ALLOCATE(v->count, V2f);
+  v->v = (float *)new V3f[v->count];
+  v->t = (float *)new V2f[v->count];
   FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     float n = TILE_SIZE_2;
@@ -185,7 +185,7 @@ void build_fow_array(VertexArray *v) {
     FREE(&v->v);
     v->v = NULL;
   }
-  v->v = ALLOCATE(v->count, V3f);
+  v->v = (float *)new V3f[v->count];
   FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     float n = TILE_SIZE_2;
@@ -217,7 +217,7 @@ void build_walkable_array(VertexArray *v) {
   if (v->count == 0) {
     return;
   }
-  v->v = ALLOCATE(v->count, V3f);
+  v->v = (float *)new V3f[v->count];
   FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     assert(t);
@@ -323,7 +323,7 @@ static void draw_unit(const Unit *u) {
 static void draw_units(void) {
   Node *node;
   FOR_EACH_NODE(units, node) {
-    Unit *u = node->data;
+    Unit *u = (Unit *)node->data;
     if (ui_mode == UI_MODE_SHOW_EVENT
         && event_filter_unit(current_event, u))
     {
@@ -578,8 +578,8 @@ static void build_picking_tiles_array(VertexArray *va) {
     FREE(&va->ub_c);
     va->ub_c = NULL;
   }
-  va->v = ALLOCATE(va->count, V3f);
-  va->ub_c = ALLOCATE(va->count * 3, GLubyte);
+  va->v = (float *)new V3f[va->count];
+  va->ub_c = new GLubyte[va->count * 3];
   FOR_EACH_TILE(&p) {
     float n = TILE_SIZE_2;
     V2f pos;

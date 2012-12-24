@@ -22,10 +22,11 @@ void* my_alloc(int count, int size) {
   return mem;
 }
 
+// TODO: implement
 void my_free(void **mem) {
   assert(mem);
   assert(*mem);
-  free(*mem);
+  // free(*mem);
   *mem = NULL;
 }
 
@@ -48,7 +49,7 @@ void* copy_to_heap(const void *data, int size) {
 
 Node* create_node(const void *data, int size) {
   void *newdata = copy_to_heap(data, size);
-  Node *n = ALLOCATE(1, Node);
+  Node *n = new Node;
   set_node(n, newdata);
   return n;
 }

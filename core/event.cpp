@@ -45,7 +45,7 @@ static void undo_event(const Event *e) {
 void undo_unshown_events(void) {
   Node *node = events.tail;
   while (node) {
-    Event *e = node->data;
+    Event *e = (Event *)node->data;
     if (e->id == current_player->last_event_id) {
       break;
     }
@@ -87,7 +87,7 @@ static Node* get_next_event_node(void) {
   }
   /* find last seen event */
   FOR_EACH_NODE(events, node) {
-    Event *e = node->data;
+    Event *e = (Event *)node->data;
     if (e->id == id)
       break;
   }
@@ -119,7 +119,7 @@ bool is_event_visible(const Event *e) {
 void apply_invisible_events(void) {
   Node *node = get_next_event_node();
   while (node) {
-    Event *e = node->data;
+    Event *e = (Event *)node->data;
     if (!is_event_visible(e)) {
       apply_event(e);
     } else {
@@ -135,7 +135,7 @@ bool unshown_events_left(void) {
   if (events.count == 0) {
     return false;
   } else {
-    Event *e = events.tail->data;
+    Event *e = (Event *)events.tail->data;
     return e->id != current_player->last_event_id;
   }
 }
@@ -158,7 +158,7 @@ Event* get_next_event(void) {
 
 static int get_new_event_id(void) {
   if (events.count > 0) {
-    Event *last = events.tail->data;
+    Event *last = (Event *)events.tail->data;
     return last->id + 1;
   } else {
     return 0;
@@ -166,7 +166,7 @@ static int get_new_event_id(void) {
 }
 
 static void add_event_local(Event *data) {
-  Node *n = ALLOCATE(1, Node);
+  Node *n = new Node;
   set_node(n, data);
   add_node_to_tail(&events, n);
 }
