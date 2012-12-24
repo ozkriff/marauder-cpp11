@@ -352,7 +352,7 @@ static void process_mouse_button_down_event(
   Button *b;
   Unit *u;
   Tile *t;
-  set_v2i(&p, CAST(e->x, int), CAST(e->y, int));
+  set_v2i(&p, static_cast<int>(e->x), static_cast<int>(e->y));
   b = v2i_to_button(p);
   if (b) {
     b->callback();

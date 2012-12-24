@@ -90,18 +90,18 @@ Button* v2i_to_button(V2i pos) {
 void draw_button(Button *b) {
   float rect[4 * 2];
   float texture_coord[4 * 2];
-  set_xy(rect, 4, 0, 0, 0, CAST(b->size.y, float));
+  set_xy(rect, 4, 0, 0, 0, static_cast<float>(b->size.y));
   set_xy(rect, 4, 0, 1,
-      CAST(b->size.x, float), CAST(b->size.y, float));
-  set_xy(rect, 4, 0, 2, CAST(b->size.x, float), 0);
+      static_cast<float>(b->size.x), static_cast<float>(b->size.y));
+  set_xy(rect, 4, 0, 2, static_cast<float>(b->size.x), 0);
   set_xy(rect, 4, 0, 3, 0, 0);
   set_xy(texture_coord, 4, 0, 0, 0, 1);
   set_xy(texture_coord, 4, 0, 1, 1, 1);
   set_xy(texture_coord, 4, 0, 2, 1, 0);
   set_xy(texture_coord, 4, 0, 3, 0, 0);
   glPushMatrix();
-  glTranslatef(CAST(b->pos.x, float),
-      CAST(b->pos.y, float), 0.0f);
+  glTranslatef(static_cast<float>(b->pos.x),
+      static_cast<float>(b->pos.y), 0.0f);
   glColor4f(0.3f, 0.3f, 0.3f, 0.6f);
   glVertexPointer(2, GL_FLOAT, 0, rect);
   glDrawArrays(GL_QUADS, 0, 4);

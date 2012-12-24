@@ -18,4 +18,3 @@ T* getNext(std::list<T*> &list, T* node) {
 void die(const char *message, ...);
 
 #define UNUSED(x) ((void)x)
-#define CAST(data, type) ((type)(data))
