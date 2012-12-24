@@ -15,10 +15,6 @@ T* getNext(std::list<T*> &list, T* node) {
   return nullptr;
 }
 
-void* my_alloc(int count, int size);
-#define ALLOCATE(count, type) \
-  my_alloc(count, sizeof(type))
-
 void my_free(void **mem);
 #define FREE(mem) my_free(CAST(mem, void**))
 

@@ -7,20 +7,6 @@
 #include <string.h>
 #include "core/misc.h"
 
-void* my_alloc(int count, int size) {
-  unsigned int u_count;
-  unsigned int u_size;
-  void *mem;
-  assert(count > 0);
-  assert(size > 0);
-  u_count = CAST(count, unsigned int);
-  u_size = CAST(size, unsigned int);
-  mem = calloc(u_count, u_size);
-  /* For debugging */
-  memset(mem, 0xCC, u_count * u_size);
-  return mem;
-}
-
 // TODO: implement
 void my_free(void **mem) {
   assert(mem);
