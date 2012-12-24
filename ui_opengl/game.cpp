@@ -289,7 +289,7 @@ void draw_unit_circle(const Unit *u) {
   assert(u);
   if (u->player_id == 0) {
     glColor3f(1, 0, 0);
-  } elif (u->player_id == 1) {
+  } else if (u->player_id == 1) {
     glColor3f(0, 0, 1);
   } else {
     die("draw_unit_circle(): You need more colors!");
@@ -370,7 +370,7 @@ static void process_mouse_button_down_event(
     selected_unit = u;
     fill_map(selected_unit);
     build_walkable_array(&va_walkable_map);
-  } elif (selected_unit) {
+  } else if (selected_unit) {
     const Unit_type *type = get_unit_type(
         selected_unit->type_id);
     int ap = type->action_points;
@@ -378,7 +378,7 @@ static void process_mouse_button_down_event(
       if (selected_unit && u) {
         shoot(selected_unit, u);
       }
-    } elif (t->cost <= ap && t->parent != D_NONE) {
+    } else if (t->cost <= ap && t->parent != D_NONE) {
       generate_event_move(selected_unit, &active_tile_pos);
       /* TODO: Move this to ui_event_move? */
       FREE(&va_walkable_map.v);
@@ -535,7 +535,7 @@ static void process_sdl_event(const SDL_Event *e) {
       if (e->button.button == SDL_BUTTON_WHEELUP) {
         camera.zoom -= 5;
         clamp_f(&camera.zoom, 30, 200);
-      } elif (e->button.button == SDL_BUTTON_WHEELDOWN) {
+      } else if (e->button.button == SDL_BUTTON_WHEELDOWN) {
         camera.zoom += 5;
         clamp_f(&camera.zoom, 30, 200);
       }
@@ -544,7 +544,7 @@ static void process_sdl_event(const SDL_Event *e) {
     case SDL_MOUSEBUTTONDOWN: {
       if (e->button.button == SDL_BUTTON_RIGHT) {
         is_rotating_camera = true;
-      } elif (e->button.button == SDL_BUTTON_LEFT) {
+      } else if (e->button.button == SDL_BUTTON_LEFT) {
         process_mouse_button_down_event(&e->button);
       }
       break;
@@ -626,22 +626,22 @@ static void scroll_map(void) {
   int offset = 15;
   if (p->x < offset) {
     move_camera(&camera, D_W);
-  } elif(p->x > screen->w - offset) {
+  } else if(p->x > screen->w - offset) {
     move_camera(&camera, D_E);
   }
   if (p->y < offset) {
     move_camera(&camera, D_N);
-  } elif(p->y > screen->h - offset) {
+  } else if(p->y > screen->h - offset) {
     move_camera(&camera, D_S);
   }
   if (camera.pos.x > MAP_X * TILE_SIZE) {
     camera.pos.x = MAP_X * TILE_SIZE;
-  } elif (camera.pos.x < 0) {
+  } else if (camera.pos.x < 0) {
     camera.pos.x = 0;
   }
   if (camera.pos.y > MAP_Y * TILE_SIZE) {
     camera.pos.y = MAP_Y * TILE_SIZE;
-  } elif (camera.pos.y < 0) {
+  } else if (camera.pos.y < 0) {
     camera.pos.y = 0;
   }
 }
