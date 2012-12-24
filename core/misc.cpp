@@ -15,15 +15,6 @@ void die(const char *message, ...) {
   exit(EXIT_FAILURE);
 }
 
-void* copy_to_heap(const void *data, int size) {
-  void *tmp;
-  assert(data);
-  assert(size > 0);
-  tmp = calloc(1, size);
-  memcpy(tmp, data, CAST(size, unsigned int));
-  return tmp;
-}
-
 #if 0
 Node* create_node(const void *data, int size) {
   void *newdata = copy_to_heap(data, size);
