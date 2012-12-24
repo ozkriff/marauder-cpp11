@@ -77,11 +77,11 @@ static void build_map_array(VertexArray *v) {
   int i = 0; /* tile's index */
   v->count = MAP_X * MAP_Y * 6;
   if (v->v) {
-    FREE(&v->v);
+    delete[] v->v;
     v->v = NULL;
   }
   if (v->t) {
-    FREE(&v->t);
+    delete[] v->t;
     v->t = NULL;
   }
   v->v = (float*)new V3f[v->count];
@@ -117,11 +117,11 @@ static void build_obstacles_array(VertexArray *v) {
   int i = 0; /* tile's index */
   v->count = MAP_X * MAP_Y * 6;
   if (v->v) {
-    FREE(&v->v);
+    delete[] v->v;
     v->v = NULL;
   }
   if (v->t) {
-    FREE(&v->t);
+    delete[] v->t;
     v->t = NULL;
   }
   v->v = (float *)new V3f[v->count];
@@ -181,7 +181,7 @@ void build_fow_array(VertexArray *v) {
   int i = 0; /* tile's index */
   v->count = calculate_fogged_tiles_count() * 6;
   if (v->v) {
-    FREE(&v->v);
+    delete[] v->v;
     v->v = NULL;
   }
   v->v = (float *)new V3f[v->count];
@@ -209,7 +209,7 @@ void build_walkable_array(VertexArray *v) {
   int i = 0; /* tile's index */
   assert(v);
   if (v->v) {
-    FREE(&v->v);
+    delete[] v->v;
     v->v = NULL;
   }
   v->count = calculate_walkable_tiles_count() * 3;
@@ -381,7 +381,7 @@ static void process_mouse_button_down_event(
     } else if (t->cost <= ap && t->parent != D_NONE) {
       generate_event_move(selected_unit, &active_tile_pos);
       /* TODO: Move this to ui_event_move? */
-      FREE(&va_walkable_map.v);
+      delete[] va_walkable_map.v;
       va_walkable_map = empty_vertex_array;
     }
   }
@@ -568,11 +568,11 @@ static void build_picking_tiles_array(VertexArray *va) {
   assert(va);
   va->count = MAP_X * MAP_Y * 4;
   if (va->v) {
-    FREE(&va->v);
+    delete[] va->v;
     va->v = NULL;
   }
   if (va->ub_c) {
-    FREE(&va->ub_c);
+    delete[] va->ub_c;
     va->ub_c = NULL;
   }
   va->v = (float *)new V3f[va->count];

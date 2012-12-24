@@ -7,14 +7,6 @@
 #include <string.h>
 #include "core/misc.h"
 
-// TODO: implement
-void my_free(void **mem) {
-  assert(mem);
-  assert(*mem);
-  // free(*mem);
-  *mem = NULL;
-}
-
 void die(const char *message, ...) {
   va_list arg_list;
   va_start(arg_list, message);

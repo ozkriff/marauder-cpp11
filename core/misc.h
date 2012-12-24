@@ -15,9 +15,6 @@ T* getNext(std::list<T*> &list, T* node) {
   return nullptr;
 }
 
-void my_free(void **mem);
-#define FREE(mem) my_free(CAST(mem, void**))
-
 void die(const char *message, ...);
 
 #define COPY_TO_HEAP(data, type) \
