@@ -101,7 +101,7 @@ void calculate_fow() {
 
 Unit* unit_at(const V2i &pos) {
   for (auto u : units) {
-    if (v2i_is_equal(&u->pos, &pos)) {
+    if (u->pos == pos) {
       return u;
     }
   }
@@ -163,11 +163,9 @@ void shoot(Unit *shooter, Unit *target) {
 }
 
 static void init_units() {
-  int i;
   selected_unit = NULL;
-  for (i = 0; i < 8; i++) {
-    V2i p;
-    set_v2i(&p, rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
+  for (int i = 0; i < 8; i++) {
+    V2i p = V2i(rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
     if (!tile(p).obstacle && !unit_at(p)) {
       add_unit(p, rnd(0, 1));
     } else {
@@ -201,5 +199,3 @@ void init_logic() {
   init_units();
   calculate_fow();
 }
-
-

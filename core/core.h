@@ -42,7 +42,7 @@ void add_unit(V2i p, int player_id);
 void init_logic();
 
 #define FOR_EACH_TILE(p) \
-  for (set_v2i(p, 0, 0); inboard(*p); inc_v2i(p))
+  for (*p = V2i(0, 0); inboard(*p); inc_v2i(p))
 
 /* Player.last_event_id */
 #define HAVE_NOT_SEEN_ANY_EVENTS (-1)

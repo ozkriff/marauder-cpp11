@@ -3,11 +3,28 @@
 #ifndef CORE_V2I_H
 #define CORE_V2I_H
 
-typedef struct {
-  int x, y;
-} V2i;
+class V2i {
+public:
+  int x;
+  int y;
 
-void set_v2i(V2i *v, int x, int y);
-bool v2i_is_equal(const V2i *a, const V2i *b);
+public:
+  V2i(int x, int y) {
+    this->x = x;
+    this->y = y;
+  }
+
+  V2i() {
+    this->x = 0;
+    this->y = 0;
+  }
+
+  ~V2i() {
+  }
+
+  bool operator==(const V2i& b) {
+    return x == b.x && y == b.y;
+  }
+};
 
 #endif

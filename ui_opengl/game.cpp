@@ -80,9 +80,9 @@ void Game::do_xxx() {
 void Game::init() {
   init_logic();
   done = false;
-  set_v2i(&win_size, WIN_WIDTH, WIN_HEIGHT);
-  set_v2i(&active_tile_pos, 0, 0);
-  set_v2i(&mouse_pos, 0, 0);
+  win_size = V2i(WIN_WIDTH, WIN_HEIGHT);
+  active_tile_pos = V2i(0, 0);
+  mouse_pos = V2i(0, 0);
   ui_mode = UI_MODE_NORMAL;
   is_rotating_camera = false;
   SDL_Init(SDL_INIT_EVERYTHING);
@@ -378,7 +378,7 @@ void Game::process_mouse_button_down_event(
   V2i p;
   Button *b;
   Unit *u;
-  set_v2i(&p, static_cast<int>(e->x), static_cast<int>(e->y));
+  p = V2i(static_cast<int>(e->x), static_cast<int>(e->y));
   b = v2i_to_button(p);
   if (b) {
     b->callback();
@@ -417,7 +417,7 @@ void Game::process_mouse_motion_event(
     const SDL_MouseMotionEvent *e)
 {
   assert(e);
-  set_v2i(&mouse_pos, (int)e->x, (int)e->y);
+  mouse_pos = V2i(static_cast<int>(e->x), static_cast<int>(e->y));
   if (is_rotating_camera) {
     camera.z_angle -= e->xrel;
     camera.x_angle -= e->yrel;

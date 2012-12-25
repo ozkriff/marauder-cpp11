@@ -45,9 +45,9 @@ V2i Los::getNext() {
   }
   mPos.x++;
   if (!mIsSteep) {
-    set_v2i(&n, mPos.x, mPos.y);
+    n = V2i(mPos.x, mPos.y);
   } else {
-    set_v2i(&n, mPos.y, mPos.x);
+    n =V2i(mPos.y, mPos.x);
   }
   return n;
 }
