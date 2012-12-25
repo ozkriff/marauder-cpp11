@@ -1,5 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
+#ifndef UI_OPENGL_VERTEX_ARRAY_H
+#define UI_OPENGL_VERTEX_ARRAY_H
+
 /* Vertex array */
 typedef struct {
   float *v; /* vertices */
@@ -18,3 +21,5 @@ void set_rgb(GLubyte *colors, int n, int i, int vi,
     GLubyte r, GLubyte g, GLubyte b);
 void set_rgb_i(GLubyte *colors, int n, int i, int vi,
     int r, int g, int b);
+
+#endif

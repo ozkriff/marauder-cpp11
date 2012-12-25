@@ -1,5 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
+#ifndef CORE_EVENT_H
+#define CORE_EVENT_H
+
 typedef enum {
   E_MOVE,
   E_END_TURN
@@ -22,3 +25,5 @@ void apply_invisible_events(void);
 bool is_event_visible(const Event *e);
 void apply_event(const Event *e);
 void undo_unshown_events(void);
+
+#endif

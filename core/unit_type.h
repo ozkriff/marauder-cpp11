@@ -1,5 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
+#ifndef CORE_UNIT_TYPE_H
+#define CORE_UNIT_TYPE_H
+
 typedef enum {
   UNIT_TANK,
   UNIT_TRUCK,
@@ -13,3 +16,5 @@ typedef struct {
 
 const Unit_type* get_unit_type(int id);
 void init_unit_types(void);
+
+#endif

@@ -1,5 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
+#ifndef CORE_CORE_H
+#define CORE_CORE_H
+
 typedef struct {
   int type_id;
   int id;
@@ -43,3 +46,5 @@ void init_logic(void);
 
 /* Player.last_event_id */
 #define HAVE_NOT_SEEN_ANY_EVENTS (-1)
+
+#endif

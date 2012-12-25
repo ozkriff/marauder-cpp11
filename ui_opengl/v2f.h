@@ -1,5 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
+#ifndef UI_OPENGL_V2F_H
+#define UI_OPENGL_V2F_H
+
 class V2f {
 private:
   float mX;
@@ -19,3 +22,5 @@ public:
   void rotate(V2f *p, float angle);
   V2f& operator+(const V2f& b);
 };
+
+#endif

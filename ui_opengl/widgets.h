@@ -1,5 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
+#ifndef UI_OPENGL_WIDGETS_H
+#define UI_OPENGL_WIDGETS_H
+
 typedef void (*ButtonCallback)(void);
 
 /* TODO: fg_color, bg_color */
@@ -21,3 +24,5 @@ int add_button(TTF_Font *f, const V2i *pos,
 void draw_buttons(void);
 void change_button_text(Button *b, char *text);
 void change_button_text_by_id(int id, char *text);
+
+#endif

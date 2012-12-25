@@ -1,5 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
+#ifndef UI_OPENGL_OBJ_H
+#define UI_OPENGL_OBJ_H
+
 /* vertex, texture, normal */
 typedef struct {
   int v[3];
@@ -21,3 +24,5 @@ typedef struct {
 void obj_build(VertexArray *va, const ObjModel *model);
 void obj_read(ObjModel *m, const char *filename);
 void obj_debug_print(ObjModel *m);
+
+#endif

@@ -1,5 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
+#ifndef CORE_DIR_H
+#define CORE_DIR_H
+
 typedef enum {
   D_N, D_NE, D_E, D_SE,
   D_S, D_SW, D_W, D_NW,
@@ -13,3 +16,5 @@ void get_dir_neib(V2i *n,
     const V2i *p1, const V2i *p2, int add_me);
 Dir opposite_dir(Dir d);
 int dir_diff(Dir d0, Dir d1);
+
+#endif
