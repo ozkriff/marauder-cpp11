@@ -6,12 +6,9 @@
 #include "core/v2i.h"
 #include "core/math.h"
 
-int dist_i(const V2i *a, const V2i *b) {
-  int dx, dy;
-  assert(a);
-  assert(b);
-  dx = abs(b->x - a->x);
-  dy = abs(b->y - a->y);
+int dist(const V2i &a, const V2i &b) {
+  int dx = abs(b.x - a.x);
+  int dy = abs(b.y - a.y);
   return (int)sqrt(pow(dx, 2) + pow(dy, 2));
 }
 
