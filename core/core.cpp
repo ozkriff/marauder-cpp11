@@ -132,7 +132,7 @@ void add_unit(V2i p, int player_id) {
   u->pos = p;
   u->player_id = player_id;
   u->dir = static_cast<Dir>(rnd(0, 7));
-  u->type_id = rnd(0, UNIT_COUNT - 1);
+  u->type_id = rnd(0, (int)Unit_type_id::UNIT_COUNT - 1);
   units.push_back(u);
   calculate_fow();
 #if 0

@@ -3,8 +3,8 @@
 #ifndef UI_OPENGL_V3F_H
 #define UI_OPENGL_V3F_H
 
-typedef struct {
+struct V3f {
   float x, y, z;
-} V3f;
+} ;
 
 #endif

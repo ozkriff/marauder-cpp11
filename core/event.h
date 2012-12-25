@@ -3,10 +3,10 @@
 #ifndef CORE_EVENT_H
 #define CORE_EVENT_H
 
-typedef enum {
+enum class EventTypeId {
   E_MOVE,
   E_END_TURN
-} EventTypeId;
+};
 
 typedef struct {
   EventTypeId t;

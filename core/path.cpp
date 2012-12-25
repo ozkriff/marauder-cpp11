@@ -90,7 +90,7 @@ static int get_tile_cost(
   d = m2dir(t, nb);
   d2 = get_parent_dir(u, t);
   d_diff = (Dir)dir_diff(d, d2);
-  switch (d_diff) {
+  switch ((int)d_diff) {
     case 0: break;
     case 1: cost += 3; break;
     case 2: cost += 20; break;
@@ -151,18 +151,17 @@ void clean_map() {
   FOR_EACH_TILE(&p) {
     Tile& t = tile(p);
     t.cost = 30000;
-    t.parent = D_NONE;
+    t.parent = Dir::D_NONE;
   }
 }
 
 static void try_to_push_neibors(
     const Unit *u, const V2i *m)
 {
-  int i;
   assert(m);
   assert(inboard(*m));
   assert(u);
-  for (i = D_N; i <= D_NW; i++) {
+  for (int i = (int)Dir::D_N; i <= (int)Dir::D_NW; i++) {
     V2i neib_m;
     neib(&neib_m, m, (Dir)i);
     if (inboard(neib_m)) {
@@ -176,7 +175,7 @@ void fill_map(const Unit *u) {
   assert(is_queue_empty(&q));
   clean_map();
   /* Push start position. */
-  push(&u->pos, D_NONE, 0, u->dir);
+  push(&u->pos, Dir::D_NONE, 0, u->dir);
   while (!is_queue_empty(&q)) {
     V2i p = pop();
     try_to_push_neibors(u, &p);

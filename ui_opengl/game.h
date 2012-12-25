@@ -5,10 +5,10 @@
 
 #include <SDL/SDL.h>
 
-typedef enum {
+enum class UIMode {
   UI_MODE_NORMAL,
   UI_MODE_SHOW_EVENT
-} UIMode;
+};
 
 class Game;
 

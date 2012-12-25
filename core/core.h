@@ -3,21 +3,21 @@
 #ifndef CORE_CORE_H
 #define CORE_CORE_H
 
-typedef struct {
+struct Unit {
   int type_id;
   int id;
   int player_id;
   Dir dir;
   int action_points;
   V2i pos;
-} Unit;
+};
 
-typedef struct {
+struct Player {
   int id;
   int last_event_id;
-} Player;
+};
 
-typedef struct {
+struct Tile {
   Unit *unit;
   bool obstacle;
   /* TODO: move to pathfinding */
@@ -25,7 +25,7 @@ typedef struct {
   Dir parent;
   Dir dir;
   int fow; /* how many units see this tile */
-} Tile;
+};
 
 #define MAP_X 20
 #define MAP_Y 20

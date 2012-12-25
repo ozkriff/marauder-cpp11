@@ -38,7 +38,7 @@ void generate_event_end_turn() {
   if (new_id == players_count) {
     new_id = 0;
   }
-  e->t = E_END_TURN;
+  e->t = EventTypeId::E_END_TURN;
   e->e.end_turn.old_id = current_player->id;
   e->e.end_turn.new_id = new_id;
   add_event(e);

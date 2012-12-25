@@ -31,27 +31,27 @@ Dir m2dir(const V2i *a, const V2i *b) {
       return (Dir)i;
     }
   }
-  return D_ERROR;
+  return Dir::D_ERROR;
 }
 
 /* Get tile's neiborhood by it's index. */
 void neib(V2i *neib, const V2i* pos, Dir i) {
   int dx, dy;
-  assert(i < D_COUNT);
+  assert(i < Dir::D_COUNT);
   assert(pos);
   assert(neib);
-  if (i == D_NONE || i == D_ERROR) {
+  if (i == Dir::D_NONE || i == Dir::D_ERROR) {
     die("dir.c: neib(): "
         "Wrong direction: pos:[%d %d %d] dir:%d\n",
         pos->x, pos->y, i);
   }
-  dx = dir_to_pos_diff[i].x;
-  dy = dir_to_pos_diff[i].y;
+  dx = dir_to_pos_diff[(int)i].x;
+  dy = dir_to_pos_diff[(int)i].y;
   *neib = V2i(pos->x + dx, pos->y + dy);
 }
 
 bool dir_is_diagonal(Dir d) {
-  return d != D_N && d != D_E && d != D_S && d != D_W;
+  return d != Dir::D_N && d != Dir::D_E && d != Dir::D_S && d != Dir::D_W;
 }
 
 /* TODO rename */
@@ -84,7 +84,7 @@ Dir opposite_dir(Dir d) {
 }
 
 int dir_diff(Dir d0, Dir d1) {
-  int diff = abs(d0 - d1);
+  int diff = abs((int)d0 - (int)d1);
   if (diff > 4) {
     diff = 8 - diff;
   }

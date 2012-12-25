@@ -21,7 +21,7 @@ void generate_event_move(
   if (tile(*destination).cost > ap) {
     return;
   }
-  e->t = E_MOVE;
+  e->t = EventTypeId::E_MOVE;
   m->initial_direction = u->dir;
   m->length = get_path_length(*destination);
   m->path = new V2i[m->length];

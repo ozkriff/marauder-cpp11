@@ -3,11 +3,11 @@
 #ifndef CORE_DIR_H
 #define CORE_DIR_H
 
-typedef enum {
+enum class Dir {
   D_N, D_NE, D_E, D_SE,
   D_S, D_SW, D_W, D_NW,
   D_NONE, D_ERROR, D_COUNT
-} Dir;
+};
 
 void neib(V2i *neib, const V2i* pos, Dir i);
 Dir m2dir(const V2i *a, const V2i *b);

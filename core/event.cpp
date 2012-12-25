@@ -23,11 +23,11 @@ void init_events() {
 static void undo_event(const Event *e) {
   assert(e);
   switch (e->t) {
-    case E_MOVE: {
+    case EventTypeId::E_MOVE: {
       undo_event_move(&e->e.move);
       break;
     }
-    case E_END_TURN: {
+    case EventTypeId::E_END_TURN: {
       /* empty */
       /* TODO: die()? */
       break;
@@ -61,11 +61,11 @@ void apply_event(const Event *e) {
   assert(e);
   current_player->last_event_id = e->id;
   switch (e->t) {
-    case E_MOVE: {
+    case EventTypeId::E_MOVE: {
       apply_event_move(&e->e.move);
       break;
     }
-    case E_END_TURN: {
+    case EventTypeId::E_END_TURN: {
       apply_event_end_turn(&e->e.end_turn);
       break;
     }
@@ -104,10 +104,10 @@ static Event* get_next_event_node() {
 bool is_event_visible(const Event *e) {
   assert(e);
   switch (e->t) {
-    case E_MOVE: {
+    case EventTypeId::E_MOVE: {
       return is_visible_event_move(&e->e.move);
     }
-    case E_END_TURN: {
+    case EventTypeId::E_END_TURN: {
       return true;
     }
     default: {

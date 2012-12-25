@@ -85,6 +85,6 @@ void rotate_point_around_point(
 }
 
 float dir_to_angle(Dir d) {
-  assert(d < 8);
-  return (360 / 8) * d;
+  assert((int)d < 8);
+  return (360 / 8) * (int)d;
 }

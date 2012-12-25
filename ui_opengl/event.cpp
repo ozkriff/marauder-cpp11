@@ -21,10 +21,10 @@ bool event_filter_unit(const Event *e, const Unit *u) {
   assert(e);
   assert(u);
   switch (e->t) {
-    case E_END_TURN: {
+    case EventTypeId::E_END_TURN: {
       return false;
     }
-    case E_MOVE: {
+    case EventTypeId::E_MOVE: {
       return u->id == current_event->e.move.unit_id;
     }
     default: {
@@ -38,11 +38,11 @@ bool event_filter_unit(const Event *e, const Unit *u) {
 void event_draw(const Event *e) {
   assert(e);
   switch (e->t) {
-    case E_END_TURN: {
+    case EventTypeId::E_END_TURN: {
       die("TODO");
       break;
     }
-    case E_MOVE: {
+    case EventTypeId::E_MOVE: {
       draw_moving_unit();
       break;
     }
@@ -57,10 +57,10 @@ void event_draw(const Event *e) {
 int get_last_event_index(const Event *e) {
   assert(e);
   switch (e->t) {
-    case E_END_TURN: {
+    case EventTypeId::E_END_TURN: {
       return 0;
     }
-    case E_MOVE: {
+    case EventTypeId::E_MOVE: {
       return get_last_event_move_index(e);
     }
     default: {

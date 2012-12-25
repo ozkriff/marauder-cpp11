@@ -4,13 +4,13 @@
 #define UI_OPENGL_OBJ_H
 
 /* vertex, texture, normal */
-typedef struct {
+struct ObjTriangle {
   int v[3];
   int t[3];
   int n[3];
-} ObjTriangle;
+};
 
-typedef struct {
+struct ObjModel {
   V3f *vertexes;
   V3f *normals;
   V2f *text_coords;
@@ -19,7 +19,7 @@ typedef struct {
   int v_count;
   int t_count;
   int n_count;
-} ObjModel;
+};
 
 void obj_build(VertexArray *va, const ObjModel *model);
 void obj_read(ObjModel *m, const char *filename);

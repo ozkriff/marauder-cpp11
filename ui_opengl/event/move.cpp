@@ -57,7 +57,7 @@ static void end_movement(const V2i *pos) {
   Unit *u;
   assert(pos);
   u = id2unit(current_event->e.move.unit_id);
-  game.ui_mode = UI_MODE_NORMAL;
+  game.ui_mode = UIMode::UI_MODE_NORMAL;
   u->pos = *pos;
   if (selected_unit) {
     fill_map(u);
@@ -112,7 +112,7 @@ void draw_moving_unit() {
   glPushMatrix();
   glTranslatef(p.x(), p.y(), 0.0f);
   /* TODO: Remove '+ 4'! Rotate obj files! */
-  glRotatef((m2dir(&from_i, &to_i) + 4) * 45.0f, 0, 0, 1);
+  glRotatef(((int)m2dir(&from_i, &to_i) + 4) * 45.0f, 0, 0, 1);
   game.draw_unit_model(u);
   game.draw_unit_circle(u);
   glPopMatrix();
