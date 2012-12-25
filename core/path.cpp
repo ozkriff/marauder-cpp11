@@ -33,17 +33,16 @@ void init_pathfinding_module(void) {
 static void push(
     const V2i *m, Dir parent, int newcost, Dir dir)
 {
-  Tile *t;
   assert(m);
-  t = tile(m);
-  assert(t);
-  t->cost = newcost;
-  t->parent = parent;
-  t->dir = dir;
+  Tile& t = tile(*m);
+  t.cost = newcost;
+  t.parent = parent;
+  t.dir = dir;
   q.v[q.tail] = *m;
   q.tail++;
-  if (q.tail == q.size)
+  if (q.tail == q.size) {
     q.tail = 0;
+  }
 }
 
 static bool is_queue_empty(const PathQueue *q) {
@@ -63,11 +62,11 @@ static V2i pop(void) {
 
 /* If this is first(start) tile - no parent tile. */
 static Dir get_parent_dir (const Unit *u, const V2i *m){
-  Tile *t = tile(m);
-  if (t->cost == 0) {
+  Tile& t = tile(*m);
+  if (t.cost == 0) {
     return u->dir;
   } else {
-    return opposite_dir(t->parent);
+    return opposite_dir(t.parent);
   }
 }
 
@@ -115,9 +114,9 @@ static bool can_move_there(const V2i *p1, const V2i *p2) {
   get_dir_neib(&neib_left, p1, p2, -1);
   get_dir_neib(&neib_right, p1, p2, +1);
   is_left_blocked = inboard(neib_left)
-      && tile(&neib_left)->obstacle;
+      && tile(neib_left).obstacle;
   is_right_blocked = inboard(neib_right)
-      && tile(&neib_right)->obstacle;
+      && tile(neib_right).obstacle;
 #if 0
   return !is_left_blocked && !is_right_blocked;
 #else
@@ -132,19 +131,17 @@ static void process_neibor(
 {
   int newcost;
   int ap;
-  Tile *t1 = tile(p1);
-  Tile *t2 = tile(p2);
-  assert(t1);
-  assert(t2);
+  Tile& t1 = tile(*p1);
+  Tile& t2 = tile(*p2);
   assert(u);
-  if (unit_at(p2) || t2->obstacle
+  if (unit_at(p2) || t2.obstacle
       || !can_move_there(p1, p2))
   {
     return;
   }
-  newcost = t1->cost + get_tile_cost(u, p1, p2);
+  newcost = t1.cost + get_tile_cost(u, p1, p2);
   ap = get_unit_type(u->type_id)->action_points;
-  if (t2->cost > newcost && newcost <= ap) {
+  if (t2.cost > newcost && newcost <= ap) {
     push(p2, m2dir(p2, p1), newcost, m2dir(p1, p2));
   }
 }
@@ -152,10 +149,9 @@ static void process_neibor(
 void clean_map(void) {
   V2i p;
   FOR_EACH_TILE(&p) {
-    Tile *t = tile(&p);
-    assert(t);
-    t->cost = 30000;
-    t->parent = D_NONE;
+    Tile& t = tile(p);
+    t.cost = 30000;
+    t.parent = D_NONE;
   }
 }
 
@@ -192,9 +188,9 @@ void get_path(V2i *path, int length, V2i pos) {
   int i = length - 1;
   assert(path);
   assert(inboard(pos));
-  while (tile(&pos)->cost != 0) {
+  while (tile(pos).cost != 0) {
     path[i] = pos;
-    dir = tile(&pos)->parent;
+    dir = tile(pos).parent;
     neib(&pos, &pos, dir);
     i--;
   }
@@ -206,9 +202,9 @@ int get_path_length(V2i pos) {
   Dir dir;
   int length = 1;
   assert(inboard(pos));
-  while (tile(&pos)->cost != 0) {
+  while (tile(pos).cost != 0) {
     length++;
-    dir = tile(&pos)->parent;
+    dir = tile(pos).parent;
     neib(&pos, &pos, dir);
   }
   return length;

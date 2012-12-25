@@ -84,14 +84,13 @@ static void build_map_array(VertexArray *v) {
   v->v = (float*)new V3f[v->count];
   v->t = (float*)new V2f[v->count];
   FOR_EACH_TILE(&p) {
-    Tile *t = tile(&p);
+    Tile& t = tile(p);
     float n = TILE_SIZE_2;
     V2f pos;
-    if (t->obstacle) {
+    if (t.obstacle) {
       continue;
     }
     pos = v2i_to_v2f(p);
-    assert(t);
     set_xy(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
     set_xy(v->v, 3, i, 1, pos.x() + n, pos.y() - n);
     set_xy(v->v, 3, i, 2, pos.x() + n, pos.y() + n);
@@ -124,13 +123,12 @@ static void build_obstacles_array(VertexArray *v) {
   v->v = (float *)new V3f[v->count];
   v->t = (float *)new V2f[v->count];
   FOR_EACH_TILE(&p) {
-    Tile *t = tile(&p);
+    Tile& t = tile(p);
     float n = TILE_SIZE_2;
-    if (!t->obstacle) {
+    if (!t.obstacle) {
       continue;
     }
     V2f pos = v2i_to_v2f(p);
-    assert(t);
     set_xy(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
     set_xy(v->v, 3, i, 1, pos.x() + n, pos.y() - n);
     set_xy(v->v, 3, i, 2, pos.x() + n, pos.y() + n);
@@ -152,8 +150,8 @@ static int calculate_walkable_tiles_count(void) {
   V2i p;
   int count = 0;
   FOR_EACH_TILE(&p) {
-    Tile *t = tile(&p);
-    if (t->parent != D_NONE && t->cost != 30000) {
+    Tile& t = tile(p);
+    if (t.parent != D_NONE && t.cost != 30000) {
       count++;
     }
   }
@@ -164,8 +162,8 @@ static int calculate_fogged_tiles_count(void) {
   int n = 0;
   V2i p;
   FOR_EACH_TILE(&p) {
-    Tile *t = tile(&p);
-    if (t->fow == 0) {
+    Tile& t = tile(p);
+    if (t.fow == 0) {
       n++;
     }
   }
@@ -182,12 +180,11 @@ void build_fow_array(VertexArray *v) {
   }
   v->v = (float *)new V3f[v->count];
   FOR_EACH_TILE(&p) {
-    Tile *t = tile(&p);
+    Tile& t = tile(p);
     float n = TILE_SIZE_2;
-    if (t->fow > 0)
+    if (t.fow > 0)
       continue;
     V2f pos = v2i_to_v2f(p);
-    assert(t);
     set_xyz(v->v, 3, i, 0, pos.x() - n, pos.y() - n, 0.05f);
     set_xyz(v->v, 3, i, 1, pos.x() + n, pos.y() - n, 0.05f);
     set_xyz(v->v, 3, i, 2, pos.x() + n, pos.y() + n, 0.05f);
@@ -213,15 +210,13 @@ void build_walkable_array(VertexArray *v) {
   }
   v->v = (float *)new V3f[v->count];
   FOR_EACH_TILE(&p) {
-    Tile *t = tile(&p);
-    assert(t);
-    if (t->parent != D_NONE && t->cost < 50) {
-      V2f pos1, pos2;
+    Tile& t = tile(p);
+    if (t.parent != D_NONE && t.cost < 50) {
       V2i p2;
-      neib(&p2, &p, t->parent);
+      neib(&p2, &p, t.parent);
       if (inboard(p2)) {
-        pos1 = v2i_to_v2f(p);
-        pos2 = v2i_to_v2f(p2);
+        V2f pos1 = v2i_to_v2f(p);
+        V2f pos2 = v2i_to_v2f(p2);
         set_xyz(v->v, 2, i, 0, pos1.x(), pos1.y(), 0.1f);
         set_xyz(v->v, 2, i, 1, pos2.x(), pos2.y(), 0.1f);
         i++;
@@ -320,7 +315,7 @@ static void draw_units(void) {
     {
       continue;
     }
-    if (tile(&u->pos)->fow == 0) {
+    if (tile(u->pos).fow == 0) {
       continue;
     }
     draw_unit(u);
@@ -345,7 +340,6 @@ static void process_mouse_button_down_event(
   V2i p;
   Button *b;
   Unit *u;
-  Tile *t;
   set_v2i(&p, static_cast<int>(e->x), static_cast<int>(e->y));
   b = v2i_to_button(p);
   if (b) {
@@ -353,7 +347,7 @@ static void process_mouse_button_down_event(
     return;
   }
   u = unit_at(&active_tile_pos);
-  t = tile(&active_tile_pos);
+  Tile& t = tile(active_tile_pos);
   assert(current_player);
   assert(e);
   UNUSED(e);
@@ -372,7 +366,7 @@ static void process_mouse_button_down_event(
       if (selected_unit && u) {
         shoot(selected_unit, u);
       }
-    } else if (t->cost <= ap && t->parent != D_NONE) {
+    } else if (t.cost <= ap && t.parent != D_NONE) {
       generate_event_move(selected_unit, &active_tile_pos);
       /* TODO: Move this to ui_event_move? */
       delete[] va_walkable_map.v;
@@ -413,8 +407,8 @@ static void process_key_down_event(
       break;
     }
     case SDLK_t: {
-      Tile *t = tile(&active_tile_pos);
-      t->obstacle = !t->obstacle;
+      Tile& t = tile(active_tile_pos);
+      t.obstacle = !t.obstacle;
       build_map_array(&va_map);
       build_obstacles_array(&va_obstacles);
       calculate_fow();

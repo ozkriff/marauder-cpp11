@@ -18,7 +18,7 @@ void generate_event_move(
   Event *e = new Event;
   EventMove *m = &e->e.move;
   int ap = get_unit_type(u->type_id)->action_points;
-  if (tile(destination)->cost > ap) {
+  if (tile(*destination).cost > ap) {
     return;
   }
   e->t = E_MOVE;
