@@ -63,12 +63,10 @@ void inc_v2i(V2i *pos) {
 
 static bool isLosClear(const V2i& from, const V2i& to) {
   Los los(from, to);
-  V2i p = los.getNext();
-  while (!los.isFinished()) {
+  for (V2i p = los.getNext(); !los.isFinished(); p = los.getNext()) {
     if (unit_at(p) || tile(p).obstacle) {
       return false;
     }
-    p = los.getNext();
   }
   return true;
 }
