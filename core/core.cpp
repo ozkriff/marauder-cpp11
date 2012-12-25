@@ -67,7 +67,7 @@ static bool is_los_clear(const V2i *p1, const V2i *p2) {
   los_init(&los_data, p1, p2);
   los_get_next(&los_data, &p);
   while (!los_is_finished(&los_data)) {
-    if (unit_at(&p) || tile(p).obstacle) {
+    if (unit_at(p) || tile(p).obstacle) {
       return false;
     }
     los_get_next(&los_data, &p);
@@ -101,10 +101,9 @@ void calculate_fow(void) {
   }
 }
 
-Unit* unit_at(const V2i *pos) {
-  assert(pos);
+Unit* unit_at(const V2i &pos) {
   for (auto u : units) {
-    if (v2i_is_equal(&u->pos, pos)) {
+    if (v2i_is_equal(&u->pos, &pos)) {
       return u;
     }
   }
@@ -171,7 +170,7 @@ static void init_units(void) {
   for (i = 0; i < 8; i++) {
     V2i p;
     set_v2i(&p, rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
-    if (!tile(p).obstacle && !unit_at(&p)) {
+    if (!tile(p).obstacle && !unit_at(p)) {
       add_unit(p, rnd(0, 1));
     } else {
       i--;

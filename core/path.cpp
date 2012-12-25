@@ -134,7 +134,7 @@ static void process_neibor(
   Tile& t1 = tile(*p1);
   Tile& t2 = tile(*p2);
   assert(u);
-  if (unit_at(p2) || t2.obstacle
+  if (unit_at(*p2) || t2.obstacle
       || !can_move_there(p1, p2))
   {
     return;

@@ -346,7 +346,7 @@ static void process_mouse_button_down_event(
     b->callback();
     return;
   }
-  u = unit_at(&active_tile_pos);
+  u = unit_at(active_tile_pos);
   Tile& t = tile(active_tile_pos);
   assert(current_player);
   assert(e);
