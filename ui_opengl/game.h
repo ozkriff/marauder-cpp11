@@ -5,6 +5,21 @@
 
 #include <SDL/SDL.h>
 
+typedef enum {
+  UI_MODE_NORMAL,
+  UI_MODE_SHOW_EVENT
+} UIMode;
+
+extern UIMode ui_mode;
+extern int last_move_index;
+extern int current_move_index;
+extern VertexArray va_walkable_map;
+extern VertexArray va_fog_of_war;
+
+class Game;
+
+extern Game game;
+
 class Game {
 public:
   Game();

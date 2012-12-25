@@ -32,7 +32,6 @@
 #include "ui_opengl/event/move.h"
 #include "ui_opengl/event.h"
 #include "ui_opengl/config.h"
-#include "ui_opengl/game_private.h"
 
 #ifndef DATA_DIR
 #error DATA_DIR undefined!
