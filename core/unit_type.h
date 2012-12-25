@@ -14,7 +14,7 @@ struct Unit_type {
   int action_points;
 };
 
-const Unit_type* get_unit_type(int id);
+const Unit_type& get_unit_type(int id);
 void init_unit_types();
 
 #endif

@@ -17,9 +17,9 @@ static void init_truck(Unit_type *t){
   t->action_points = 16;
 }
 
-const Unit_type* get_unit_type(int id) {
+const Unit_type& get_unit_type(int id) {
   assert(id >= 0 && id < (int)Unit_type_id::UNIT_COUNT);
-  return unit_types + id;
+  return unit_types[id];
 }
 
 void init_unit_types() {

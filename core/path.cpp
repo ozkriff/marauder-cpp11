@@ -140,7 +140,7 @@ static void process_neibor(
     return;
   }
   newcost = t1.cost + get_tile_cost(u, p1, p2);
-  ap = get_unit_type(u->type_id)->action_points;
+  ap = get_unit_type(u->type_id).action_points;
   if (t2.cost > newcost && newcost <= ap) {
     push(p2, m2dir(p2, p1), newcost, m2dir(p1, p2));
   }

@@ -397,9 +397,8 @@ void Game::process_mouse_button_down_event(
     fill_map(selected_unit);
     build_walkable_array(&va_walkable_map);
   } else if (selected_unit) {
-    const Unit_type *type = get_unit_type(
-        selected_unit->type_id);
-    int ap = type->action_points;
+    auto type = get_unit_type(selected_unit->type_id);
+    int ap = type.action_points;
     if (u && u->player_id != current_player->id) {
       if (selected_unit && u) {
         shoot(selected_unit, u);

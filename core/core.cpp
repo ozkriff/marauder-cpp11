@@ -86,7 +86,7 @@ void calculate_fow() {
   FOR_EACH_TILE(&p) {
     Tile& t = tile(p);
     for (auto u : units) {
-      int max_dist = get_unit_type(u->type_id)->range_of_vision;
+      int max_dist = get_unit_type(u->type_id).range_of_vision;
       bool is_player_ok = (u->player_id == current_player->id);
       bool is_distance_ok = (dist(p, u->pos) < max_dist);
       bool is_los_ok = isLosClear(p, u->pos);
