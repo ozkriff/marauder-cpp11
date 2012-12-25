@@ -10,17 +10,18 @@ typedef enum {
   UI_MODE_SHOW_EVENT
 } UIMode;
 
-extern UIMode ui_mode;
-extern int last_move_index;
-extern int current_move_index;
-extern VertexArray va_walkable_map;
-extern VertexArray va_fog_of_war;
-
 class Game;
 
 extern Game game;
 
 class Game {
+public:
+  UIMode ui_mode;
+  int last_move_index;
+  int current_move_index;
+  VertexArray va_walkable_map;
+  VertexArray va_fog_of_war;
+
 public:
   Game();
   ~Game();

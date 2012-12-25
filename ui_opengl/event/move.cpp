@@ -37,7 +37,7 @@ int get_last_event_move_index(const Event *e) {
 }
 
 void get_current_moving_nodes(V2i *from, V2i *to) {
-  int i = current_move_index;
+  int i = game.current_move_index;
   const EventMove *m = &current_event->e.move;
   const V2i *p = m->path; /* shortcut */
   int j; /* node id */
@@ -57,22 +57,22 @@ static void end_movement(const V2i *pos) {
   Unit *u;
   assert(pos);
   u = id2unit(current_event->e.move.unit_id);
-  ui_mode = UI_MODE_NORMAL;
+  game.ui_mode = UI_MODE_NORMAL;
   u->pos = *pos;
   if (selected_unit) {
     fill_map(u);
-    game.build_walkable_array(&va_walkable_map);
+    game.build_walkable_array(&game.va_walkable_map);
     calculate_fow();
-    game.build_fow_array(&va_fog_of_war);
+    game.build_fow_array(&game.va_fog_of_war);
   }
   apply_event(current_event);
   current_event = NULL;
   if (u->player_id == current_player->id) {
     if (selected_unit) {
       fill_map(selected_unit);
-      game.build_walkable_array(&va_walkable_map);
+      game.build_walkable_array(&game.va_walkable_map);
     }
-    game.build_fow_array(&va_fog_of_war);
+    game.build_fow_array(&game.va_fog_of_war);
   }
 }
 
@@ -84,12 +84,12 @@ static int get_node_index(void) {
   int current = 0;
   for (j = 0; j < m->length - 2; j++) {
     current += get_move_legth(&p[j], &p[j + 1]);
-    if (current > current_move_index) {
+    if (current > game.current_move_index) {
       break;
     }
     last = current;
   }
-  return current_move_index - last;
+  return game.current_move_index - last;
 }
 
 void draw_moving_unit(void) {
@@ -116,8 +116,8 @@ void draw_moving_unit(void) {
   game.draw_unit_model(u);
   game.draw_unit_circle(u);
   glPopMatrix();
-  current_move_index++;
-  if (current_move_index == last_move_index) {
+  game.current_move_index++;
+  if (game.current_move_index == game.last_move_index) {
     end_movement(&to_i);
   }
 }
