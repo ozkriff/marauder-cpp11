@@ -5,6 +5,6 @@
 
 struct V3f {
   float x, y, z;
-} ;
+};
 
 #endif
