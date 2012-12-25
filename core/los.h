@@ -3,17 +3,21 @@
 #ifndef CORE_LOS_H
 #define CORE_LOS_H
 
-typedef struct {
-  V2i a, b;
-  V2i delta;
-  V2i pos; /* current position */
-  int ystep;
-  int error;
-  bool is_steep;
-} LosData;
+class Los {
+  V2i mFrom;
+  V2i mTo;
+  V2i mDelta;
+  V2i mPos; // current position
+  int mYstep;
+  int mError;
+  bool mIsSteep;
 
-void los_init(LosData *br, const V2i *a, const V2i *b);
-bool los_is_finished(LosData *br);
-void los_get_next(LosData *br, V2i *next_pos);
+public:
+  Los(const V2i& from, const V2i& to);
+  ~Los();
+
+  bool isFinished() const;
+  V2i getNext();
+};
 
 #endif

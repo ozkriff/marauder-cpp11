@@ -61,16 +61,14 @@ void inc_v2i(V2i *pos) {
   }
 }
 
-static bool is_los_clear(const V2i *p1, const V2i *p2) {
-  LosData los_data;
-  V2i p = *p1;
-  los_init(&los_data, p1, p2);
-  los_get_next(&los_data, &p);
-  while (!los_is_finished(&los_data)) {
+static bool isLosClear(const V2i& from, const V2i& to) {
+  Los los(from, to);
+  V2i p = los.getNext();
+  while (!los.isFinished()) {
     if (unit_at(p) || tile(p).obstacle) {
       return false;
     }
-    los_get_next(&los_data, &p);
+    p = los.getNext();
   }
   return true;
 }
@@ -93,7 +91,7 @@ void calculate_fow(void) {
       int max_dist = get_unit_type(u->type_id)->range_of_vision;
       bool is_player_ok = (u->player_id == current_player->id);
       bool is_distance_ok = (dist_i(&p, &u->pos) < max_dist);
-      bool is_los_ok = is_los_clear(&p, &u->pos);
+      bool is_los_ok = isLosClear(p, u->pos);
       if (is_player_ok && is_distance_ok && is_los_ok) {
         t.fow++;
       }
@@ -159,7 +157,7 @@ static void kill_unit(Unit *u) {
 }
 
 void shoot(Unit *shooter, Unit *target) {
-  if (is_los_clear( &shooter->pos, &target->pos)) {
+  if (isLosClear(shooter->pos, target->pos)) {
     kill_unit(target);
   }
 }
