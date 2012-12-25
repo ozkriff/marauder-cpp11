@@ -41,21 +41,20 @@ void init_local_players(int n, int *ids) {
   current_player = players.back();
 }
 
-bool inboard(const V2i *p) {
-  assert(p);
-  return p->x >= 0 && p->y >= 0
-      && p->x < MAP_X && p->y < MAP_Y;
+bool inboard(const V2i& p) {
+  return p.x >= 0 && p.y >= 0
+      && p.x < MAP_X && p.y < MAP_Y;
 }
 
 Tile* tile(const V2i *p) {
   assert(p);
-  assert(inboard(p));
+  assert(inboard(*p));
   return &(map[p->y][p->x]);
 }
 
 void inc_v2i(V2i *pos) {
   assert(pos);
-  assert(inboard(pos));
+  assert(inboard(*pos));
   pos->x++;
   if (pos->x == MAP_X) {
     pos->x = 0;
@@ -133,7 +132,7 @@ static int get_new_unit_id(void) {
 
 void add_unit(V2i p, int player_id) {
   auto u = new Unit;
-  assert(inboard(&p));
+  assert(inboard(p));
   assert(player_id >= 0 && player_id < 16);
   u->id = get_new_unit_id();
   u->pos = p;

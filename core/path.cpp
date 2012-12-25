@@ -107,16 +107,16 @@ static bool can_move_there(const V2i *p1, const V2i *p2) {
   bool is_left_blocked, is_right_blocked;
   assert(p1);
   assert(p2);
-  assert(inboard(p1));
-  assert(inboard(p2));
+  assert(inboard(*p1));
+  assert(inboard(*p2));
   if (!dir_is_diagonal(m2dir(p1, p2))) {
     return true;
   }
   get_dir_neib(&neib_left, p1, p2, -1);
   get_dir_neib(&neib_right, p1, p2, +1);
-  is_left_blocked = inboard(&neib_left)
+  is_left_blocked = inboard(neib_left)
       && tile(&neib_left)->obstacle;
-  is_right_blocked = inboard(&neib_right)
+  is_right_blocked = inboard(neib_right)
       && tile(&neib_right)->obstacle;
 #if 0
   return !is_left_blocked && !is_right_blocked;
@@ -164,12 +164,12 @@ static void try_to_push_neibors(
 {
   int i;
   assert(m);
-  assert(inboard(m));
+  assert(inboard(*m));
   assert(u);
   for (i = D_N; i <= D_NW; i++) {
     V2i neib_m;
     neib(&neib_m, m, (Dir)i);
-    if (inboard(&neib_m)) {
+    if (inboard(neib_m)) {
       process_neibor(u, m, &neib_m);
     }
   }
@@ -191,7 +191,7 @@ void get_path(V2i *path, int length, V2i pos) {
   Dir dir;
   int i = length - 1;
   assert(path);
-  assert(inboard(&pos));
+  assert(inboard(pos));
   while (tile(&pos)->cost != 0) {
     path[i] = pos;
     dir = tile(&pos)->parent;
@@ -205,7 +205,7 @@ void get_path(V2i *path, int length, V2i pos) {
 int get_path_length(V2i pos) {
   Dir dir;
   int length = 1;
-  assert(inboard(&pos));
+  assert(inboard(pos));
   while (tile(&pos)->cost != 0) {
     length++;
     dir = tile(&pos)->parent;

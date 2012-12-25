@@ -4,13 +4,22 @@
 #include <assert.h>
 #include "ui_opengl/v2f.h"
 
-void set_v2f(V2f *v, float x, float y) {
-  assert(v);
-  v->x = x;
-  v->y = y;
+V2f::V2f(float x, float y)
+  : mX(x),
+    mY(y)
+{
 }
 
-void rotate_v2f(V2f *p, float angle) {
+V2f::V2f()
+  : mX(0.0f),
+    mY(0.0f)
+{
+}
+
+V2f::~V2f() {
+}
+
+void V2f::rotate(V2f *p, float angle) {
   V2f old;
   float sn, cs;
   assert(p);
@@ -19,13 +28,12 @@ void rotate_v2f(V2f *p, float angle) {
   old = *p;
   sn = sin(angle);
   cs = cos(angle);
-  p->x = cs * old.x - sn * old.y;
-  p->y = sn * old.x + cs * old.y;
+  p->setX(cs * old.x() - sn * old.y());
+  p->setY(sn * old.x() + cs * old.y());
 }
 
-void v2f_plus(V2f *a, const V2f *b) {
-  assert(a);
-  assert(b);
-  a->x += b->x;
-  a->y += b->y;
+V2f& V2f::operator+(const V2f& b) {
+  mX += b.x();
+  mY += b.y();
+  return *this;
 }

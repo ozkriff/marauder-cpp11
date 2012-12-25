@@ -13,11 +13,11 @@ float get_rot_angle(const V2f *a, const V2f *b) {
   V2f diff_2;
   assert(a);
   assert(b);
-  diff_2.x = (float)pow(b->x - a->x, 2);
-  diff_2.y = (float)pow(b->y - a->y, 2);
-  distance = (float)sqrt(diff_2.x + diff_2.y);
-  angle = rad2deg((float)asin((b->x - a->x) / distance));
-  if (b->y - a->y > 0) {
+  diff_2.setX((float)pow(b->x() - a->x(), 2));
+  diff_2.setY((float)pow(b->y() - a->y(), 2));
+  distance = (float)sqrt(diff_2.x() + diff_2.y());
+  angle = rad2deg((float)asin((b->x() - a->x()) / distance));
+  if (b->y() - a->y() > 0) {
     angle = -(180 + angle);
   }
   return angle;
@@ -61,8 +61,8 @@ float dist(const V2f *a, const V2f *b) {
   double dx, dy;
   assert(a);
   assert(b);
-  dx = abs(b->x - a->x);
-  dy = abs(b->y - a->y);
+  dx = abs(b->x() - a->x());
+  dy = abs(b->y() - a->y());
   return (float)sqrt(pow(dx, 2) + pow(dy, 2));
 }
 
@@ -78,10 +78,10 @@ void rotate_point_around_point(
   old = *p;
   sn = sin(angle);
   cs = cos(angle);
-  dx = old.x - o->x;
-  dy = old.y - o->y;
-  p->x = cs * dx - sn * dy + o->x;
-  p->y = sn * dx + cs * dy + o->y;
+  dx = old.x() - o->x();
+  dy = old.y() - o->y();
+  p->setX(cs * dx - sn * dy + o->x());
+  p->setY(sn * dx + cs * dy + o->y());
 }
 
 float dir_to_angle(Dir d) {

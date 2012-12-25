@@ -64,12 +64,9 @@ static VertexArray va_units[UNIT_COUNT];
 static GLuint texture_units[UNIT_COUNT];
 static TTF_Font *font;
 
-void v2i_to_v2f(V2f *f, const V2i *i) {
-  assert(f);
-  assert(i);
+V2f v2i_to_v2f(const V2i& i) {
   assert(inboard(i));
-  f->x = i->x * TILE_SIZE;
-  f->y = i->y * TILE_SIZE;
+  return V2f(i.x * TILE_SIZE, i.y * TILE_SIZE);
 }
 
 static void build_map_array(VertexArray *v) {
@@ -93,18 +90,18 @@ static void build_map_array(VertexArray *v) {
     if (t->obstacle) {
       continue;
     }
-    v2i_to_v2f(&pos, &p);
+    pos = v2i_to_v2f(p);
     assert(t);
-    set_xy(v->v, 3, i, 0, pos.x - n, pos.y - n);
-    set_xy(v->v, 3, i, 1, pos.x + n, pos.y - n);
-    set_xy(v->v, 3, i, 2, pos.x + n, pos.y + n);
+    set_xy(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
+    set_xy(v->v, 3, i, 1, pos.x() + n, pos.y() - n);
+    set_xy(v->v, 3, i, 2, pos.x() + n, pos.y() + n);
     set_xy(v->t, 3, i, 0, 0, 0);
     set_xy(v->t, 3, i, 1, 1, 0);
     set_xy(v->t, 3, i, 2, 1, 1);
     i++;
-    set_xy(v->v, 3, i, 0, pos.x - n, pos.y - n);
-    set_xy(v->v, 3, i, 1, pos.x + n, pos.y + n);
-    set_xy(v->v, 3, i, 2, pos.x - n, pos.y + n);
+    set_xy(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
+    set_xy(v->v, 3, i, 1, pos.x() + n, pos.y() + n);
+    set_xy(v->v, 3, i, 2, pos.x() - n, pos.y() + n);
     set_xy(v->t, 3, i, 0, 0, 0);
     set_xy(v->t, 3, i, 1, 1, 1);
     set_xy(v->t, 3, i, 2, 0, 1);
@@ -129,22 +126,21 @@ static void build_obstacles_array(VertexArray *v) {
   FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     float n = TILE_SIZE_2;
-    V2f pos;
     if (!t->obstacle) {
       continue;
     }
-    v2i_to_v2f(&pos, &p);
+    V2f pos = v2i_to_v2f(p);
     assert(t);
-    set_xy(v->v, 3, i, 0, pos.x - n, pos.y - n);
-    set_xy(v->v, 3, i, 1, pos.x + n, pos.y - n);
-    set_xy(v->v, 3, i, 2, pos.x + n, pos.y + n);
+    set_xy(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
+    set_xy(v->v, 3, i, 1, pos.x() + n, pos.y() - n);
+    set_xy(v->v, 3, i, 2, pos.x() + n, pos.y() + n);
     set_xy(v->t, 3, i, 0, 0, 0);
     set_xy(v->t, 3, i, 1, 1, 0);
     set_xy(v->t, 3, i, 2, 1, 1);
     i++;
-    set_xy(v->v, 3, i, 0, pos.x - n, pos.y - n);
-    set_xy(v->v, 3, i, 1, pos.x + n, pos.y + n);
-    set_xy(v->v, 3, i, 2, pos.x - n, pos.y + n);
+    set_xy(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
+    set_xy(v->v, 3, i, 1, pos.x() + n, pos.y() + n);
+    set_xy(v->v, 3, i, 2, pos.x() - n, pos.y() + n);
     set_xy(v->t, 3, i, 0, 0, 0);
     set_xy(v->t, 3, i, 1, 1, 1);
     set_xy(v->t, 3, i, 2, 0, 1);
@@ -188,18 +184,17 @@ void build_fow_array(VertexArray *v) {
   FOR_EACH_TILE(&p) {
     Tile *t = tile(&p);
     float n = TILE_SIZE_2;
-    V2f pos;
     if (t->fow > 0)
       continue;
-    v2i_to_v2f(&pos, &p);
+    V2f pos = v2i_to_v2f(p);
     assert(t);
-    set_xyz(v->v, 3, i, 0, pos.x - n, pos.y - n, 0.05f);
-    set_xyz(v->v, 3, i, 1, pos.x + n, pos.y - n, 0.05f);
-    set_xyz(v->v, 3, i, 2, pos.x + n, pos.y + n, 0.05f);
+    set_xyz(v->v, 3, i, 0, pos.x() - n, pos.y() - n, 0.05f);
+    set_xyz(v->v, 3, i, 1, pos.x() + n, pos.y() - n, 0.05f);
+    set_xyz(v->v, 3, i, 2, pos.x() + n, pos.y() + n, 0.05f);
     i++;
-    set_xyz(v->v, 3, i, 0, pos.x - n, pos.y - n, 0.05f);
-    set_xyz(v->v, 3, i, 1, pos.x + n, pos.y + n, 0.05f);
-    set_xyz(v->v, 3, i, 2, pos.x - n, pos.y + n, 0.05f);
+    set_xyz(v->v, 3, i, 0, pos.x() - n, pos.y() - n, 0.05f);
+    set_xyz(v->v, 3, i, 1, pos.x() + n, pos.y() + n, 0.05f);
+    set_xyz(v->v, 3, i, 2, pos.x() - n, pos.y() + n, 0.05f);
     i++;
   }
 }
@@ -224,11 +219,11 @@ void build_walkable_array(VertexArray *v) {
       V2f pos1, pos2;
       V2i p2;
       neib(&p2, &p, t->parent);
-      if (inboard(&p2)) {
-        v2i_to_v2f(&pos1, &p);
-        v2i_to_v2f(&pos2, &p2);
-        set_xyz(v->v, 2, i, 0, pos1.x, pos1.y, 0.1f);
-        set_xyz(v->v, 2, i, 1, pos2.x, pos2.y, 0.1f);
+      if (inboard(p2)) {
+        pos1 = v2i_to_v2f(p);
+        pos2 = v2i_to_v2f(p2);
+        set_xyz(v->v, 2, i, 0, pos1.x(), pos1.y(), 0.1f);
+        set_xyz(v->v, 2, i, 1, pos2.x(), pos2.y(), 0.1f);
         i++;
       }
     }
@@ -307,12 +302,11 @@ void draw_unit_circle(const Unit *u) {
 }
 
 static void draw_unit(const Unit *u) {
-  V2f f;
   assert(u);
-  v2i_to_v2f(&f, &u->pos);
+  V2f f = v2i_to_v2f(u->pos);
   glColor3f(1, 0, 0);
   glPushMatrix();
-  glTranslatef(f.x, f.y, 0);
+  glTranslatef(f.x(), f.y(), 0);
   glRotatef((u->dir + 4) * 45.0f, 0, 0, 1);
   draw_unit_model(u);
   draw_unit_circle(u);
@@ -411,11 +405,11 @@ static void process_key_down_event(
       break;
     }
     case SDLK_c: {
-      V2f unit_pos;
-      if (!selected_unit)
+      if (!selected_unit) {
         return;
-      v2i_to_v2f(&unit_pos, &selected_unit->pos);
-      set_v2f(&camera.pos, unit_pos.x, unit_pos.y);
+      }
+      V2f unit_pos = v2i_to_v2f(selected_unit->pos);
+      camera.pos = unit_pos;
       break;
     }
     case SDLK_t: {
@@ -579,12 +573,11 @@ static void build_picking_tiles_array(VertexArray *va) {
   va->ub_c = new GLubyte[va->count * 3];
   FOR_EACH_TILE(&p) {
     float n = TILE_SIZE_2;
-    V2f pos;
-    v2i_to_v2f(&pos, &p);
-    set_xy(va->v, 4, i, 0, pos.x - n, pos.y - n);
-    set_xy(va->v, 4, i, 1, pos.x + n, pos.y - n);
-    set_xy(va->v, 4, i, 2, pos.x + n, pos.y + n);
-    set_xy(va->v, 4, i, 3, pos.x - n, pos.y + n);
+    V2f pos = v2i_to_v2f(p);
+    set_xy(va->v, 4, i, 0, pos.x() - n, pos.y() - n);
+    set_xy(va->v, 4, i, 1, pos.x() + n, pos.y() - n);
+    set_xy(va->v, 4, i, 2, pos.x() + n, pos.y() + n);
+    set_xy(va->v, 4, i, 3, pos.x() - n, pos.y() + n);
     set_rgb_i(va->ub_c, 4, i, 0, p.x, p.y, 1);
     set_rgb_i(va->ub_c, 4, i, 1, p.x, p.y, 1);
     set_rgb_i(va->ub_c, 4, i, 2, p.x, p.y, 1);
@@ -634,15 +627,15 @@ static void scroll_map(void) {
   } else if(p->y > screen->h - offset) {
     camera.move(D_S);
   }
-  if (camera.pos.x > MAP_X * TILE_SIZE) {
-    camera.pos.x = MAP_X * TILE_SIZE;
-  } else if (camera.pos.x < 0) {
-    camera.pos.x = 0;
+  if (camera.pos.x() > MAP_X * TILE_SIZE) {
+    camera.pos.setX(MAP_X * TILE_SIZE);
+  } else if (camera.pos.x() < 0) {
+    camera.pos.setX(0);
   }
-  if (camera.pos.y > MAP_Y * TILE_SIZE) {
-    camera.pos.y = MAP_Y * TILE_SIZE;
-  } else if (camera.pos.y < 0) {
-    camera.pos.y = 0;
+  if (camera.pos.y() > MAP_Y * TILE_SIZE) {
+    camera.pos.setY(MAP_Y * TILE_SIZE);
+  } else if (camera.pos.y() < 0) {
+    camera.pos.setY(0);
   }
 }
 
@@ -690,8 +683,7 @@ static void init_opengl(void) {
 static void init_camera(void) {
   camera.x_angle = 45.0f;
   camera.z_angle = 45.0f;
-  camera.pos.x = 20;
-  camera.pos.y = 20;
+  camera.pos = V2f(20, 20);
   camera.zoom = 100.0f;
 }
 

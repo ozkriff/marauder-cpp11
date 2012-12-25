@@ -73,8 +73,10 @@ void obj_read(ObjModel *m, const char *filename) {
       /* Texture coords */
       int items;
       V2f *tex = m->text_coords + t_i;
-      items = sscanf(buffer, "vt %f %f", &tex->x, &tex->y);
-      tex->y = 1.0f - tex->y; /* flip vertically */
+      float x, y;
+      items = sscanf(buffer, "vt %f %f", &x, &y);
+      *tex = V2f(x, y);
+      tex->setY(1.0f - tex->y()); /* flip vertically */
       if (items != 2) {
         die("obj_read(): texture coords: items != 2\n");
       }
@@ -122,7 +124,7 @@ void obj_debug_print(ObjModel *m) {
   }
   for (i = 0; i < m->t_count; i++) {
     V2f *v = m->text_coords + i;
-    printf("t %f %f\n", v->x, v->y);
+    printf("t %f %f\n", v->x(), v->y());
   }
   for (i = 0; i < m->f_count; i++) {
     ObjTriangle *f = m->faces + i;
@@ -148,7 +150,7 @@ void obj_build(VertexArray *va, const ObjModel *model) {
       V3f *vert = model->vertexes + vert_id;
       V2f *tex = model->text_coords + tex_id;
       set_xyz(va->v, 3, i, j, vert->x, vert->y, vert->z);
-      set_xy(va->t, 3, i, j, tex->x, tex->y);
+      set_xy(va->t, 3, i, j, tex->x(), tex->y());
     }
   }
 }

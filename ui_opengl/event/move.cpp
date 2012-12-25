@@ -101,16 +101,16 @@ void draw_moving_unit(void) {
   V2f diff;
   V2f p;
   get_current_moving_nodes(&from_i, &to_i);
-  v2i_to_v2f(&from_f, &from_i);
-  v2i_to_v2f(&to_f, &to_i);
+  from_f = v2i_to_v2f(from_i);
+  to_f = v2i_to_v2f(to_i);
   move_speed = get_move_legth(&from_i, &to_i);
   node_index = get_node_index();
-  diff.x = (to_f.x - from_f.x) / move_speed;
-  diff.y = (to_f.y - from_f.y) / move_speed;
-  p.x = from_f.x + diff.x * node_index;
-  p.y = from_f.y + diff.y * node_index;
+  diff.setX((to_f.x() - from_f.x()) / move_speed);
+  diff.setY((to_f.y() - from_f.y()) / move_speed);
+  p.setX(from_f.x() + diff.x() * node_index);
+  p.setY(from_f.y() + diff.y() * node_index);
   glPushMatrix();
-  glTranslatef(p.x, p.y, 0.0f);
+  glTranslatef(p.x(), p.y(), 0.0f);
   /* TODO: Remove '+ 4'! Rotate obj files! */
   glRotatef((m2dir(&from_i, &to_i) + 4) * 45.0f, 0, 0, 1);
   draw_unit_model(u);

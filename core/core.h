@@ -30,7 +30,7 @@ typedef struct {
 void inc_v2i(V2i *pos);
 
 Tile* tile(const V2i *p);
-bool inboard(const V2i *p);
+bool inboard(const V2i &p);
 Unit* unit_at(const V2i *pos);
 
 /* TODO */
@@ -39,7 +39,7 @@ void add_unit(V2i p, int player_id);
 void init_logic(void);
 
 #define FOR_EACH_TILE(p) \
-  for (set_v2i(p, 0, 0); inboard(p); inc_v2i(p))
+  for (set_v2i(p, 0, 0); inboard(*p); inc_v2i(p))
 
 /* Player.last_event_id */
 #define HAVE_NOT_SEEN_ANY_EVENTS (-1)
