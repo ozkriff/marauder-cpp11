@@ -61,18 +61,18 @@ static void end_movement(const V2i *pos) {
   u->pos = *pos;
   if (selected_unit) {
     fill_map(u);
-    build_walkable_array(&va_walkable_map);
+    game.build_walkable_array(&va_walkable_map);
     calculate_fow();
-    build_fow_array(&va_fog_of_war);
+    game.build_fow_array(&va_fog_of_war);
   }
   apply_event(current_event);
   current_event = NULL;
   if (u->player_id == current_player->id) {
     if (selected_unit) {
       fill_map(selected_unit);
-      build_walkable_array(&va_walkable_map);
+      game.build_walkable_array(&va_walkable_map);
     }
-    build_fow_array(&va_fog_of_war);
+    game.build_fow_array(&va_fog_of_war);
   }
 }
 
@@ -101,8 +101,8 @@ void draw_moving_unit(void) {
   V2f diff;
   V2f p;
   get_current_moving_nodes(&from_i, &to_i);
-  from_f = v2i_to_v2f(from_i);
-  to_f = v2i_to_v2f(to_i);
+  from_f = game.v2i_to_v2f(from_i);
+  to_f = game.v2i_to_v2f(to_i);
   move_speed = get_move_legth(&from_i, &to_i);
   node_index = get_node_index();
   diff.setX((to_f.x() - from_f.x()) / move_speed);
@@ -113,8 +113,8 @@ void draw_moving_unit(void) {
   glTranslatef(p.x(), p.y(), 0.0f);
   /* TODO: Remove '+ 4'! Rotate obj files! */
   glRotatef((m2dir(&from_i, &to_i) + 4) * 45.0f, 0, 0, 1);
-  draw_unit_model(u);
-  draw_unit_circle(u);
+  game.draw_unit_model(u);
+  game.draw_unit_circle(u);
   glPopMatrix();
   current_move_index++;
   if (current_move_index == last_move_index) {

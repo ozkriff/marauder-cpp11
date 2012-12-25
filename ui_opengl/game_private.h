@@ -1,6 +1,11 @@
 /* See LICENSE file for copyright and license details. */
 
+#ifndef UI_OPENGL_GAME_PRIVATE_H
+#define UI_OPENGL_GAME_PRIVATE_H
+
 /* User interface */
+
+#include "game.h"
 
 typedef enum {
   UI_MODE_NORMAL,
@@ -13,8 +18,6 @@ extern int current_move_index;
 extern VertexArray va_walkable_map;
 extern VertexArray va_fog_of_war;
 
-V2f v2i_to_v2f(const V2i &i);
-void draw_unit_circle(const Unit *u);
-void draw_unit_model(const Unit *u);
-void build_walkable_array(VertexArray *v);
-void build_fow_array(VertexArray *v);
+extern Game game;
+
+#endif

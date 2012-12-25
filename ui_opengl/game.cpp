@@ -48,6 +48,8 @@ int current_move_index;
 VertexArray va_walkable_map;
 VertexArray va_fog_of_war;
 
+Game game;
+
 static V2i win_size;
 static V2i mouse_pos;
 static V2i active_tile_pos;
@@ -64,12 +66,49 @@ static VertexArray va_units[UNIT_COUNT];
 static GLuint texture_units[UNIT_COUNT];
 static TTF_Font *font;
 
-V2f v2i_to_v2f(const V2i& i) {
+Game::Game() {
+}
+
+Game::~Game() {
+}
+
+void Game::do_xxx() {
+  init();
+  mainloop();
+  cleanup();
+}
+
+void Game::init() {
+  init_logic();
+  done = false;
+  set_v2i(&win_size, WIN_WIDTH, WIN_HEIGHT);
+  set_v2i(&active_tile_pos, 0, 0);
+  set_v2i(&mouse_pos, 0, 0);
+  ui_mode = UI_MODE_NORMAL;
+  is_rotating_camera = false;
+  SDL_Init(SDL_INIT_EVERYTHING);
+  screen = SDL_SetVideoMode(win_size.x, win_size.y,
+      32, SDL_OPENGL | SDL_GL_DOUBLEBUFFER);
+  init_opengl();
+  init_camera();
+  init_widgets();
+  font = open_font(DEFAULT_FONT, 10);
+  add_buttons();
+  load_texture(&floor_texture, DATA("floor.png"));
+  load_unit_resources();
+  init_vertex_arrays();
+}
+
+void Game::cleanup() {
+  SDL_Quit();
+}
+
+V2f Game::v2i_to_v2f(const V2i& i) {
   assert(inboard(i));
   return V2f(i.x * TILE_SIZE, i.y * TILE_SIZE);
 }
 
-static void build_map_array(VertexArray *v) {
+void Game::build_map_array(VertexArray *v) {
   V2i p;
   int i = 0; /* tile's index */
   v->count = MAP_X * MAP_Y * 6;
@@ -108,7 +147,7 @@ static void build_map_array(VertexArray *v) {
   }
 }
 
-static void build_obstacles_array(VertexArray *v) {
+void Game::build_obstacles_array(VertexArray *v) {
   V2i p;
   int i = 0; /* tile's index */
   v->count = MAP_X * MAP_Y * 6;
@@ -146,7 +185,7 @@ static void build_obstacles_array(VertexArray *v) {
   }
 }
 
-static int calculate_walkable_tiles_count(void) {
+int Game::calculate_walkable_tiles_count() {
   V2i p;
   int count = 0;
   FOR_EACH_TILE(&p) {
@@ -158,7 +197,7 @@ static int calculate_walkable_tiles_count(void) {
   return count;
 }
 
-static int calculate_fogged_tiles_count(void) {
+int Game::calculate_fogged_tiles_count() {
   int n = 0;
   V2i p;
   FOR_EACH_TILE(&p) {
@@ -170,7 +209,7 @@ static int calculate_fogged_tiles_count(void) {
   return n;
 }
 
-void build_fow_array(VertexArray *v) {
+void Game::build_fow_array(VertexArray *v) {
   V2i p;
   int i = 0; /* tile's index */
   v->count = calculate_fogged_tiles_count() * 6;
@@ -196,7 +235,7 @@ void build_fow_array(VertexArray *v) {
   }
 }
 
-void build_walkable_array(VertexArray *v) {
+void Game::build_walkable_array(VertexArray *v) {
   V2i p;
   int i = 0; /* tile's index */
   assert(v);
@@ -225,7 +264,7 @@ void build_walkable_array(VertexArray *v) {
   }
 }
 
-static void draw_map(void) {
+void Game::draw_map() {
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -258,7 +297,7 @@ static void draw_map(void) {
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void draw_unit_model(const Unit *u) {
+void Game::draw_unit_model(const Unit *u) {
   assert(u);
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -273,7 +312,7 @@ void draw_unit_model(const Unit *u) {
   glDisable(GL_TEXTURE_2D);
 }
 
-void draw_unit_circle(const Unit *u) {
+void Game::draw_unit_circle(const Unit *u) {
   float v[4 * 3];
   float n = TILE_SIZE_2 * 0.9f;
   assert(u);
@@ -296,7 +335,7 @@ void draw_unit_circle(const Unit *u) {
   glLineWidth(1);
 }
 
-static void draw_unit(const Unit *u) {
+void Game::draw_unit(const Unit *u) {
   assert(u);
   V2f f = v2i_to_v2f(u->pos);
   glColor3f(1, 0, 0);
@@ -308,7 +347,7 @@ static void draw_unit(const Unit *u) {
   glPopMatrix();
 }
 
-static void draw_units(void) {
+void Game::draw_units() {
   for (auto u : units) {
     if (ui_mode == UI_MODE_SHOW_EVENT
         && event_filter_unit(current_event, u))
@@ -322,7 +361,7 @@ static void draw_units(void) {
   }
 }
 
-static void draw(void) {
+void Game::draw() {
   glLoadIdentity();
   camera.set();
   draw_map();
@@ -334,7 +373,7 @@ static void draw(void) {
   SDL_GL_SwapBuffers();
 }
 
-static void process_mouse_button_down_event(
+void Game::process_mouse_button_down_event(
     const SDL_MouseButtonEvent *e)
 {
   V2i p;
@@ -375,7 +414,7 @@ static void process_mouse_button_down_event(
   }
 }
 
-static void process_mouse_motion_event(
+void Game::process_mouse_motion_event(
     const SDL_MouseMotionEvent *e)
 {
   assert(e);
@@ -388,7 +427,7 @@ static void process_mouse_motion_event(
   }
 }
 
-static void process_key_down_event(
+void Game::process_key_down_event(
     const SDL_KeyboardEvent *e)
 {
   assert(e);
@@ -476,7 +515,7 @@ static void process_key_down_event(
   }
 }
 
-static void screen_scenario_main_events(void) {
+void Game::screen_scenario_main_events() {
   current_event = get_next_event();
   last_move_index = get_last_event_index(current_event);
   ui_mode = UI_MODE_SHOW_EVENT;
@@ -488,7 +527,7 @@ static void screen_scenario_main_events(void) {
   }
 }
 
-static void logic(void) {
+void Game::logic() {
   while (ui_mode == UI_MODE_NORMAL
       && unshown_events_left())
   {
@@ -496,7 +535,7 @@ static void logic(void) {
   }
 }
 
-static void process_sdl_event(const SDL_Event *e) {
+void Game::process_sdl_event(const SDL_Event *e) {
   assert(e);
   switch (e->type) {
     case SDL_QUIT: {
@@ -543,14 +582,14 @@ static void process_sdl_event(const SDL_Event *e) {
   }
 }
 
-static void sdl_events(void) {
+void Game::sdl_events() {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
     process_sdl_event(&e);
   }
 }
 
-static void build_picking_tiles_array(VertexArray *va) {
+void Game::build_picking_tiles_array(VertexArray *va) {
   V2i p;
   int i = 0; /* tile index */
   assert(va);
@@ -580,7 +619,7 @@ static void build_picking_tiles_array(VertexArray *va) {
   }
 }
 
-static bool pick_tile(V2i *p, const V2i *mouse_pos) {
+bool Game::pick_tile(V2i *p, const V2i *mouse_pos) {
   GLint viewport[4];
   GLubyte pixel[3];
   assert(p);
@@ -596,7 +635,7 @@ static bool pick_tile(V2i *p, const V2i *mouse_pos) {
   return true;
 }
 
-static void draw_for_picking(void) {
+void Game::draw_for_picking() {
   glLoadIdentity();
   camera.set();
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -608,7 +647,7 @@ static void draw_for_picking(void) {
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-static void scroll_map(void) {
+void Game::scroll_map() {
   const V2i *p = &mouse_pos;
   int offset = 15;
   if (p->x < offset) {
@@ -633,7 +672,7 @@ static void scroll_map(void) {
   }
 }
 
-static void mainloop(void) {
+void Game::mainloop() {
   while (!done) {
     sdl_events();
     logic();
@@ -649,7 +688,7 @@ static void mainloop(void) {
   }
 }
 
-static void init_opengl(void) {
+void Game::init_opengl() {
   float aspect_ratio = (float)win_size.y / win_size.x;
   SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -674,14 +713,14 @@ static void init_opengl(void) {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-static void init_camera(void) {
+void Game::init_camera() {
   camera.x_angle = 45.0f;
   camera.z_angle = 45.0f;
   camera.pos = V2f(20, 20);
   camera.zoom = 100.0f;
 }
 
-static void init_vertex_arrays(void) {
+void Game::init_vertex_arrays() {
   va_map = empty_vertex_array;
   va_pick = empty_vertex_array;
   va_walkable_map = empty_vertex_array;
@@ -692,7 +731,7 @@ static void init_vertex_arrays(void) {
   build_fow_array(&va_fog_of_war);
 }
 
-static void load_unit_resources(void) {
+void Game::load_unit_resources() {
   load_texture(&texture_units[UNIT_TANK], DATA("tank.png"));
   load_texture(&texture_units[UNIT_TRUCK], DATA("truck.png"));
   obj_read(&obj_units[UNIT_TANK], DATA("tank.obj"));
@@ -701,50 +740,20 @@ static void load_unit_resources(void) {
   obj_build(&va_units[UNIT_TRUCK], &obj_units[UNIT_TRUCK]);
 }
 
-static void on_test_button(void) {
+void Game::on_test_button() {
   printf("BUTTON CLICKED\n");
 }
 
-static void add_buttons(void) {
+void Game::add_buttons() {
   V2i pos = {10, 10};
   (void)add_button(font, &pos, "[CLICK ME!]",
-      on_test_button);
-}
-
-static void init_ui_opengl(void) {
-  init_logic();
-  done = false;
-  set_v2i(&win_size, WIN_WIDTH, WIN_HEIGHT);
-  set_v2i(&active_tile_pos, 0, 0);
-  set_v2i(&mouse_pos, 0, 0);
-  ui_mode = UI_MODE_NORMAL;
-  is_rotating_camera = false;
-  SDL_Init(SDL_INIT_EVERYTHING);
-  screen = SDL_SetVideoMode(win_size.x, win_size.y,
-      32, SDL_OPENGL | SDL_GL_DOUBLEBUFFER);
-  init_opengl();
-  init_camera();
-  init_widgets();
-  font = open_font(DEFAULT_FONT, 10);
-  add_buttons();
-  load_texture(&floor_texture, DATA("floor.png"));
-  load_unit_resources();
-  init_vertex_arrays();
-}
-
-static void cleanup_opengl_ui(void) {
-  SDL_Quit();
-}
-
-static void do_ui_opengl(void) {
-  init_ui_opengl();
-  mainloop();
-  cleanup_opengl_ui();
+      nullptr); // on_test_button);
 }
 
 int main(int ac, char **av) {
   UNUSED(ac);
   UNUSED(av);
-  do_ui_opengl();
+  Game game;
+  game.do_xxx();
   return 0;
 }
