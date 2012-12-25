@@ -26,7 +26,7 @@ void init_path_queue (PathQueue *q, int size) {
   q->size = size;
 }
 
-void init_pathfinding_module(void) {
+void init_pathfinding_module() {
   init_path_queue(&q, 10000);
 }
 
@@ -50,7 +50,7 @@ static bool is_queue_empty(const PathQueue *q) {
   return q->head == q->tail;
 }
 
-static V2i pop(void) {
+static V2i pop() {
   V2i m;
   assert(q.head != q.tail);
   m = q.v[q.head];
@@ -146,7 +146,7 @@ static void process_neibor(
   }
 }
 
-void clean_map(void) {
+void clean_map() {
   V2i p;
   FOR_EACH_TILE(&p) {
     Tile& t = tile(p);

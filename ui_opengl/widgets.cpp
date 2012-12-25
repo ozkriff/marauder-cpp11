@@ -49,7 +49,7 @@ void change_button_text_by_id(int id, char *text) {
   }
 }
 
-static int get_new_button_id(void) {
+static int get_new_button_id() {
   if (buttons.size() > 0) {
     return buttons.back()->id + 1;
   } else {
@@ -116,7 +116,7 @@ void draw_button(Button *b) {
   glPopMatrix();
 }
 
-static void set_2d_widgets_drawing_mode_on(void) {
+static void set_2d_widgets_drawing_mode_on() {
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -130,7 +130,7 @@ static void set_2d_widgets_drawing_mode_on(void) {
   glLoadIdentity();
 }
 
-static void set_2d_widgets_drawing_mode_off(void) {
+static void set_2d_widgets_drawing_mode_off() {
   glPopMatrix();
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
@@ -140,7 +140,7 @@ static void set_2d_widgets_drawing_mode_off(void) {
   glEnable(GL_DEPTH_TEST);
 }
 
-void draw_buttons(void) {
+void draw_buttons() {
   set_2d_widgets_drawing_mode_on();
   for (auto b : buttons) {
     draw_button(b);
@@ -158,7 +158,7 @@ TTF_Font* open_font(const char *font_name, int size) {
   return f;
 }
 
-void init_widgets(void) {
+void init_widgets() {
   TTF_Init();
   // buttons = empty_list;
 }

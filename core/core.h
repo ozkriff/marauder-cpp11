@@ -39,7 +39,7 @@ Unit* unit_at(const V2i& pos);
 /* TODO */
 void shoot(Unit *shooter, Unit *target);
 void add_unit(V2i p, int player_id);
-void init_logic(void);
+void init_logic();
 
 #define FOR_EACH_TILE(p) \
   for (set_v2i(p, 0, 0); inboard(*p); inc_v2i(p))

@@ -32,7 +32,7 @@ static GLenum get_texture_format(
   }
 }
 
-static void set_texture_parameters(void) {
+static void set_texture_parameters() {
   glTexParameteri(GL_TEXTURE_2D,
       GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D,

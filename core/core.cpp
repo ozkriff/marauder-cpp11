@@ -73,7 +73,7 @@ static bool isLosClear(const V2i& from, const V2i& to) {
   return true;
 }
 
-static void clean_fow(void) {
+static void clean_fow() {
   V2i p;
   FOR_EACH_TILE(&p) {
     Tile& t = tile(p);
@@ -81,7 +81,7 @@ static void clean_fow(void) {
   }
 }
 
-void calculate_fow(void) {
+void calculate_fow() {
   V2i p;
   assert(current_player);
   clean_fow();
@@ -117,7 +117,7 @@ Unit* id2unit(int id) {
   return NULL;
 }
 
-static int get_new_unit_id(void) {
+static int get_new_unit_id() {
   if (units.size() > 0) {
     auto lastUnit = units.back();
     return lastUnit->id + 1;
@@ -162,7 +162,7 @@ void shoot(Unit *shooter, Unit *target) {
   }
 }
 
-static void init_units(void) {
+static void init_units() {
   int i;
   selected_unit = NULL;
   for (i = 0; i < 8; i++) {
@@ -176,7 +176,7 @@ static void init_units(void) {
   }
 }
 
-static void init_obstacles(void) {
+static void init_obstacles() {
   V2i p;
   FOR_EACH_TILE(&p) {
     Tile& t = tile(p);
@@ -184,12 +184,12 @@ static void init_obstacles(void) {
   }
 }
 
-static void init_players(void) {
+static void init_players() {
   int id[] = {0, 1};
   init_local_players(2, id);
 }
 
-void init_logic(void) {
+void init_logic() {
   srand(time(NULL));
   init_pathfinding_module();
   init_unit_types();

@@ -22,7 +22,7 @@ const Unit_type* get_unit_type(int id) {
   return unit_types + id;
 }
 
-void init_unit_types(void) {
+void init_unit_types() {
   init_tank(unit_types + UNIT_TANK);
   init_truck(unit_types + UNIT_TRUCK);
 }

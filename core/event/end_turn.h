@@ -8,7 +8,7 @@ typedef struct {
   int new_id;
 } EventEndturn;
 
-void generate_event_end_turn(void);
+void generate_event_end_turn();
 void apply_event_end_turn(const EventEndturn *e);
 
 #endif

@@ -31,7 +31,7 @@ void apply_event_end_turn(const EventEndturn *e) {
   }
 }
 
-void generate_event_end_turn(void) {
+void generate_event_end_turn() {
   Event *e = new Event;
   int players_count = 2; /* TODO */
   int new_id = current_player->id + 1;

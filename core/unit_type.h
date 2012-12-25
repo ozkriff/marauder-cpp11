@@ -15,6 +15,6 @@ typedef struct {
 } Unit_type;
 
 const Unit_type* get_unit_type(int id);
-void init_unit_types(void);
+void init_unit_types();
 
 #endif

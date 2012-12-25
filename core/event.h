@@ -17,13 +17,13 @@ typedef struct {
   } e;
 } Event;
 
-void init_events(void);
+void init_events();
 void add_event(Event *e);
-Event* get_next_event(void);
-bool unshown_events_left(void);
-void apply_invisible_events(void);
+Event* get_next_event();
+bool unshown_events_left();
+void apply_invisible_events();
 bool is_event_visible(const Event *e);
 void apply_event(const Event *e);
-void undo_unshown_events(void);
+void undo_unshown_events();
 
 #endif

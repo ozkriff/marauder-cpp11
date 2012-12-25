@@ -3,7 +3,7 @@
 #ifndef UI_OPENGL_WIDGETS_H
 #define UI_OPENGL_WIDGETS_H
 
-typedef void (*ButtonCallback)(void);
+typedef void (*ButtonCallback)();
 
 /* TODO: fg_color, bg_color */
 typedef struct {
@@ -16,12 +16,12 @@ typedef struct {
   ButtonCallback callback;
 } Button;
 
-void init_widgets(void);
+void init_widgets();
 TTF_Font* open_font(const char *font_name, int size);
 Button* v2i_to_button(V2i pos);
 int add_button(TTF_Font *f, const V2i *pos,
     const char *text, ButtonCallback callback);
-void draw_buttons(void);
+void draw_buttons();
 void change_button_text(Button *b, char *text);
 void change_button_text_by_id(int id, char *text);
 

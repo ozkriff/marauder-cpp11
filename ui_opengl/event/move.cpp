@@ -76,7 +76,7 @@ static void end_movement(const V2i *pos) {
   }
 }
 
-static int get_node_index(void) {
+static int get_node_index() {
   const EventMove *m = &current_event->e.move;
   const V2i *p = m->path; /* shortcut */
   int j;
@@ -92,7 +92,7 @@ static int get_node_index(void) {
   return game.current_move_index - last;
 }
 
-void draw_moving_unit(void) {
+void draw_moving_unit() {
   Unit *u = id2unit(current_event->e.move.unit_id);
   V2i from_i, to_i;
   V2f from_f, to_f;

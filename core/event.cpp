@@ -17,7 +17,7 @@
 
 static std::list<Event*> events;
 
-void init_events(void) {
+void init_events() {
 }
 
 static void undo_event(const Event *e) {
@@ -41,7 +41,7 @@ static void undo_event(const Event *e) {
 }
 
 /* Undo all events that this player have not seen yet */
-void undo_unshown_events(void) {
+void undo_unshown_events() {
   if (events.size() == 0) {
     return;
   }
@@ -79,7 +79,7 @@ void apply_event(const Event *e) {
 }
 
 /* TODO: rename. */
-static Event* get_next_event_node(void) {
+static Event* get_next_event_node() {
   // Node *node;
   int id = current_player->last_event_id; /* shortcut */
   if (events.size() == 0) {
@@ -119,7 +119,7 @@ bool is_event_visible(const Event *e) {
 }
 
 /* TODO simplify */
-void apply_invisible_events(void) {
+void apply_invisible_events() {
   Event* e = get_next_event_node();
   while (e) {
     assert(e);
@@ -134,7 +134,7 @@ void apply_invisible_events(void) {
 }
 
 /* TODO: Called before get_next_event */
-bool unshown_events_left(void) {
+bool unshown_events_left() {
   apply_invisible_events();
   if (events.size() == 0) {
     return false;
@@ -145,7 +145,7 @@ bool unshown_events_left(void) {
 }
 
 /* Always called after apply_invisible_events */
-Event* get_next_event(void) {
+Event* get_next_event() {
   int id = current_player->last_event_id; /* shortcut */
   assert(events.size() > 0);
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
@@ -159,7 +159,7 @@ Event* get_next_event(void) {
   return NULL;
 }
 
-static int get_new_event_id(void) {
+static int get_new_event_id() {
   if (events.size() > 0) {
     auto lastEvent = events.back();
     return lastEvent->id + 1;
