@@ -32,7 +32,7 @@ Dir::Dir(int value)
 }
 
 Dir::Dir(const V2i& a, const V2i& b) {
-  assert(dist(a, b) == 1);
+  assert(a.distance(b) == 1);
   V2i diff = b - a;
   for (int i = 0; i < 8; i++) {
     if (diff == dirToPosDiff[i]) {

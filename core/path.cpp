@@ -83,7 +83,7 @@ int Pathfinder::get_tile_cost(const Unit& u, const V2i& t, const V2i& nb) {
 bool Pathfinder::can_move_there(const V2i& p1, const V2i& p2) {
   assert(core.inboard(p1));
   assert(core.inboard(p2));
-  assert(dist(p1, p2) == 1);
+  assert(p1.distance(p2) == 1);
   if (!Dir(p1, p2).isDiagonal()) {
     return true;
   }

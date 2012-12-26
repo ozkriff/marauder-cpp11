@@ -1,7 +1,9 @@
 // See LICENSE file for copyright and license details.
 
-#include <cassert>
 #include "core/v2i.h"
+#include <cassert>
+#include <cstdlib>
+#include <cmath>
 
 V2i::V2i(int x, int y)
   : x(x),
@@ -18,6 +20,12 @@ V2i::V2i()
 V2i::~V2i() {
 }
 
+int V2i::distance(const V2i &b) const {
+  int dx = abs(b.x - x);
+  int dy = abs(b.y - y);
+  return sqrt(pow(dx, 2) + pow(dy, 2));
+}
+
 bool V2i::operator==(const V2i& b) const {
   return x == b.x && y == b.y;
 }
@@ -28,4 +36,8 @@ V2i V2i::operator-(const V2i& b) const {
 
 V2i V2i::operator+(const V2i& b) const {
   return V2i(x + b.x, y + b.y);
+}
+
+int V2i::distance(const V2i& a, const V2i &b) {
+  return a.distance(b);
 }
