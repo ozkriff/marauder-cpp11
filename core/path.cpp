@@ -84,21 +84,9 @@ static int get_tile_cost(const Unit& u, const V2i& t, const V2i& nb) {
   Dir d = m2dir(t, nb);
   Dir d2 = get_parent_dir(u, t);
   int d_diff = dir_diff(d, d2);
-  switch (d_diff) {
-  case 0:
-    break;
-  case 1:
-    return cost + 3;
-  case 2:
-    return cost + 20;
-  case 3:
-    return cost + 90;
-  case 4:
-    return cost + 90;
-  default:
-    exit(1);
-  }
-  return cost;
+  int additionalCost[] = {0, 3, 20, 90, 90};
+  assert(d_diff >= 0 && d_diff <= 4);
+  return cost + additionalCost[d_diff];
 }
 
 static bool can_move_there(const V2i& p1, const V2i& p2) {
