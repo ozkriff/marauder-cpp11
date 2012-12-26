@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #include <cstdio>
 #include <cstdlib>
@@ -10,7 +10,7 @@
 #include "ui_opengl/vertex_array.h"
 #include "ui_opengl/obj.h"
 
-/* TODO "usemtl filename" */
+// TODO "usemtl filename"
 void obj_read(ObjModel *m, const char *filename) {
   char buffer[100];
   FILE *file;
@@ -46,7 +46,7 @@ void obj_read(ObjModel *m, const char *filename) {
   m->faces = new ObjTriangle[m->f_count];
   while (fgets(buffer, 100, file)) {
     if (buffer[0] == 'v' && buffer[1] == ' ') {
-      /* Vertex coords */
+      // Vertex coords
       int items;
       V3f *v;
       v = m->vertexes + v_i;
@@ -57,7 +57,7 @@ void obj_read(ObjModel *m, const char *filename) {
       }
       v_i++;
     } else if (buffer[0] == 'v' && buffer[1] == 'n') {
-      /* Vertex normals */
+      // Vertex normals
       int items;
       V3f *norm = m->normals + n_i;
       items = sscanf(buffer, "vn %f %f %f",
@@ -67,19 +67,19 @@ void obj_read(ObjModel *m, const char *filename) {
       }
       n_i++;
     } else if (buffer[0] == 'v' && buffer[1] == 't') {
-      /* Texture coords */
+      // Texture coords
       int items;
       V2f *tex = m->text_coords + t_i;
       float x, y;
       items = sscanf(buffer, "vt %f %f", &x, &y);
       *tex = V2f(x, y);
-      tex->setY(1.0f - tex->y()); /* flip vertically */
+      tex->setY(1.0f - tex->y()); // flip vertically
       if (items != 2) {
         die("obj_read(): texture coords: items != 2\n");
       }
       t_i++;
     } else if (buffer[0] == 'f' && buffer [1] == ' ') {
-      /* Faces */
+      // Faces
       int items;
       ObjTriangle *t;
       int slash_count = 0;

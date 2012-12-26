@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #ifndef CORE_END_TURN_H
 #define CORE_END_TURN_H

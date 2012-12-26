@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #include <assert.h>
 #include "core/core.h"
@@ -27,7 +27,7 @@ void generate_event_move(
 }
 
 void apply_event_move(Core& core, const EventMove& e) {
-  auto& p = e.path; /* shortcut */
+  auto& p = e.path; // shortcut
   Unit *u = core.id2unit(e.unit_id);
   assert(u);
   u->pos = p[e.length - 1];
@@ -45,6 +45,6 @@ void undo_event_move(Core& core, const EventMove& e) {
 
 bool is_visible_event_move(const Core &core, const EventMove &e) {
   UNUSED(e);
-  /* TODO */
+  // TODO
   return true;
 }

@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #ifndef CORE_PATH_H
 #define CORE_PATH_H

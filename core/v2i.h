@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #ifndef CORE_V2I_H
 #define CORE_V2I_H

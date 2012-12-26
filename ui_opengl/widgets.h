@@ -1,11 +1,11 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #ifndef UI_OPENGL_WIDGETS_H
 #define UI_OPENGL_WIDGETS_H
 
 typedef void (*ButtonCallback)();
 
-/* TODO: fg_color, bg_color */
+// TODO: fg_color, bg_color
 typedef struct {
   int id;
   V2i pos;

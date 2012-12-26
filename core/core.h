@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #ifndef CORE_CORE_H
 #define CORE_CORE_H
@@ -30,24 +30,17 @@ struct Player {
 struct Tile {
   Unit *unit;
   bool obstacle;
-  /* TODO: move to pathfinding */
+  // TODO: move to pathfinding
   int cost;
   Dir parent;
   Dir dir;
-  int fow; /* how many units see this tile */
+  int fow; // how many units see this tile
 };
 
 #define MAP_X 20
 #define MAP_Y 20
 
-// void inc_v2i(V2i *pos);
-
-/* TODO */
-// void shoot(Unit *shooter, Unit *target);
-// void add_unit(V2i p, int player_id);
-// void init_logic();
-
-/* Player.last_event_id */
+// Player.last_event_id
 #define HAVE_NOT_SEEN_ANY_EVENTS (-1)
 
 class Core {
@@ -85,8 +78,5 @@ private:
   void clean_fow();
   bool isLosClear(const V2i& from, const V2i& to);
 };
-
-// Unit* id2unit(int id);
-// void calculate_fow(void);
 
 #endif

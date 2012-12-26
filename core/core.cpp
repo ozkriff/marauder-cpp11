@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #include <cstdlib>
 #include <cmath>
@@ -65,8 +65,7 @@ bool Core::isLosClear(const V2i& from, const V2i& to) {
 void Core::clean_fow() {
   V2i p;
   FOR_EACH_TILE(&p) {
-    Tile& t = tile(p);
-    t.fow = 0;
+    tile(p).fow = 0;
   }
 }
 
@@ -75,14 +74,13 @@ void Core::calculate_fow() {
   assert(current_player);
   clean_fow();
   FOR_EACH_TILE(&p) {
-    Tile& t = tile(p);
     for (auto u : units) {
       int max_dist = get_unit_type(u->type_id).range_of_vision;
       bool is_player_ok = (u->player_id == current_player->id);
       bool is_distance_ok = (p.distance(u->pos) < max_dist);
       bool is_los_ok = isLosClear(p, u->pos);
       if (is_player_ok && is_distance_ok && is_los_ok) {
-        t.fow++;
+        tile(p).fow++;
       }
     }
   }
@@ -166,8 +164,7 @@ void Core::init_units() {
 void Core::init_obstacles() {
   V2i p;
   FOR_EACH_TILE(&p) {
-    Tile& t = tile(p);
-    t.obstacle = ((rand() % 100) > 85);
+    tile(p).obstacle = ((rand() % 100) > 85);
   }
 }
 

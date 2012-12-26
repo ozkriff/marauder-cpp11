@@ -1,11 +1,11 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #ifndef UI_OPENGL_OBJ_H
 #define UI_OPENGL_OBJ_H
 
 #include "ui_opengl/v3f.h"
 
-/* vertex, texture, normal */
+// vertex, texture, normal
 struct ObjTriangle {
   int v[3];
   int t[3];

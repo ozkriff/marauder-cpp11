@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #include <cassert>
 #include <cstdio>
@@ -22,7 +22,7 @@ void apply_event_end_turn(Core& core, const EventEndturn& e) {
 
 void generate_event_end_turn(Core& core) {
   Event *e = new Event;
-  int players_count = 2; /* TODO */
+  int players_count = 2; // TODO
   int new_id = core.current_player->id + 1;
   if (new_id == players_count) {
     new_id = 0;

@@ -1,16 +1,15 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #ifndef UI_OPENGL_VERTEX_ARRAY_H
 #define UI_OPENGL_VERTEX_ARRAY_H
 
 #include <SDL/SDL_opengl.h>
 
-/* Vertex array */
 struct VertexArray {
-  float *v; /* vertices */
-  float *t; /* [opt] texture coordinates */
-  GLubyte *ub_c; /* [opt] colors */
-  int count; /* vertices count */
+  float *v; // vertices
+  float *t; // [opt] texture coordinates
+  GLubyte *ub_c; // [opt] colors
+  int count; // vertices count
 };
 
 extern const VertexArray empty_vertex_array;

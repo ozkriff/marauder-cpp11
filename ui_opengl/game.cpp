@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #include <cstdlib>
 #include <cmath>
@@ -70,7 +70,7 @@ V2f Game::v2i_to_v2f(const V2i& i) {
 
 void Game::build_map_array(VertexArray *v) {
   V2i p;
-  int i = 0; /* tile's index */
+  int i = 0; // tile's index
   v->count = MAP_X * MAP_Y * 6;
   if (v->v) {
     delete[] v->v;
@@ -109,7 +109,7 @@ void Game::build_map_array(VertexArray *v) {
 
 void Game::build_obstacles_array(VertexArray *v) {
   V2i p;
-  int i = 0; /* tile's index */
+  int i = 0; // tile's index
   v->count = MAP_X * MAP_Y * 6;
   if (v->v) {
     delete[] v->v;
@@ -171,7 +171,7 @@ int Game::calculate_fogged_tiles_count() {
 
 void Game::build_fow_array(VertexArray *v) {
   V2i p;
-  int i = 0; /* tile's index */
+  int i = 0; // tile's index
   v->count = calculate_fogged_tiles_count() * 6;
   if (v->v) {
     delete[] v->v;
@@ -197,7 +197,7 @@ void Game::build_fow_array(VertexArray *v) {
 
 void Game::build_walkable_array(VertexArray *v) {
   V2i p;
-  int i = 0; /* tile's index */
+  int i = 0; // tile's index
   assert(v);
   if (v->v) {
     delete[] v->v;
@@ -361,7 +361,7 @@ void Game::process_mouse_button_down_event(const SDL_MouseButtonEvent& e) {
       }
     } else if (t.cost <= ap && t.parent.value() != DirID::D_NONE) {
       generate_event_move(core, *core.selected_unit, active_tile_pos);
-      /* TODO: Move this to ui_event_move? */
+      // TODO: Move this to ui_event_move?
       delete[] va_walkable_map.v;
       va_walkable_map = empty_vertex_array;
     }
@@ -536,7 +536,7 @@ void Game::sdl_events() {
 
 void Game::build_picking_tiles_array(VertexArray *va) {
   V2i p;
-  int i = 0; /* tile index */
+  int i = 0; // tile index
   assert(va);
   va->count = MAP_X * MAP_Y * 4;
   if (va->v) {

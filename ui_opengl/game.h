@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #ifndef UI_OPENGL_GAME_H
 #define UI_OPENGL_GAME_H

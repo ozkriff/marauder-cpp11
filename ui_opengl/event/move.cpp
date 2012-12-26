@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #include <cassert>
 #include <SDL/SDL_opengl.h>
@@ -21,7 +21,7 @@ static int get_move_legth(const V2i& from, const V2i& to) {
 
 int get_last_event_move_index(Game& game, const Event &e) {
   const EventMove* m = &e.e.move;
-  auto& p = m->path; /* shortcut */
+  auto& p = m->path; // shortcut
   int length = 0;
   int i;
   for (i = 1; i < m->length; i++) {
@@ -34,8 +34,8 @@ void get_current_moving_nodes(
     Game& game, const EventMove& e, V2i* from, V2i* to)
 {
   int i = game.current_move_index;
-  auto& p = e.path; /* shortcut */
-  unsigned int j; /* node id */
+  auto& p = e.path; // shortcut
+  unsigned int j; // node id
   assert(from);
   assert(to);
   for (j = 0; j < p.size() - 2; j++) {
@@ -72,7 +72,7 @@ static void end_movement(Game& game, const EventMove& e, const V2i *pos) {
 }
 
 static int get_node_index(Game& game, const EventMove& e) {
-  auto& p = e.path; /* shortcut */
+  auto& p = e.path; // shortcut
   int last = 0;
   int current = 0;
   for (unsigned int j = 0; j < p.size() - 2; j++) {
@@ -101,7 +101,7 @@ void draw_moving_unit(Game& game, const EventMove& e) {
   p.setY(from_f.y() + diff.y() * node_index);
   glPushMatrix();
   glTranslatef(p.x(), p.y(), 0.0f);
-  /* TODO: Remove '+ 4'! Rotate obj files! */
+  // TODO: Remove '+ 4'! Rotate obj files!
   glRotatef(
       (Dir(from_i, to_i).toInt() + 4) * 45.0f,
       0, 0, 1);

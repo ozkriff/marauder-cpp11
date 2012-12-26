@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #include <cassert>
 #include <cstdlib>
@@ -24,8 +24,8 @@ static void undo_event(Core& core, const Event& e) {
       break;
     }
     case EventTypeId::E_END_TURN: {
-      /* empty */
-      /* TODO: die()? */
+      // empty
+      // TODO: die()?
       break;
     }
     default:
@@ -33,10 +33,10 @@ static void undo_event(Core& core, const Event& e) {
           "unknown event type '%d'\n", e.t);
       break;
   }
-  /* update_units_visibility(); */
+  // update_units_visibility();
 }
 
-/* Undo all events that this player have not seen yet */
+// Undo all events that this player have not seen yet
 void undo_unshown_events(Core& core) {
   if (core.events.size() == 0) {
     return;
@@ -67,20 +67,20 @@ void apply_event(Core& core, const Event& e) {
         "unknown event '%d'\n", e.t);
     break;
   }
-  /* update_units_visibility(); */
+  // update_units_visibility();
 }
 
-/* TODO: rename. */
+// TODO: rename.
 static Event* get_next_event_node(Core& core) {
   // Node *node;
-  int id = core.current_player->last_event_id; /* shortcut */
+  int id = core.current_player->last_event_id; // shortcut
   if (core.events.size() == 0) {
     return nullptr;
   }
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
     return core.events.front();
   }
-  /* find last seen event */
+  // find last seen event
   Event *e = nullptr;
   for (auto e : core.events) {
     if (e->id == id) {
@@ -110,7 +110,7 @@ bool is_event_visible(const Core& core, const Event& e) {
   }
 }
 
-/* TODO simplify */
+// TODO simplify
 void apply_invisible_events(Core& core) {
   Event* e = get_next_event_node(core);
   while (e) {
@@ -125,7 +125,7 @@ void apply_invisible_events(Core& core) {
   }
 }
 
-/* TODO: Called before get_next_event */
+// TODO: Called before get_next_event
 bool unshown_events_left(Core& core) {
   apply_invisible_events(core);
   if (core.events.size() == 0) {
@@ -162,12 +162,12 @@ static int get_new_event_id(Core& core) {
 
 static void event2log(const Event& e) {
   UNUSED(e);
-  /* TODO */
+  // TODO
 }
 
 static void send_event(const Event& e) {
   UNUSED(e);
-  /* TODO */
+  // TODO
 }
 
 void add_event(Core& core, Event* e) {
@@ -176,7 +176,7 @@ void add_event(Core& core, Event* e) {
   core.events.push_back(e);
   event2log(*e);
 #if 0
-  /* TODO */
+  // TODO
   if (!is_local) {
     send_event(e);
   }

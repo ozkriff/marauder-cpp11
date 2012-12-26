@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #include <cassert>
 #include <SDL/SDL.h>
@@ -11,14 +11,14 @@ static GLenum get_texture_format(
     const SDL_Surface *surface, int n_of_colors)
 {
   if (n_of_colors == 4) {
-    /* contains an alpha channel */
+    // contains an alpha channel
     if (surface->format->Rmask == 0xff) {
       return GL_RGBA;
     } else {
       return GL_BGRA;
     }
   } else if (n_of_colors == 3) {
-    /* no alpha channel */
+    // no alpha channel
     if (surface->format->Rmask == 0xff) {
       return GL_RGB;
     } else {
