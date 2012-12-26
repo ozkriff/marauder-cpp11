@@ -41,12 +41,6 @@
 #define TILE_SIZE 6.0f
 #define TILE_SIZE_2 (TILE_SIZE / 2.0f)
 
-UIMode ui_mode;
-int last_move_index;
-int current_move_index;
-VertexArray va_walkable_map;
-VertexArray va_fog_of_war;
-
 Game game;
 
 static V2i win_size;
@@ -750,7 +744,7 @@ void Game::add_buttons() {
 int main(int ac, char **av) {
   UNUSED(ac);
   UNUSED(av);
-  Game game;
+  // Game game;
   game.do_xxx();
   return 0;
 }
