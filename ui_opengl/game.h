@@ -4,8 +4,12 @@
 #define UI_OPENGL_GAME_H
 
 #include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
+#include <SDL/SDL_opengl.h>
 #include "ui_opengl/vertex_array.h"
 #include "ui_opengl/v2f.h"
+#include "ui_opengl/camera.h"
+#include "ui_opengl/obj.h"
 
 enum class UIMode {
   UI_MODE_NORMAL,
@@ -24,6 +28,22 @@ public:
   int current_move_index;
   VertexArray va_walkable_map;
   VertexArray va_fog_of_war;
+
+  V2i win_size;
+  V2i mouse_pos;
+  V2i active_tile_pos;
+  SDL_Surface* screen;
+  bool is_rotating_camera;
+  bool done;
+  Camera camera;
+  GLuint floor_texture;
+  VertexArray va_map;
+  VertexArray va_obstacles;
+  VertexArray va_pick;
+  ObjModel obj_units[static_cast<int>(Unit_type_id::UNIT_COUNT)];
+  VertexArray va_units[static_cast<int>(Unit_type_id::UNIT_COUNT)];
+  GLuint texture_units[static_cast<int>(Unit_type_id::UNIT_COUNT)];
+  TTF_Font *font;
 
 public:
   Game();

@@ -3,6 +3,8 @@
 #ifndef UI_OPENGL_OBJ_H
 #define UI_OPENGL_OBJ_H
 
+#include "ui_opengl/v3f.h"
+
 /* vertex, texture, normal */
 struct ObjTriangle {
   int v[3];
@@ -11,10 +13,10 @@ struct ObjTriangle {
 };
 
 struct ObjModel {
-  V3f *vertexes;
-  V3f *normals;
-  V2f *text_coords;
-  ObjTriangle *faces;
+  V3f* vertexes;
+  V3f* normals;
+  V2f* text_coords;
+  ObjTriangle* faces;
   int f_count;
   int v_count;
   int t_count;

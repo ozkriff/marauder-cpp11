@@ -5,13 +5,9 @@
 #include <cstring>
 #include <cassert>
 #include <ctime>
-#include <SDL/SDL_opengl.h>
-#include <SDL/SDL_ttf.h>
 #include "core/core.h"
 #include "ui_opengl/math.h"
 #include "ui_opengl/vertex_array.h"
-#include "ui_opengl/obj.h"
-#include "ui_opengl/camera.h"
 #include "ui_opengl/game.h"
 #include "ui_opengl/gl.h"
 #include "ui_opengl/widgets.h"
@@ -31,22 +27,6 @@
   for (*p = V2i(0, 0); core.inboard(*p); core.inc_v2i(p))
 
 Game game;
-
-static V2i win_size;
-static V2i mouse_pos;
-static V2i active_tile_pos;
-static SDL_Surface *screen;
-static bool is_rotating_camera;
-static bool done;
-static Camera camera;
-static GLuint floor_texture;
-static VertexArray va_map;
-static VertexArray va_obstacles;
-static VertexArray va_pick;
-static ObjModel obj_units[static_cast<int>(Unit_type_id::UNIT_COUNT)];
-static VertexArray va_units[static_cast<int>(Unit_type_id::UNIT_COUNT)];
-static GLuint texture_units[static_cast<int>(Unit_type_id::UNIT_COUNT)];
-static TTF_Font *font;
 
 Game::Game() {
 }

@@ -5,13 +5,13 @@
 
 static Unit_type unit_types[(int)Unit_type_id::UNIT_COUNT];
 
-static void init_tank(Unit_type *t){
+static void init_tank(Unit_type *t) {
   assert(t);
   t->range_of_vision = 4;
   t->action_points = 12;
 }
 
-static void init_truck(Unit_type *t){
+static void init_truck(Unit_type *t) {
   assert(t);
   t->range_of_vision = 6;
   t->action_points = 16;
