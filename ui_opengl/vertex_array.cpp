@@ -4,7 +4,7 @@
 #include <SDL/SDL_opengl.h>
 #include "ui_opengl/vertex_array.h"
 
-const VertexArray empty_vertex_array = {NULL, NULL, NULL, 0};
+const VertexArray empty_vertex_array = {nullptr, nullptr, nullptr, 0};
 
 void set_xy(float *coords, int n, int i, int vi,
     float x, float y)

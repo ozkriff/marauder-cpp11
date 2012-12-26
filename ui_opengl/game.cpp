@@ -74,11 +74,11 @@ void Game::build_map_array(VertexArray *v) {
   v->count = MAP_X * MAP_Y * 6;
   if (v->v) {
     delete[] v->v;
-    v->v = NULL;
+    v->v = nullptr;
   }
   if (v->t) {
     delete[] v->t;
-    v->t = NULL;
+    v->t = nullptr;
   }
   v->v = (float*)new V3f[v->count];
   v->t = (float*)new V2f[v->count];
@@ -113,11 +113,11 @@ void Game::build_obstacles_array(VertexArray *v) {
   v->count = MAP_X * MAP_Y * 6;
   if (v->v) {
     delete[] v->v;
-    v->v = NULL;
+    v->v = nullptr;
   }
   if (v->t) {
     delete[] v->t;
-    v->t = NULL;
+    v->t = nullptr;
   }
   v->v = (float *)new V3f[v->count];
   v->t = (float *)new V2f[v->count];
@@ -175,7 +175,7 @@ void Game::build_fow_array(VertexArray *v) {
   v->count = calculate_fogged_tiles_count() * 6;
   if (v->v) {
     delete[] v->v;
-    v->v = NULL;
+    v->v = nullptr;
   }
   v->v = (float *)new V3f[v->count];
   FOR_EACH_TILE(&p) {
@@ -201,7 +201,7 @@ void Game::build_walkable_array(VertexArray *v) {
   assert(v);
   if (v->v) {
     delete[] v->v;
-    v->v = NULL;
+    v->v = nullptr;
   }
   v->count = calculate_walkable_tiles_count() * 3;
   if (v->count == 0) {
@@ -551,11 +551,11 @@ void Game::build_picking_tiles_array(VertexArray *va) {
   va->count = MAP_X * MAP_Y * 4;
   if (va->v) {
     delete[] va->v;
-    va->v = NULL;
+    va->v = nullptr;
   }
   if (va->ub_c) {
     delete[] va->ub_c;
-    va->ub_c = NULL;
+    va->ub_c = nullptr;
   }
   va->v = (float *)new V3f[va->count];
   va->ub_c = new GLubyte[va->count * 3];

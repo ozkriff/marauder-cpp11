@@ -61,7 +61,7 @@ static void end_movement(Game& game, const EventMove& e, const V2i *pos) {
     game.build_fow_array(&game.va_fog_of_war);
   }
   apply_event(game.core, *game.core.current_event);
-  game.core.current_event = NULL;
+  game.core.current_event = nullptr;
   if (u->player_id == game.core.current_player->id) {
     if (game.core.selected_unit) {
       game.core.pathfinder.fill_map(*game.core.selected_unit);

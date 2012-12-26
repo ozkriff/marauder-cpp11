@@ -152,7 +152,7 @@ void Core::shoot(Unit *shooter, Unit *target) {
 }
 
 void Core::init_units() {
-  selected_unit = NULL;
+  selected_unit = nullptr;
   for (int i = 0; i < 8; i++) {
     V2i p = V2i(rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
     if (!tile(p).obstacle && !unit_at(p)) {
@@ -177,7 +177,7 @@ void Core::init_players() {
 }
 
 void Core::init_logic() {
-  srand(time(NULL));
+  srand(time(nullptr));
   init_unit_types();
   init_events();
   pathfinder.clean_map();
