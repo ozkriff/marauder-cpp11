@@ -45,7 +45,7 @@ void undo_unshown_events(Core& core) {
   --i;
   while (i != core.events.begin()) {
     auto event = *i;
-    if (event->id == game.core.current_player->last_event_id) {
+    if (event->id == core.current_player->last_event_id) {
       break;
     }
     undo_event(core, *event);
@@ -54,7 +54,7 @@ void undo_unshown_events(Core& core) {
 }
 
 void apply_event(Core& core, const Event& e) {
-  game.core.current_player->last_event_id = e.id;
+  core.current_player->last_event_id = e.id;
   switch (e.t) {
   case EventTypeId::E_MOVE:
     apply_event_move(core, e.e.move);
@@ -73,7 +73,7 @@ void apply_event(Core& core, const Event& e) {
 /* TODO: rename. */
 static Event* get_next_event_node(Core& core) {
   // Node *node;
-  int id = game.core.current_player->last_event_id; /* shortcut */
+  int id = core.current_player->last_event_id; /* shortcut */
   if (core.events.size() == 0) {
     return nullptr;
   }
@@ -132,13 +132,13 @@ bool unshown_events_left(Core& core) {
     return false;
   } else {
     auto e = core.events.back();
-    return e->id != game.core.current_player->last_event_id;
+    return e->id != core.current_player->last_event_id;
   }
 }
 
-/* Always called after apply_invisible_events */
+// Always called after apply_invisible_events
 Event* get_next_event(Core& core) {
-  int id = game.core.current_player->last_event_id; /* shortcut */
+  int id = core.current_player->last_event_id; // shortcut
   assert(core.events.size() > 0);
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
     return core.events.front();

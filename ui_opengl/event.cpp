@@ -15,7 +15,7 @@
 #include "ui_opengl/event.h"
 #include "ui_opengl/event/move.h"
 
-bool event_filter_unit(const Event& e, const Unit& u) {
+bool event_filter_unit(Game& game, const Event& e, const Unit& u) {
   switch (e.t) {
   case EventTypeId::E_END_TURN:
     return false;
@@ -28,14 +28,14 @@ bool event_filter_unit(const Event& e, const Unit& u) {
   }
 }
 
-void event_draw(const Event& e) {
+void event_draw(Game& game, const Event& e) {
   switch (e.t) {
   case EventTypeId::E_END_TURN: {
     die("TODO");
     break;
   }
   case EventTypeId::E_MOVE: {
-    draw_moving_unit(e.e.move);
+    draw_moving_unit(game, e.e.move);
     break;
   }
   default:
@@ -45,13 +45,13 @@ void event_draw(const Event& e) {
   }
 }
 
-int get_last_event_index(const Event& e) {
+int get_last_event_index(Game& game, const Event& e) {
   switch (e.t) {
   case EventTypeId::E_END_TURN: {
     return 0;
   }
   case EventTypeId::E_MOVE: {
-    return get_last_event_move_index(e);
+    return get_last_event_move_index(game, e);
   }
   default:
     die("ui_event: get_last_event_index(): "

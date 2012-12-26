@@ -20,7 +20,7 @@ static int get_move_legth(const V2i& from, const V2i& to) {
   }
 }
 
-int get_last_event_move_index(const Event &e) {
+int get_last_event_move_index(Game& game, const Event &e) {
   const EventMove* m = &e.e.move;
   auto& p = m->path; /* shortcut */
   int length = 0;
@@ -32,7 +32,7 @@ int get_last_event_move_index(const Event &e) {
 }
 
 void get_current_moving_nodes(
-    const EventMove& e, V2i* from, V2i* to)
+    Game& game, const EventMove& e, V2i* from, V2i* to)
 {
   int i = game.current_move_index;
   auto& p = e.path; /* shortcut */
@@ -49,7 +49,7 @@ void get_current_moving_nodes(
   *to = p[j + 1];
 }
 
-static void end_movement(const EventMove& e, const V2i *pos) {
+static void end_movement(Game& game, const EventMove& e, const V2i *pos) {
   Unit *u;
   assert(pos);
   u = game.core.id2unit(e.unit_id);
@@ -72,7 +72,7 @@ static void end_movement(const EventMove& e, const V2i *pos) {
   }
 }
 
-static int get_node_index(const EventMove& e) {
+static int get_node_index(Game& game, const EventMove& e) {
   auto& p = e.path; /* shortcut */
   int last = 0;
   int current = 0;
@@ -86,16 +86,16 @@ static int get_node_index(const EventMove& e) {
   return game.current_move_index - last;
 }
 
-void draw_moving_unit(const EventMove& e) {
+void draw_moving_unit(Game& game, const EventMove& e) {
   Unit *u = game.core.id2unit(e.unit_id);
   V2i from_i, to_i;
   V2f diff;
   V2f p;
-  get_current_moving_nodes(e, &from_i, &to_i);
+  get_current_moving_nodes(game, e, &from_i, &to_i);
   V2f from_f = game.v2i_to_v2f(from_i);
   V2f to_f = game.v2i_to_v2f(to_i);
   int move_speed = get_move_legth(from_i, to_i);
-  int node_index = get_node_index(e);
+  int node_index = get_node_index(game, e);
   diff.setX((to_f.x() - from_f.x()) / move_speed);
   diff.setY((to_f.y() - from_f.y()) / move_speed);
   p.setX(from_f.x() + diff.x() * node_index);
@@ -111,6 +111,6 @@ void draw_moving_unit(const EventMove& e) {
   glPopMatrix();
   game.current_move_index++;
   if (game.current_move_index == game.last_move_index) {
-    end_movement(e, &to_i);
+    end_movement(game, e, &to_i);
   }
 }

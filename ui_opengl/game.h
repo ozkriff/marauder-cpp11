@@ -16,10 +16,6 @@ enum class UIMode {
   UI_MODE_SHOW_EVENT
 };
 
-class Game;
-
-extern Game game;
-
 class Game {
 public:
   Core core;

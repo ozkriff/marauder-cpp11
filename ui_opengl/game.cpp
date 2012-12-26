@@ -26,8 +26,6 @@
 #define FOR_EACH_TILE(p) \
   for (*p = V2i(0, 0); core.inboard(*p); core.inc_v2i(p))
 
-Game game;
-
 Game::Game() {
 }
 
@@ -311,7 +309,7 @@ void Game::draw_unit(const Unit *u) {
 void Game::draw_units() {
   for (auto u : core.units) {
     if (ui_mode == UIMode::UI_MODE_SHOW_EVENT
-        && event_filter_unit(*core.current_event, *u))
+        && event_filter_unit(*this, *core.current_event, *u))
     {
       continue;
     }
@@ -328,7 +326,7 @@ void Game::draw() {
   draw_map();
   draw_units();
   if (ui_mode == UIMode::UI_MODE_SHOW_EVENT) {
-    event_draw(*core.current_event);
+    event_draw(*this, *core.current_event);
   }
   draw_buttons();
   SDL_GL_SwapBuffers();
@@ -476,10 +474,10 @@ void Game::process_key_down_event(
 
 void Game::screen_scenario_main_events() {
   core.current_event = get_next_event(core);
-  last_move_index = get_last_event_index(*core.current_event);
+  last_move_index = get_last_event_index(*this, *core.current_event);
   ui_mode = UIMode::UI_MODE_SHOW_EVENT;
   current_move_index = 0;
-  /* TODO: Remove this hack */
+  // TODO: Remove this hack
   if (core.current_event->t == EventTypeId::E_END_TURN) {
     apply_event(core, *core.current_event);
     ui_mode = UIMode::UI_MODE_NORMAL;
@@ -683,6 +681,7 @@ void Game::init_vertex_arrays() {
   va_pick = empty_vertex_array;
   va_walkable_map = empty_vertex_array;
   va_fog_of_war = empty_vertex_array;
+  va_obstacles = empty_vertex_array;
   build_picking_tiles_array(&va_pick);
   build_map_array(&va_map);
   build_obstacles_array(&va_obstacles);
@@ -713,7 +712,7 @@ void Game::add_buttons() {
 int main(int ac, char **av) {
   UNUSED(ac);
   UNUSED(av);
-  // Game game;
+  Game game;
   game.do_xxx();
   return 0;
 }

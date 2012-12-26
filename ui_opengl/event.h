@@ -3,8 +3,10 @@
 #ifndef UI_OPENGL_EVENT_H
 #define UI_OPENGL_EVENT_H
 
-int get_last_event_index(const Event& e);
-bool event_filter_unit(const Event& e, const Unit& u);
-void event_draw(const Event& e);
+#include "ui_opengl/game.h"
+
+int get_last_event_index(Game& game, const Event& e);
+bool event_filter_unit(Game& game, const Event& e, const Unit& u);
+void event_draw(Game& game, const Event& e);
 
 #endif
