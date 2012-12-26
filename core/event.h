@@ -18,12 +18,12 @@ typedef struct {
 } Event;
 
 void init_events();
-void add_event(Event *e);
+void add_event(Event* e);
 Event* get_next_event();
 bool unshown_events_left();
 void apply_invisible_events();
-bool is_event_visible(const Event *e);
-void apply_event(const Event *e);
+bool is_event_visible(const Event& e);
+void apply_event(const Event& e);
 void undo_unshown_events();
 
 #endif

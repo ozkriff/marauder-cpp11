@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <assert.h>
+#include <cassert>
 #include <SDL/SDL_opengl.h>
 #include "core/misc.h"
 #include "core/v2i.h"
@@ -16,7 +16,7 @@
 #include "ui_opengl/vertex_array.h"
 #include "ui_opengl/game.h"
 
-static int get_move_legth(const V2i *from, const V2i *to) {
+static int get_move_legth(const V2i& from, const V2i& to) {
   Dir d = m2dir(from, to);
   if (dir_is_diagonal(d)) {
     return 14;
@@ -31,7 +31,7 @@ int get_last_event_move_index(const Event *e) {
   int length = 0;
   int i;
   for (i = 1; i < m->length; i++) {
-    length += get_move_legth(&p[i - 1], &p[i]);
+    length += get_move_legth(p[i - 1], p[i]);
   }
   return length;
 }
@@ -44,7 +44,7 @@ void get_current_moving_nodes(V2i *from, V2i *to) {
   assert(from);
   assert(to);
   for (j = 0; j < m->length - 2; j++) {
-    i -= get_move_legth(&p[j], &p[j + 1]);
+    i -= get_move_legth(p[j], p[j + 1]);
     if (i < 0) {
       break;
     }
@@ -60,16 +60,16 @@ static void end_movement(const V2i *pos) {
   game.ui_mode = UIMode::UI_MODE_NORMAL;
   u->pos = *pos;
   if (selected_unit) {
-    fill_map(u);
+    fill_map(*u);
     game.build_walkable_array(&game.va_walkable_map);
     calculate_fow();
     game.build_fow_array(&game.va_fog_of_war);
   }
-  apply_event(current_event);
+  apply_event(*current_event);
   current_event = NULL;
   if (u->player_id == current_player->id) {
     if (selected_unit) {
-      fill_map(selected_unit);
+      fill_map(*selected_unit);
       game.build_walkable_array(&game.va_walkable_map);
     }
     game.build_fow_array(&game.va_fog_of_war);
@@ -77,13 +77,12 @@ static void end_movement(const V2i *pos) {
 }
 
 static int get_node_index() {
-  const EventMove *m = &current_event->e.move;
-  const V2i *p = m->path; /* shortcut */
-  int j;
+  const EventMove& m = current_event->e.move;
+  const V2i* p = m.path; /* shortcut */
   int last = 0;
   int current = 0;
-  for (j = 0; j < m->length - 2; j++) {
-    current += get_move_legth(&p[j], &p[j + 1]);
+  for (int j = 0; j < m.length - 2; j++) {
+    current += get_move_legth(p[j], p[j + 1]);
     if (current > game.current_move_index) {
       break;
     }
@@ -103,7 +102,7 @@ void draw_moving_unit() {
   get_current_moving_nodes(&from_i, &to_i);
   from_f = game.v2i_to_v2f(from_i);
   to_f = game.v2i_to_v2f(to_i);
-  move_speed = get_move_legth(&from_i, &to_i);
+  move_speed = get_move_legth(from_i, to_i);
   node_index = get_node_index();
   diff.setX((to_f.x() - from_f.x()) / move_speed);
   diff.setY((to_f.y() - from_f.y()) / move_speed);
@@ -112,7 +111,9 @@ void draw_moving_unit() {
   glPushMatrix();
   glTranslatef(p.x(), p.y(), 0.0f);
   /* TODO: Remove '+ 4'! Rotate obj files! */
-  glRotatef(((int)m2dir(&from_i, &to_i) + 4) * 45.0f, 0, 0, 1);
+  glRotatef(
+      (static_cast<int>(m2dir(from_i, to_i)) + 4) * 45.0f,
+      0, 0, 1);
   game.draw_unit_model(u);
   game.draw_unit_circle(u);
   glPopMatrix();

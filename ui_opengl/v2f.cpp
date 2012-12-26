@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <math.h>
-#include <assert.h>
+#include <cassert>
+#include <cmath>
 #include "ui_opengl/v2f.h"
 
 V2f::V2f(float x, float y)

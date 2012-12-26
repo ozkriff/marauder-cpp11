@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <assert.h>
+#include <cassert>
 #include "core/unit_type.h"
 
 static Unit_type unit_types[(int)Unit_type_id::UNIT_COUNT];

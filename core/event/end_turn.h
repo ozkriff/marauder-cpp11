@@ -9,6 +9,6 @@ typedef struct {
 } EventEndturn;
 
 void generate_event_end_turn();
-void apply_event_end_turn(const EventEndturn *e);
+void apply_event_end_turn(const EventEndturn& e);
 
 #endif

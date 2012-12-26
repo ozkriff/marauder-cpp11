@@ -1,14 +1,14 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <assert.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
+#include <cassert>
+#include <cstdlib>
+#include <cstdio>
+#include <cmath>
 #include "core/v2i.h"
 #include "core/los.h"
 #include "core/math.h"
 
-/* Wikipedia: Bresenham's line algorithm */
+// Wikipedia: Bresenham's line algorithm
 
 Los::Los(const V2i& from, const V2i& to) {
   mFrom = from;
@@ -47,7 +47,7 @@ V2i Los::getNext() {
   if (!mIsSteep) {
     n = V2i(mPos.x, mPos.y);
   } else {
-    n =V2i(mPos.y, mPos.x);
+    n = V2i(mPos.y, mPos.x);
   }
   return n;
 }

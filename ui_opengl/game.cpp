@@ -1,10 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <assert.h>
-#include <time.h>
+#include <cstdlib>
+#include <cmath>
+#include <cstring>
+#include <cassert>
+#include <ctime>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 #include <SDL/SDL_ttf.h>
@@ -250,8 +250,7 @@ void Game::build_walkable_array(VertexArray *v) {
   FOR_EACH_TILE(&p) {
     Tile& t = tile(p);
     if (t.parent != Dir::D_NONE && t.cost < 50) {
-      V2i p2;
-      neib(&p2, &p, t.parent);
+      V2i p2 = neib(p, t.parent);
       if (inboard(p2)) {
         V2f pos1 = v2i_to_v2f(p);
         V2f pos2 = v2i_to_v2f(p2);
@@ -394,7 +393,7 @@ void Game::process_mouse_button_down_event(
   }
   if (u && u->player_id == current_player->id) {
     selected_unit = u;
-    fill_map(selected_unit);
+    fill_map(*selected_unit);
     build_walkable_array(&va_walkable_map);
   } else if (selected_unit) {
     auto type = get_unit_type(selected_unit->type_id);
@@ -451,7 +450,7 @@ void Game::process_key_down_event(
       calculate_fow();
       build_fow_array(&va_fog_of_war);
       if (selected_unit) {
-        fill_map(selected_unit);
+        fill_map(*selected_unit);
         build_walkable_array(&va_walkable_map);
       }
       break;
@@ -463,7 +462,7 @@ void Game::process_key_down_event(
     case SDLK_u: {
       add_unit(active_tile_pos, current_player->id);
       if (selected_unit) {
-        fill_map(selected_unit);
+        fill_map(*selected_unit);
         build_walkable_array(&va_walkable_map);
       }
       break;
@@ -520,7 +519,7 @@ void Game::screen_scenario_main_events() {
   current_move_index = 0;
   /* TODO: Remove this hack */
   if (current_event->t == EventTypeId::E_END_TURN) {
-    apply_event(current_event);
+    apply_event(*current_event);
     ui_mode = UIMode::UI_MODE_NORMAL;
   }
 }
@@ -730,16 +729,14 @@ void Game::init_vertex_arrays() {
 }
 
 void Game::load_unit_resources() {
-  load_texture(&texture_units[(int)Unit_type_id::UNIT_TANK], DATA("tank.png"));
-  load_texture(&texture_units[(int)Unit_type_id::UNIT_TRUCK], DATA("truck.png"));
-  obj_read(&obj_units[(int)Unit_type_id::UNIT_TANK], DATA("tank.obj"));
-  obj_read(&obj_units[(int)Unit_type_id::UNIT_TRUCK], DATA("truck.obj"));
-  obj_build(
-      &va_units[(int)Unit_type_id::UNIT_TANK],
-      &obj_units[(int)Unit_type_id::UNIT_TANK]);
-  obj_build(
-      &va_units[(int)Unit_type_id::UNIT_TRUCK],
-      &obj_units[(int)Unit_type_id::UNIT_TRUCK]);
+  int tankID = static_cast<int>(Unit_type_id::UNIT_TANK);
+  int truckID = static_cast<int>(Unit_type_id::UNIT_TRUCK);
+  load_texture(&texture_units[tankID], DATA("tank.png"));
+  load_texture(&texture_units[truckID], DATA("truck.png"));
+  obj_read(&obj_units[tankID], DATA("tank.obj"));
+  obj_read(&obj_units[truckID], DATA("truck.obj"));
+  obj_build(&va_units[tankID], &obj_units[tankID]);
+  obj_build(&va_units[truckID], &obj_units[truckID]);
 }
 
 void Game::on_test_button() {

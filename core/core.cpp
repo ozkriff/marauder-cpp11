@@ -1,10 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <assert.h>
-#include <time.h>
+#include <cstdlib>
+#include <cmath>
+#include <cstring>
+#include <cassert>
+#include <ctime>
 #include "core/v2i.h"
 #include "core/math.h"
 #include "core/dir.h"
@@ -145,7 +145,7 @@ static void kill_unit(Unit *u) {
   units.remove(u);
   delete u;
   if (selected_unit) {
-    fill_map(selected_unit);
+    fill_map(*selected_unit);
     calculate_fow();
 #if 0
     build_walkable_array(&va_walkable_map);

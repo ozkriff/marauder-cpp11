@@ -1,15 +1,15 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <assert.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cassert>
+#include <cstdlib>
+#include <cmath>
 #include "core/v2i.h"
 #include "core/math.h"
 
 int dist(const V2i &a, const V2i &b) {
   int dx = abs(b.x - a.x);
   int dy = abs(b.y - a.y);
-  return (int)sqrt(pow(dx, 2) + pow(dy, 2));
+  return sqrt(pow(dx, 2) + pow(dy, 2));
 }
 
 int rnd(int min, int max) {

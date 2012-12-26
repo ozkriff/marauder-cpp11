@@ -13,12 +13,10 @@
 #include "core/path.h"
 #include "core/core_private.h"
 
-void apply_event_end_turn(const EventEndturn *e) {
-  assert(e);
-  // FOR_EACH_NODE(players, nd) {
+void apply_event_end_turn(const EventEndturn& e) {
   for (auto p : players) {
-    if (p->id == e->new_id) {
-      if (current_player->id == e->old_id) {
+    if (p->id == e.new_id) {
+      if (current_player->id == e.old_id) {
         current_player = p;
         undo_unshown_events();
       } else {

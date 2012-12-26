@@ -12,8 +12,8 @@ typedef struct {
 
 void generate_event_move(
     const Unit *u, const V2i *destination);
-void apply_event_move(const EventMove *e);
-void undo_event_move(const EventMove *e);
-bool is_visible_event_move(const EventMove *e);
+void apply_event_move(const EventMove& e);
+void undo_event_move(const EventMove& e);
+bool is_visible_event_move(const EventMove& e);
 
 #endif

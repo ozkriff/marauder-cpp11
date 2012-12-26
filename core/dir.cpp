@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <assert.h>
-#include <stdlib.h>
+#include <cassert>
+#include <cstdlib>
 #include "core/misc.h"
 #include "core/v2i.h"
 #include "core/dir.h"
@@ -17,37 +17,30 @@ static V2i dir_to_pos_diff[8] = {
   {1, -1},
 };
 
-Dir m2dir(const V2i *a, const V2i *b) {
-  int dx, dy;
-  int i;
-  assert(a);
-  assert(b);
-  dx = b->x - a->x;
-  dy = b->y - a->y;
-  for (i = 0; i < 8; i++) {
+Dir m2dir(const V2i& a, const V2i& b) {
+  int dx = b.x - a.x;
+  int dy = b.y - a.y;
+  for (int i = 0; i < 8; i++) {
     if (dx == dir_to_pos_diff[i].x
         && dy == dir_to_pos_diff[i].y)
     {
-      return (Dir)i;
+      return static_cast<Dir>(i);
     }
   }
   return Dir::D_ERROR;
 }
 
 /* Get tile's neiborhood by it's index. */
-void neib(V2i *neib, const V2i* pos, Dir i) {
-  int dx, dy;
+V2i neib(const V2i& pos, Dir i) {
   assert(i < Dir::D_COUNT);
-  assert(pos);
-  assert(neib);
   if (i == Dir::D_NONE || i == Dir::D_ERROR) {
     die("dir.c: neib(): "
         "Wrong direction: pos:[%d %d %d] dir:%d\n",
-        pos->x, pos->y, i);
+        pos.x, pos.y, i);
   }
-  dx = dir_to_pos_diff[(int)i].x;
-  dy = dir_to_pos_diff[(int)i].y;
-  *neib = V2i(pos->x + dx, pos->y + dy);
+  int dx = dir_to_pos_diff[static_cast<int>(i)].x;
+  int dy = dir_to_pos_diff[static_cast<int>(i)].y;
+  return V2i(pos.x + dx, pos.y + dy);
 }
 
 bool dir_is_diagonal(Dir d) {
@@ -55,16 +48,10 @@ bool dir_is_diagonal(Dir d) {
 }
 
 /* TODO rename */
-void get_dir_neib(
-    V2i *n, const V2i *p1, const V2i *p2, int add_me)
-{
-  int d;
-  assert(n);
-  assert(p1);
-  assert(p2);
+V2i get_dir_neib(const V2i& p1, const V2i& p2, int add_me) {
   assert(add_me >= -7);
   assert(add_me <= 7);
-  d = (int)m2dir(p1, p2) + add_me;
+  int d = static_cast<int>(m2dir(p1, p2)) + add_me;
   while (d > 7) {
     d -= 8;
   }
@@ -72,7 +59,7 @@ void get_dir_neib(
     d += 8;
   }
   assert(d >= 0 && d <= 7);
-  neib(n, p1, (Dir)d);
+  return neib(p1, static_cast<Dir>(d));
 }
 
 Dir opposite_dir(Dir d) {

@@ -9,11 +9,10 @@ enum class Dir {
   D_NONE, D_ERROR, D_COUNT
 };
 
-void neib(V2i *neib, const V2i* pos, Dir i);
-Dir m2dir(const V2i *a, const V2i *b);
+V2i neib(const V2i& pos, Dir i);
+Dir m2dir(const V2i& a, const V2i& b);
 bool dir_is_diagonal(Dir d);
-void get_dir_neib(V2i *n,
-    const V2i *p1, const V2i *p2, int add_me);
+V2i get_dir_neib(const V2i& p1, const V2i& p2, int add_me);
 Dir opposite_dir(Dir d);
 int dir_diff(Dir d0, Dir d1);
 

@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <assert.h>
-#include <math.h>
+#include <cassert>
+#include <cmath>
 #include <SDL/SDL_opengl.h>
 #include "core/v2i.h"
 #include "core/misc.h"
@@ -27,6 +27,6 @@ void Camera::move(Dir d) {
   assert(!dir_is_diagonal(d));
   float speed = zoom / 20.0f;
   float in_radians = deg2rad(z_angle - dir_to_angle(d));
-  pos.setX(pos.x() + static_cast<float>(sin(in_radians)) * speed);
-  pos.setY(pos.y() + static_cast<float>(cos(in_radians)) * speed);
+  pos.setX(pos.x() + sin(in_radians) * speed);
+  pos.setY(pos.y() + cos(in_radians) * speed);
 }

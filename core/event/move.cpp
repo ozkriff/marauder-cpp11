@@ -30,29 +30,24 @@ void generate_event_move(
   add_event(e);
 }
 
-void apply_event_move(const EventMove *e) {
-  Unit *u;
-  const V2i *p = e->path; /* shortcut */
-  assert(e);
-  u = id2unit(e->unit_id);
+void apply_event_move(const EventMove& e) {
+  const V2i* p = e.path; /* shortcut */
+  Unit *u = id2unit(e.unit_id);
   assert(u);
-  u->pos = p[e->length - 1];
-  u->dir = m2dir(&p[e->length - 2], &p[e->length - 1]);
+  u->pos = p[e.length - 1];
+  u->dir = m2dir(p[e.length - 2], p[e.length - 1]);
   if (u->player_id == current_player->id) {
     calculate_fow();
   }
 }
 
-void undo_event_move(const EventMove *e) {
-  Unit *u;
-  assert(e);
-  u = id2unit(e->unit_id);
-  u->pos = e->path[0];
-  u->dir = e->initial_direction;
+void undo_event_move(const EventMove& e) {
+  Unit *u = id2unit(e.unit_id);
+  u->pos = e.path[0];
+  u->dir = e.initial_direction;
 }
 
-bool is_visible_event_move(const EventMove *e) {
-  assert(e);
+bool is_visible_event_move(const EventMove& e) {
   UNUSED(e);
   /* TODO */
   return true;

@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <assert.h>
-#include <stdlib.h>
+#include <cassert>
+#include <cstdlib>
 #include <list>
 #include "core/v2i.h"
 #include "core/dir.h"
@@ -20,11 +20,10 @@ static std::list<Event*> events;
 void init_events() {
 }
 
-static void undo_event(const Event *e) {
-  assert(e);
-  switch (e->t) {
+static void undo_event(const Event& e) {
+  switch (e.t) {
     case EventTypeId::E_MOVE: {
-      undo_event_move(&e->e.move);
+      undo_event_move(e.e.move);
       break;
     }
     case EventTypeId::E_END_TURN: {
@@ -34,7 +33,7 @@ static void undo_event(const Event *e) {
     }
     default:
       die("event: undo_event(): "
-          "unknown event type '%d'\n", e->t);
+          "unknown event type '%d'\n", e.t);
       break;
   }
   /* update_units_visibility(); */
@@ -52,26 +51,25 @@ void undo_unshown_events() {
     if (event->id == current_player->last_event_id) {
       break;
     }
-    undo_event(event);
+    undo_event(*event);
     --i;
   }
 }
 
-void apply_event(const Event *e) {
-  assert(e);
-  current_player->last_event_id = e->id;
-  switch (e->t) {
+void apply_event(const Event& e) {
+  current_player->last_event_id = e.id;
+  switch (e.t) {
     case EventTypeId::E_MOVE: {
-      apply_event_move(&e->e.move);
+      apply_event_move(e.e.move);
       break;
     }
     case EventTypeId::E_END_TURN: {
-      apply_event_end_turn(&e->e.end_turn);
+      apply_event_end_turn(e.e.end_turn);
       break;
     }
     default: {
       die("event: apply_event(): "
-          "unknown event '%d'\n", e->t);
+          "unknown event '%d'\n", e.t);
       break;
     }
   }
@@ -101,18 +99,17 @@ static Event* get_next_event_node() {
   }
 }
 
-bool is_event_visible(const Event *e) {
-  assert(e);
-  switch (e->t) {
+bool is_event_visible(const Event& e) {
+  switch (e.t) {
     case EventTypeId::E_MOVE: {
-      return is_visible_event_move(&e->e.move);
+      return is_visible_event_move(e.e.move);
     }
     case EventTypeId::E_END_TURN: {
       return true;
     }
     default: {
       die("event: is_event_visible(): "
-          "unknown event '%d'\n", e->t);
+          "unknown event '%d'\n", e.t);
       return true;
     }
   }
@@ -123,8 +120,8 @@ void apply_invisible_events() {
   Event* e = get_next_event_node();
   while (e) {
     assert(e);
-    if (!is_event_visible(e)) {
-      apply_event(e);
+    if (!is_event_visible(*e)) {
+      apply_event(*e);
     } else {
       break;
     }
@@ -168,23 +165,21 @@ static int get_new_event_id() {
   }
 }
 
-static void event2log(const Event *e) {
-  assert(e);
+static void event2log(const Event& e) {
   UNUSED(e);
   /* TODO */
 }
 
-static void send_event(const Event *e) {
-  assert(e);
+static void send_event(const Event& e) {
   UNUSED(e);
   /* TODO */
 }
 
-void add_event(Event *e) {
+void add_event(Event* e) {
   assert(e);
   e->id = get_new_event_id();
   events.push_back(e);
-  event2log(e);
+  event2log(*e);
 #if 0
   /* TODO */
   if (!is_local) {

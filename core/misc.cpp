@@ -1,10 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <assert.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstdarg>
+#include <cassert>
+#include <cstring>
 #include "core/misc.h"
 
 void die(const char *message, ...) {
