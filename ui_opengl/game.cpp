@@ -150,7 +150,7 @@ int Game::calculate_walkable_tiles_count() {
   int count = 0;
   FOR_EACH_TILE(&p) {
     Tile& t = core.tile(p);
-    if (t.parent != Dir::D_NONE && t.cost != 30000) {
+    if (t.parent.value() != DirID::D_NONE && t.cost != 30000) {
       count++;
     }
   }
@@ -210,8 +210,8 @@ void Game::build_walkable_array(VertexArray *v) {
   v->v = (float *)new V3f[v->count];
   FOR_EACH_TILE(&p) {
     Tile& t = core.tile(p);
-    if (t.parent != Dir::D_NONE && t.cost < 50) {
-      V2i p2 = neib(p, t.parent);
+    if (t.parent.value() != DirID::D_NONE && t.cost < 50) {
+      V2i p2 = Dir::neib(p, t.parent);
       if (core.inboard(p2)) {
         V2f pos1 = v2i_to_v2f(p);
         V2f pos2 = v2i_to_v2f(p2);
@@ -300,7 +300,7 @@ void Game::draw_unit(const Unit *u) {
   glColor3f(1, 0, 0);
   glPushMatrix();
   glTranslatef(f.x(), f.y(), 0);
-  glRotatef((static_cast<int>(u->dir) + 4) * 45.0f, 0, 0, 1);
+  glRotatef((u->dir.toInt() + 4) * 45.0f, 0, 0, 1);
   draw_unit_model(u);
   draw_unit_circle(u);
   glPopMatrix();
@@ -362,7 +362,7 @@ void Game::process_mouse_button_down_event(
       if (core.selected_unit && u) {
         core.shoot(core.selected_unit, u);
       }
-    } else if (t.cost <= ap && t.parent != Dir::D_NONE) {
+    } else if (t.cost <= ap && t.parent.value() != DirID::D_NONE) {
       generate_event_move(core, *core.selected_unit, active_tile_pos);
       /* TODO: Move this to ui_event_move? */
       delete[] va_walkable_map.v;
@@ -448,19 +448,19 @@ void Game::process_key_down_event(
     break;
   }
   case SDLK_UP: {
-    camera.move(Dir::D_N);
+    camera.move(DirID::D_N);
     break;
   }
   case SDLK_DOWN: {
-    camera.move(Dir::D_S);
+    camera.move(DirID::D_S);
     break;
   }
   case SDLK_LEFT: {
-    camera.move(Dir::D_W);
+    camera.move(DirID::D_W);
     break;
   }
   case SDLK_RIGHT: {
-    camera.move(Dir::D_E);
+    camera.move(DirID::D_E);
     break;
   }
   default:
@@ -606,14 +606,14 @@ void Game::scroll_map() {
   const V2i *p = &mouse_pos;
   int offset = 15;
   if (p->x < offset) {
-    camera.move(Dir::D_W);
+    camera.move(DirID::D_W);
   } else if(p->x > screen->w - offset) {
-    camera.move(Dir::D_E);
+    camera.move(DirID::D_E);
   }
   if (p->y < offset) {
-    camera.move(Dir::D_N);
+    camera.move(DirID::D_N);
   } else if(p->y > screen->h - offset) {
-    camera.move(Dir::D_S);
+    camera.move(DirID::D_S);
   }
   if (camera.pos.x() > MAP_X * TILE_SIZE) {
     camera.pos.setX(MAP_X * TILE_SIZE);

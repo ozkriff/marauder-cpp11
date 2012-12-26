@@ -52,11 +52,11 @@ Pathfinder::Pathfinder(Core& core)
 
 // If this is first(start) tile - no parent tile
 Dir Pathfinder::get_parent_dir(const Unit& u, const V2i& m) {
-  Tile& t = core.tile(m);
-  if (t.cost == 0) {
+  Tile& tile = core.tile(m);
+  if (tile.cost == 0) {
     return u.dir;
   } else {
-    return opposite_dir(t.parent);
+    return tile.parent.opposite();
   }
 }
 
@@ -72,9 +72,9 @@ int Pathfinder::get_tile_cost(const Unit& u, const V2i& t, const V2i& nb) {
   if (dy != 0) {
     cost++;
   }
-  Dir d = m2dir(t, nb);
+  Dir d(t, nb);
   Dir d2 = get_parent_dir(u, t);
-  int d_diff = dir_diff(d, d2);
+  int d_diff = d.diff(d2);
   int additionalCost[] = {0, 3, 20, 90, 90};
   assert(d_diff >= 0 && d_diff <= 4);
   return cost + additionalCost[d_diff];
@@ -83,11 +83,12 @@ int Pathfinder::get_tile_cost(const Unit& u, const V2i& t, const V2i& nb) {
 bool Pathfinder::can_move_there(const V2i& p1, const V2i& p2) {
   assert(core.inboard(p1));
   assert(core.inboard(p2));
-  if (!dir_is_diagonal(m2dir(p1, p2))) {
+  assert(dist(p1, p2) == 1);
+  if (!Dir(p1, p2).isDiagonal()) {
     return true;
   }
-  V2i neib_left = get_dir_neib(p1, p2, -1);
-  V2i neib_right = get_dir_neib(p1, p2, +1);
+  V2i neib_left = Dir::get_neib(p1, p2, -1);
+  V2i neib_right = Dir::get_neib(p1, p2, +1);
   bool is_left_blocked = core.inboard(neib_left)
       && core.tile(neib_left).obstacle;
   bool is_right_blocked = core.inboard(neib_right)
@@ -110,7 +111,7 @@ void Pathfinder::process_neibor(const Unit& u, const V2i& p1, const V2i& p2) {
   int newcost = t1.cost + get_tile_cost(u, p1, p2);
   int ap = get_unit_type(u.type_id).action_points;
   if (t2.cost > newcost && newcost <= ap) {
-    q.push(p2, m2dir(p2, p1), newcost, m2dir(p1, p2));
+    q.push(p2, Dir(p2, p1), newcost, Dir(p1, p2));
   }
 }
 
@@ -122,17 +123,14 @@ void Pathfinder::clean_map() {
   FOR_EACH_TILE(&p) {
     Tile& t = core.tile(p);
     t.cost = 30000;
-    t.parent = Dir::D_NONE;
+    t.parent = DirID::D_NONE;
   }
 }
 
 void Pathfinder::try_to_push_neibors(const Unit& u, const V2i& m) {
   assert(core.inboard(m));
-  for (int i = static_cast<int>(Dir::D_N);
-      i <= static_cast<int>(Dir::D_NW);
-      i++)
-  {
-    V2i neib_m = neib(m, static_cast<Dir>(i));
+  for (int i = Dir(DirID::D_N).toInt(); i <= Dir(DirID::D_NW).toInt(); i++) {
+    V2i neib_m = Dir::neib(m, static_cast<DirID>(i));
     if (core.inboard(neib_m)) {
       process_neibor(u, m, neib_m);
     }
@@ -143,7 +141,7 @@ void Pathfinder::fill_map(const Unit& u) {
   assert(q.is_empty());
   clean_map();
   // Push start position
-  q.push(u.pos, Dir::D_NONE, 0, u.dir);
+  q.push(u.pos, DirID::D_NONE, 0, u.dir);
   while (!q.is_empty()) {
     V2i p = q.pop();
     try_to_push_neibors(u, p);
@@ -156,7 +154,7 @@ std::vector<V2i> Pathfinder::get_path(const V2i& pos) {
   assert(core.inboard(p));
   while (core.tile(p).cost != 0) {
     path.push_back(p);
-    p = neib(p, core.tile(p).parent);
+    p = Dir::neib(p, core.tile(p).parent);
     assert(core.inboard(p));
   }
   // Add start position

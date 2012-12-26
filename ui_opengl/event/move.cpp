@@ -12,8 +12,7 @@
 #include "ui_opengl/game.h"
 
 static int get_move_legth(const V2i& from, const V2i& to) {
-  Dir d = m2dir(from, to);
-  if (dir_is_diagonal(d)) {
+  if (Dir(from, to).isDiagonal()) {
     return 14;
   } else {
     return 10;
@@ -104,7 +103,7 @@ void draw_moving_unit(Game& game, const EventMove& e) {
   glTranslatef(p.x(), p.y(), 0.0f);
   /* TODO: Remove '+ 4'! Rotate obj files! */
   glRotatef(
-      (static_cast<int>(m2dir(from_i, to_i)) + 4) * 45.0f,
+      (Dir(from_i, to_i).toInt() + 4) * 45.0f,
       0, 0, 1);
   game.draw_unit_model(u);
   game.draw_unit_circle(u);

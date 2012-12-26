@@ -75,8 +75,3 @@ void rotate_point_around_point(
   p->setX(cs * dx - sn * dy + o->x());
   p->setY(sn * dx + cs * dy + o->y());
 }
-
-float dir_to_angle(Dir d) {
-  assert(static_cast<int>(d) < 8);
-  return (360 / 8) * static_cast<int>(d);
-}

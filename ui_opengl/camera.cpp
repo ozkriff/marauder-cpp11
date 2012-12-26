@@ -21,9 +21,9 @@ void Camera::set() {
 }
 
 void Camera::move(Dir d) {
-  assert(!dir_is_diagonal(d));
+  assert(!d.isDiagonal());
   float speed = zoom / 20.0f;
-  float in_radians = deg2rad(z_angle - dir_to_angle(d));
+  float in_radians = deg2rad(z_angle - d.toAngle());
   pos.setX(pos.x() + sin(in_radians) * speed);
   pos.setY(pos.y() + cos(in_radians) * speed);
 }

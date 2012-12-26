@@ -31,7 +31,7 @@ void apply_event_move(Core& core, const EventMove& e) {
   Unit *u = core.id2unit(e.unit_id);
   assert(u);
   u->pos = p[e.length - 1];
-  u->dir = m2dir(p[e.length - 2], p[e.length - 1]);
+  u->dir = Dir(p[e.length - 2], p[e.length - 1]);
   if (u->player_id == core.current_player->id) {
     core.calculate_fow();
   }
