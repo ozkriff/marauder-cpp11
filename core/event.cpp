@@ -8,6 +8,13 @@
 
 static std::list<Event*> events;
 
+Event::Event() {
+}
+
+Event::~Event() {
+
+}
+
 void init_events() {
 }
 

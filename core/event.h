@@ -11,14 +11,26 @@ enum class EventTypeId {
   E_END_TURN
 };
 
-typedef struct {
+class Event {
+public:
   EventTypeId t;
   int id;
-  union {
+  union TMP {
     EventMove move;
     EventEndturn end_turn;
+
+    TMP() {
+      // Due to the Point member, a constructor definition is now required
+      new(&move) EventMove();
+    }
+    ~TMP() {
+
+    }
   } e;
-} Event;
+
+  Event();
+  ~Event();
+};
 
 void init_events();
 void add_event(Event* e);

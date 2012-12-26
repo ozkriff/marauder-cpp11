@@ -12,6 +12,7 @@ Event const *current_event;
 Player *current_player;
 Unit *selected_unit;
 std::list<Unit*> units;
+Pathfinder pathfinder;
 
 static Tile map[MAP_Y][MAP_X];
 
@@ -134,7 +135,7 @@ static void kill_unit(Unit *u) {
   units.remove(u);
   delete u;
   if (selected_unit) {
-    fill_map(*selected_unit);
+    pathfinder.fill_map(*selected_unit);
     calculate_fow();
 #if 0
     build_walkable_array(&va_walkable_map);
@@ -176,10 +177,9 @@ static void init_players() {
 
 void init_logic() {
   srand(time(NULL));
-  init_pathfinding_module();
   init_unit_types();
   init_events();
-  clean_map();
+  pathfinder.clean_map();
   clean_fow();
   init_players();
   init_obstacles();

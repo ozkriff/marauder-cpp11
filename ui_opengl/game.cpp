@@ -373,7 +373,7 @@ void Game::process_mouse_button_down_event(
   }
   if (u && u->player_id == current_player->id) {
     selected_unit = u;
-    fill_map(*selected_unit);
+    pathfinder.fill_map(*selected_unit);
     build_walkable_array(&va_walkable_map);
   } else if (selected_unit) {
     auto type = get_unit_type(selected_unit->type_id);
@@ -430,7 +430,7 @@ void Game::process_key_down_event(
     calculate_fow();
     build_fow_array(&va_fog_of_war);
     if (selected_unit) {
-      fill_map(*selected_unit);
+      pathfinder.fill_map(*selected_unit);
       build_walkable_array(&va_walkable_map);
     }
     break;
@@ -442,7 +442,7 @@ void Game::process_key_down_event(
   case SDLK_u: {
     add_unit(active_tile_pos, current_player->id);
     if (selected_unit) {
-      fill_map(*selected_unit);
+      pathfinder.fill_map(*selected_unit);
       build_walkable_array(&va_walkable_map);
     }
     break;

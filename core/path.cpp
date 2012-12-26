@@ -1,63 +1,55 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
 #include <cstdlib>
 #include <cassert>
-#include <vector>
-#include "core/core.h"
+#include <algorithm>
 #include "core/path.h"
+#include "core/core.h"
 
-class PathQueue {
-private:
-  unsigned int mTailNodeIndex;
-  unsigned int mHeadNodeIndex;
-  std::vector<V2i> mNodes;
-
-public:
-  PathQueue(int size)
-    : mTailNodeIndex(0),
-      mHeadNodeIndex(0),
-      mNodes(size)
-  {
-    assert(size > 0);
-  }
-
-  ~PathQueue() {
-  }
-
-  bool is_empty() const {
-    return (mHeadNodeIndex == mTailNodeIndex);
-  }
-
-  void push(const V2i& m, Dir parent, int newcost, Dir dir) {
-    Tile& t = tile(m);
-    t.cost = newcost;
-    t.parent = parent;
-    t.dir = dir;
-    mNodes[mTailNodeIndex] = m;
-    mTailNodeIndex++;
-    if (mTailNodeIndex == mNodes.size()) {
-      mTailNodeIndex = 0;
-    }
-  }
-
-  V2i pop() {
-    assert(mHeadNodeIndex != mTailNodeIndex);
-    V2i m = mNodes[mHeadNodeIndex];
-    mHeadNodeIndex++;
-    if (mHeadNodeIndex == mNodes.size()) {
-      mHeadNodeIndex = 0;
-    }
-    return m;
-  }
-};
-
-static PathQueue q(1000);
-
-void init_pathfinding_module() {
+PathQueue::PathQueue(int size)
+  : mTailNodeIndex(0),
+    mHeadNodeIndex(0),
+    mNodes(size)
+{
+  assert(size > 0);
 }
 
-/* If this is first(start) tile - no parent tile. */
-static Dir get_parent_dir (const Unit& u, const V2i& m) {
+PathQueue::~PathQueue() {
+}
+
+bool PathQueue::is_empty() const {
+  return (mHeadNodeIndex == mTailNodeIndex);
+}
+
+void PathQueue::push(const V2i& m, Dir parent, int newcost, Dir dir) {
+  Tile& t = tile(m);
+  t.cost = newcost;
+  t.parent = parent;
+  t.dir = dir;
+  mNodes[mTailNodeIndex] = m;
+  mTailNodeIndex++;
+  if (mTailNodeIndex == mNodes.size()) {
+    mTailNodeIndex = 0;
+  }
+}
+
+V2i PathQueue::pop() {
+  assert(mHeadNodeIndex != mTailNodeIndex);
+  V2i m = mNodes[mHeadNodeIndex];
+  mHeadNodeIndex++;
+  if (mHeadNodeIndex == mNodes.size()) {
+    mHeadNodeIndex = 0;
+  }
+  return m;
+}
+
+Pathfinder::Pathfinder()
+  : q(1000)
+{
+}
+
+// If this is first(start) tile - no parent tile
+Dir Pathfinder::get_parent_dir(const Unit& u, const V2i& m) {
   Tile& t = tile(m);
   if (t.cost == 0) {
     return u.dir;
@@ -66,7 +58,7 @@ static Dir get_parent_dir (const Unit& u, const V2i& m) {
   }
 }
 
-static int get_tile_cost(const Unit& u, const V2i& t, const V2i& nb) {
+int Pathfinder::get_tile_cost(const Unit& u, const V2i& t, const V2i& nb) {
   int cost = 1;
   int dx = abs(t.x - nb.x);
   int dy = abs(t.y - nb.y);
@@ -86,7 +78,7 @@ static int get_tile_cost(const Unit& u, const V2i& t, const V2i& nb) {
   return cost + additionalCost[d_diff];
 }
 
-static bool can_move_there(const V2i& p1, const V2i& p2) {
+bool Pathfinder::can_move_there(const V2i& p1, const V2i& p2) {
   assert(inboard(p1));
   assert(inboard(p2));
   if (!dir_is_diagonal(m2dir(p1, p2))) {
@@ -103,9 +95,9 @@ static bool can_move_there(const V2i& p1, const V2i& p2) {
 #endif
 }
 
-/* TODO rename */
-/* p1 - orig_pos, p2 - neib pos */
-static void process_neibor(const Unit& u, const V2i& p1, const V2i& p2) {
+// TODO: rename
+// p1 - orig_pos, p2 - neib pos
+void Pathfinder::process_neibor(const Unit& u, const V2i& p1, const V2i& p2) {
   Tile& t1 = tile(p1);
   Tile& t2 = tile(p2);
   if (unit_at(p2) || t2.obstacle || !can_move_there(p1, p2)) {
@@ -118,7 +110,7 @@ static void process_neibor(const Unit& u, const V2i& p1, const V2i& p2) {
   }
 }
 
-void clean_map() {
+void Pathfinder::clean_map() {
   V2i p;
   FOR_EACH_TILE(&p) {
     Tile& t = tile(p);
@@ -127,7 +119,7 @@ void clean_map() {
   }
 }
 
-static void try_to_push_neibors(const Unit& u, const V2i& m) {
+void Pathfinder::try_to_push_neibors(const Unit& u, const V2i& m) {
   assert(inboard(m));
   for (int i = static_cast<int>(Dir::D_N);
       i <= static_cast<int>(Dir::D_NW);
@@ -140,7 +132,7 @@ static void try_to_push_neibors(const Unit& u, const V2i& m) {
   }
 }
 
-void fill_map(const Unit& u) {
+void Pathfinder::fill_map(const Unit& u) {
   assert(q.is_empty());
   clean_map();
   // Push start position
@@ -151,29 +143,17 @@ void fill_map(const Unit& u) {
   }
 }
 
-void get_path(V2i *path, int length, V2i pos) {
-  Dir dir;
-  int i = length - 1;
-  assert(path);
-  assert(inboard(pos));
-  while (tile(pos).cost != 0) {
-    path[i] = pos;
-    dir = tile(pos).parent;
-    pos = neib(pos, dir);
-    i--;
-  }
-  /* Add start position. */
-  path[i] = pos;
-}
-
-int get_path_length(const V2i& pos) {
+std::vector<V2i> Pathfinder::get_path(const V2i& pos) {
   V2i p = pos;
-  int length = 1;
+  std::vector<V2i> path;
   assert(inboard(p));
   while (tile(p).cost != 0) {
-    length++;
-    Dir dir = tile(p).parent;
-    p = neib(p, dir);
+    path.push_back(p);
+    p = neib(p, tile(p).parent);
+    assert(inboard(p));
   }
-  return length;
+  // Add start position
+  path.push_back(p);
+  std::reverse(path.begin(), path.end());
+  return path;
 }

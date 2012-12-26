@@ -62,6 +62,7 @@ extern Event const *current_event;
 extern Player *current_player;
 extern Unit *selected_unit;
 extern std::list<Unit*> units;
+extern Pathfinder pathfinder;
 
 Unit* id2unit(int id);
 void calculate_fow(void);

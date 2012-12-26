@@ -22,7 +22,7 @@ static int get_move_legth(const V2i& from, const V2i& to) {
 
 int get_last_event_move_index(const Event *e) {
   const EventMove *m = &e->e.move;
-  const V2i *p = m->path; /* shortcut */
+  auto& p = m->path; /* shortcut */
   int length = 0;
   int i;
   for (i = 1; i < m->length; i++) {
@@ -34,7 +34,7 @@ int get_last_event_move_index(const Event *e) {
 void get_current_moving_nodes(V2i *from, V2i *to) {
   int i = game.current_move_index;
   const EventMove *m = &current_event->e.move;
-  const V2i *p = m->path; /* shortcut */
+  auto& p = m->path; /* shortcut */
   int j; /* node id */
   assert(from);
   assert(to);
@@ -55,7 +55,7 @@ static void end_movement(const V2i *pos) {
   game.ui_mode = UIMode::UI_MODE_NORMAL;
   u->pos = *pos;
   if (selected_unit) {
-    fill_map(*u);
+    pathfinder.fill_map(*u);
     game.build_walkable_array(&game.va_walkable_map);
     calculate_fow();
     game.build_fow_array(&game.va_fog_of_war);
@@ -64,7 +64,7 @@ static void end_movement(const V2i *pos) {
   current_event = NULL;
   if (u->player_id == current_player->id) {
     if (selected_unit) {
-      fill_map(*selected_unit);
+      pathfinder.fill_map(*selected_unit);
       game.build_walkable_array(&game.va_walkable_map);
     }
     game.build_fow_array(&game.va_fog_of_war);
@@ -73,7 +73,7 @@ static void end_movement(const V2i *pos) {
 
 static int get_node_index() {
   const EventMove& m = current_event->e.move;
-  const V2i* p = m.path; /* shortcut */
+  auto& p = m.path; /* shortcut */
   int last = 0;
   int current = 0;
   for (int j = 0; j < m.length - 2; j++) {

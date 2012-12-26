@@ -3,14 +3,22 @@
 #ifndef CORE_MOVE_H
 #define CORE_MOVE_H
 
+#include <vector>
+#include "core/v2i.h"
+
 struct Unit;
 
-typedef struct {
+class EventMove {
+public:
   int unit_id;
-  V2i *path;
+  std::vector<V2i> path;
   int length;
   Dir initial_direction;
-} EventMove;
+
+public:
+  EventMove();
+  ~EventMove();
+};
 
 void generate_event_move(
     const Unit *u, const V2i *destination);

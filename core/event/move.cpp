@@ -3,6 +3,12 @@
 #include <assert.h>
 #include "core/core.h"
 
+EventMove::EventMove() {
+}
+
+EventMove::~EventMove() {
+}
+
 void generate_event_move(
     const Unit *u, const V2i *destination)
 {
@@ -14,15 +20,14 @@ void generate_event_move(
   }
   e->t = EventTypeId::E_MOVE;
   m->initial_direction = u->dir;
-  m->length = get_path_length(*destination);
-  m->path = new V2i[m->length];
-  get_path(m->path, m->length, *destination);
+  m->path = pathfinder.get_path(*destination);
+  m->length = m->path.size();
   m->unit_id = u->id;
   add_event(e);
 }
 
 void apply_event_move(const EventMove& e) {
-  const V2i* p = e.path; /* shortcut */
+  auto& p = e.path; /* shortcut */
   Unit *u = id2unit(e.unit_id);
   assert(u);
   u->pos = p[e.length - 1];
