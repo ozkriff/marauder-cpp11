@@ -429,86 +429,85 @@ void Game::process_key_down_event(
 {
   assert(e);
   switch (e->keysym.sym) {
-    case SDLK_ESCAPE:
-    case SDLK_q: {
-      done = true;
-      break;
+  case SDLK_ESCAPE:
+  case SDLK_q: {
+    done = true;
+    break;
+  }
+  case SDLK_c: {
+    if (!selected_unit) {
+      return;
     }
-    case SDLK_c: {
-      if (!selected_unit) {
-        return;
-      }
-      V2f unit_pos = v2i_to_v2f(selected_unit->pos);
-      camera.pos = unit_pos;
-      break;
+    V2f unit_pos = v2i_to_v2f(selected_unit->pos);
+    camera.pos = unit_pos;
+    break;
+  }
+  case SDLK_t: {
+    Tile& t = tile(active_tile_pos);
+    t.obstacle = !t.obstacle;
+    build_map_array(&va_map);
+    build_obstacles_array(&va_obstacles);
+    calculate_fow();
+    build_fow_array(&va_fog_of_war);
+    if (selected_unit) {
+      fill_map(*selected_unit);
+      build_walkable_array(&va_walkable_map);
     }
-    case SDLK_t: {
-      Tile& t = tile(active_tile_pos);
-      t.obstacle = !t.obstacle;
-      build_map_array(&va_map);
-      build_obstacles_array(&va_obstacles);
-      calculate_fow();
-      build_fow_array(&va_fog_of_war);
-      if (selected_unit) {
-        fill_map(*selected_unit);
-        build_walkable_array(&va_walkable_map);
-      }
-      break;
+    break;
+  }
+  case SDLK_e: {
+    generate_event_end_turn();
+    break;
+  }
+  case SDLK_u: {
+    add_unit(active_tile_pos, current_player->id);
+    if (selected_unit) {
+      fill_map(*selected_unit);
+      build_walkable_array(&va_walkable_map);
     }
-    case SDLK_e: {
-      generate_event_end_turn();
-      break;
-    }
-    case SDLK_u: {
-      add_unit(active_tile_pos, current_player->id);
-      if (selected_unit) {
-        fill_map(*selected_unit);
-        build_walkable_array(&va_walkable_map);
-      }
-      break;
-    }
-    case SDLK_d: {
-      camera.z_angle += 15;
-      clamp_angle(&camera.z_angle);
-      break;
-    }
-    case SDLK_a: {
-      camera.z_angle -= 15;
-      clamp_angle(&camera.z_angle);
-      break;
-    }
-    case SDLK_w: {
-      camera.zoom -= 10;
-      clamp_f(&camera.zoom, 30, 200);
-      break;
-    }
-    case SDLK_s: {
-      camera.zoom += 10;
-      clamp_f(&camera.zoom, 30, 200);
-      break;
-    }
-    case SDLK_UP: {
-      camera.move(Dir::D_N);
-      break;
-    }
-    case SDLK_DOWN: {
-      camera.move(Dir::D_S);
-      break;
-    }
-    case SDLK_LEFT: {
-      camera.move(Dir::D_W);
-      break;
-    }
-    case SDLK_RIGHT: {
-      camera.move(Dir::D_E);
-      break;
-    }
-    default: {
-      printf("process_key_down_event(): "
-          "Unknown key (%d, 0x%x) was pressed.\n",
-          e->keysym.sym, e->keysym.sym);
-      break;
-    }
+    break;
+  }
+  case SDLK_d: {
+    camera.z_angle += 15;
+    clamp_angle(&camera.z_angle);
+    break;
+  }
+  case SDLK_a: {
+    camera.z_angle -= 15;
+    clamp_angle(&camera.z_angle);
+    break;
+  }
+  case SDLK_w: {
+    camera.zoom -= 10;
+    clamp_f(&camera.zoom, 30, 200);
+    break;
+  }
+  case SDLK_s: {
+    camera.zoom += 10;
+    clamp_f(&camera.zoom, 30, 200);
+    break;
+  }
+  case SDLK_UP: {
+    camera.move(Dir::D_N);
+    break;
+  }
+  case SDLK_DOWN: {
+    camera.move(Dir::D_S);
+    break;
+  }
+  case SDLK_LEFT: {
+    camera.move(Dir::D_W);
+    break;
+  }
+  case SDLK_RIGHT: {
+    camera.move(Dir::D_E);
+    break;
+  }
+  default:
+    printf("process_key_down_event(): "
+        "Unknown key (%d, 0x%x) was pressed.\n",
+        e->keysym.sym, e->keysym.sym);
+    break;
   }
 }
 
@@ -535,47 +534,46 @@ void Game::logic() {
 void Game::process_sdl_event(const SDL_Event *e) {
   assert(e);
   switch (e->type) {
-    case SDL_QUIT: {
-      done = true;
-      break;
+  case SDL_QUIT: {
+    done = true;
+    break;
+  }
+  case SDL_VIDEORESIZE: {
+    screen = SDL_SetVideoMode(e->resize.w, e->resize.h,
+        32, SDL_RESIZABLE);
+    break;
+  }
+  case SDL_KEYDOWN: {
+    process_key_down_event(&e->key);
+    break;
+  }
+  case SDL_MOUSEMOTION: {
+    process_mouse_motion_event(&e->motion);
+    break;
+  }
+  case SDL_MOUSEBUTTONUP: {
+    if (e->button.button == SDL_BUTTON_RIGHT) {
+      is_rotating_camera = false;
     }
-    case SDL_VIDEORESIZE: {
-      screen = SDL_SetVideoMode(e->resize.w, e->resize.h,
-          32, SDL_RESIZABLE);
-      break;
+    if (e->button.button == SDL_BUTTON_WHEELUP) {
+      camera.zoom -= 5;
+      clamp_f(&camera.zoom, 30, 200);
+    } else if (e->button.button == SDL_BUTTON_WHEELDOWN) {
+      camera.zoom += 5;
+      clamp_f(&camera.zoom, 30, 200);
     }
-    case SDL_KEYDOWN: {
-      process_key_down_event(&e->key);
-      break;
+    break;
+  }
+  case SDL_MOUSEBUTTONDOWN: {
+    if (e->button.button == SDL_BUTTON_RIGHT) {
+      is_rotating_camera = true;
+    } else if (e->button.button == SDL_BUTTON_LEFT) {
+      process_mouse_button_down_event(&e->button);
     }
-    case SDL_MOUSEMOTION: {
-      process_mouse_motion_event(&e->motion);
-      break;
-    }
-    case SDL_MOUSEBUTTONUP: {
-      if (e->button.button == SDL_BUTTON_RIGHT) {
-        is_rotating_camera = false;
-      }
-      if (e->button.button == SDL_BUTTON_WHEELUP) {
-        camera.zoom -= 5;
-        clamp_f(&camera.zoom, 30, 200);
-      } else if (e->button.button == SDL_BUTTON_WHEELDOWN) {
-        camera.zoom += 5;
-        clamp_f(&camera.zoom, 30, 200);
-      }
-      break;
-    }
-    case SDL_MOUSEBUTTONDOWN: {
-      if (e->button.button == SDL_BUTTON_RIGHT) {
-        is_rotating_camera = true;
-      } else if (e->button.button == SDL_BUTTON_LEFT) {
-        process_mouse_button_down_event(&e->button);
-      }
-      break;
-    }
-    default: {
-      break;
-    }
+    break;
+  }
+  default:
+    break;
   }
 }
 

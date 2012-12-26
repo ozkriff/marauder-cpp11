@@ -85,12 +85,18 @@ static int get_tile_cost(const Unit& u, const V2i& t, const V2i& nb) {
   Dir d2 = get_parent_dir(u, t);
   int d_diff = dir_diff(d, d2);
   switch (d_diff) {
-    case 0: break;
-    case 1: cost += 3; break;
-    case 2: cost += 20; break;
-    case 3: cost += 90; break;
-    case 4: cost += 90; break;
-    default: exit(1); break;
+  case 0:
+    break;
+  case 1:
+    return cost + 3;
+  case 2:
+    return cost + 20;
+  case 3:
+    return cost + 90;
+  case 4:
+    return cost + 90;
+  default:
+    exit(1);
   }
   return cost;
 }
