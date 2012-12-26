@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include "math.h"
 
-static V2i dirToPosDiff[8] = {
+static V2i dirToPosDiff[] = {
   {1, 0},
   {1, 1},
   {0, 1},
@@ -33,10 +33,9 @@ Dir::Dir(int value)
 
 Dir::Dir(const V2i& a, const V2i& b) {
   assert(dist(a, b) == 1);
-  int dx = b.x - a.x;
-  int dy = b.y - a.y;
+  V2i diff = b - a;
   for (int i = 0; i < 8; i++) {
-    if (dx == dirToPosDiff[i].x && dy == dirToPosDiff[i].y) {
+    if (diff == dirToPosDiff[i]) {
       mValue = static_cast<DirID>(i);
       return;
     }
@@ -87,9 +86,8 @@ int Dir::diff(Dir d1) {
 // Get tile's neiborhood by it's index
 V2i Dir::neib(const V2i& pos, Dir i) {
   assert(i.toInt() < 8);
-  int dx = dirToPosDiff[i.toInt()].x;
-  int dy = dirToPosDiff[i.toInt()].y;
-  return V2i(pos.x + dx, pos.y + dy);
+  V2i diff = dirToPosDiff[i.toInt()];
+  return pos + diff;
 }
 
 // TODO rename
