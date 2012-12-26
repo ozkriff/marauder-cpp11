@@ -9,30 +9,13 @@ public:
   int y;
 
 public:
-  V2i(int x, int y) {
-    this->x = x;
-    this->y = y;
-  }
+  V2i(int x, int y);
+  V2i();
+  ~V2i();
 
-  V2i() {
-    this->x = 0;
-    this->y = 0;
-  }
-
-  ~V2i() {
-  }
-
-  bool operator==(const V2i& b) const {
-    return x == b.x && y == b.y;
-  }
-
-  V2i operator-(const V2i& b) const {
-    return V2i(x - b.x, y - b.y);
-  }
-
-  V2i operator+(const V2i& b) const {
-    return V2i(x + b.x, y + b.y);
-  }
+  bool operator==(const V2i& b) const;
+  V2i operator-(const V2i& b) const;
+  V2i operator+(const V2i& b) const;
 };
 
 #endif
