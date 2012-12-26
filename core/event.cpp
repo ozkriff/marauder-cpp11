@@ -3,17 +3,8 @@
 #include <cassert>
 #include <cstdlib>
 #include <list>
-#include "core/v2i.h"
-#include "core/dir.h"
-#include "core/misc.h"
-#include "core/unit_type.h"
 #include "core/core.h"
-#include "core/event/move.h"
-#include "core/event/end_turn.h"
 #include "core/event.h"
-#include "core/path.h"
-#include "core/los.h"
-#include "core/core_private.h"
 
 static std::list<Event*> events;
 

@@ -4,11 +4,8 @@
 #include <cstdlib>
 #include <cassert>
 #include <GL/gl.h>
-#include "core/v2i.h"
 #include "core/dir.h"
 #include "core/misc.h"
-#include "ui_opengl/v2f.h"
-#include "ui_opengl/v3f.h"
 #include "ui_opengl/math.h"
 #include "ui_opengl/vertex_array.h"
 #include "ui_opengl/obj.h"

@@ -3,11 +3,8 @@
 #include <cstdlib>
 #include <cassert>
 #include <vector>
-#include "core/v2i.h"
-#include "core/misc.h"
-#include "core/dir.h"
 #include "core/core.h"
-#include "core/unit_type.h"
+#include "core/path.h"
 
 class PathQueue {
 private:

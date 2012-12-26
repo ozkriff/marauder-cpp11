@@ -3,6 +3,9 @@
 #ifndef CORE_DIR_H
 #define CORE_DIR_H
 
+#include "core/misc.h"
+#include "core/v2i.h"
+
 enum class Dir {
   D_N, D_NE, D_E, D_SE,
   D_S, D_SW, D_W, D_NW,

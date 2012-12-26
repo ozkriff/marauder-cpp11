@@ -3,6 +3,8 @@
 #ifndef UI_OPENGL_CAMERA_H
 #define UI_OPENGL_CAMERA_H
 
+#include "ui_opengl/v2f.h"
+
 class Camera {
 public:
   float x_angle;

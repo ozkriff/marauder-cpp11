@@ -2,8 +2,6 @@
 
 #include <cassert>
 #include <cstdlib>
-#include "core/misc.h"
-#include "core/v2i.h"
 #include "core/dir.h"
 
 static V2i dir_to_pos_diff[8] = {

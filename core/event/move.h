@@ -3,6 +3,8 @@
 #ifndef CORE_MOVE_H
 #define CORE_MOVE_H
 
+struct Unit;
+
 typedef struct {
   int unit_id;
   V2i *path;

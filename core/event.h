@@ -3,6 +3,9 @@
 #ifndef CORE_EVENT_H
 #define CORE_EVENT_H
 
+#include "core/event/move.h"
+#include "core/event/end_turn.h"
+
 enum class EventTypeId {
   E_MOVE,
   E_END_TURN

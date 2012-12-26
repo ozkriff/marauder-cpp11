@@ -3,6 +3,16 @@
 #ifndef CORE_CORE_H
 #define CORE_CORE_H
 
+#include <list>
+#include "core/misc.h"
+#include "core/v2i.h"
+#include "core/math.h"
+#include "core/dir.h"
+#include "core/los.h"
+#include "core/unit_type.h"
+#include "core/event.h"
+#include "core/path.h"
+
 struct Unit {
   int type_id;
   int id;
@@ -46,5 +56,14 @@ void init_logic();
 
 /* Player.last_event_id */
 #define HAVE_NOT_SEEN_ANY_EVENTS (-1)
+
+extern std::list<Player*> players;
+extern Event const *current_event;
+extern Player *current_player;
+extern Unit *selected_unit;
+extern std::list<Unit*> units;
+
+Unit* id2unit(int id);
+void calculate_fow(void);
 
 #endif

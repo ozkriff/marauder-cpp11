@@ -1,17 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <assert.h>
-#include <stdio.h>
-#include "core/misc.h"
-#include "core/v2i.h"
-#include "core/dir.h"
-#include "core/unit_type.h"
+#include <cassert>
+#include <cstdio>
 #include "core/core.h"
-#include "core/event/end_turn.h"
-#include "core/event/move.h"
-#include "core/event.h"
-#include "core/path.h"
-#include "core/core_private.h"
 
 void apply_event_end_turn(const EventEndturn& e) {
   for (auto p : players) {

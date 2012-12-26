@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cmath>
-#include "core/v2i.h"
 #include "core/los.h"
 #include "core/math.h"
 

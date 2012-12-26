@@ -3,10 +3,7 @@
 #include <cassert>
 #include <cmath>
 #include <SDL/SDL_opengl.h>
-#include "core/v2i.h"
-#include "core/misc.h"
 #include "core/dir.h"
-#include "ui_opengl/v2f.h"
 #include "ui_opengl/math.h"
 #include "ui_opengl/camera.h"
 

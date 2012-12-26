@@ -3,7 +3,6 @@
 #include <cassert>
 #include <cstdlib>
 #include <cmath>
-#include "core/v2i.h"
 #include "core/math.h"
 
 int dist(const V2i &a, const V2i &b) {

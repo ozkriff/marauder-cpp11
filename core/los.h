@@ -3,6 +3,8 @@
 #ifndef CORE_LOS_H
 #define CORE_LOS_H
 
+#include "core/v2i.h"
+
 class Los {
   V2i mFrom;
   V2i mTo;
