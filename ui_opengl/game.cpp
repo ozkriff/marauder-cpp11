@@ -335,16 +335,15 @@ void Game::draw() {
 void Game::process_mouse_button_down_event(
     const SDL_MouseButtonEvent *e)
 {
-  V2i p;
-  Button *b;
-  Unit *u;
-  p = V2i(static_cast<int>(e->x), static_cast<int>(e->y));
-  b = v2i_to_button(p);
+  V2i p(static_cast<int>(e->x), static_cast<int>(e->y));
+  auto b = v2i_to_button(p);
   if (b) {
-    b->callback();
+    if (b->callback) {
+      b->callback();
+    }
     return;
   }
-  u = core.unit_at(active_tile_pos);
+  Unit* u = core.unit_at(active_tile_pos);
   Tile& t = core.tile(active_tile_pos);
   assert(core.current_player);
   assert(e);
