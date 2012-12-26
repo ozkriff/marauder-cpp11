@@ -332,10 +332,8 @@ void Game::draw() {
   SDL_GL_SwapBuffers();
 }
 
-void Game::process_mouse_button_down_event(
-    const SDL_MouseButtonEvent *e)
-{
-  V2i p(static_cast<int>(e->x), static_cast<int>(e->y));
+void Game::process_mouse_button_down_event(const SDL_MouseButtonEvent& e) {
+  V2i p(static_cast<int>(e.x), static_cast<int>(e.y));
   auto b = v2i_to_button(p);
   if (b) {
     if (b->callback) {
@@ -346,7 +344,6 @@ void Game::process_mouse_button_down_event(
   Unit* u = core.unit_at(active_tile_pos);
   Tile& t = core.tile(active_tile_pos);
   assert(core.current_player);
-  assert(e);
   UNUSED(e);
   if (ui_mode != UIMode::UI_MODE_NORMAL) {
     return;
@@ -371,24 +368,18 @@ void Game::process_mouse_button_down_event(
   }
 }
 
-void Game::process_mouse_motion_event(
-    const SDL_MouseMotionEvent *e)
-{
-  assert(e);
-  mouse_pos = V2i(static_cast<int>(e->x), static_cast<int>(e->y));
+void Game::process_mouse_motion_event(const SDL_MouseMotionEvent& e) {
+  mouse_pos = V2i(static_cast<int>(e.x), static_cast<int>(e.y));
   if (is_rotating_camera) {
-    camera.z_angle -= e->xrel;
-    camera.x_angle -= e->yrel;
+    camera.z_angle -= e.xrel;
+    camera.x_angle -= e.yrel;
     clamp_angle(&camera.z_angle);
     clamp_f(&camera.x_angle, 0, 50);
   }
 }
 
-void Game::process_key_down_event(
-    const SDL_KeyboardEvent *e)
-{
-  assert(e);
-  switch (e->keysym.sym) {
+void Game::process_key_down_event(const SDL_KeyboardEvent& e) {
+  switch (e.keysym.sym) {
   case SDLK_ESCAPE:
   case SDLK_q: {
     done = true;
@@ -466,7 +457,7 @@ void Game::process_key_down_event(
   default:
     printf("process_key_down_event(): "
         "Unknown key (%d, 0x%x) was pressed.\n",
-        e->keysym.sym, e->keysym.sym);
+        e.keysym.sym, e.keysym.sym);
     break;
   }
 }
@@ -491,44 +482,43 @@ void Game::logic() {
   }
 }
 
-void Game::process_sdl_event(const SDL_Event *e) {
-  assert(e);
-  switch (e->type) {
+void Game::process_sdl_event(const SDL_Event& e) {
+  switch (e.type) {
   case SDL_QUIT: {
     done = true;
     break;
   }
   case SDL_VIDEORESIZE: {
-    screen = SDL_SetVideoMode(e->resize.w, e->resize.h,
+    screen = SDL_SetVideoMode(e.resize.w, e.resize.h,
         32, SDL_RESIZABLE);
     break;
   }
   case SDL_KEYDOWN: {
-    process_key_down_event(&e->key);
+    process_key_down_event(e.key);
     break;
   }
   case SDL_MOUSEMOTION: {
-    process_mouse_motion_event(&e->motion);
+    process_mouse_motion_event(e.motion);
     break;
   }
   case SDL_MOUSEBUTTONUP: {
-    if (e->button.button == SDL_BUTTON_RIGHT) {
+    if (e.button.button == SDL_BUTTON_RIGHT) {
       is_rotating_camera = false;
     }
-    if (e->button.button == SDL_BUTTON_WHEELUP) {
+    if (e.button.button == SDL_BUTTON_WHEELUP) {
       camera.zoom -= 5;
       clamp_f(&camera.zoom, 30, 200);
-    } else if (e->button.button == SDL_BUTTON_WHEELDOWN) {
+    } else if (e.button.button == SDL_BUTTON_WHEELDOWN) {
       camera.zoom += 5;
       clamp_f(&camera.zoom, 30, 200);
     }
     break;
   }
   case SDL_MOUSEBUTTONDOWN: {
-    if (e->button.button == SDL_BUTTON_RIGHT) {
+    if (e.button.button == SDL_BUTTON_RIGHT) {
       is_rotating_camera = true;
-    } else if (e->button.button == SDL_BUTTON_LEFT) {
-      process_mouse_button_down_event(&e->button);
+    } else if (e.button.button == SDL_BUTTON_LEFT) {
+      process_mouse_button_down_event(e.button);
     }
     break;
   }
@@ -540,7 +530,7 @@ void Game::process_sdl_event(const SDL_Event *e) {
 void Game::sdl_events() {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
-    process_sdl_event(&e);
+    process_sdl_event(e);
   }
 }
 
