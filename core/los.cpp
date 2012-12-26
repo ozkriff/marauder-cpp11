@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cmath>
+#include <algorithm>
 #include "core/los.h"
 #include "core/math.h"
 
@@ -14,12 +15,12 @@ Los::Los(const V2i& from, const V2i& to) {
   mTo = to;
   mIsSteep = abs(mTo.y - mFrom.y) > abs(mTo.x - mFrom.x);
   if (mIsSteep) {
-    swap_int(&mFrom.x, &mFrom.y);
-    swap_int(&mTo.x, &mTo.y);
+    std::swap(mFrom.x, mFrom.y);
+    std::swap(mTo.x, mTo.y);
   }
   if (mFrom.x > mTo.x) {
-    swap_int(&mFrom.x, &mTo.x);
-    swap_int(&mFrom.y, &mTo.y);
+    std::swap(mFrom.x, mTo.x);
+    std::swap(mFrom.y, mTo.y);
   }
   mDelta.x = mTo.x - mFrom.x;
   mDelta.y = abs(mTo.y - mFrom.y);

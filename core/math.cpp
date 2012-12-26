@@ -23,12 +23,3 @@ void clamp_int(int *n, int min, int max) {
     *n = max;
   }
 }
-
-void swap_int(int *a, int *b) {
-  int tmp;
-  assert(a);
-  assert(b);
-  tmp = *a;
-  *a = *b;
-  *b = tmp;
-}
