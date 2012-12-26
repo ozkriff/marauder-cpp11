@@ -73,7 +73,7 @@ public:
   void kill_unit(Unit* u);
   void init_logic();
   bool inboard(const V2i& p) const;
-  void inc_v2i(V2i *pos) const;
+  void inc_v2i(V2i* pos) const;
 
 private:
   void create_local_human(int id);

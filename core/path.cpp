@@ -62,8 +62,8 @@ Dir Pathfinder::get_parent_dir(const Unit& u, const V2i& m) {
 
 int Pathfinder::get_tile_cost(const Unit& u, const V2i& t, const V2i& nb) {
   int cost = 1;
-  int dx = abs(t.x - nb.x);
-  int dy = abs(t.y - nb.y);
+  int dx = abs(t.x() - nb.x());
+  int dy = abs(t.y() - nb.y());
   assert(dx <= 1);
   assert(dy <= 1);
   if (dx != 0) {

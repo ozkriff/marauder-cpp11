@@ -30,22 +30,22 @@ void Core::init_local_players(int n, int* ids) {
 }
 
 bool Core::inboard(const V2i& p) const {
-  return p.x >= 0 && p.y >= 0
-      && p.x < MAP_X && p.y < MAP_Y;
+  return p.x() >= 0 && p.y() >= 0
+      && p.x() < MAP_X && p.y() < MAP_Y;
 }
 
 Tile& Core::tile(const V2i &p) {
   assert(inboard(p));
-  return map[p.y][p.x];
+  return map[p.y()][p.x()];
 }
 
-void Core::inc_v2i(V2i *pos) const {
+void Core::inc_v2i(V2i* pos) const {
   assert(pos);
   assert(inboard(*pos));
-  pos->x++;
-  if (pos->x == MAP_X) {
-    pos->x = 0;
-    pos->y++;
+  pos->setX(pos->x() + 1);
+  if (pos->x() == MAP_X) {
+    pos->setX(0);
+    pos->setY(pos->y() + 1);
   }
 }
 

@@ -4,14 +4,19 @@
 #define CORE_V2I_H
 
 class V2i {
-public:
-  int x;
-  int y;
+private:
+  int mX;
+  int mY;
 
 public:
   V2i(int x, int y);
   V2i();
   ~V2i();
+
+  int x() const;
+  int y() const;
+  void setX(int x);
+  void setY(int y);
 
   int distance(const V2i &b) const;
 

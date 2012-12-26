@@ -29,8 +29,8 @@ GLuint ttf_gl_print(TTF_Font *f, const char *text, V2i *size) {
       GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, s->w, s->h,
       0, GL_BGRA, GL_UNSIGNED_BYTE, s->pixels);
-  size->x = s->w;
-  size->y = s->h;
+  size->setX(s->w);
+  size->setY(s->h);
   SDL_FreeSurface(s);
   return id;
 }
@@ -77,10 +77,10 @@ int add_button(TTF_Font *f, const V2i *pos,
 
 Button* v2i_to_button(V2i pos) {
   for (auto b : buttons) {
-    if (pos.x >= b->pos.x
-        && pos.y >= b->pos.y
-        && pos.x <= b->pos.x + b->size.x
-        && pos.y <= b->pos.y + b->size.y) {
+    if (pos.x() >= b->pos.x()
+        && pos.y() >= b->pos.y()
+        && pos.x() <= b->pos.x() + b->size.x()
+        && pos.y() <= b->pos.y() + b->size.y()) {
       return b;
     }
   }
@@ -90,18 +90,19 @@ Button* v2i_to_button(V2i pos) {
 void draw_button(Button *b) {
   float rect[4 * 2];
   float texture_coord[4 * 2];
-  set_xy(rect, 4, 0, 0, 0, static_cast<float>(b->size.y));
+  set_xy(rect, 4, 0, 0, 0, static_cast<float>(b->size.y()));
   set_xy(rect, 4, 0, 1,
-      static_cast<float>(b->size.x), static_cast<float>(b->size.y));
-  set_xy(rect, 4, 0, 2, static_cast<float>(b->size.x), 0);
+      static_cast<float>(b->size.x()),
+      static_cast<float>(b->size.y()));
+  set_xy(rect, 4, 0, 2, static_cast<float>(b->size.x()), 0);
   set_xy(rect, 4, 0, 3, 0, 0);
   set_xy(texture_coord, 4, 0, 0, 0, 1);
   set_xy(texture_coord, 4, 0, 1, 1, 1);
   set_xy(texture_coord, 4, 0, 2, 1, 0);
   set_xy(texture_coord, 4, 0, 3, 0, 0);
   glPushMatrix();
-  glTranslatef(static_cast<float>(b->pos.x),
-      static_cast<float>(b->pos.y), 0.0f);
+  glTranslatef(static_cast<float>(b->pos.x()),
+      static_cast<float>(b->pos.y()), 0.0f);
   glColor4f(0.3f, 0.3f, 0.3f, 0.6f);
   glVertexPointer(2, GL_FLOAT, 0, rect);
   glDrawArrays(GL_QUADS, 0, 4);

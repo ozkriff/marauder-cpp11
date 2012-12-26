@@ -47,7 +47,7 @@ void Game::init() {
   ui_mode = UIMode::UI_MODE_NORMAL;
   is_rotating_camera = false;
   SDL_Init(SDL_INIT_EVERYTHING);
-  screen = SDL_SetVideoMode(win_size.x, win_size.y,
+  screen = SDL_SetVideoMode(win_size.x(), win_size.y(),
       32, SDL_OPENGL | SDL_GL_DOUBLEBUFFER);
   init_opengl();
   init_camera();
@@ -65,7 +65,7 @@ void Game::cleanup() {
 
 V2f Game::v2i_to_v2f(const V2i& i) {
   assert(core.inboard(i));
-  return V2f(i.x * TILE_SIZE, i.y * TILE_SIZE);
+  return V2f(i.x() * TILE_SIZE, i.y() * TILE_SIZE);
 }
 
 void Game::build_map_array(VertexArray *v) {
@@ -566,10 +566,10 @@ void Game::build_picking_tiles_array(VertexArray *va) {
     set_xy(va->v, 4, i, 1, pos.x() + n, pos.y() - n);
     set_xy(va->v, 4, i, 2, pos.x() + n, pos.y() + n);
     set_xy(va->v, 4, i, 3, pos.x() - n, pos.y() + n);
-    set_rgb_i(va->ub_c, 4, i, 0, p.x, p.y, 1);
-    set_rgb_i(va->ub_c, 4, i, 1, p.x, p.y, 1);
-    set_rgb_i(va->ub_c, 4, i, 2, p.x, p.y, 1);
-    set_rgb_i(va->ub_c, 4, i, 3, p.x, p.y, 1);
+    set_rgb_i(va->ub_c, 4, i, 0, p.x(), p.y(), 1);
+    set_rgb_i(va->ub_c, 4, i, 1, p.x(), p.y(), 1);
+    set_rgb_i(va->ub_c, 4, i, 2, p.x(), p.y(), 1);
+    set_rgb_i(va->ub_c, 4, i, 3, p.x(), p.y(), 1);
     i++;
   }
 }
@@ -580,13 +580,13 @@ bool Game::pick_tile(V2i *p, const V2i *mouse_pos) {
   assert(p);
   glGetIntegerv(GL_VIEWPORT, viewport);
   viewport[3] -= 1;
-  glReadPixels(mouse_pos->x, viewport[3] - mouse_pos->y,
+  glReadPixels(mouse_pos->x(), viewport[3] - mouse_pos->y(),
       1, 1, GL_RGB, GL_UNSIGNED_BYTE, (void *)pixel);
   if (pixel[2] != 1) {
     return false;
   }
-  p->x = pixel[0];
-  p->y = pixel[1];
+  p->setX(pixel[0]);
+  p->setY(pixel[1]);
   return true;
 }
 
@@ -605,14 +605,14 @@ void Game::draw_for_picking() {
 void Game::scroll_map() {
   const V2i *p = &mouse_pos;
   int offset = 15;
-  if (p->x < offset) {
+  if (p->x() < offset) {
     camera.move(DirID::D_W);
-  } else if(p->x > screen->w - offset) {
+  } else if(p->x() > screen->w - offset) {
     camera.move(DirID::D_E);
   }
-  if (p->y < offset) {
+  if (p->y() < offset) {
     camera.move(DirID::D_N);
-  } else if(p->y > screen->h - offset) {
+  } else if(p->y() > screen->h - offset) {
     camera.move(DirID::D_S);
   }
   if (camera.pos.x() > MAP_X * TILE_SIZE) {
@@ -644,7 +644,7 @@ void Game::mainloop() {
 }
 
 void Game::init_opengl() {
-  float aspect_ratio = (float)win_size.y / win_size.x;
+  float aspect_ratio = static_cast<float>(win_size.y()) / win_size.x();
   SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);

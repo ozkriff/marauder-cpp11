@@ -13,41 +13,41 @@
 Los::Los(const V2i& from, const V2i& to) {
   mFrom = from;
   mTo = to;
-  mIsSteep = abs(mTo.y - mFrom.y) > abs(mTo.x - mFrom.x);
+  mIsSteep = abs(mTo.y() - mFrom.y()) > abs(mTo.x() - mFrom.x());
   if (mIsSteep) {
-    std::swap(mFrom.x, mFrom.y);
-    std::swap(mTo.x, mTo.y);
+    mFrom = V2i(mFrom.y(), mFrom.x());
+    mTo = V2i(mTo.y(), mTo.x());
   }
-  if (mFrom.x > mTo.x) {
-    std::swap(mFrom.x, mTo.x);
-    std::swap(mFrom.y, mTo.y);
+  if (mFrom.x() > mTo.x()) {
+    std::swap(mFrom, mTo);
+    // V2i tmp = mFrom;
+    // mFrom = mTo;
+    // mTo = tmp;
   }
-  mDelta.x = mTo.x - mFrom.x;
-  mDelta.y = abs(mTo.y - mFrom.y);
-  mError = mDelta.x >> 1;
+  mDelta.setX(mTo.x() - mFrom.x());
+  mDelta.setY(abs(mTo.y() - mFrom.y()));
+  mError = mDelta.x() >> 1;
   mPos = mFrom;
-  mYstep = (mFrom.y < mTo.y) ? 1 : -1;
+  mYstep = (mFrom.y() < mTo.y()) ? 1 : -1;
 }
 
 Los::~Los() {
 }
 
 bool Los::isFinished() const {
-  return mPos.x >= mTo.x;
+  return mPos.x() >= mTo.x();
 }
 
 V2i Los::getNext() {
-  V2i n;
-  mError -= mDelta.y;
+  mError -= mDelta.y();
   if (mError < 0) {
-    mPos.y += mYstep;
-    mError += mDelta.x;
+    mPos.setY(mPos.y() + mYstep);
+    mError += mDelta.x();
   }
-  mPos.x++;
+  mPos.setX(mPos.x() + 1);
   if (!mIsSteep) {
-    n = V2i(mPos.x, mPos.y);
+    return mPos;
   } else {
-    n = V2i(mPos.y, mPos.x);
+    return V2i(mPos.y(), mPos.x());
   }
-  return n;
 }
