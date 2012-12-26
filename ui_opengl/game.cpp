@@ -27,6 +27,9 @@
 #define TILE_SIZE 6.0f
 #define TILE_SIZE_2 (TILE_SIZE / 2.0f)
 
+#define FOR_EACH_TILE(p) \
+  for (*p = V2i(0, 0); core.inboard(*p); core.inc_v2i(p))
+
 Game game;
 
 static V2i win_size;
@@ -58,7 +61,7 @@ void Game::do_xxx() {
 }
 
 void Game::init() {
-  init_logic();
+  core.init_logic();
   done = false;
   win_size = V2i(WIN_WIDTH, WIN_HEIGHT);
   active_tile_pos = V2i(0, 0);
@@ -83,7 +86,7 @@ void Game::cleanup() {
 }
 
 V2f Game::v2i_to_v2f(const V2i& i) {
-  assert(inboard(i));
+  assert(core.inboard(i));
   return V2f(i.x * TILE_SIZE, i.y * TILE_SIZE);
 }
 
@@ -102,7 +105,7 @@ void Game::build_map_array(VertexArray *v) {
   v->v = (float*)new V3f[v->count];
   v->t = (float*)new V2f[v->count];
   FOR_EACH_TILE(&p) {
-    Tile& t = tile(p);
+    Tile& t = core.tile(p);
     float n = TILE_SIZE_2;
     V2f pos;
     if (t.obstacle) {
@@ -141,7 +144,7 @@ void Game::build_obstacles_array(VertexArray *v) {
   v->v = (float *)new V3f[v->count];
   v->t = (float *)new V2f[v->count];
   FOR_EACH_TILE(&p) {
-    Tile& t = tile(p);
+    Tile& t = core.tile(p);
     float n = TILE_SIZE_2;
     if (!t.obstacle) {
       continue;
@@ -168,7 +171,7 @@ int Game::calculate_walkable_tiles_count() {
   V2i p;
   int count = 0;
   FOR_EACH_TILE(&p) {
-    Tile& t = tile(p);
+    Tile& t = core.tile(p);
     if (t.parent != Dir::D_NONE && t.cost != 30000) {
       count++;
     }
@@ -180,7 +183,7 @@ int Game::calculate_fogged_tiles_count() {
   int n = 0;
   V2i p;
   FOR_EACH_TILE(&p) {
-    Tile& t = tile(p);
+    Tile& t = core.tile(p);
     if (t.fow == 0) {
       n++;
     }
@@ -198,7 +201,7 @@ void Game::build_fow_array(VertexArray *v) {
   }
   v->v = (float *)new V3f[v->count];
   FOR_EACH_TILE(&p) {
-    Tile& t = tile(p);
+    Tile& t = core.tile(p);
     float n = TILE_SIZE_2;
     if (t.fow > 0)
       continue;
@@ -228,10 +231,10 @@ void Game::build_walkable_array(VertexArray *v) {
   }
   v->v = (float *)new V3f[v->count];
   FOR_EACH_TILE(&p) {
-    Tile& t = tile(p);
+    Tile& t = core.tile(p);
     if (t.parent != Dir::D_NONE && t.cost < 50) {
       V2i p2 = neib(p, t.parent);
-      if (inboard(p2)) {
+      if (core.inboard(p2)) {
         V2f pos1 = v2i_to_v2f(p);
         V2f pos2 = v2i_to_v2f(p2);
         set_xyz(v->v, 2, i, 0, pos1.x(), pos1.y(), 0.1f);
@@ -326,13 +329,13 @@ void Game::draw_unit(const Unit *u) {
 }
 
 void Game::draw_units() {
-  for (auto u : units) {
+  for (auto u : core.units) {
     if (ui_mode == UIMode::UI_MODE_SHOW_EVENT
-        && event_filter_unit(current_event, u))
+        && event_filter_unit(*core.current_event, *u))
     {
       continue;
     }
-    if (tile(u->pos).fow == 0) {
+    if (core.tile(u->pos).fow == 0) {
       continue;
     }
     draw_unit(u);
@@ -345,7 +348,7 @@ void Game::draw() {
   draw_map();
   draw_units();
   if (ui_mode == UIMode::UI_MODE_SHOW_EVENT) {
-    event_draw(current_event);
+    event_draw(*core.current_event);
   }
   draw_buttons();
   SDL_GL_SwapBuffers();
@@ -363,27 +366,27 @@ void Game::process_mouse_button_down_event(
     b->callback();
     return;
   }
-  u = unit_at(active_tile_pos);
-  Tile& t = tile(active_tile_pos);
-  assert(current_player);
+  u = core.unit_at(active_tile_pos);
+  Tile& t = core.tile(active_tile_pos);
+  assert(core.current_player);
   assert(e);
   UNUSED(e);
   if (ui_mode != UIMode::UI_MODE_NORMAL) {
     return;
   }
-  if (u && u->player_id == current_player->id) {
-    selected_unit = u;
-    pathfinder.fill_map(*selected_unit);
+  if (u && u->player_id == core.current_player->id) {
+    core.selected_unit = u;
+    core.pathfinder.fill_map(*core.selected_unit);
     build_walkable_array(&va_walkable_map);
-  } else if (selected_unit) {
-    auto type = get_unit_type(selected_unit->type_id);
+  } else if (core.selected_unit) {
+    auto type = get_unit_type(core.selected_unit->type_id);
     int ap = type.action_points;
-    if (u && u->player_id != current_player->id) {
-      if (selected_unit && u) {
-        shoot(selected_unit, u);
+    if (u && u->player_id != core.current_player->id) {
+      if (core.selected_unit && u) {
+        core.shoot(core.selected_unit, u);
       }
     } else if (t.cost <= ap && t.parent != Dir::D_NONE) {
-      generate_event_move(selected_unit, &active_tile_pos);
+      generate_event_move(core, *core.selected_unit, active_tile_pos);
       /* TODO: Move this to ui_event_move? */
       delete[] va_walkable_map.v;
       va_walkable_map = empty_vertex_array;
@@ -415,34 +418,34 @@ void Game::process_key_down_event(
     break;
   }
   case SDLK_c: {
-    if (!selected_unit) {
+    if (!core.selected_unit) {
       return;
     }
-    V2f unit_pos = v2i_to_v2f(selected_unit->pos);
+    V2f unit_pos = v2i_to_v2f(core.selected_unit->pos);
     camera.pos = unit_pos;
     break;
   }
   case SDLK_t: {
-    Tile& t = tile(active_tile_pos);
+    Tile& t = core.tile(active_tile_pos);
     t.obstacle = !t.obstacle;
     build_map_array(&va_map);
     build_obstacles_array(&va_obstacles);
-    calculate_fow();
+    core.calculate_fow();
     build_fow_array(&va_fog_of_war);
-    if (selected_unit) {
-      pathfinder.fill_map(*selected_unit);
+    if (core.selected_unit) {
+      core.pathfinder.fill_map(*core.selected_unit);
       build_walkable_array(&va_walkable_map);
     }
     break;
   }
   case SDLK_e: {
-    generate_event_end_turn();
+    generate_event_end_turn(core);
     break;
   }
   case SDLK_u: {
-    add_unit(active_tile_pos, current_player->id);
-    if (selected_unit) {
-      pathfinder.fill_map(*selected_unit);
+    core.add_unit(active_tile_pos, core.current_player->id);
+    if (core.selected_unit) {
+      core.pathfinder.fill_map(*core.selected_unit);
       build_walkable_array(&va_walkable_map);
     }
     break;
@@ -492,20 +495,20 @@ void Game::process_key_down_event(
 }
 
 void Game::screen_scenario_main_events() {
-  current_event = get_next_event();
-  last_move_index = get_last_event_index(current_event);
+  core.current_event = get_next_event(core);
+  last_move_index = get_last_event_index(*core.current_event);
   ui_mode = UIMode::UI_MODE_SHOW_EVENT;
   current_move_index = 0;
   /* TODO: Remove this hack */
-  if (current_event->t == EventTypeId::E_END_TURN) {
-    apply_event(*current_event);
+  if (core.current_event->t == EventTypeId::E_END_TURN) {
+    apply_event(core, *core.current_event);
     ui_mode = UIMode::UI_MODE_NORMAL;
   }
 }
 
 void Game::logic() {
   while (ui_mode == UIMode::UI_MODE_NORMAL
-      && unshown_events_left())
+      && unshown_events_left(core))
   {
     screen_scenario_main_events();
   }

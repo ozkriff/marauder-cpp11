@@ -3,13 +3,15 @@
 #ifndef UI_OPENGL_VERTEX_ARRAY_H
 #define UI_OPENGL_VERTEX_ARRAY_H
 
+#include <SDL/SDL_opengl.h>
+
 /* Vertex array */
-typedef struct {
+struct VertexArray {
   float *v; /* vertices */
   float *t; /* [opt] texture coordinates */
   GLubyte *ub_c; /* [opt] colors */
   int count; /* vertices count */
-} VertexArray;
+};
 
 extern const VertexArray empty_vertex_array;
 

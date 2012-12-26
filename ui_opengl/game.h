@@ -4,6 +4,8 @@
 #define UI_OPENGL_GAME_H
 
 #include <SDL/SDL.h>
+#include "ui_opengl/vertex_array.h"
+#include "ui_opengl/v2f.h"
 
 enum class UIMode {
   UI_MODE_NORMAL,
@@ -16,6 +18,7 @@ extern Game game;
 
 class Game {
 public:
+  Core core;
   UIMode ui_mode;
   int last_move_index;
   int current_move_index;

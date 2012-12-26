@@ -7,15 +7,17 @@
 #include "core/dir.h"
 
 class Unit;
+class Core;
 
 class PathQueue {
 private:
+  Core& core;
   unsigned int mTailNodeIndex;
   unsigned int mHeadNodeIndex;
   std::vector<V2i> mNodes;
 
 public:
-  PathQueue(int size);
+  PathQueue(Core& core, int size);
   ~PathQueue();
 
   bool is_empty() const;
@@ -26,6 +28,7 @@ public:
 class Pathfinder {
 private:
   PathQueue q;
+  Core& core;
 
   void try_to_push_neibors(const Unit& u, const V2i& m);
   void process_neibor(const Unit& u, const V2i& p1, const V2i& p2);
@@ -34,7 +37,7 @@ private:
   int get_tile_cost(const Unit& u, const V2i& t, const V2i& nb);
 
 public:
-  Pathfinder();
+  Pathfinder(Core& core);
 
   std::vector<V2i> get_path(const V2i& pos);
   void fill_map(const Unit& u);

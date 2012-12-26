@@ -7,41 +7,39 @@
 #include <ctime>
 #include "core/core.h"
 
-std::list<Player*> players;
-Event const *current_event;
-Player *current_player;
-Unit *selected_unit;
-std::list<Unit*> units;
-Pathfinder pathfinder;
+Core::Core()
+  : pathfinder(*this)
+{
+}
 
-static Tile map[MAP_Y][MAP_X];
+Core::~Core() {
+}
 
-void create_local_human(int id) {
+void Core::create_local_human(int id) {
   auto p = new Player;
   players.push_back(p);
   p->id = id;
   p->last_event_id = HAVE_NOT_SEEN_ANY_EVENTS;
 }
 
-void init_local_players(int n, int *ids) {
-  int i;
-  for (i = 0; i < n; i++) {
+void Core::init_local_players(int n, int* ids) {
+  for (int i = 0; i < n; i++) {
     create_local_human(ids[i]);
   }
   current_player = players.back();
 }
 
-bool inboard(const V2i& p) {
+bool Core::inboard(const V2i& p) const {
   return p.x >= 0 && p.y >= 0
       && p.x < MAP_X && p.y < MAP_Y;
 }
 
-Tile& tile(const V2i &p) {
+Tile& Core::tile(const V2i &p) {
   assert(inboard(p));
   return map[p.y][p.x];
 }
 
-void inc_v2i(V2i *pos) {
+void Core::inc_v2i(V2i *pos) const {
   assert(pos);
   assert(inboard(*pos));
   pos->x++;
@@ -51,7 +49,7 @@ void inc_v2i(V2i *pos) {
   }
 }
 
-static bool isLosClear(const V2i& from, const V2i& to) {
+bool Core::isLosClear(const V2i& from, const V2i& to) {
   Los los(from, to);
   for (V2i p = los.getNext(); !los.isFinished(); p = los.getNext()) {
     if (unit_at(p) || tile(p).obstacle) {
@@ -61,7 +59,10 @@ static bool isLosClear(const V2i& from, const V2i& to) {
   return true;
 }
 
-static void clean_fow() {
+#define FOR_EACH_TILE(p) \
+  for (*p = V2i(0, 0); inboard(*p); inc_v2i(p))
+
+void Core::clean_fow() {
   V2i p;
   FOR_EACH_TILE(&p) {
     Tile& t = tile(p);
@@ -69,7 +70,7 @@ static void clean_fow() {
   }
 }
 
-void calculate_fow() {
+void Core::calculate_fow() {
   V2i p;
   assert(current_player);
   clean_fow();
@@ -87,25 +88,25 @@ void calculate_fow() {
   }
 }
 
-Unit* unit_at(const V2i &pos) {
+Unit* Core::unit_at(const V2i& pos) {
   for (auto u : units) {
     if (u->pos == pos) {
       return u;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
-Unit* id2unit(int id) {
+Unit* Core::id2unit(int id) {
   for (auto u : units) {
     if (u->id == id) {
       return u;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
-static int get_new_unit_id() {
+int Core::get_new_unit_id() {
   if (units.size() > 0) {
     auto lastUnit = units.back();
     return lastUnit->id + 1;
@@ -114,7 +115,7 @@ static int get_new_unit_id() {
   }
 }
 
-void add_unit(V2i p, int player_id) {
+void Core::add_unit(const V2i& p, int player_id) {
   auto u = new Unit;
   assert(inboard(p));
   assert(player_id >= 0 && player_id < 16);
@@ -130,7 +131,7 @@ void add_unit(V2i p, int player_id) {
 #endif
 }
 
-static void kill_unit(Unit *u) {
+void Core::kill_unit(Unit* u) {
   // delete_node(&units, data2node(units, u));
   units.remove(u);
   delete u;
@@ -144,13 +145,13 @@ static void kill_unit(Unit *u) {
   }
 }
 
-void shoot(Unit *shooter, Unit *target) {
+void Core::shoot(Unit *shooter, Unit *target) {
   if (isLosClear(shooter->pos, target->pos)) {
     kill_unit(target);
   }
 }
 
-static void init_units() {
+void Core::init_units() {
   selected_unit = NULL;
   for (int i = 0; i < 8; i++) {
     V2i p = V2i(rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
@@ -162,7 +163,7 @@ static void init_units() {
   }
 }
 
-static void init_obstacles() {
+void Core::init_obstacles() {
   V2i p;
   FOR_EACH_TILE(&p) {
     Tile& t = tile(p);
@@ -170,12 +171,12 @@ static void init_obstacles() {
   }
 }
 
-static void init_players() {
+void Core::init_players() {
   int id[] = {0, 1};
   init_local_players(2, id);
 }
 
-void init_logic() {
+void Core::init_logic() {
   srand(time(NULL));
   init_unit_types();
   init_events();

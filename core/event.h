@@ -33,12 +33,12 @@ public:
 };
 
 void init_events();
-void add_event(Event* e);
-Event* get_next_event();
-bool unshown_events_left();
-void apply_invisible_events();
-bool is_event_visible(const Event& e);
-void apply_event(const Event& e);
-void undo_unshown_events();
+void add_event(Core& core, Event* e);
+Event* get_next_event(Core& core);
+bool unshown_events_left(Core& core);
+void apply_invisible_events(Core& core);
+bool is_event_visible(const Core& core, const Event& e);
+void apply_event(Core& core, const Event& e);
+void undo_unshown_events(Core& core);
 
 #endif

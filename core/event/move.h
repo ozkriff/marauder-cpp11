@@ -7,6 +7,7 @@
 #include "core/v2i.h"
 
 struct Unit;
+class Core;
 
 class EventMove {
 public:
@@ -21,9 +22,9 @@ public:
 };
 
 void generate_event_move(
-    const Unit *u, const V2i *destination);
-void apply_event_move(const EventMove& e);
-void undo_event_move(const EventMove& e);
-bool is_visible_event_move(const EventMove& e);
+    Core& core, const Unit& u, const V2i& destination);
+void apply_event_move(Core& core, const EventMove& e);
+void undo_event_move(Core& core, const EventMove& e);
+bool is_visible_event_move(const Core& core, const EventMove& e);
 
 #endif

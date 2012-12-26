@@ -5,8 +5,7 @@
 #include <list>
 #include "core/core.h"
 #include "core/event.h"
-
-static std::list<Event*> events;
+#include "ui_opengl/game.h"
 
 Event::Event() {
 }
@@ -18,10 +17,10 @@ Event::~Event() {
 void init_events() {
 }
 
-static void undo_event(const Event& e) {
+static void undo_event(Core& core, const Event& e) {
   switch (e.t) {
     case EventTypeId::E_MOVE: {
-      undo_event_move(e.e.move);
+      undo_event_move(core, e.e.move);
       break;
     }
     case EventTypeId::E_END_TURN: {
@@ -38,69 +37,67 @@ static void undo_event(const Event& e) {
 }
 
 /* Undo all events that this player have not seen yet */
-void undo_unshown_events() {
-  if (events.size() == 0) {
+void undo_unshown_events(Core& core) {
+  if (core.events.size() == 0) {
     return;
   }
-  std::list<Event*>::iterator i = events.end();
+  auto i = core.events.end();
   --i;
-  while (i != events.begin()) {
+  while (i != core.events.begin()) {
     auto event = *i;
-    if (event->id == current_player->last_event_id) {
+    if (event->id == game.core.current_player->last_event_id) {
       break;
     }
-    undo_event(*event);
+    undo_event(core, *event);
     --i;
   }
 }
 
-void apply_event(const Event& e) {
-  current_player->last_event_id = e.id;
+void apply_event(Core& core, const Event& e) {
+  game.core.current_player->last_event_id = e.id;
   switch (e.t) {
-    case EventTypeId::E_MOVE: {
-      apply_event_move(e.e.move);
-      break;
-    }
-    case EventTypeId::E_END_TURN: {
-      apply_event_end_turn(e.e.end_turn);
-      break;
-    }
-    default: {
-      die("event: apply_event(): "
-          "unknown event '%d'\n", e.t);
-      break;
-    }
+  case EventTypeId::E_MOVE:
+    apply_event_move(core, e.e.move);
+    break;
+  case EventTypeId::E_END_TURN:
+    apply_event_end_turn(core, e.e.end_turn);
+    break;
+  default:
+    die("event: apply_event(): "
+        "unknown event '%d'\n", e.t);
+    break;
   }
   /* update_units_visibility(); */
 }
 
 /* TODO: rename. */
-static Event* get_next_event_node() {
+static Event* get_next_event_node(Core& core) {
   // Node *node;
-  int id = current_player->last_event_id; /* shortcut */
-  if (events.size() == 0) {
+  int id = game.core.current_player->last_event_id; /* shortcut */
+  if (core.events.size() == 0) {
     return nullptr;
   }
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
-    return events.front();
+    return core.events.front();
   }
   /* find last seen event */
   Event *e = nullptr;
-  for (auto e : events) {
-    if (e->id == id)
+  for (auto e : core.events) {
+    if (e->id == id) {
       break;
+    }
   }
   if (!e) {
     return nullptr;
   } else {
-    return getNext(events, e);
+    return getNext(core.events, e);
   }
 }
 
-bool is_event_visible(const Event& e) {
+bool is_event_visible(const Core& core, const Event& e) {
   switch (e.t) {
     case EventTypeId::E_MOVE: {
-      return is_visible_event_move(e.e.move);
+      return is_visible_event_move(core, e.e.move);
     }
     case EventTypeId::E_END_TURN: {
       return true;
@@ -114,49 +111,49 @@ bool is_event_visible(const Event& e) {
 }
 
 /* TODO simplify */
-void apply_invisible_events() {
-  Event* e = get_next_event_node();
+void apply_invisible_events(Core& core) {
+  Event* e = get_next_event_node(core);
   while (e) {
     assert(e);
-    if (!is_event_visible(*e)) {
-      apply_event(*e);
+    if (!is_event_visible(core, *e)) {
+      apply_event(core, *e);
     } else {
       break;
     }
-    e = getNext(events, e);
+    e = getNext(core.events, e);
     assert(e);
   }
 }
 
 /* TODO: Called before get_next_event */
-bool unshown_events_left() {
-  apply_invisible_events();
-  if (events.size() == 0) {
+bool unshown_events_left(Core& core) {
+  apply_invisible_events(core);
+  if (core.events.size() == 0) {
     return false;
   } else {
-    auto e = events.back();
-    return e->id != current_player->last_event_id;
+    auto e = core.events.back();
+    return e->id != game.core.current_player->last_event_id;
   }
 }
 
 /* Always called after apply_invisible_events */
-Event* get_next_event() {
-  int id = current_player->last_event_id; /* shortcut */
-  assert(events.size() > 0);
+Event* get_next_event(Core& core) {
+  int id = game.core.current_player->last_event_id; /* shortcut */
+  assert(core.events.size() > 0);
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
-    return events.front();
+    return core.events.front();
   }
-  for (auto e : events) {
+  for (auto e : core.events) {
     if (e->id == id) {
-      return getNext(events, e);
+      return getNext(core.events, e);
     }
   }
-  return NULL;
+  return nullptr;
 }
 
-static int get_new_event_id() {
-  if (events.size() > 0) {
-    auto lastEvent = events.back();
+static int get_new_event_id(Core& core) {
+  if (core.events.size() > 0) {
+    auto lastEvent = core.events.back();
     return lastEvent->id + 1;
   } else {
     return 0;
@@ -173,10 +170,10 @@ static void send_event(const Event& e) {
   /* TODO */
 }
 
-void add_event(Event* e) {
+void add_event(Core& core, Event* e) {
   assert(e);
-  e->id = get_new_event_id();
-  events.push_back(e);
+  e->id = get_new_event_id(core);
+  core.events.push_back(e);
   event2log(*e);
 #if 0
   /* TODO */

@@ -20,8 +20,8 @@ static int get_move_legth(const V2i& from, const V2i& to) {
   }
 }
 
-int get_last_event_move_index(const Event *e) {
-  const EventMove *m = &e->e.move;
+int get_last_event_move_index(const Event &e) {
+  const EventMove* m = &e.e.move;
   auto& p = m->path; /* shortcut */
   int length = 0;
   int i;
@@ -31,52 +31,52 @@ int get_last_event_move_index(const Event *e) {
   return length;
 }
 
-void get_current_moving_nodes(V2i *from, V2i *to) {
+void get_current_moving_nodes(
+    const EventMove& e, V2i* from, V2i* to)
+{
   int i = game.current_move_index;
-  const EventMove *m = &current_event->e.move;
-  auto& p = m->path; /* shortcut */
-  int j; /* node id */
+  auto& p = e.path; /* shortcut */
+  unsigned int j; /* node id */
   assert(from);
   assert(to);
-  for (j = 0; j < m->length - 2; j++) {
+  for (j = 0; j < p.size() - 2; j++) {
     i -= get_move_legth(p[j], p[j + 1]);
     if (i < 0) {
       break;
     }
   }
-  *from = m->path[j];
-  *to = m->path[j + 1];
+  *from = p[j];
+  *to = p[j + 1];
 }
 
-static void end_movement(const V2i *pos) {
+static void end_movement(const EventMove& e, const V2i *pos) {
   Unit *u;
   assert(pos);
-  u = id2unit(current_event->e.move.unit_id);
+  u = game.core.id2unit(e.unit_id);
   game.ui_mode = UIMode::UI_MODE_NORMAL;
   u->pos = *pos;
-  if (selected_unit) {
-    pathfinder.fill_map(*u);
+  if (game.core.selected_unit) {
+    game.core.pathfinder.fill_map(*u);
     game.build_walkable_array(&game.va_walkable_map);
-    calculate_fow();
+    game.core.calculate_fow();
     game.build_fow_array(&game.va_fog_of_war);
   }
-  apply_event(*current_event);
-  current_event = NULL;
-  if (u->player_id == current_player->id) {
-    if (selected_unit) {
-      pathfinder.fill_map(*selected_unit);
+  apply_event(game.core, *game.core.current_event);
+  game.core.current_event = NULL;
+  if (u->player_id == game.core.current_player->id) {
+    if (game.core.selected_unit) {
+      game.core.pathfinder.fill_map(*game.core.selected_unit);
       game.build_walkable_array(&game.va_walkable_map);
     }
     game.build_fow_array(&game.va_fog_of_war);
   }
 }
 
-static int get_node_index() {
-  const EventMove& m = current_event->e.move;
-  auto& p = m.path; /* shortcut */
+static int get_node_index(const EventMove& e) {
+  auto& p = e.path; /* shortcut */
   int last = 0;
   int current = 0;
-  for (int j = 0; j < m.length - 2; j++) {
+  for (unsigned int j = 0; j < p.size() - 2; j++) {
     current += get_move_legth(p[j], p[j + 1]);
     if (current > game.current_move_index) {
       break;
@@ -86,19 +86,16 @@ static int get_node_index() {
   return game.current_move_index - last;
 }
 
-void draw_moving_unit() {
-  Unit *u = id2unit(current_event->e.move.unit_id);
+void draw_moving_unit(const EventMove& e) {
+  Unit *u = game.core.id2unit(e.unit_id);
   V2i from_i, to_i;
-  V2f from_f, to_f;
-  int move_speed;
-  int node_index;
   V2f diff;
   V2f p;
-  get_current_moving_nodes(&from_i, &to_i);
-  from_f = game.v2i_to_v2f(from_i);
-  to_f = game.v2i_to_v2f(to_i);
-  move_speed = get_move_legth(from_i, to_i);
-  node_index = get_node_index();
+  get_current_moving_nodes(e, &from_i, &to_i);
+  V2f from_f = game.v2i_to_v2f(from_i);
+  V2f to_f = game.v2i_to_v2f(to_i);
+  int move_speed = get_move_legth(from_i, to_i);
+  int node_index = get_node_index(e);
   diff.setX((to_f.x() - from_f.x()) / move_speed);
   diff.setY((to_f.y() - from_f.y()) / move_speed);
   p.setX(from_f.x() + diff.x() * node_index);
@@ -114,6 +111,6 @@ void draw_moving_unit() {
   glPopMatrix();
   game.current_move_index++;
   if (game.current_move_index == game.last_move_index) {
-    end_movement(&to_i);
+    end_movement(e, &to_i);
   }
 }
