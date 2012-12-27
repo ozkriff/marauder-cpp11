@@ -1,4 +1,3 @@
 tags
-*.o
-rusty_armies
 *~
+CMakeLists.txt.user
