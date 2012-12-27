@@ -6,23 +6,23 @@
 typedef void (*ButtonCallback)();
 
 // TODO: fg_color, bg_color
-typedef struct {
+struct Button {
   int id;
   V2i pos;
   V2i size;
-  GLuint texture_id;
-  char *text;
-  TTF_Font *f;
+  GLuint textureID;
+  char* text;
+  TTF_Font* f;
   ButtonCallback callback;
-} Button;
+};
 
-void init_widgets();
-TTF_Font* open_font(const char *font_name, int size);
-Button* v2i_to_button(V2i pos);
-int add_button(TTF_Font *f, const V2i *pos,
-    const char *text, ButtonCallback callback);
-void draw_buttons();
-void change_button_text(Button *b, char *text);
-void change_button_text_by_id(int id, char *text);
+void initWidgets();
+TTF_Font* openFont(const char* fontName, int size);
+Button* v2iToButton(V2i pos);
+int addButton(TTF_Font* f, const V2i* pos,
+    const char* text, ButtonCallback callback);
+void drawButtons();
+void changeButton_text(Button* b, char* text);
+void changeButtonTextByID(int id, char* text);
 
 #endif

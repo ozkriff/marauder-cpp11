@@ -7,17 +7,17 @@
 #include "core/misc.h"
 #include "ui_opengl/gl.h"
 
-static GLenum get_texture_format(
-    const SDL_Surface *surface, int n_of_colors)
+static GLenum getTextureFormat(
+    const SDL_Surface* surface, int nOfColors)
 {
-  if (n_of_colors == 4) {
+  if (nOfColors == 4) {
     // contains an alpha channel
     if (surface->format->Rmask == 0xff) {
       return GL_RGBA;
     } else {
       return GL_BGRA;
     }
-  } else if (n_of_colors == 3) {
+  } else if (nOfColors == 3) {
     // no alpha channel
     if (surface->format->Rmask == 0xff) {
       return GL_RGB;
@@ -25,14 +25,14 @@ static GLenum get_texture_format(
       return GL_BGR;
     }
   } else {
-    die("gl.c: load_texture(): "
+    die("gl.c: loadTexture(): "
         "the image is not truecolor.."
         "  this will probably break\n");
     return 0;
   }
 }
 
-static void set_texture_parameters() {
+static void setTextureParameters() {
   glTexParameteri(GL_TEXTURE_2D,
       GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D,
@@ -46,35 +46,32 @@ static void set_texture_parameters() {
       GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
-static bool is_power_of_two(int n) {
+static bool isPowerOfTwo(int n) {
   return ((n & (n - 1)) == 0);
 }
 
-bool load_texture(GLuint *id, const char *filename) {
-  GLenum texture_format;
-  GLint n_of_colors;
-  SDL_Surface *surface;
+bool loadTexture(GLuint *id, const char *filename) {
   assert(id);
-  surface = IMG_Load(filename);
+  SDL_Surface* surface = IMG_Load(filename);
   if (!surface) {
-    die("gl.c: load_texture(): Can't load file '%s'\n",
+    die("gl.c: loadTexture(): Can't load file '%s'\n",
         filename);
     return false;
   }
-  if (!is_power_of_two(surface->w)
-      || !is_power_of_two(surface->h))
+  if (!isPowerOfTwo(surface->w)
+      || !isPowerOfTwo(surface->h))
   {
-    die("ui_opengl/gl.c: load_texture(): "
+    die("ui_opengl/gl.c: loadTexture(): "
         "image's height or width is not a power of 2\n");
   }
-  n_of_colors = surface->format->BytesPerPixel;
-  texture_format = get_texture_format(surface, n_of_colors);
+  GLint nOfColors = surface->format->BytesPerPixel;
+  GLenum textureFormat = getTextureFormat(surface, nOfColors);
   glGenTextures(1, id);
   glBindTexture(GL_TEXTURE_2D, *id);
-  set_texture_parameters();
-  glTexImage2D(GL_TEXTURE_2D, 0, n_of_colors,
+  setTextureParameters();
+  glTexImage2D(GL_TEXTURE_2D, 0, nOfColors,
       surface->w, surface->h, 0,
-      texture_format, GL_UNSIGNED_BYTE, surface->pixels);
+      textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
   if (surface) {
     SDL_FreeSurface(surface);
   }

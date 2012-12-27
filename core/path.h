@@ -20,7 +20,7 @@ public:
   PathQueue(Core& core, int size);
   ~PathQueue();
 
-  bool is_empty() const;
+  bool isEmpty() const;
   void push(const V2i& m, Dir parent, int newcost, Dir dir);
   V2i pop();
 };
@@ -30,18 +30,18 @@ private:
   PathQueue q;
   Core& core;
 
-  void try_to_push_neibors(const Unit& u, const V2i& m);
-  void process_neibor(const Unit& u, const V2i& p1, const V2i& p2);
-  bool can_move_there(const V2i& p1, const V2i& p2);
-  Dir get_parent_dir(const Unit& u, const V2i& m);
-  int get_tile_cost(const Unit& u, const V2i& t, const V2i& nb);
+  void tryToPushNeibors(const Unit& u, const V2i& m);
+  void processNeibor(const Unit& u, const V2i& p1, const V2i& p2);
+  bool canMoveThere(const V2i& p1, const V2i& p2);
+  Dir getParentDir(const Unit& u, const V2i& m);
+  int getTileCost(const Unit& u, const V2i& t, const V2i& nb);
 
 public:
   Pathfinder(Core& core);
 
-  std::vector<V2i> get_path(const V2i& pos);
-  void fill_map(const Unit& u);
-  void clean_map();
+  std::vector<V2i> getPath(const V2i& pos);
+  void fillMap(const Unit& u);
+  void cleanMap();
 };
 
 #endif

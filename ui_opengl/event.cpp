@@ -15,46 +15,46 @@
 #include "ui_opengl/event.h"
 #include "ui_opengl/event/move.h"
 
-bool event_filter_unit(Game& game, const Event& e, const Unit& u) {
+bool eventFilterUnit(Game& game, const Event& e, const Unit& u) {
   switch (e.t) {
-  case EventTypeId::E_END_TURN:
+  case EventTypeID::END_TURN:
     return false;
-  case EventTypeId::E_MOVE:
-    return u.id == e.e.move.unit_id;
+  case EventTypeID::MOVE:
+    return u.id == e.e.move.unitID;
   default:
-    die("ui_event: event_filter_unit(): "
+    die("uiEvent: eventFilterUnit(): "
         "unknow event '%d'.\n", e.t);
     return false;
   }
 }
 
-void event_draw(Game& game, const Event& e) {
+void eventDraw(Game& game, const Event& e) {
   switch (e.t) {
-  case EventTypeId::E_END_TURN: {
+  case EventTypeID::END_TURN: {
     die("TODO");
     break;
   }
-  case EventTypeId::E_MOVE: {
-    draw_moving_unit(game, e.e.move);
+  case EventTypeID::MOVE: {
+    drawMovingUnit(game, e.e.move);
     break;
   }
   default:
-    die("ui_event: event_draw(): "
+    die("uiEvent: eventDraw(): "
         "unknow event '%d'.\n", e.t);
     break;
   }
 }
 
-int get_last_event_index(Game& game, const Event& e) {
+int getLastEventIndex(Game& game, const Event& e) {
   switch (e.t) {
-  case EventTypeId::E_END_TURN: {
+  case EventTypeID::END_TURN: {
     return 0;
   }
-  case EventTypeId::E_MOVE: {
-    return get_last_event_move_index(game, e);
+  case EventTypeID::MOVE: {
+    return getLastEventMoveIndex(game, e);
   }
   default:
-    die("ui_event: get_last_event_index(): "
+    die("uiEvent: getLastEventIndex(): "
         "unknow event '%d'.\n", e.t);
     return 0;
   }

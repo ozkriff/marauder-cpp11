@@ -6,18 +6,18 @@
 #include "core/event/move.h"
 #include "core/event/end_turn.h"
 
-enum class EventTypeId {
-  E_MOVE,
-  E_END_TURN
+enum class EventTypeID {
+  MOVE,
+  END_TURN
 };
 
 class Event {
 public:
-  EventTypeId t;
+  EventTypeID t;
   int id;
   union TMP {
     EventMove move;
-    EventEndturn end_turn;
+    EventEndturn endTurn;
 
     TMP() {
       // Due to the Point member, a constructor definition is now required
@@ -32,13 +32,13 @@ public:
   ~Event();
 };
 
-void init_events();
-void add_event(Core& core, Event* e);
-Event* get_next_event(Core& core);
-bool unshown_events_left(Core& core);
-void apply_invisible_events(Core& core);
-bool is_event_visible(const Core& core, const Event& e);
-void apply_event(Core& core, const Event& e);
-void undo_unshown_events(Core& core);
+void initEvents();
+void addEvent(Core& core, Event* e);
+Event* getNextEvent(Core& core);
+bool unshownEventsLeft(Core& core);
+void applyInvisibleEvents(Core& core);
+bool isEventVisible(const Core& core, const Event& e);
+void applyEvent(Core& core, const Event& e);
+void undoUnshownEvents(Core& core);
 
 #endif

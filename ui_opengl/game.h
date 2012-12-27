@@ -6,78 +6,79 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_opengl.h>
+#include "core/core.h"
 #include "ui_opengl/vertex_array.h"
 #include "ui_opengl/v2f.h"
 #include "ui_opengl/camera.h"
 #include "ui_opengl/obj.h"
 
 enum class UIMode {
-  UI_MODE_NORMAL,
-  UI_MODE_SHOW_EVENT
+  NORMAL,
+  SHOW_EVENT
 };
 
 class Game {
 public:
   Core core;
-  UIMode ui_mode;
-  int last_move_index;
-  int current_move_index;
-  VertexArray va_walkable_map;
-  VertexArray va_fog_of_war;
+  UIMode uiMode;
+  int lastMoveIndex;
+  int currentMoveIndex;
+  VertexArray vaWalkableMap;
+  VertexArray vaFogOfWar;
 
-  V2i win_size;
-  V2i mouse_pos;
-  V2i active_tile_pos;
+  V2i winSize;
+  V2i mousePos;
+  V2i activeTilePos;
   SDL_Surface* screen;
-  bool is_rotating_camera;
+  bool isRotatingCamera;
   bool done;
   Camera camera;
-  GLuint floor_texture;
-  VertexArray va_map;
-  VertexArray va_obstacles;
-  VertexArray va_pick;
-  ObjModel obj_units[static_cast<int>(Unit_type_id::UNIT_COUNT)];
-  VertexArray va_units[static_cast<int>(Unit_type_id::UNIT_COUNT)];
-  GLuint texture_units[static_cast<int>(Unit_type_id::UNIT_COUNT)];
-  TTF_Font *font;
+  GLuint floorTexture;
+  VertexArray vaMap;
+  VertexArray vaObstacles;
+  VertexArray vaPick;
+  ObjModel objUnits[static_cast<int>(UnitTypeID::COUNT)];
+  VertexArray vaUnits[static_cast<int>(UnitTypeID::COUNT)];
+  GLuint textureUnits[static_cast<int>(UnitTypeID::COUNT)];
+  TTF_Font* font;
 
 public:
   Game();
   ~Game();
-  void do_xxx();
+  void run();
   void init();
   void cleanup();
-  V2f v2i_to_v2f(const V2i& i);
-  void build_map_array(VertexArray *v);
-  void build_obstacles_array(VertexArray *v);
-  int calculate_walkable_tiles_count();
-  int calculate_fogged_tiles_count();
-  void build_fow_array(VertexArray *v);
-  void build_walkable_array(VertexArray *v);
-  void draw_map();
-  void draw_unit_model(const Unit *u);
-  void draw_unit_circle(const Unit *u);
-  void draw_unit(const Unit *u);
-  void draw_units();
+  V2f v2iToV2f(const V2i& i);
+  void buildMapArray(VertexArray* v);
+  void buildObstaclesArray(VertexArray* v);
+  int calculateWalkableTilesCount();
+  int calculateFoggedTilesCount();
+  void buildFowArray(VertexArray* v);
+  void buildWalkableArray(VertexArray* v);
+  void drawMap();
+  void drawUnitModel(const Unit& u);
+  void drawUnitCircle(const Unit& u);
+  void drawUnit(const Unit& u);
+  void drawUnits();
   void draw();
-  void process_mouse_button_down_event(const SDL_MouseButtonEvent& e);
-  void process_mouse_motion_event(const SDL_MouseMotionEvent& e);
-  void process_key_down_event(const SDL_KeyboardEvent& e);
-  void screen_scenario_main_events();
+  void processMouseButtonDownEvent(const SDL_MouseButtonEvent& e);
+  void processMouseMotionEvent(const SDL_MouseMotionEvent& e);
+  void processKeyDownEvent(const SDL_KeyboardEvent& e);
+  void screenScenarioMainEvents();
   void logic();
-  void process_sdl_event(const SDL_Event& e);
-  void sdl_events();
-  void build_picking_tiles_array(VertexArray *va);
-  bool pick_tile(V2i *p, const V2i *mouse_pos);
-  void draw_for_picking();
-  void scroll_map();
+  void processSDLEvent(const SDL_Event& e);
+  void sdlEvents();
+  void buildPickingTilesArray(VertexArray* va);
+  bool pickTile(V2i* p, const V2i* mousePos);
+  void drawForPicking();
+  void scrollMap();
   void mainloop();
-  void init_opengl();
-  void init_camera();
-  void init_vertex_arrays();
-  void load_unit_resources();
-  void on_test_button();
-  void add_buttons();
+  void initOpengl();
+  void initCamera();
+  void initVertexArrays();
+  void loadUnitResources();
+  void onTestButton();
+  void addButtons();
 };
 
 #endif

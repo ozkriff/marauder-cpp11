@@ -5,7 +5,6 @@
 #include <cstring>
 #include <cassert>
 #include <ctime>
-#include "core/core.h"
 #include "ui_opengl/math.h"
 #include "ui_opengl/vertex_array.h"
 #include "ui_opengl/game.h"
@@ -24,7 +23,7 @@
 #define TILE_SIZE_2 (TILE_SIZE / 2.0f)
 
 #define FOR_EACH_TILE(p) \
-  for (*p = V2i(0, 0); core.inboard(*p); core.inc_v2i(p))
+  for (*p = V2i(0, 0); core.inboard(*p); core.incV2i(p))
 
 Game::Game() {
 }
@@ -32,43 +31,43 @@ Game::Game() {
 Game::~Game() {
 }
 
-void Game::do_xxx() {
+void Game::run() {
   init();
   mainloop();
   cleanup();
 }
 
 void Game::init() {
-  core.init_logic();
+  core.initLogic();
   done = false;
-  win_size = V2i(WIN_WIDTH, WIN_HEIGHT);
-  active_tile_pos = V2i(0, 0);
-  mouse_pos = V2i(0, 0);
-  ui_mode = UIMode::UI_MODE_NORMAL;
-  is_rotating_camera = false;
+  winSize = V2i(WIN_WIDTH, WIN_HEIGHT);
+  activeTilePos = V2i(0, 0);
+  mousePos = V2i(0, 0);
+  uiMode = UIMode::NORMAL;
+  isRotatingCamera = false;
   SDL_Init(SDL_INIT_EVERYTHING);
-  screen = SDL_SetVideoMode(win_size.x(), win_size.y(),
+  screen = SDL_SetVideoMode(winSize.x(), winSize.y(),
       32, SDL_OPENGL | SDL_GL_DOUBLEBUFFER);
-  init_opengl();
-  init_camera();
-  init_widgets();
-  font = open_font(DEFAULT_FONT, 10);
-  add_buttons();
-  load_texture(&floor_texture, DATA("floor.png"));
-  load_unit_resources();
-  init_vertex_arrays();
+  initOpengl();
+  initCamera();
+  initWidgets();
+  font = openFont(DEFAULT_FONT, 10);
+  addButtons();
+  loadTexture(&floorTexture, DATA("floor.png"));
+  loadUnitResources();
+  initVertexArrays();
 }
 
 void Game::cleanup() {
   SDL_Quit();
 }
 
-V2f Game::v2i_to_v2f(const V2i& i) {
+V2f Game::v2iToV2f(const V2i& i) {
   assert(core.inboard(i));
   return V2f(i.x() * TILE_SIZE, i.y() * TILE_SIZE);
 }
 
-void Game::build_map_array(VertexArray *v) {
+void Game::buildMapArray(VertexArray *v) {
   V2i p;
   int i = 0; // tile's index
   v->count = MAP_X * MAP_Y * 6;
@@ -89,25 +88,25 @@ void Game::build_map_array(VertexArray *v) {
     if (t.obstacle) {
       continue;
     }
-    pos = v2i_to_v2f(p);
-    set_xy(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
-    set_xy(v->v, 3, i, 1, pos.x() + n, pos.y() - n);
-    set_xy(v->v, 3, i, 2, pos.x() + n, pos.y() + n);
-    set_xy(v->t, 3, i, 0, 0, 0);
-    set_xy(v->t, 3, i, 1, 1, 0);
-    set_xy(v->t, 3, i, 2, 1, 1);
+    pos = v2iToV2f(p);
+    setXY(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
+    setXY(v->v, 3, i, 1, pos.x() + n, pos.y() - n);
+    setXY(v->v, 3, i, 2, pos.x() + n, pos.y() + n);
+    setXY(v->t, 3, i, 0, 0, 0);
+    setXY(v->t, 3, i, 1, 1, 0);
+    setXY(v->t, 3, i, 2, 1, 1);
     i++;
-    set_xy(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
-    set_xy(v->v, 3, i, 1, pos.x() + n, pos.y() + n);
-    set_xy(v->v, 3, i, 2, pos.x() - n, pos.y() + n);
-    set_xy(v->t, 3, i, 0, 0, 0);
-    set_xy(v->t, 3, i, 1, 1, 1);
-    set_xy(v->t, 3, i, 2, 0, 1);
+    setXY(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
+    setXY(v->v, 3, i, 1, pos.x() + n, pos.y() + n);
+    setXY(v->v, 3, i, 2, pos.x() - n, pos.y() + n);
+    setXY(v->t, 3, i, 0, 0, 0);
+    setXY(v->t, 3, i, 1, 1, 1);
+    setXY(v->t, 3, i, 2, 0, 1);
     i++;
   }
 }
 
-void Game::build_obstacles_array(VertexArray *v) {
+void Game::buildObstaclesArray(VertexArray *v) {
   V2i p;
   int i = 0; // tile's index
   v->count = MAP_X * MAP_Y * 6;
@@ -127,37 +126,37 @@ void Game::build_obstacles_array(VertexArray *v) {
     if (!t.obstacle) {
       continue;
     }
-    V2f pos = v2i_to_v2f(p);
-    set_xy(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
-    set_xy(v->v, 3, i, 1, pos.x() + n, pos.y() - n);
-    set_xy(v->v, 3, i, 2, pos.x() + n, pos.y() + n);
-    set_xy(v->t, 3, i, 0, 0, 0);
-    set_xy(v->t, 3, i, 1, 1, 0);
-    set_xy(v->t, 3, i, 2, 1, 1);
+    V2f pos = v2iToV2f(p);
+    setXY(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
+    setXY(v->v, 3, i, 1, pos.x() + n, pos.y() - n);
+    setXY(v->v, 3, i, 2, pos.x() + n, pos.y() + n);
+    setXY(v->t, 3, i, 0, 0, 0);
+    setXY(v->t, 3, i, 1, 1, 0);
+    setXY(v->t, 3, i, 2, 1, 1);
     i++;
-    set_xy(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
-    set_xy(v->v, 3, i, 1, pos.x() + n, pos.y() + n);
-    set_xy(v->v, 3, i, 2, pos.x() - n, pos.y() + n);
-    set_xy(v->t, 3, i, 0, 0, 0);
-    set_xy(v->t, 3, i, 1, 1, 1);
-    set_xy(v->t, 3, i, 2, 0, 1);
+    setXY(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
+    setXY(v->v, 3, i, 1, pos.x() + n, pos.y() + n);
+    setXY(v->v, 3, i, 2, pos.x() - n, pos.y() + n);
+    setXY(v->t, 3, i, 0, 0, 0);
+    setXY(v->t, 3, i, 1, 1, 1);
+    setXY(v->t, 3, i, 2, 0, 1);
     i++;
   }
 }
 
-int Game::calculate_walkable_tiles_count() {
+int Game::calculateWalkableTilesCount() {
   V2i p;
   int count = 0;
   FOR_EACH_TILE(&p) {
     Tile& t = core.tile(p);
-    if (t.parent.value() != DirID::D_NONE && t.cost != 30000) {
+    if (t.parent.value() != DirID::NONE && t.cost != 30000) {
       count++;
     }
   }
   return count;
 }
 
-int Game::calculate_fogged_tiles_count() {
+int Game::calculateFoggedTilesCount() {
   int n = 0;
   V2i p;
   FOR_EACH_TILE(&p) {
@@ -169,10 +168,10 @@ int Game::calculate_fogged_tiles_count() {
   return n;
 }
 
-void Game::build_fow_array(VertexArray *v) {
+void Game::buildFowArray(VertexArray *v) {
   V2i p;
   int i = 0; // tile's index
-  v->count = calculate_fogged_tiles_count() * 6;
+  v->count = calculateFoggedTilesCount() * 6;
   if (v->v) {
     delete[] v->v;
     v->v = nullptr;
@@ -181,21 +180,22 @@ void Game::build_fow_array(VertexArray *v) {
   FOR_EACH_TILE(&p) {
     Tile& t = core.tile(p);
     float n = TILE_SIZE_2;
-    if (t.fow > 0)
+    if (t.fow > 0) {
       continue;
-    V2f pos = v2i_to_v2f(p);
-    set_xyz(v->v, 3, i, 0, pos.x() - n, pos.y() - n, 0.05f);
-    set_xyz(v->v, 3, i, 1, pos.x() + n, pos.y() - n, 0.05f);
-    set_xyz(v->v, 3, i, 2, pos.x() + n, pos.y() + n, 0.05f);
+    }
+    V2f pos = v2iToV2f(p);
+    setXYZ(v->v, 3, i, 0, pos.x() - n, pos.y() - n, 0.05f);
+    setXYZ(v->v, 3, i, 1, pos.x() + n, pos.y() - n, 0.05f);
+    setXYZ(v->v, 3, i, 2, pos.x() + n, pos.y() + n, 0.05f);
     i++;
-    set_xyz(v->v, 3, i, 0, pos.x() - n, pos.y() - n, 0.05f);
-    set_xyz(v->v, 3, i, 1, pos.x() + n, pos.y() + n, 0.05f);
-    set_xyz(v->v, 3, i, 2, pos.x() - n, pos.y() + n, 0.05f);
+    setXYZ(v->v, 3, i, 0, pos.x() - n, pos.y() - n, 0.05f);
+    setXYZ(v->v, 3, i, 1, pos.x() + n, pos.y() + n, 0.05f);
+    setXYZ(v->v, 3, i, 2, pos.x() - n, pos.y() + n, 0.05f);
     i++;
   }
 }
 
-void Game::build_walkable_array(VertexArray *v) {
+void Game::buildWalkableArray(VertexArray *v) {
   V2i p;
   int i = 0; // tile's index
   assert(v);
@@ -203,41 +203,41 @@ void Game::build_walkable_array(VertexArray *v) {
     delete[] v->v;
     v->v = nullptr;
   }
-  v->count = calculate_walkable_tiles_count() * 3;
+  v->count = calculateWalkableTilesCount() * 3;
   if (v->count == 0) {
     return;
   }
   v->v = (float *)new V3f[v->count];
   FOR_EACH_TILE(&p) {
     Tile& t = core.tile(p);
-    if (t.parent.value() != DirID::D_NONE && t.cost < 50) {
+    if (t.parent.value() != DirID::NONE && t.cost < 50) {
       V2i p2 = Dir::neib(p, t.parent);
       if (core.inboard(p2)) {
-        V2f pos1 = v2i_to_v2f(p);
-        V2f pos2 = v2i_to_v2f(p2);
-        set_xyz(v->v, 2, i, 0, pos1.x(), pos1.y(), 0.1f);
-        set_xyz(v->v, 2, i, 1, pos2.x(), pos2.y(), 0.1f);
+        V2f pos1 = v2iToV2f(p);
+        V2f pos2 = v2iToV2f(p2);
+        setXYZ(v->v, 2, i, 0, pos1.x(), pos1.y(), 0.1f);
+        setXYZ(v->v, 2, i, 1, pos2.x(), pos2.y(), 0.1f);
         i++;
       }
     }
   }
 }
 
-void Game::draw_map() {
+void Game::drawMap() {
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glBindTexture(GL_TEXTURE_2D, floor_texture);
+  glBindTexture(GL_TEXTURE_2D, floorTexture);
 
   glColor3f(1.0f, 1.0f, 1.0f);
-  glTexCoordPointer(2, GL_FLOAT, 0, va_map.t);
-  glVertexPointer(2, GL_FLOAT, 0, va_map.v);
-  glDrawArrays(GL_TRIANGLES, 0, va_map.count);
+  glTexCoordPointer(2, GL_FLOAT, 0, vaMap.t);
+  glVertexPointer(2, GL_FLOAT, 0, vaMap.v);
+  glDrawArrays(GL_TRIANGLES, 0, vaMap.count);
 
   glColor3f(1.0f, 0.0f, 0.0f);
-  glTexCoordPointer(2, GL_FLOAT, 0, va_obstacles.t);
-  glVertexPointer(2, GL_FLOAT, 0, va_obstacles.v);
-  glDrawArrays(GL_TRIANGLES, 0, va_obstacles.count);
+  glTexCoordPointer(2, GL_FLOAT, 0, vaObstacles.t);
+  glVertexPointer(2, GL_FLOAT, 0, vaObstacles.v);
+  glDrawArrays(GL_TRIANGLES, 0, vaObstacles.count);
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisable(GL_TEXTURE_2D);
@@ -245,47 +245,45 @@ void Game::draw_map() {
 
   glEnableClientState(GL_VERTEX_ARRAY);
   glColor3f(0.0f, 0.3f, 1.0f);
-  glVertexPointer(3, GL_FLOAT, 0, va_walkable_map.v);
-  glDrawArrays(GL_LINES, 0, va_walkable_map.count);
+  glVertexPointer(3, GL_FLOAT, 0, vaWalkableMap.v);
+  glDrawArrays(GL_LINES, 0, vaWalkableMap.count);
   glDisableClientState(GL_VERTEX_ARRAY);
 
   glEnableClientState(GL_VERTEX_ARRAY);
   glColor4f(0.0f, 0.0f, 0.0f, 0.2f);
-  glVertexPointer(3, GL_FLOAT, 0, va_fog_of_war.v);
-  glDrawArrays(GL_TRIANGLES, 0, va_fog_of_war.count);
+  glVertexPointer(3, GL_FLOAT, 0, vaFogOfWar.v);
+  glDrawArrays(GL_TRIANGLES, 0, vaFogOfWar.count);
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void Game::draw_unit_model(const Unit *u) {
-  assert(u);
+void Game::drawUnitModel(const Unit& u) {
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glBindTexture(GL_TEXTURE_2D, texture_units[u->type_id]);
+  glBindTexture(GL_TEXTURE_2D, textureUnits[u.typeID]);
   glColor3f(1, 1, 1);
-  glTexCoordPointer(2, GL_FLOAT, 0, va_units[u->type_id].t);
-  glVertexPointer(3, GL_FLOAT, 0, va_units[u->type_id].v);
-  glDrawArrays(GL_TRIANGLES, 0, va_units[u->type_id].count);
+  glTexCoordPointer(2, GL_FLOAT, 0, vaUnits[u.typeID].t);
+  glVertexPointer(3, GL_FLOAT, 0, vaUnits[u.typeID].v);
+  glDrawArrays(GL_TRIANGLES, 0, vaUnits[u.typeID].count);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_TEXTURE_2D);
 }
 
-void Game::draw_unit_circle(const Unit *u) {
+void Game::drawUnitCircle(const Unit& u) {
   float v[4 * 3];
   float n = TILE_SIZE_2 * 0.9f;
-  assert(u);
-  if (u->player_id == 0) {
+  if (u.playerID == 0) {
     glColor3f(1, 0, 0);
-  } else if (u->player_id == 1) {
+  } else if (u.playerID == 1) {
     glColor3f(0, 0, 1);
   } else {
-    die("draw_unit_circle(): You need more colors!");
+    die("drawUnitCircle(): You need more colors!");
   }
-  set_xyz(v, 2, 0, 0, +n, +n, 0.1f);
-  set_xyz(v, 2, 0, 1, +n, -n, 0.1f);
-  set_xyz(v, 2, 1, 0, -n, -n, 0.1f);
-  set_xyz(v, 2, 1, 1, -n, +n, 0.1f);
+  setXYZ(v, 2, 0, 0, +n, +n, 0.1f);
+  setXYZ(v, 2, 0, 1, +n, -n, 0.1f);
+  setXYZ(v, 2, 1, 0, -n, -n, 0.1f);
+  setXYZ(v, 2, 1, 1, -n, +n, 0.1f);
   glLineWidth(2);
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(3, GL_FLOAT, 0, v);
@@ -294,91 +292,90 @@ void Game::draw_unit_circle(const Unit *u) {
   glLineWidth(1);
 }
 
-void Game::draw_unit(const Unit *u) {
-  assert(u);
-  V2f f = v2i_to_v2f(u->pos);
+void Game::drawUnit(const Unit& u) {
+  V2f f = v2iToV2f(u.pos);
   glColor3f(1, 0, 0);
   glPushMatrix();
   glTranslatef(f.x(), f.y(), 0);
-  glRotatef((u->dir.toInt() + 4) * 45.0f, 0, 0, 1);
-  draw_unit_model(u);
-  draw_unit_circle(u);
+  glRotatef((u.dir.toInt() + 4) * 45.0f, 0, 0, 1);
+  drawUnitModel(u);
+  drawUnitCircle(u);
   glPopMatrix();
 }
 
-void Game::draw_units() {
+void Game::drawUnits() {
   for (auto u : core.units) {
-    if (ui_mode == UIMode::UI_MODE_SHOW_EVENT
-        && event_filter_unit(*this, *core.current_event, *u))
+    if (uiMode == UIMode::SHOW_EVENT
+        && eventFilterUnit(*this, *core.currentEvent, *u))
     {
       continue;
     }
     if (core.tile(u->pos).fow == 0) {
       continue;
     }
-    draw_unit(u);
+    drawUnit(*u);
   }
 }
 
 void Game::draw() {
   glLoadIdentity();
   camera.set();
-  draw_map();
-  draw_units();
-  if (ui_mode == UIMode::UI_MODE_SHOW_EVENT) {
-    event_draw(*this, *core.current_event);
+  drawMap();
+  drawUnits();
+  if (uiMode == UIMode::SHOW_EVENT) {
+    eventDraw(*this, *core.currentEvent);
   }
-  draw_buttons();
+  drawButtons();
   SDL_GL_SwapBuffers();
 }
 
-void Game::process_mouse_button_down_event(const SDL_MouseButtonEvent& e) {
+void Game::processMouseButtonDownEvent(const SDL_MouseButtonEvent& e) {
   V2i p(static_cast<int>(e.x), static_cast<int>(e.y));
-  auto b = v2i_to_button(p);
+  auto b = v2iToButton(p);
   if (b) {
     if (b->callback) {
       b->callback();
     }
     return;
   }
-  Unit* u = core.unit_at(active_tile_pos);
-  Tile& t = core.tile(active_tile_pos);
-  assert(core.current_player);
+  Unit* u = core.unitAt(activeTilePos);
+  Tile& t = core.tile(activeTilePos);
+  assert(core.currentPlayer);
   UNUSED(e);
-  if (ui_mode != UIMode::UI_MODE_NORMAL) {
+  if (uiMode != UIMode::NORMAL) {
     return;
   }
-  if (u && u->player_id == core.current_player->id) {
-    core.selected_unit = u;
-    core.pathfinder.fill_map(*core.selected_unit);
-    build_walkable_array(&va_walkable_map);
-  } else if (core.selected_unit) {
-    auto type = get_unit_type(core.selected_unit->type_id);
-    int ap = type.action_points;
-    if (u && u->player_id != core.current_player->id) {
-      if (core.selected_unit && u) {
-        core.shoot(core.selected_unit, u);
+  if (u && u->playerID == core.currentPlayer->id) {
+    core.selectedUnit = u;
+    core.pathfinder.fillMap(*core.selectedUnit);
+    buildWalkableArray(&vaWalkableMap);
+  } else if (core.selectedUnit) {
+    auto type = getUnitType(core.selectedUnit->typeID);
+    int ap = type.actionPoints;
+    if (u && u->playerID != core.currentPlayer->id) {
+      if (core.selectedUnit && u) {
+        core.shoot(core.selectedUnit, u);
       }
-    } else if (t.cost <= ap && t.parent.value() != DirID::D_NONE) {
-      generate_event_move(core, *core.selected_unit, active_tile_pos);
-      // TODO: Move this to ui_event_move?
-      delete[] va_walkable_map.v;
-      va_walkable_map = empty_vertex_array;
+    } else if (t.cost <= ap && t.parent.value() != DirID::NONE) {
+      generateEventMove(core, *core.selectedUnit, activeTilePos);
+      // TODO: Move this to uiEventMove?
+      delete[] vaWalkableMap.v;
+      vaWalkableMap = emptyVertexArray;
     }
   }
 }
 
-void Game::process_mouse_motion_event(const SDL_MouseMotionEvent& e) {
-  mouse_pos = V2i(static_cast<int>(e.x), static_cast<int>(e.y));
-  if (is_rotating_camera) {
-    camera.z_angle -= e.xrel;
-    camera.x_angle -= e.yrel;
-    clamp_angle(&camera.z_angle);
-    clamp_f(&camera.x_angle, 0, 50);
+void Game::processMouseMotionEvent(const SDL_MouseMotionEvent& e) {
+  mousePos = V2i(static_cast<int>(e.x), static_cast<int>(e.y));
+  if (isRotatingCamera) {
+    camera.zAngle -= e.xrel;
+    camera.xAngle -= e.yrel;
+    clampAngle(&camera.zAngle);
+    clampF(&camera.xAngle, 0, 50);
   }
 }
 
-void Game::process_key_down_event(const SDL_KeyboardEvent& e) {
+void Game::processKeyDownEvent(const SDL_KeyboardEvent& e) {
   switch (e.keysym.sym) {
   case SDLK_ESCAPE:
   case SDLK_q: {
@@ -386,155 +383,147 @@ void Game::process_key_down_event(const SDL_KeyboardEvent& e) {
     break;
   }
   case SDLK_c: {
-    if (!core.selected_unit) {
+    if (!core.selectedUnit) {
       return;
     }
-    V2f unit_pos = v2i_to_v2f(core.selected_unit->pos);
-    camera.pos = unit_pos;
+    V2f unitPos = v2iToV2f(core.selectedUnit->pos);
+    camera.pos = unitPos;
     break;
   }
   case SDLK_t: {
-    Tile& t = core.tile(active_tile_pos);
+    Tile& t = core.tile(activeTilePos);
     t.obstacle = !t.obstacle;
-    build_map_array(&va_map);
-    build_obstacles_array(&va_obstacles);
-    core.calculate_fow();
-    build_fow_array(&va_fog_of_war);
-    if (core.selected_unit) {
-      core.pathfinder.fill_map(*core.selected_unit);
-      build_walkable_array(&va_walkable_map);
+    buildMapArray(&vaMap);
+    buildObstaclesArray(&vaObstacles);
+    core.calculateFow();
+    buildFowArray(&vaFogOfWar);
+    if (core.selectedUnit) {
+      core.pathfinder.fillMap(*core.selectedUnit);
+      buildWalkableArray(&vaWalkableMap);
     }
     break;
   }
   case SDLK_e: {
-    generate_event_end_turn(core);
+    generateEventEndTurn(core);
     break;
   }
   case SDLK_u: {
-    core.add_unit(active_tile_pos, core.current_player->id);
-    if (core.selected_unit) {
-      core.pathfinder.fill_map(*core.selected_unit);
-      build_walkable_array(&va_walkable_map);
+    core.addUnit(activeTilePos, core.currentPlayer->id);
+    if (core.selectedUnit) {
+      core.pathfinder.fillMap(*core.selectedUnit);
+      buildWalkableArray(&vaWalkableMap);
     }
     break;
   }
   case SDLK_d: {
-    camera.z_angle += 15;
-    clamp_angle(&camera.z_angle);
+    camera.zAngle += 15;
+    clampAngle(&camera.zAngle);
     break;
   }
   case SDLK_a: {
-    camera.z_angle -= 15;
-    clamp_angle(&camera.z_angle);
+    camera.zAngle -= 15;
+    clampAngle(&camera.zAngle);
     break;
   }
   case SDLK_w: {
     camera.zoom -= 10;
-    clamp_f(&camera.zoom, 30, 200);
+    clampF(&camera.zoom, 30, 200);
     break;
   }
   case SDLK_s: {
     camera.zoom += 10;
-    clamp_f(&camera.zoom, 30, 200);
+    clampF(&camera.zoom, 30, 200);
     break;
   }
   case SDLK_UP: {
-    camera.move(DirID::D_N);
+    camera.move(DirID::N);
     break;
   }
   case SDLK_DOWN: {
-    camera.move(DirID::D_S);
+    camera.move(DirID::S);
     break;
   }
   case SDLK_LEFT: {
-    camera.move(DirID::D_W);
+    camera.move(DirID::W);
     break;
   }
   case SDLK_RIGHT: {
-    camera.move(DirID::D_E);
+    camera.move(DirID::E);
     break;
   }
   default:
-    printf("process_key_down_event(): "
+    printf("processKeyDownEvent(): "
         "Unknown key (%d, 0x%x) was pressed.\n",
         e.keysym.sym, e.keysym.sym);
     break;
   }
 }
 
-void Game::screen_scenario_main_events() {
-  core.current_event = get_next_event(core);
-  last_move_index = get_last_event_index(*this, *core.current_event);
-  ui_mode = UIMode::UI_MODE_SHOW_EVENT;
-  current_move_index = 0;
+void Game::screenScenarioMainEvents() {
+  core.currentEvent = getNextEvent(core);
+  lastMoveIndex = getLastEventIndex(*this, *core.currentEvent);
+  uiMode = UIMode::SHOW_EVENT;
+  currentMoveIndex = 0;
   // TODO: Remove this hack
-  if (core.current_event->t == EventTypeId::E_END_TURN) {
-    apply_event(core, *core.current_event);
-    ui_mode = UIMode::UI_MODE_NORMAL;
+  if (core.currentEvent->t == EventTypeID::END_TURN) {
+    applyEvent(core, *core.currentEvent);
+    uiMode = UIMode::NORMAL;
   }
 }
 
 void Game::logic() {
-  while (ui_mode == UIMode::UI_MODE_NORMAL
-      && unshown_events_left(core))
-  {
-    screen_scenario_main_events();
+  while (uiMode == UIMode::NORMAL && unshownEventsLeft(core)) {
+    screenScenarioMainEvents();
   }
 }
 
-void Game::process_sdl_event(const SDL_Event& e) {
+void Game::processSDLEvent(const SDL_Event& e) {
   switch (e.type) {
-  case SDL_QUIT: {
+  case SDL_QUIT:
     done = true;
     break;
-  }
-  case SDL_VIDEORESIZE: {
+  case SDL_VIDEORESIZE:
     screen = SDL_SetVideoMode(e.resize.w, e.resize.h,
         32, SDL_RESIZABLE);
     break;
-  }
-  case SDL_KEYDOWN: {
-    process_key_down_event(e.key);
+  case SDL_KEYDOWN:
+    processKeyDownEvent(e.key);
     break;
-  }
-  case SDL_MOUSEMOTION: {
-    process_mouse_motion_event(e.motion);
+  case SDL_MOUSEMOTION:
+    processMouseMotionEvent(e.motion);
     break;
-  }
-  case SDL_MOUSEBUTTONUP: {
+  case SDL_MOUSEBUTTONUP:
     if (e.button.button == SDL_BUTTON_RIGHT) {
-      is_rotating_camera = false;
+      isRotatingCamera = false;
     }
     if (e.button.button == SDL_BUTTON_WHEELUP) {
       camera.zoom -= 5;
-      clamp_f(&camera.zoom, 30, 200);
+      clampF(&camera.zoom, 30, 200);
     } else if (e.button.button == SDL_BUTTON_WHEELDOWN) {
       camera.zoom += 5;
-      clamp_f(&camera.zoom, 30, 200);
+      clampF(&camera.zoom, 30, 200);
     }
     break;
-  }
-  case SDL_MOUSEBUTTONDOWN: {
+  case SDL_MOUSEBUTTONDOWN:
     if (e.button.button == SDL_BUTTON_RIGHT) {
-      is_rotating_camera = true;
+      isRotatingCamera = true;
     } else if (e.button.button == SDL_BUTTON_LEFT) {
-      process_mouse_button_down_event(e.button);
+      processMouseButtonDownEvent(e.button);
     }
     break;
-  }
   default:
     break;
   }
 }
 
-void Game::sdl_events() {
+void Game::sdlEvents() {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
-    process_sdl_event(e);
+    processSDLEvent(e);
   }
 }
 
-void Game::build_picking_tiles_array(VertexArray *va) {
+void Game::buildPickingTilesArray(VertexArray *va) {
   V2i p;
   int i = 0; // tile index
   assert(va);
@@ -543,34 +532,34 @@ void Game::build_picking_tiles_array(VertexArray *va) {
     delete[] va->v;
     va->v = nullptr;
   }
-  if (va->ub_c) {
-    delete[] va->ub_c;
-    va->ub_c = nullptr;
+  if (va->ubC) {
+    delete[] va->ubC;
+    va->ubC = nullptr;
   }
   va->v = (float *)new V3f[va->count];
-  va->ub_c = new GLubyte[va->count * 3];
+  va->ubC = new GLubyte[va->count * 3];
   FOR_EACH_TILE(&p) {
     float n = TILE_SIZE_2;
-    V2f pos = v2i_to_v2f(p);
-    set_xy(va->v, 4, i, 0, pos.x() - n, pos.y() - n);
-    set_xy(va->v, 4, i, 1, pos.x() + n, pos.y() - n);
-    set_xy(va->v, 4, i, 2, pos.x() + n, pos.y() + n);
-    set_xy(va->v, 4, i, 3, pos.x() - n, pos.y() + n);
-    set_rgb_i(va->ub_c, 4, i, 0, p.x(), p.y(), 1);
-    set_rgb_i(va->ub_c, 4, i, 1, p.x(), p.y(), 1);
-    set_rgb_i(va->ub_c, 4, i, 2, p.x(), p.y(), 1);
-    set_rgb_i(va->ub_c, 4, i, 3, p.x(), p.y(), 1);
+    V2f pos = v2iToV2f(p);
+    setXY(va->v, 4, i, 0, pos.x() - n, pos.y() - n);
+    setXY(va->v, 4, i, 1, pos.x() + n, pos.y() - n);
+    setXY(va->v, 4, i, 2, pos.x() + n, pos.y() + n);
+    setXY(va->v, 4, i, 3, pos.x() - n, pos.y() + n);
+    setRGBi(va->ubC, 4, i, 0, p.x(), p.y(), 1);
+    setRGBi(va->ubC, 4, i, 1, p.x(), p.y(), 1);
+    setRGBi(va->ubC, 4, i, 2, p.x(), p.y(), 1);
+    setRGBi(va->ubC, 4, i, 3, p.x(), p.y(), 1);
     i++;
   }
 }
 
-bool Game::pick_tile(V2i *p, const V2i *mouse_pos) {
+bool Game::pickTile(V2i* p, const V2i* mousePos) {
   GLint viewport[4];
   GLubyte pixel[3];
   assert(p);
   glGetIntegerv(GL_VIEWPORT, viewport);
   viewport[3] -= 1;
-  glReadPixels(mouse_pos->x(), viewport[3] - mouse_pos->y(),
+  glReadPixels(mousePos->x(), viewport[3] - mousePos->y(),
       1, 1, GL_RGB, GL_UNSIGNED_BYTE, (void *)pixel);
   if (pixel[2] != 1) {
     return false;
@@ -580,30 +569,30 @@ bool Game::pick_tile(V2i *p, const V2i *mouse_pos) {
   return true;
 }
 
-void Game::draw_for_picking() {
+void Game::drawForPicking() {
   glLoadIdentity();
   camera.set();
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_COLOR_ARRAY);
-  glColorPointer(3, GL_UNSIGNED_BYTE, 0, va_pick.ub_c);
-  glVertexPointer(2, GL_FLOAT, 0, va_pick.v);
-  glDrawArrays(GL_QUADS, 0, va_pick.count);
+  glColorPointer(3, GL_UNSIGNED_BYTE, 0, vaPick.ubC);
+  glVertexPointer(2, GL_FLOAT, 0, vaPick.v);
+  glDrawArrays(GL_QUADS, 0, vaPick.count);
   glDisableClientState(GL_COLOR_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void Game::scroll_map() {
-  const V2i *p = &mouse_pos;
+void Game::scrollMap() {
+  const V2i *p = &mousePos;
   int offset = 15;
   if (p->x() < offset) {
-    camera.move(DirID::D_W);
+    camera.move(DirID::W);
   } else if(p->x() > screen->w - offset) {
-    camera.move(DirID::D_E);
+    camera.move(DirID::E);
   }
   if (p->y() < offset) {
-    camera.move(DirID::D_N);
+    camera.move(DirID::N);
   } else if(p->y() > screen->h - offset) {
-    camera.move(DirID::D_S);
+    camera.move(DirID::S);
   }
   if (camera.pos.x() > MAP_X * TILE_SIZE) {
     camera.pos.setX(MAP_X * TILE_SIZE);
@@ -619,22 +608,22 @@ void Game::scroll_map() {
 
 void Game::mainloop() {
   while (!done) {
-    sdl_events();
+    sdlEvents();
     logic();
-    scroll_map();
+    scrollMap();
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    draw_for_picking();
-    pick_tile(&active_tile_pos, &mouse_pos);
+    drawForPicking();
+    pickTile(&activeTilePos, &mousePos);
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     draw();
-    // SDL_Delay(1000.0f / 24.0f);
+    // SDLDelay(1000.0f / 24.0f);
   }
 }
 
-void Game::init_opengl() {
-  float aspect_ratio = static_cast<float>(win_size.y()) / win_size.x();
+void Game::initOpengl() {
+  float aspectRatio = static_cast<float>(winSize.y()) / winSize.x();
   SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -642,8 +631,8 @@ void Game::init_opengl() {
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glFrustum(0.5, -0.5, -0.5 * aspect_ratio,
-      0.5 * aspect_ratio, 1, 500);
+  glFrustum(0.5, -0.5, -0.5 * aspectRatio,
+      0.5 * aspectRatio, 1, 500);
   glMatrixMode(GL_MODELVIEW);
   glEnable(GL_BLEND);
   glShadeModel(GL_SMOOTH);
@@ -658,50 +647,50 @@ void Game::init_opengl() {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void Game::init_camera() {
-  camera.x_angle = 45.0f;
-  camera.z_angle = 45.0f;
+void Game::initCamera() {
+  camera.xAngle = 45.0f;
+  camera.zAngle = 45.0f;
   camera.pos = V2f(20, 20);
   camera.zoom = 100.0f;
 }
 
-void Game::init_vertex_arrays() {
-  va_map = empty_vertex_array;
-  va_pick = empty_vertex_array;
-  va_walkable_map = empty_vertex_array;
-  va_fog_of_war = empty_vertex_array;
-  va_obstacles = empty_vertex_array;
-  build_picking_tiles_array(&va_pick);
-  build_map_array(&va_map);
-  build_obstacles_array(&va_obstacles);
-  build_fow_array(&va_fog_of_war);
+void Game::initVertexArrays() {
+  vaMap = emptyVertexArray;
+  vaPick = emptyVertexArray;
+  vaWalkableMap = emptyVertexArray;
+  vaFogOfWar = emptyVertexArray;
+  vaObstacles = emptyVertexArray;
+  buildPickingTilesArray(&vaPick);
+  buildMapArray(&vaMap);
+  buildObstaclesArray(&vaObstacles);
+  buildFowArray(&vaFogOfWar);
 }
 
-void Game::load_unit_resources() {
-  int tankID = static_cast<int>(Unit_type_id::UNIT_TANK);
-  int truckID = static_cast<int>(Unit_type_id::UNIT_TRUCK);
-  load_texture(&texture_units[tankID], DATA("tank.png"));
-  load_texture(&texture_units[truckID], DATA("truck.png"));
-  obj_read(&obj_units[tankID], DATA("tank.obj"));
-  obj_read(&obj_units[truckID], DATA("truck.obj"));
-  obj_build(&va_units[tankID], &obj_units[tankID]);
-  obj_build(&va_units[truckID], &obj_units[truckID]);
+void Game::loadUnitResources() {
+  int tankID = static_cast<int>(UnitTypeID::TANK);
+  int truckID = static_cast<int>(UnitTypeID::TRUCK);
+  loadTexture(&textureUnits[tankID], DATA("tank.png"));
+  loadTexture(&textureUnits[truckID], DATA("truck.png"));
+  objRead(&objUnits[tankID], DATA("tank.obj"));
+  objRead(&objUnits[truckID], DATA("truck.obj"));
+  objBuild(&vaUnits[tankID], &objUnits[tankID]);
+  objBuild(&vaUnits[truckID], &objUnits[truckID]);
 }
 
-void Game::on_test_button() {
+void Game::onTestButton() {
   printf("BUTTON CLICKED\n");
 }
 
-void Game::add_buttons() {
+void Game::addButtons() {
   V2i pos = {10, 10};
-  (void)add_button(font, &pos, "[CLICK ME!]",
-      nullptr); // on_test_button);
+  (void)addButton(font, &pos, "[CLICK ME!]",
+      nullptr); // onTestButton);
 }
 
 int main(int ac, char **av) {
   UNUSED(ac);
   UNUSED(av);
   Game game;
-  game.do_xxx();
+  game.run();
   return 0;
 }

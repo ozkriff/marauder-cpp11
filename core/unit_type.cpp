@@ -3,26 +3,26 @@
 #include <cassert>
 #include "core/unit_type.h"
 
-static Unit_type unit_types[(int)Unit_type_id::UNIT_COUNT];
+static UnitType unitTypes[static_cast<int>(UnitTypeID::COUNT)];
 
-static void init_tank(Unit_type *t) {
+static void initTank(UnitType* t) {
   assert(t);
-  t->range_of_vision = 4;
-  t->action_points = 12;
+  t->rangeOfVision = 4;
+  t->actionPoints = 12;
 }
 
-static void init_truck(Unit_type *t) {
+static void initTruck(UnitType* t) {
   assert(t);
-  t->range_of_vision = 6;
-  t->action_points = 16;
+  t->rangeOfVision = 6;
+  t->actionPoints = 16;
 }
 
-const Unit_type& get_unit_type(int id) {
-  assert(id >= 0 && id < (int)Unit_type_id::UNIT_COUNT);
-  return unit_types[id];
+const UnitType& getUnitType(int id) {
+  assert(id >= 0 && id < (int)UnitTypeID::COUNT);
+  return unitTypes[id];
 }
 
-void init_unit_types() {
-  init_tank(unit_types + (int)Unit_type_id::UNIT_TANK);
-  init_truck(unit_types + (int)Unit_type_id::UNIT_TRUCK);
+void initUnitTypes() {
+  initTank(unitTypes + (int)UnitTypeID::TANK);
+  initTruck(unitTypes + (int)UnitTypeID::TRUCK);
 }

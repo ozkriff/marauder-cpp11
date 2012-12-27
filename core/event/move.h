@@ -11,20 +11,20 @@ class Core;
 
 class EventMove {
 public:
-  int unit_id;
+  int unitID;
   std::vector<V2i> path;
   int length;
-  Dir initial_direction;
+  Dir initialDirection;
 
 public:
   EventMove();
   ~EventMove();
 };
 
-void generate_event_move(
+void generateEventMove(
     Core& core, const Unit& u, const V2i& destination);
-void apply_event_move(Core& core, const EventMove& e);
-void undo_event_move(Core& core, const EventMove& e);
-bool is_visible_event_move(const Core& core, const EventMove& e);
+void applyEventMove(Core& core, const EventMove& e);
+void undoEventMove(Core& core, const EventMove& e);
+bool isVisibleEventMove(const Core& core, const EventMove& e);
 
 #endif

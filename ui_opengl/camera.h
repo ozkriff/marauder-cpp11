@@ -7,8 +7,8 @@
 
 class Camera {
 public:
-  float x_angle;
-  float z_angle;
+  float xAngle;
+  float zAngle;
   V2f pos;
   float zoom;
 

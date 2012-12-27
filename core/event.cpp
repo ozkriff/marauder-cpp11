@@ -14,30 +14,30 @@ Event::~Event() {
 
 }
 
-void init_events() {
+void initEvents() {
 }
 
-static void undo_event(Core& core, const Event& e) {
+static void undoEvent(Core& core, const Event& e) {
   switch (e.t) {
-    case EventTypeId::E_MOVE: {
-      undo_event_move(core, e.e.move);
+    case EventTypeID::MOVE: {
+      undoEventMove(core, e.e.move);
       break;
     }
-    case EventTypeId::E_END_TURN: {
+    case EventTypeID::END_TURN: {
       // empty
       // TODO: die()?
       break;
     }
     default:
-      die("event: undo_event(): "
+      die("event: undoEvent(): "
           "unknown event type '%d'\n", e.t);
       break;
   }
-  // update_units_visibility();
+  // updateUnitsVisibility();
 }
 
 // Undo all events that this player have not seen yet
-void undo_unshown_events(Core& core) {
+void undoUnshownEvents(Core& core) {
   if (core.events.size() == 0) {
     return;
   }
@@ -45,35 +45,35 @@ void undo_unshown_events(Core& core) {
   --i;
   while (i != core.events.begin()) {
     auto event = *i;
-    if (event->id == core.current_player->last_event_id) {
+    if (event->id == core.currentPlayer->lastEventID) {
       break;
     }
-    undo_event(core, *event);
+    undoEvent(core, *event);
     --i;
   }
 }
 
-void apply_event(Core& core, const Event& e) {
-  core.current_player->last_event_id = e.id;
+void applyEvent(Core& core, const Event& e) {
+  core.currentPlayer->lastEventID = e.id;
   switch (e.t) {
-  case EventTypeId::E_MOVE:
-    apply_event_move(core, e.e.move);
+  case EventTypeID::MOVE:
+    applyEventMove(core, e.e.move);
     break;
-  case EventTypeId::E_END_TURN:
-    apply_event_end_turn(core, e.e.end_turn);
+  case EventTypeID::END_TURN:
+    applyEventEndTurn(core, e.e.endTurn);
     break;
   default:
-    die("event: apply_event(): "
+    die("event: applyEvent(): "
         "unknown event '%d'\n", e.t);
     break;
   }
-  // update_units_visibility();
+  // updateUnitsVisibility();
 }
 
 // TODO: rename.
-static Event* get_next_event_node(Core& core) {
+static Event* getNextEventNode(Core& core) {
   // Node *node;
-  int id = core.current_player->last_event_id; // shortcut
+  int id = core.currentPlayer->lastEventID; // shortcut
   if (core.events.size() == 0) {
     return nullptr;
   }
@@ -94,16 +94,16 @@ static Event* get_next_event_node(Core& core) {
   }
 }
 
-bool is_event_visible(const Core& core, const Event& e) {
+bool isEventVisible(const Core& core, const Event& e) {
   switch (e.t) {
-    case EventTypeId::E_MOVE: {
-      return is_visible_event_move(core, e.e.move);
+    case EventTypeID::MOVE: {
+      return isVisibleEventMove(core, e.e.move);
     }
-    case EventTypeId::E_END_TURN: {
+    case EventTypeID::END_TURN: {
       return true;
     }
     default: {
-      die("event: is_event_visible(): "
+      die("event: isEventVisible(): "
           "unknown event '%d'\n", e.t);
       return true;
     }
@@ -111,12 +111,12 @@ bool is_event_visible(const Core& core, const Event& e) {
 }
 
 // TODO simplify
-void apply_invisible_events(Core& core) {
-  Event* e = get_next_event_node(core);
+void applyInvisibleEvents(Core& core) {
+  Event* e = getNextEventNode(core);
   while (e) {
     assert(e);
-    if (!is_event_visible(core, *e)) {
-      apply_event(core, *e);
+    if (!isEventVisible(core, *e)) {
+      applyEvent(core, *e);
     } else {
       break;
     }
@@ -125,20 +125,20 @@ void apply_invisible_events(Core& core) {
   }
 }
 
-// TODO: Called before get_next_event
-bool unshown_events_left(Core& core) {
-  apply_invisible_events(core);
+// TODO: Called before getNextEvent
+bool unshownEventsLeft(Core& core) {
+  applyInvisibleEvents(core);
   if (core.events.size() == 0) {
     return false;
   } else {
     auto e = core.events.back();
-    return e->id != core.current_player->last_event_id;
+    return e->id != core.currentPlayer->lastEventID;
   }
 }
 
-// Always called after apply_invisible_events
-Event* get_next_event(Core& core) {
-  int id = core.current_player->last_event_id; // shortcut
+// Always called after applyInvisibleEvents
+Event* getNextEvent(Core& core) {
+  int id = core.currentPlayer->lastEventID; // shortcut
   assert(core.events.size() > 0);
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
     return core.events.front();
@@ -151,7 +151,7 @@ Event* get_next_event(Core& core) {
   return nullptr;
 }
 
-static int get_new_event_id(Core& core) {
+static int getNewEventId(Core& core) {
   if (core.events.size() > 0) {
     auto lastEvent = core.events.back();
     return lastEvent->id + 1;
@@ -165,22 +165,22 @@ static void event2log(const Event& e) {
   // TODO
 }
 
-static void send_event(const Event& e) {
+static void sendEvent(const Event& e) {
   UNUSED(e);
   // TODO
 }
 
-void add_event(Core& core, Event* e) {
+void addEvent(Core& core, Event* e) {
   assert(e);
-  e->id = get_new_event_id(core);
+  e->id = getNewEventId(core);
   core.events.push_back(e);
   event2log(*e);
 #if 0
   // TODO
-  if (!is_local) {
-    send_event(e);
+  if (!isLocal) {
+    sendEvent(e);
   }
 #else
-  UNUSED(send_event);
+  UNUSED(sendEvent);
 #endif
 }

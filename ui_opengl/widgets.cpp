@@ -17,9 +17,9 @@
 
 std::list<Button*> buttons;
 
-GLuint ttf_gl_print(TTF_Font *f, const char *text, V2i *size) {
-  SDL_Color Color = {255, 255, 255, 0};
-  SDL_Surface *s = TTF_RenderUTF8_Blended(f, text, Color);
+GLuint ttfGlPrint(TTF_Font *f, const char *text, V2i *size) {
+  SDL_Color color = {255, 255, 255, 0};
+  SDL_Surface *s = TTF_RenderUTF8_Blended(f, text, color);
   GLuint id;
   glGenTextures(1, &id);
   glBindTexture(GL_TEXTURE_2D, id);
@@ -35,21 +35,21 @@ GLuint ttf_gl_print(TTF_Font *f, const char *text, V2i *size) {
   return id;
 }
 
-void change_button_text(Button *b, char *text) {
-  glDeleteTextures(1, &b->texture_id);
-  b->texture_id = ttf_gl_print(b->f, text, &b->size);
+void changeButtonText(Button* b, char* text) {
+  glDeleteTextures(1, &b->textureID);
+  b->textureID = ttfGlPrint(b->f, text, &b->size);
 }
 
-void change_button_text_by_id(int id, char *text) {
+void changeButtonTextById(int id, char *text) {
   for (auto b : buttons) {
     if (b->id == id) {
-      change_button_text(b, text);
+      changeButtonText(b, text);
       return;
     }
   }
 }
 
-static int get_new_button_id() {
+static int getNewButtonID() {
   if (buttons.size() > 0) {
     return buttons.back()->id + 1;
   } else {
@@ -57,8 +57,8 @@ static int get_new_button_id() {
   }
 }
 
-int add_button(TTF_Font *f, const V2i *pos,
-    const char *text, ButtonCallback callback)
+int addButton(TTF_Font* f, const V2i* pos,
+    const char* text, ButtonCallback callback)
 {
   auto b = new Button;
   buttons.push_back(b);
@@ -66,16 +66,16 @@ int add_button(TTF_Font *f, const V2i *pos,
   assert(f);
   assert(pos);
   b->f = f;
-  int id = get_new_button_id();
+  int id = getNewButtonID();
   b->id = id;
   b->pos = *pos;
   b->text = strdup(text);
-  b->texture_id = ttf_gl_print(f, text, &b->size);
+  b->textureID = ttfGlPrint(f, text, &b->size);
   b->callback = callback;
   return id;
 }
 
-Button* v2i_to_button(V2i pos) {
+Button* v2iToButton(V2i pos) {
   for (auto b : buttons) {
     if (pos.x() >= b->pos.x()
         && pos.y() >= b->pos.y()
@@ -87,19 +87,19 @@ Button* v2i_to_button(V2i pos) {
   return nullptr;
 }
 
-void draw_button(Button *b) {
+void drawButton(Button *b) {
   float rect[4 * 2];
-  float texture_coord[4 * 2];
-  set_xy(rect, 4, 0, 0, 0, static_cast<float>(b->size.y()));
-  set_xy(rect, 4, 0, 1,
+  float textureCoord[4 * 2];
+  setXY(rect, 4, 0, 0, 0, static_cast<float>(b->size.y()));
+  setXY(rect, 4, 0, 1,
       static_cast<float>(b->size.x()),
       static_cast<float>(b->size.y()));
-  set_xy(rect, 4, 0, 2, static_cast<float>(b->size.x()), 0);
-  set_xy(rect, 4, 0, 3, 0, 0);
-  set_xy(texture_coord, 4, 0, 0, 0, 1);
-  set_xy(texture_coord, 4, 0, 1, 1, 1);
-  set_xy(texture_coord, 4, 0, 2, 1, 0);
-  set_xy(texture_coord, 4, 0, 3, 0, 0);
+  setXY(rect, 4, 0, 2, static_cast<float>(b->size.x()), 0);
+  setXY(rect, 4, 0, 3, 0, 0);
+  setXY(textureCoord, 4, 0, 0, 0, 1);
+  setXY(textureCoord, 4, 0, 1, 1, 1);
+  setXY(textureCoord, 4, 0, 2, 1, 0);
+  setXY(textureCoord, 4, 0, 3, 0, 0);
   glPushMatrix();
   glTranslatef(static_cast<float>(b->pos.x()),
       static_cast<float>(b->pos.y()), 0.0f);
@@ -109,15 +109,15 @@ void draw_button(Button *b) {
   glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
   glEnable(GL_TEXTURE_2D);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glBindTexture(GL_TEXTURE_2D, b->texture_id);
+  glBindTexture(GL_TEXTURE_2D, b->textureID);
   glVertexPointer(2, GL_FLOAT, 0, rect);
-  glTexCoordPointer(2, GL_FLOAT, 0, texture_coord);
+  glTexCoordPointer(2, GL_FLOAT, 0, textureCoord);
   glDrawArrays(GL_QUADS, 0, 4);
   glDisable(GL_TEXTURE_2D);
   glPopMatrix();
 }
 
-static void set_2d_widgets_drawing_mode_on() {
+static void set_2dWidgetsDrawingModeOn() {
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -131,7 +131,7 @@ static void set_2d_widgets_drawing_mode_on() {
   glLoadIdentity();
 }
 
-static void set_2d_widgets_drawing_mode_off() {
+static void set_2dWidgetsDrawingModeOff() {
   glPopMatrix();
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
@@ -141,25 +141,25 @@ static void set_2d_widgets_drawing_mode_off() {
   glEnable(GL_DEPTH_TEST);
 }
 
-void draw_buttons() {
-  set_2d_widgets_drawing_mode_on();
+void drawButtons() {
+  set_2dWidgetsDrawingModeOn();
   for (auto b : buttons) {
-    draw_button(b);
+    drawButton(b);
   }
-  set_2d_widgets_drawing_mode_off();
+  set_2dWidgetsDrawingModeOff();
 }
 
-TTF_Font* open_font(const char *font_name, int size) {
-  TTF_Font *f = TTF_OpenFont(font_name, size);
+TTF_Font* openFont(const char* fontName, int size) {
+  TTF_Font *f = TTF_OpenFont(fontName, size);
   if (!f) {
-    die("open_font(): "
+    die("openFont(): "
         "Unable to open font file: '%s'\n",
         TTF_GetError());
   }
   return f;
 }
 
-void init_widgets() {
+void initWidgets() {
   TTF_Init();
-  // buttons = empty_list;
+  // buttons = emptyList;
 }

@@ -14,21 +14,21 @@
 #include "core/path.h"
 
 struct Unit {
-  int type_id;
+  int typeID;
   int id;
-  int player_id;
+  int playerID;
   Dir dir;
-  int action_points;
+  int actionPoints;
   V2i pos;
 };
 
 struct Player {
   int id;
-  int last_event_id;
+  int lastEventID;
 };
 
 struct Tile {
-  Unit *unit;
+  Unit* unit;
   bool obstacle;
   // TODO: move to pathfinding
   int cost;
@@ -46,9 +46,9 @@ struct Tile {
 class Core {
 public:
   std::list<Player*> players;
-  Event const* current_event;
-  Player* current_player;
-  Unit* selected_unit;
+  Event const* currentEvent;
+  Player* currentPlayer;
+  Unit* selectedUnit;
   std::list<Unit*> units;
   Pathfinder pathfinder;
   Tile map[MAP_Y][MAP_X];
@@ -58,24 +58,24 @@ public:
   ~Core();
 
   Tile& tile(const V2i &p);
-  void calculate_fow();
-  Unit* unit_at(const V2i& pos);
+  void calculateFow();
+  Unit* unitAt(const V2i& pos);
   Unit* id2unit(int id);
-  void add_unit(const V2i& p, int player_id);
-  void shoot(Unit *shooter, Unit *target);
-  void kill_unit(Unit* u);
-  void init_logic();
+  void addUnit(const V2i& p, int playerID);
+  void shoot(Unit* shooter, Unit* target);
+  void killUnit(Unit* u);
+  void initLogic();
   bool inboard(const V2i& p) const;
-  void inc_v2i(V2i* pos) const;
+  void incV2i(V2i* pos) const;
 
 private:
-  void create_local_human(int id);
-  void init_local_players(int n, int* ids);
-  int get_new_unit_id();
-  void init_units();
-  void init_players();
-  void init_obstacles();
-  void clean_fow();
+  void createLocalHuman(int id);
+  void initLocalPlayers(int n, int* ids);
+  int getNewUnitID();
+  void initUnits();
+  void initPlayers();
+  void initObstacles();
+  void cleanFow();
   bool isLosClear(const V2i& from, const V2i& to);
 };
 

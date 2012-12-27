@@ -5,8 +5,8 @@
 
 #include "ui_opengl/game.h"
 
-int get_last_event_index(Game& game, const Event& e);
-bool event_filter_unit(Game& game, const Event& e, const Unit& u);
-void event_draw(Game& game, const Event& e);
+int getLastEventIndex(Game& game, const Event& e);
+bool eventFilterUnit(Game& game, const Event& e, const Unit& u);
+void eventDraw(Game& game, const Event& e);
 
 #endif

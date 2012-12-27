@@ -15,18 +15,18 @@ Core::Core()
 Core::~Core() {
 }
 
-void Core::create_local_human(int id) {
+void Core::createLocalHuman(int id) {
   auto p = new Player;
   players.push_back(p);
   p->id = id;
-  p->last_event_id = HAVE_NOT_SEEN_ANY_EVENTS;
+  p->lastEventID = HAVE_NOT_SEEN_ANY_EVENTS;
 }
 
-void Core::init_local_players(int n, int* ids) {
+void Core::initLocalPlayers(int n, int* ids) {
   for (int i = 0; i < n; i++) {
-    create_local_human(ids[i]);
+    createLocalHuman(ids[i]);
   }
-  current_player = players.back();
+  currentPlayer = players.back();
 }
 
 bool Core::inboard(const V2i& p) const {
@@ -39,7 +39,7 @@ Tile& Core::tile(const V2i &p) {
   return map[p.y()][p.x()];
 }
 
-void Core::inc_v2i(V2i* pos) const {
+void Core::incV2i(V2i* pos) const {
   assert(pos);
   assert(inboard(*pos));
   pos->setX(pos->x() + 1);
@@ -52,7 +52,7 @@ void Core::inc_v2i(V2i* pos) const {
 bool Core::isLosClear(const V2i& from, const V2i& to) {
   Los los(from, to);
   for (V2i p = los.getNext(); !los.isFinished(); p = los.getNext()) {
-    if (unit_at(p) || tile(p).obstacle) {
+    if (unitAt(p) || tile(p).obstacle) {
       return false;
     }
   }
@@ -60,33 +60,33 @@ bool Core::isLosClear(const V2i& from, const V2i& to) {
 }
 
 #define FOR_EACH_TILE(p) \
-  for (*p = V2i(0, 0); inboard(*p); inc_v2i(p))
+  for (*p = V2i(0, 0); inboard(*p); incV2i(p))
 
-void Core::clean_fow() {
+void Core::cleanFow() {
   V2i p;
   FOR_EACH_TILE(&p) {
     tile(p).fow = 0;
   }
 }
 
-void Core::calculate_fow() {
+void Core::calculateFow() {
   V2i p;
-  assert(current_player);
-  clean_fow();
+  assert(currentPlayer);
+  cleanFow();
   FOR_EACH_TILE(&p) {
     for (auto u : units) {
-      int max_dist = get_unit_type(u->type_id).range_of_vision;
-      bool is_player_ok = (u->player_id == current_player->id);
-      bool is_distance_ok = (p.distance(u->pos) < max_dist);
-      bool is_los_ok = isLosClear(p, u->pos);
-      if (is_player_ok && is_distance_ok && is_los_ok) {
+      int maxDist = getUnitType(u->typeID).rangeOfVision;
+      bool isPlayerOk = (u->playerID == currentPlayer->id);
+      bool isDistanceOk = (p.distance(u->pos) < maxDist);
+      bool isLosOk = isLosClear(p, u->pos);
+      if (isPlayerOk && isDistanceOk && isLosOk) {
         tile(p).fow++;
       }
     }
   }
 }
 
-Unit* Core::unit_at(const V2i& pos) {
+Unit* Core::unitAt(const V2i& pos) {
   for (auto u : units) {
     if (u->pos == pos) {
       return u;
@@ -104,7 +104,7 @@ Unit* Core::id2unit(int id) {
   return nullptr;
 }
 
-int Core::get_new_unit_id() {
+int Core::getNewUnitID() {
   if (units.size() > 0) {
     auto lastUnit = units.back();
     return lastUnit->id + 1;
@@ -113,74 +113,74 @@ int Core::get_new_unit_id() {
   }
 }
 
-void Core::add_unit(const V2i& p, int player_id) {
+void Core::addUnit(const V2i& p, int playerID) {
   auto u = new Unit;
   assert(inboard(p));
-  assert(player_id >= 0 && player_id < 16);
-  u->id = get_new_unit_id();
+  assert(playerID >= 0 && playerID < 16);
+  u->id = getNewUnitID();
   u->pos = p;
-  u->player_id = player_id;
+  u->playerID = playerID;
   u->dir = static_cast<Dir>(rnd(0, 7));
-  u->type_id = rnd(0, (int)Unit_type_id::UNIT_COUNT - 1);
+  u->typeID = rnd(0, (int)UnitTypeID::COUNT - 1);
   units.push_back(u);
-  calculate_fow();
+  calculateFow();
 #if 0
-  build_fow_array(&va_fog_of_war);
+  buildFowArray(&vaFogOfWar);
 #endif
 }
 
-void Core::kill_unit(Unit* u) {
-  // delete_node(&units, data2node(units, u));
+void Core::killUnit(Unit* u) {
+  // deleteNode(&units, data2node(units, u));
   units.remove(u);
   delete u;
-  if (selected_unit) {
-    pathfinder.fill_map(*selected_unit);
-    calculate_fow();
+  if (selectedUnit) {
+    pathfinder.fillMap(*selectedUnit);
+    calculateFow();
 #if 0
-    build_walkable_array(&va_walkable_map);
-    build_fow_array(&va_fog_of_war);
+    buildWalkableArray(&vaWalkableMap);
+    buildFowArray(&vaFogOfWar);
 #endif
   }
 }
 
 void Core::shoot(Unit *shooter, Unit *target) {
   if (isLosClear(shooter->pos, target->pos)) {
-    kill_unit(target);
+    killUnit(target);
   }
 }
 
-void Core::init_units() {
-  selected_unit = nullptr;
+void Core::initUnits() {
+  selectedUnit = nullptr;
   for (int i = 0; i < 8; i++) {
     V2i p = V2i(rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
-    if (!tile(p).obstacle && !unit_at(p)) {
-      add_unit(p, rnd(0, 1));
+    if (!tile(p).obstacle && !unitAt(p)) {
+      addUnit(p, rnd(0, 1));
     } else {
       i--;
     }
   }
 }
 
-void Core::init_obstacles() {
+void Core::initObstacles() {
   V2i p;
   FOR_EACH_TILE(&p) {
     tile(p).obstacle = ((rand() % 100) > 85);
   }
 }
 
-void Core::init_players() {
+void Core::initPlayers() {
   int id[] = {0, 1};
-  init_local_players(2, id);
+  initLocalPlayers(2, id);
 }
 
-void Core::init_logic() {
+void Core::initLogic() {
   srand(time(nullptr));
-  init_unit_types();
-  init_events();
-  pathfinder.clean_map();
-  clean_fow();
-  init_players();
-  init_obstacles();
-  init_units();
-  calculate_fow();
+  initUnitTypes();
+  initEvents();
+  pathfinder.cleanMap();
+  cleanFow();
+  initPlayers();
+  initObstacles();
+  initUnits();
+  calculateFow();
 }

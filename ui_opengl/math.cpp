@@ -8,7 +8,7 @@
 #include "ui_opengl/v2f.h"
 #include "ui_opengl/math.h"
 
-float get_rot_angle(const V2f& a, const V2f& b) {
+float getRotAngle(const V2f& a, const V2f& b) {
   V2f diff(
       pow(b.x() - a.x(), 2),
       pow(b.y() - a.y(), 2));
@@ -20,7 +20,7 @@ float get_rot_angle(const V2f& a, const V2f& b) {
   return angle;
 }
 
-void clamp_f(float *n, float min, float max) {
+void clampF(float *n, float min, float max) {
   assert(n);
   if (*n < min) {
     *n = min;
@@ -37,15 +37,15 @@ float rad2deg(float rad) {
   return (rad * 180.0f) / M_PI;
 }
 
-bool min_f(float a, float b) {
+bool minF(float a, float b) {
   return (a > b) ? b : a;
 }
 
-bool max_f(float a, float b) {
+bool maxF(float a, float b) {
   return (a < b) ? b : a;
 }
 
-void clamp_angle(float *angle) {
+void clampAngle(float *angle) {
   assert(angle);
   if (*angle < 0.0f) {
     *angle += 360.0f;
@@ -60,7 +60,7 @@ float dist(const V2f& a, const V2f& b) {
   return sqrt(pow(dx, 2) + pow(dy, 2));
 }
 
-void rotate_point_around_point(
+void rotatePointAroundPoint(
     V2f *p, float angle, const V2f *o)
 {
   assert(p);

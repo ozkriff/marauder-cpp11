@@ -17,7 +17,7 @@ static V2i dirToPosDiff[] = {
 };
 
 Dir::Dir()
-  : mValue(DirID::D_NONE)
+  : mValue(DirID::NONE)
 {
 }
 
@@ -40,7 +40,7 @@ Dir::Dir(const V2i& a, const V2i& b) {
       return;
     }
   }
-  mValue = DirID::D_ERROR;
+  mValue = DirID::ERROR;
   assert(false);
 }
 
@@ -61,10 +61,10 @@ float Dir::toAngle() {
 }
 
 bool Dir::isDiagonal() const {
-  return value() != DirID::D_N
-      && value() != DirID::D_E
-      && value() != DirID::D_S
-      && value() != DirID::D_W;
+  return value() != DirID::N
+      && value() != DirID::E
+      && value() != DirID::S
+      && value() != DirID::W;
 }
 
 Dir Dir::opposite() const {
@@ -91,10 +91,10 @@ V2i Dir::neib(const V2i& pos, Dir i) {
 }
 
 // TODO rename
-V2i Dir::get_neib(const V2i& p1, const V2i& p2, int add_me) {
-  assert(add_me >= -7);
-  assert(add_me <= 7);
-  int d = Dir(p1, p2).toInt() + add_me;
+V2i Dir::getNeib(const V2i& p1, const V2i& p2, int addMe) {
+  assert(addMe >= -7);
+  assert(addMe <= 7);
+  int d = Dir(p1, p2).toInt() + addMe;
   while (d > 7) {
     d -= 8;
   }

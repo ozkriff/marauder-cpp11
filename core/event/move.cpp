@@ -9,41 +9,41 @@ EventMove::EventMove() {
 EventMove::~EventMove() {
 }
 
-void generate_event_move(
+void generateEventMove(
     Core& core, const Unit &u, const V2i &destination)
 {
   Event *e = new Event;
   EventMove *m = &e->e.move;
-  int ap = get_unit_type(u.type_id).action_points;
+  int ap = getUnitType(u.typeID).actionPoints;
   if (core.tile(destination).cost > ap) {
     return;
   }
-  e->t = EventTypeId::E_MOVE;
-  m->initial_direction = u.dir;
-  m->path = core.pathfinder.get_path(destination);
+  e->t = EventTypeID::MOVE;
+  m->initialDirection = u.dir;
+  m->path = core.pathfinder.getPath(destination);
   m->length = m->path.size();
-  m->unit_id = u.id;
-  add_event(core, e);
+  m->unitID = u.id;
+  addEvent(core, e);
 }
 
-void apply_event_move(Core& core, const EventMove& e) {
+void applyEventMove(Core& core, const EventMove& e) {
   auto& p = e.path; // shortcut
-  Unit *u = core.id2unit(e.unit_id);
+  Unit *u = core.id2unit(e.unitID);
   assert(u);
   u->pos = p[e.length - 1];
   u->dir = Dir(p[e.length - 2], p[e.length - 1]);
-  if (u->player_id == core.current_player->id) {
-    core.calculate_fow();
+  if (u->playerID == core.currentPlayer->id) {
+    core.calculateFow();
   }
 }
 
-void undo_event_move(Core& core, const EventMove& e) {
-  Unit *u = core.id2unit(e.unit_id);
+void undoEventMove(Core& core, const EventMove& e) {
+  Unit *u = core.id2unit(e.unitID);
   u->pos = e.path[0];
-  u->dir = e.initial_direction;
+  u->dir = e.initialDirection;
 }
 
-bool is_visible_event_move(const Core &core, const EventMove &e) {
+bool isVisibleEventMove(const Core &core, const EventMove &e) {
   UNUSED(e);
   // TODO
   return true;

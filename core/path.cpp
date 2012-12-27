@@ -18,7 +18,7 @@ PathQueue::PathQueue(Core& core, int size)
 PathQueue::~PathQueue() {
 }
 
-bool PathQueue::is_empty() const {
+bool PathQueue::isEmpty() const {
   return (mHeadNodeIndex == mTailNodeIndex);
 }
 
@@ -51,7 +51,7 @@ Pathfinder::Pathfinder(Core& core)
 }
 
 // If this is first(start) tile - no parent tile
-Dir Pathfinder::get_parent_dir(const Unit& u, const V2i& m) {
+Dir Pathfinder::getParentDir(const Unit& u, const V2i& m) {
   Tile& tile = core.tile(m);
   if (tile.cost == 0) {
     return u.dir;
@@ -60,7 +60,7 @@ Dir Pathfinder::get_parent_dir(const Unit& u, const V2i& m) {
   }
 }
 
-int Pathfinder::get_tile_cost(const Unit& u, const V2i& t, const V2i& nb) {
+int Pathfinder::getTileCost(const Unit& u, const V2i& t, const V2i& nb) {
   int cost = 1;
   int dx = abs(t.x() - nb.x());
   int dy = abs(t.y() - nb.y());
@@ -73,82 +73,82 @@ int Pathfinder::get_tile_cost(const Unit& u, const V2i& t, const V2i& nb) {
     cost++;
   }
   Dir d(t, nb);
-  Dir d2 = get_parent_dir(u, t);
-  int d_diff = d.diff(d2);
+  Dir d2 = getParentDir(u, t);
+  int dDiff = d.diff(d2);
   int additionalCost[] = {0, 3, 20, 90, 90};
-  assert(d_diff >= 0 && d_diff <= 4);
-  return cost + additionalCost[d_diff];
+  assert(dDiff >= 0 && dDiff <= 4);
+  return cost + additionalCost[dDiff];
 }
 
-bool Pathfinder::can_move_there(const V2i& p1, const V2i& p2) {
+bool Pathfinder::canMoveThere(const V2i& p1, const V2i& p2) {
   assert(core.inboard(p1));
   assert(core.inboard(p2));
   assert(p1.distance(p2) == 1);
   if (!Dir(p1, p2).isDiagonal()) {
     return true;
   }
-  V2i neib_left = Dir::get_neib(p1, p2, -1);
-  V2i neib_right = Dir::get_neib(p1, p2, +1);
-  bool is_left_blocked = core.inboard(neib_left)
-      && core.tile(neib_left).obstacle;
-  bool is_right_blocked = core.inboard(neib_right)
-      && core.tile(neib_right).obstacle;
+  V2i neibLeft = Dir::getNeib(p1, p2, -1);
+  V2i neibRight = Dir::getNeib(p1, p2, +1);
+  bool isLeftBlocked = core.inboard(neibLeft)
+      && core.tile(neibLeft).obstacle;
+  bool isRightBlocked = core.inboard(neibRight)
+      && core.tile(neibRight).obstacle;
 #if 0
-  return !is_left_blocked && !is_right_blocked;
+  return !isLeftBlocked && !isRightBlocked;
 #else
-  return !is_left_blocked || !is_right_blocked;
+  return !isLeftBlocked || !isRightBlocked;
 #endif
 }
 
 // TODO: rename
-// p1 - orig_pos, p2 - neib pos
-void Pathfinder::process_neibor(const Unit& u, const V2i& p1, const V2i& p2) {
+// p1 - origPos, p2 - neib pos
+void Pathfinder::processNeibor(const Unit& u, const V2i& p1, const V2i& p2) {
   Tile& t1 = core.tile(p1);
   Tile& t2 = core.tile(p2);
-  if (core.unit_at(p2) || t2.obstacle || !can_move_there(p1, p2)) {
+  if (core.unitAt(p2) || t2.obstacle || !canMoveThere(p1, p2)) {
     return;
   }
-  int newcost = t1.cost + get_tile_cost(u, p1, p2);
-  int ap = get_unit_type(u.type_id).action_points;
+  int newcost = t1.cost + getTileCost(u, p1, p2);
+  int ap = getUnitType(u.typeID).actionPoints;
   if (t2.cost > newcost && newcost <= ap) {
     q.push(p2, Dir(p2, p1), newcost, Dir(p1, p2));
   }
 }
 
 #define FOR_EACH_TILE(p) \
-  for (*p = V2i(0, 0); core.inboard(*p); core.inc_v2i(p))
+  for (*p = V2i(0, 0); core.inboard(*p); core.incV2i(p))
 
-void Pathfinder::clean_map() {
+void Pathfinder::cleanMap() {
   V2i p;
   FOR_EACH_TILE(&p) {
     Tile& t = core.tile(p);
     t.cost = 30000;
-    t.parent = DirID::D_NONE;
+    t.parent = DirID::NONE;
   }
 }
 
-void Pathfinder::try_to_push_neibors(const Unit& u, const V2i& m) {
+void Pathfinder::tryToPushNeibors(const Unit& u, const V2i& m) {
   assert(core.inboard(m));
-  for (int i = Dir(DirID::D_N).toInt(); i <= Dir(DirID::D_NW).toInt(); i++) {
-    V2i neib_m = Dir::neib(m, static_cast<DirID>(i));
-    if (core.inboard(neib_m)) {
-      process_neibor(u, m, neib_m);
+  for (int i = Dir(DirID::N).toInt(); i <= Dir(DirID::NW).toInt(); i++) {
+    V2i neibM = Dir::neib(m, static_cast<DirID>(i));
+    if (core.inboard(neibM)) {
+      processNeibor(u, m, neibM);
     }
   }
 }
 
-void Pathfinder::fill_map(const Unit& u) {
-  assert(q.is_empty());
-  clean_map();
+void Pathfinder::fillMap(const Unit& u) {
+  assert(q.isEmpty());
+  cleanMap();
   // Push start position
-  q.push(u.pos, DirID::D_NONE, 0, u.dir);
-  while (!q.is_empty()) {
+  q.push(u.pos, DirID::NONE, 0, u.dir);
+  while (!q.isEmpty()) {
     V2i p = q.pop();
-    try_to_push_neibors(u, p);
+    tryToPushNeibors(u, p);
   }
 }
 
-std::vector<V2i> Pathfinder::get_path(const V2i& pos) {
+std::vector<V2i> Pathfinder::getPath(const V2i& pos) {
   V2i p = pos;
   std::vector<V2i> path;
   assert(core.inboard(p));

@@ -3,6 +3,6 @@
 #ifndef UI_OPENGL_GL_H
 #define UI_OPENGL_GL_H
 
-bool load_texture(GLuint *id, const char *filename);
+bool loadTexture(GLuint* id, const char* filename);
 
 #endif

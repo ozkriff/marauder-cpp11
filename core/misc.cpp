@@ -8,9 +8,9 @@
 #include "core/misc.h"
 
 void die(const char *message, ...) {
-  va_list arg_list;
-  va_start(arg_list, message);
-  vfprintf(stderr, message, arg_list);
-  va_end(arg_list);
+  va_list argList;
+  va_start(argList, message);
+  vfprintf(stderr, message, argList);
+  va_end(argList);
   exit(EXIT_FAILURE);
 }

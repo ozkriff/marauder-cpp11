@@ -15,7 +15,7 @@ int rnd(int min, int max) {
   }
 }
 
-void clamp_int(int *n, int min, int max) {
+void clampInt(int *n, int min, int max) {
   assert(n);
   if (*n < min) {
     *n = min;

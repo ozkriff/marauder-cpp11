@@ -3,9 +3,9 @@
 #ifndef UI_OPENGL_EVENT_MOVE_H
 #define UI_OPENGL_EVENT_MOVE_H
 
-int get_last_event_move_index(Game& game, const Event& e);
-void get_current_moving_nodes(
+int getLastEventMoveIndex(Game& game, const Event& e);
+void getCurrentMovingNodes(
     Game& game, const EventMove& e, V2i* from, V2i* to);
-void draw_moving_unit(Game& game, const EventMove& e);
+void drawMovingUnit(Game& game, const EventMove& e);
 
 #endif

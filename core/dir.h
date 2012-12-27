@@ -7,17 +7,17 @@
 #include "core/v2i.h"
 
 enum class DirID {
-  D_N,
-  D_NE,
-  D_E,
-  D_SE,
-  D_S,
-  D_SW,
-  D_W,
-  D_NW,
-  D_NONE,
-  D_ERROR,
-  D_COUNT
+  N,
+  NE,
+  E,
+  SE,
+  S,
+  SW,
+  W,
+  NW,
+  NONE,
+  ERROR,
+  COUNT
 };
 
 class Dir {
@@ -41,7 +41,7 @@ public:
   static V2i neib(const V2i& pos, Dir i);
 
   // TODO: rename
-  static V2i get_neib(const V2i& p1, const V2i& p2, int add_me);
+  static V2i getNeib(const V2i& p1, const V2i& p2, int addMe);
 };
 
 #endif
