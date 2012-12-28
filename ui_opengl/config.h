@@ -1,6 +1,6 @@
-/* See LICENSE file for copyright and license details. */
+// See LICENSE file for copyright and license details.
 
-#define DATA_DIR "/home/ozkriff/projects/my/rusty_armies/data/"
+#define DATA_DIR "/home/ozkriff/projects/my/marauder/data/"
 #define WIN_WIDTH 640
 #define WIN_HEIGHT 480
 

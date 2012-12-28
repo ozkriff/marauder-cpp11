@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
-project(rusty_armies)
+project(marauder)
 find_package(OpenGL REQUIRED)
 find_package(SDL REQUIRED)
 find_package(SDL_ttf REQUIRED)
@@ -32,14 +32,14 @@ add_library(SOURCES
 	core/event/move.cpp
 	core/event/end_turn.cpp
 )
-add_executable(rusty_armies ui_opengl/main.cpp)
+add_executable(marauder ui_opengl/main.cpp)
 set(LIBS
 	${OPENGL_LIBRARIES}
 	${SDL_LIBRARY}
 	${SDLTTF_LIBRARY}
 	${SDLIMAGE_LIBRARY}
 )
-target_link_libraries( rusty_armies SOURCES ${LIBS})
+target_link_libraries(marauder SOURCES ${LIBS})
 
 add_executable(testMarauder
 	tests/runner.cpp
