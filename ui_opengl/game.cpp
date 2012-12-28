@@ -686,11 +686,3 @@ void Game::addButtons() {
   (void)addButton(font, &pos, "[CLICK ME!]",
       nullptr); // onTestButton);
 }
-
-int main(int ac, char **av) {
-  UNUSED(ac);
-  UNUSED(av);
-  Game game;
-  game.run();
-  return 0;
-}
