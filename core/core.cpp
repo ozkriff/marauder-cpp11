@@ -184,7 +184,6 @@ void Core::initPlayers() {
 void Core::initLogic() {
   srand(time(nullptr));
   initUnitTypes();
-  initEvents();
   pathfinder.cleanMap();
   cleanFow();
   initPlayers();

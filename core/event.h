@@ -32,7 +32,6 @@ public:
   ~Event();
 };
 
-void initEvents();
 void addEvent(Core& core, Event* e);
 Event* getNextEvent(Core& core);
 bool unshownEventsLeft(Core& core);

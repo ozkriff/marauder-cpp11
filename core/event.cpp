@@ -14,9 +14,6 @@ Event::~Event() {
 
 }
 
-void initEvents() {
-}
-
 static void undoEvent(Core& core, const Event& e) {
   switch (e.t) {
     case EventTypeID::MOVE: {
