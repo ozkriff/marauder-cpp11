@@ -23,7 +23,7 @@
 #define TILE_SIZE_2 (TILE_SIZE / 2.0f)
 
 #define FOR_EACH_TILE(p) \
-  for (*p = V2i(0, 0); core.inboard(*p); core.incV2i(p))
+  for (p = V2i(0, 0); core.inboard(p); p = core.incV2i(p))
 
 Game::Game() {
 }
@@ -81,14 +81,13 @@ void Game::buildMapArray(VertexArray *v) {
   }
   v->v = (float*)new V3f[v->count];
   v->t = (float*)new V2f[v->count];
-  FOR_EACH_TILE(&p) {
+  FOR_EACH_TILE(p) {
     Tile& t = core.tile(p);
     float n = TILE_SIZE_2;
-    V2f pos;
     if (t.obstacle) {
       continue;
     }
-    pos = v2iToV2f(p);
+    V2f pos = v2iToV2f(p);
     setXY(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
     setXY(v->v, 3, i, 1, pos.x() + n, pos.y() - n);
     setXY(v->v, 3, i, 2, pos.x() + n, pos.y() + n);
@@ -120,7 +119,7 @@ void Game::buildObstaclesArray(VertexArray *v) {
   }
   v->v = (float *)new V3f[v->count];
   v->t = (float *)new V2f[v->count];
-  FOR_EACH_TILE(&p) {
+  FOR_EACH_TILE(p) {
     Tile& t = core.tile(p);
     float n = TILE_SIZE_2;
     if (!t.obstacle) {
@@ -145,9 +144,9 @@ void Game::buildObstaclesArray(VertexArray *v) {
 }
 
 int Game::calculateWalkableTilesCount() {
-  V2i p;
   int count = 0;
-  FOR_EACH_TILE(&p) {
+  V2i p;
+  FOR_EACH_TILE(p) {
     Tile& t = core.tile(p);
     if (t.parent.value() != DirID::NONE && t.cost != 30000) {
       count++;
@@ -159,9 +158,8 @@ int Game::calculateWalkableTilesCount() {
 int Game::calculateFoggedTilesCount() {
   int n = 0;
   V2i p;
-  FOR_EACH_TILE(&p) {
-    Tile& t = core.tile(p);
-    if (t.fow == 0) {
+  FOR_EACH_TILE(p) {
+    if (core.tile(p).fow == 0) {
       n++;
     }
   }
@@ -177,10 +175,9 @@ void Game::buildFowArray(VertexArray *v) {
     v->v = nullptr;
   }
   v->v = (float *)new V3f[v->count];
-  FOR_EACH_TILE(&p) {
-    Tile& t = core.tile(p);
+  FOR_EACH_TILE(p) {
     float n = TILE_SIZE_2;
-    if (t.fow > 0) {
+    if (core.tile(p).fow > 0) {
       continue;
     }
     V2f pos = v2iToV2f(p);
@@ -208,7 +205,7 @@ void Game::buildWalkableArray(VertexArray *v) {
     return;
   }
   v->v = (float *)new V3f[v->count];
-  FOR_EACH_TILE(&p) {
+  FOR_EACH_TILE(p) {
     Tile& t = core.tile(p);
     if (t.parent.value() != DirID::NONE && t.cost < 50) {
       V2i p2 = Dir::neib(p, t.parent);
@@ -538,7 +535,7 @@ void Game::buildPickingTilesArray(VertexArray *va) {
   }
   va->v = (float *)new V3f[va->count];
   va->ubC = new GLubyte[va->count * 3];
-  FOR_EACH_TILE(&p) {
+  FOR_EACH_TILE(p) {
     float n = TILE_SIZE_2;
     V2f pos = v2iToV2f(p);
     setXY(va->v, 4, i, 0, pos.x() - n, pos.y() - n);

@@ -39,14 +39,15 @@ Tile& Core::tile(const V2i &p) {
   return map[p.y()][p.x()];
 }
 
-void Core::incV2i(V2i* pos) const {
-  assert(pos);
-  assert(inboard(*pos));
-  pos->setX(pos->x() + 1);
-  if (pos->x() == MAP_X) {
-    pos->setX(0);
-    pos->setY(pos->y() + 1);
+V2i Core::incV2i(const V2i& pos) const {
+  assert(inboard(pos));
+  V2i newPos = pos;
+  newPos.setX(pos.x() + 1);
+  if (newPos.x() == MAP_X) {
+    newPos.setX(0);
+    newPos.setY(newPos.y() + 1);
   }
+  return newPos;
 }
 
 int Core::getNewEventId() {
@@ -172,11 +173,11 @@ bool Core::isLosClear(const V2i& from, const V2i& to) {
 }
 
 #define FOR_EACH_TILE(p) \
-  for (*p = V2i(0, 0); inboard(*p); incV2i(p))
+  for (p = V2i(0, 0); inboard(p); p = incV2i(p))
 
 void Core::cleanFow() {
   V2i p;
-  FOR_EACH_TILE(&p) {
+  FOR_EACH_TILE(p) {
     tile(p).fow = 0;
   }
 }
@@ -185,7 +186,7 @@ void Core::calculateFow() {
   assert(currentPlayer);
   cleanFow();
   V2i p;
-  FOR_EACH_TILE(&p) {
+  FOR_EACH_TILE(p) {
     for (auto u : units) {
       int maxDist = getUnitType(u->typeID).rangeOfVision;
       bool isPlayerOk = (u->playerID == currentPlayer->id);
@@ -275,7 +276,7 @@ void Core::initUnits() {
 
 void Core::initObstacles() {
   V2i p;
-  FOR_EACH_TILE(&p) {
+  FOR_EACH_TILE(p) {
     tile(p).obstacle = ((rand() % 100) > 85);
   }
 }

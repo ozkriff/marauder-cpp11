@@ -66,7 +66,7 @@ public:
   void killUnit(Unit* u);
   void initLogic();
   bool inboard(const V2i& p) const;
-  void incV2i(V2i* pos) const;
+  V2i incV2i(const V2i& pos) const;
   int getNewEventId();
 
   void addEvent(Event* e);
