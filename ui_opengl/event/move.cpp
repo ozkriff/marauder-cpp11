@@ -60,7 +60,7 @@ static void endMovement(Game& game, const EventMove& e, const V2i *pos) {
     game.core.calculateFow();
     game.buildFowArray(&game.vaFogOfWar);
   }
-  applyEvent(game.core, *game.core.currentEvent);
+  game.core.applyEvent(*game.core.currentEvent);
   game.core.currentEvent = nullptr;
   if (u->playerID == game.core.currentPlayer->id) {
     if (game.core.selectedUnit) {

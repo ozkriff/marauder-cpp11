@@ -69,6 +69,14 @@ public:
   void incV2i(V2i* pos) const;
   int getNewEventId();
 
+  void addEvent(Event* e);
+  Event* getNextEvent();
+  bool unshownEventsLeft();
+  void applyInvisibleEvents();
+  bool isEventVisible(const Event& e) const;
+  void applyEvent(const Event& e);
+  void undoUnshownEvents();
+
 private:
   void createLocalHuman(int id);
   void initLocalPlayers(int n, int* ids);
@@ -78,6 +86,10 @@ private:
   void initObstacles();
   void cleanFow();
   bool isLosClear(const V2i& from, const V2i& to);
+  void undoEvent(const Event& e);
+  Event* getNextEventNode();
+  void event2log(const Event& e);
+  void sendEvent(const Event& e);
 };
 
 #endif

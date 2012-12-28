@@ -460,19 +460,19 @@ void Game::processKeyDownEvent(const SDL_KeyboardEvent& e) {
 }
 
 void Game::screenScenarioMainEvents() {
-  core.currentEvent = getNextEvent(core);
+  core.currentEvent = core.getNextEvent();
   lastMoveIndex = getLastEventIndex(*this, *core.currentEvent);
   uiMode = UIMode::SHOW_EVENT;
   currentMoveIndex = 0;
   // TODO: Remove this hack
   if (core.currentEvent->t == EventTypeID::END_TURN) {
-    applyEvent(core, *core.currentEvent);
+    core.applyEvent(*core.currentEvent);
     uiMode = UIMode::NORMAL;
   }
 }
 
 void Game::logic() {
-  while (uiMode == UIMode::NORMAL && unshownEventsLeft(core)) {
+  while (uiMode == UIMode::NORMAL && core.unshownEventsLeft()) {
     screenScenarioMainEvents();
   }
 }

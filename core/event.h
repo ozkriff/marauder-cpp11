@@ -32,12 +32,4 @@ public:
   ~Event();
 };
 
-void addEvent(Core& core, Event* e);
-Event* getNextEvent(Core& core);
-bool unshownEventsLeft(Core& core);
-void applyInvisibleEvents(Core& core);
-bool isEventVisible(const Core& core, const Event& e);
-void applyEvent(Core& core, const Event& e);
-void undoUnshownEvents(Core& core);
-
 #endif

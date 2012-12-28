@@ -57,6 +57,110 @@ int Core::getNewEventId() {
   }
 }
 
+// Undo all events that this player have not seen yet
+void Core::undoUnshownEvents() {
+  if (events.size() == 0) {
+    return;
+  }
+  auto i = events.end();
+  --i;
+  while (i != events.begin()) {
+    auto event = *i;
+    if (event->id == currentPlayer->lastEventID) {
+      break;
+    }
+    undoEvent(*event);
+    --i;
+  }
+}
+
+void Core::applyEvent(const Event& e) {
+  currentPlayer->lastEventID = e.id;
+  switch (e.t) {
+  case EventTypeID::MOVE:
+    applyEventMove(*this, e.e.move);
+    break;
+  case EventTypeID::END_TURN:
+    applyEventEndTurn(*this, e.e.endTurn);
+    break;
+  default:
+    die("event: applyEvent(): "
+        "unknown event '%d'\n", e.t);
+    break;
+  }
+  // updateUnitsVisibility();
+}
+
+
+bool Core::isEventVisible(const Event& e) const {
+  switch (e.t) {
+  case EventTypeID::MOVE:
+    return isVisibleEventMove(*this, e.e.move);
+  case EventTypeID::END_TURN:
+    return true;
+  default:
+    die("event: isEventVisible(): "
+        "unknown event '%d'\n", e.t);
+    return true;
+  }
+}
+
+// TODO simplify
+void Core::applyInvisibleEvents() {
+  Event* e = getNextEventNode();
+  while (e) {
+    assert(e);
+    if (!isEventVisible(*e)) {
+      applyEvent(*e);
+    } else {
+      break;
+    }
+    e = getNext(events, e);
+    assert(e);
+  }
+}
+
+// TODO: Called before getNextEvent
+bool Core::unshownEventsLeft() {
+  applyInvisibleEvents();
+  if (events.size() == 0) {
+    return false;
+  } else {
+    auto e = events.back();
+    return e->id != currentPlayer->lastEventID;
+  }
+}
+
+// Always called after applyInvisibleEvents
+Event* Core::getNextEvent() {
+  int id = currentPlayer->lastEventID; // shortcut
+  assert(events.size() > 0);
+  if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
+    return events.front();
+  }
+  for (auto e : events) {
+    if (e->id == id) {
+      return getNext(events, e);
+    }
+  }
+  return nullptr;
+}
+
+void Core::addEvent(Event* e) {
+  assert(e);
+  e->id = getNewEventId();
+  events.push_back(e);
+  // event2log(*e);
+#if 0
+  // TODO
+  if (!isLocal) {
+    sendEvent(e);
+  }
+#else
+  // UNUSED(sendEvent);
+#endif
+}
+
 bool Core::isLosClear(const V2i& from, const V2i& to) {
   Los los(from, to);
   for (V2i p = los.getNext(); !los.isFinished(); p = los.getNext()) {
@@ -78,9 +182,9 @@ void Core::cleanFow() {
 }
 
 void Core::calculateFow() {
-  V2i p;
   assert(currentPlayer);
   cleanFow();
+  V2i p;
   FOR_EACH_TILE(&p) {
     for (auto u : units) {
       int maxDist = getUnitType(u->typeID).rangeOfVision;
@@ -190,4 +294,55 @@ void Core::initLogic() {
   initObstacles();
   initUnits();
   calculateFow();
+}
+
+void Core::undoEvent(const Event& e) {
+  switch (e.t) {
+  case EventTypeID::MOVE:
+    undoEventMove(*this, e.e.move);
+    break;
+  case EventTypeID::END_TURN:
+    // empty
+    // TODO: die()?
+    break;
+  default:
+    die("event: undoEvent(): "
+        "unknown event type '%d'\n", e.t);
+    break;
+  }
+  // updateUnitsVisibility();
+}
+
+// TODO: rename.
+Event* Core::getNextEventNode() {
+  // Node *node;
+  int id = currentPlayer->lastEventID; // shortcut
+  if (events.size() == 0) {
+    return nullptr;
+  }
+  if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
+    return events.front();
+  }
+  // find last seen event
+  Event *e = nullptr;
+  for (auto e : events) {
+    if (e->id == id) {
+      break;
+    }
+  }
+  if (!e) {
+    return nullptr;
+  } else {
+    return getNext(events, e);
+  }
+}
+
+void Core::event2log(const Event& e) {
+  UNUSED(e);
+  // TODO
+}
+
+void Core::sendEvent(const Event& e) {
+  UNUSED(e);
+  // TODO
 }
