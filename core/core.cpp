@@ -49,6 +49,14 @@ void Core::incV2i(V2i* pos) const {
   }
 }
 
+int Core::getNewEventId() {
+  if (!events.empty()) {
+    return events.back()->id + 1;
+  } else {
+    return 0;
+  }
+}
+
 bool Core::isLosClear(const V2i& from, const V2i& to) {
   Los los(from, to);
   for (V2i p = los.getNext(); !los.isFinished(); p = los.getNext()) {

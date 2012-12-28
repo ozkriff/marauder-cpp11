@@ -67,6 +67,7 @@ public:
   void initLogic();
   bool inboard(const V2i& p) const;
   void incV2i(V2i* pos) const;
+  int getNewEventId();
 
 private:
   void createLocalHuman(int id);

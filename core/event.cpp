@@ -151,15 +151,6 @@ Event* getNextEvent(Core& core) {
   return nullptr;
 }
 
-static int getNewEventId(Core& core) {
-  if (core.events.size() > 0) {
-    auto lastEvent = core.events.back();
-    return lastEvent->id + 1;
-  } else {
-    return 0;
-  }
-}
-
 static void event2log(const Event& e) {
   UNUSED(e);
   // TODO
@@ -172,7 +163,7 @@ static void sendEvent(const Event& e) {
 
 void addEvent(Core& core, Event* e) {
   assert(e);
-  e->id = getNewEventId(core);
+  e->id = core.getNewEventId();
   core.events.push_back(e);
   event2log(*e);
 #if 0
