@@ -668,10 +668,10 @@ void Game::loadUnitResources() {
   int truckID = static_cast<int>(UnitTypeID::TRUCK);
   loadTexture(&textureUnits[tankID], DATA("tank.png"));
   loadTexture(&textureUnits[truckID], DATA("truck.png"));
-  objRead(&objUnits[tankID], DATA("tank.obj"));
-  objRead(&objUnits[truckID], DATA("truck.obj"));
-  objBuild(&vaUnits[tankID], &objUnits[tankID]);
-  objBuild(&vaUnits[truckID], &objUnits[truckID]);
+  objUnits[tankID].read(DATA("tank.obj"));
+  objUnits[truckID].read(DATA("truck.obj"));
+  vaUnits[tankID] =  objUnits[tankID].build();
+  vaUnits[truckID] =  objUnits[truckID].build();
 }
 
 void Game::onTestButton() {
