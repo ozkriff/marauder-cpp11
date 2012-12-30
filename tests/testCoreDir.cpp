@@ -1,3 +1,5 @@
+// See LICENSE file for copyright and license details.
+
 #include <unittest++/UnitTest++.h>
 #include "core/dir.h"
 
