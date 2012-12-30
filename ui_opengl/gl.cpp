@@ -50,13 +50,13 @@ static bool isPowerOfTwo(int n) {
   return ((n & (n - 1)) == 0);
 }
 
-bool loadTexture(GLuint *id, const char *filename) {
-  assert(id);
+int loadTexture(const char *filename) {
+  GLuint id;
   SDL_Surface* surface = IMG_Load(filename);
   if (!surface) {
     die("gl.c: loadTexture(): Can't load file '%s'\n",
         filename);
-    return false;
+    return 0;
   }
   if (!isPowerOfTwo(surface->w)
       || !isPowerOfTwo(surface->h))
@@ -66,8 +66,8 @@ bool loadTexture(GLuint *id, const char *filename) {
   }
   GLint nOfColors = surface->format->BytesPerPixel;
   GLenum textureFormat = getTextureFormat(surface, nOfColors);
-  glGenTextures(1, id);
-  glBindTexture(GL_TEXTURE_2D, *id);
+  glGenTextures(1, &id);
+  glBindTexture(GL_TEXTURE_2D, id);
   setTextureParameters();
   glTexImage2D(GL_TEXTURE_2D, 0, nOfColors,
       surface->w, surface->h, 0,
@@ -75,5 +75,5 @@ bool loadTexture(GLuint *id, const char *filename) {
   if (surface) {
     SDL_FreeSurface(surface);
   }
-  return true;
+  return static_cast<int>(id);
 }

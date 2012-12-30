@@ -33,7 +33,7 @@ int getLastEventMoveIndex(Game& game, const Event &e) {
 void getCurrentMovingNodes(
     Game& game, const EventMove& e, V2i* from, V2i* to)
 {
-  int i = game.currentMoveIndex;
+  int i = game.currentMoveIndex();
   auto& p = e.path; // shortcut
   unsigned int j; // node id
   assert(from);
@@ -48,26 +48,24 @@ void getCurrentMovingNodes(
   *to = p[j + 1];
 }
 
-static void endMovement(Game& game, const EventMove& e, const V2i *pos) {
-  Unit *u;
-  assert(pos);
-  u = game.core.id2unit(e.unitID);
-  game.uiMode = UIMode::NORMAL;
-  u->pos = *pos;
-  if (game.core.selectedUnit) {
-    game.core.pathfinder.fillMap(*u);
-    game.vaWalkableMap = game.buildWalkableArray();
-    game.core.calculateFow();
-    game.vaFogOfWar = game.buildFowArray();
+static void endMovement(Game& game, const EventMove& e, const V2i& pos) {
+  Unit* u = game.core().id2unit(e.unitID);
+  game.setUiMode(UIMode::NORMAL);
+  u->pos = pos;
+  if (game.core().selectedUnit) {
+    game.core().pathfinder.fillMap(*u);
+    game.setVaWalkableMap(game.buildWalkableArray());
+    game.core().calculateFow();
+    game.setVaFogOfWar(game.buildFowArray());
   }
-  game.core.applyEvent(*game.core.currentEvent);
-  game.core.currentEvent = nullptr;
-  if (u->playerID == game.core.currentPlayer->id) {
-    if (game.core.selectedUnit) {
-      game.core.pathfinder.fillMap(*game.core.selectedUnit);
-      game.vaWalkableMap = game.buildWalkableArray();
+  game.core().applyEvent(*game.core().currentEvent);
+  game.core().currentEvent = nullptr;
+  if (u->playerID == game.core().currentPlayer->id) {
+    if (game.core().selectedUnit) {
+      game.core().pathfinder.fillMap(*game.core().selectedUnit);
+      game.setVaWalkableMap(game.buildWalkableArray());
     }
-    game.vaFogOfWar = game.buildFowArray();
+    game.setVaFogOfWar(game.buildFowArray());
   }
 }
 
@@ -77,16 +75,16 @@ static int getNodeIndex(Game& game, const EventMove& e) {
   int current = 0;
   for (unsigned int j = 0; j < p.size() - 2; j++) {
     current += getMoveLegth(p[j], p[j + 1]);
-    if (current > game.currentMoveIndex) {
+    if (current > game.currentMoveIndex()) {
       break;
     }
     last = current;
   }
-  return game.currentMoveIndex - last;
+  return game.currentMoveIndex() - last;
 }
 
 void drawMovingUnit(Game& game, const EventMove& e) {
-  Unit *u = game.core.id2unit(e.unitID);
+  Unit *u = game.core().id2unit(e.unitID);
   V2i fromI, toI;
   V2f diff;
   V2f p;
@@ -108,8 +106,8 @@ void drawMovingUnit(Game& game, const EventMove& e) {
   game.drawUnitModel(*u);
   game.drawUnitCircle(*u);
   glPopMatrix();
-  game.currentMoveIndex++;
-  if (game.currentMoveIndex == game.lastMoveIndex) {
-    endMovement(game, e, &toI);
+  game.setCurrentMoveIndex(game.currentMoveIndex() + 1);
+  if (game.currentMoveIndex() == game.lastMoveIndex()) {
+    endMovement(game, e, toI);
   }
 }

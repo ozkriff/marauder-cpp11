@@ -18,33 +18,60 @@ enum class UIMode {
 };
 
 class Game {
-public:
-  Core core;
-  UIMode uiMode;
-  int lastMoveIndex;
-  int currentMoveIndex;
-  VertexArray vaWalkableMap;
-  VertexArray vaFogOfWar;
-
-  V2i winSize;
-  V2i mousePos;
-  V2i activeTilePos;
-  SDL_Surface* screen;
-  bool isRotatingCamera;
-  bool done;
-  Camera camera;
-  GLuint floorTexture;
-  VertexArray vaMap;
-  VertexArray vaObstacles;
-  VertexArray vaPick;
-  ObjModel objUnits[static_cast<int>(UnitTypeID::COUNT)];
-  VertexArray vaUnits[static_cast<int>(UnitTypeID::COUNT)];
-  GLuint textureUnits[static_cast<int>(UnitTypeID::COUNT)];
-  TTF_Font* font;
+private:
+  Core mCore;
+  UIMode mUiMode;
+  int mLastMoveIndex;
+  int mCurrentMoveIndex;
+  VertexArray mVaWalkableMap;
+  VertexArray mVaFogOfWar;
+  V2i mWinSize;
+  V2i mMousePos;
+  V2i mActiveTilePos;
+  SDL_Surface* mScreen;
+  bool mIsRotatingCamera;
+  bool mDone;
+  Camera mCamera;
+  GLuint mFloorTexture;
+  VertexArray mVaMap;
+  VertexArray mVaObstacles;
+  VertexArray mVaPick;
+  ObjModel mObjUnits[static_cast<int>(UnitTypeID::COUNT)];
+  VertexArray mVaUnits[static_cast<int>(UnitTypeID::COUNT)];
+  GLuint mTextureUnits[static_cast<int>(UnitTypeID::COUNT)];
+  TTF_Font* mFont;
 
 public:
   Game();
   ~Game();
+
+  int currentMoveIndex();
+  int lastMoveIndex();
+  Core& core();
+  const V2i& winSize();
+  UIMode uiMode();
+  Camera& camera();
+  const V2i& activeTilePos();
+  bool isRotatingCamera();
+  const V2i& mousePos();
+  SDL_Surface* screen();
+  bool done();
+  TTF_Font* font();
+
+  void setDone(bool done);
+  void setWinSize(const V2i& winSize);
+  void setActiveTilePos(const V2i& activeTilePos);
+  void setMousePos(const V2i& mousePos);
+  void setUiMode(UIMode uiMode);
+  void setIsRotatingCamera(bool isRotatingCamera);
+  void setFont(TTF_Font* font);
+  void setFloorTexture(int textureID);
+  void setLastMoveIndex(int lastMoveIndex);
+  void setCurrentMoveIndex(int currentMoveIndex);
+  void setScreen(SDL_Surface* screen);
+  void setVaWalkableMap(const VertexArray& va);
+  void setVaFogOfWar(const VertexArray& va);
+
   void run();
   void init();
   void cleanup();

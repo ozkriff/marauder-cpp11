@@ -23,12 +23,112 @@
 #define TILE_SIZE_2 (TILE_SIZE / 2.0f)
 
 #define FOR_EACH_TILE(p) \
-  for (p = V2i(0, 0); core.inboard(p); p = core.incV2i(p))
+  for (p = V2i(0, 0); core().inboard(p); p = core().incV2i(p))
 
 Game::Game() {
 }
 
 Game::~Game() {
+}
+
+int Game::currentMoveIndex() {
+  return mCurrentMoveIndex;
+}
+
+int Game::lastMoveIndex() {
+  return mLastMoveIndex;
+}
+
+Core& Game::core() {
+  return mCore;
+}
+
+const V2i& Game::winSize() {
+  return mWinSize;
+}
+
+UIMode Game::uiMode() {
+  return mUiMode;
+}
+
+Camera& Game::camera() {
+  return mCamera;
+}
+
+const V2i& Game::activeTilePos() {
+  return mActiveTilePos;
+}
+
+bool Game::isRotatingCamera() {
+  return mIsRotatingCamera;
+}
+
+const V2i& Game::mousePos() {
+  return mMousePos;
+}
+
+SDL_Surface* Game::screen() {
+  return mScreen;
+}
+
+bool Game::done() {
+  return mDone;
+}
+
+TTF_Font* Game::font() {
+  return mFont;
+}
+
+void Game::setDone(bool done) {
+  mDone = done;
+}
+
+void Game::setWinSize(const V2i& winSize) {
+  mWinSize = winSize;
+}
+
+void Game::setActiveTilePos(const V2i& activeTilePos) {
+  mActiveTilePos = activeTilePos;
+}
+
+void Game::setMousePos(const V2i& mousePos) {
+  mMousePos = mousePos;
+}
+
+void Game::setUiMode(UIMode uiMode) {
+  mUiMode = uiMode;
+}
+
+void Game::setIsRotatingCamera(bool isRotatingCamera) {
+  mIsRotatingCamera = isRotatingCamera;
+}
+
+void Game::setFont(TTF_Font* font) {
+  mFont = font;
+}
+
+void Game::setFloorTexture(int textureID) {
+  mFloorTexture = textureID;
+}
+
+void Game::setLastMoveIndex(int lastMoveIndex) {
+  mLastMoveIndex = lastMoveIndex;
+}
+
+void Game::setCurrentMoveIndex(int currentMoveIndex) {
+  mCurrentMoveIndex = currentMoveIndex;
+}
+
+void Game::setScreen(SDL_Surface* screen) {
+  mScreen = screen;
+}
+
+void Game::setVaWalkableMap(const VertexArray& va) {
+  mVaWalkableMap = va;
+}
+
+void Game::setVaFogOfWar(const VertexArray& va) {
+  mVaFogOfWar = va;
 }
 
 void Game::run() {
@@ -38,22 +138,22 @@ void Game::run() {
 }
 
 void Game::init() {
-  core.initLogic();
-  done = false;
-  winSize = V2i(WIN_WIDTH, WIN_HEIGHT);
-  activeTilePos = V2i(0, 0);
-  mousePos = V2i(0, 0);
-  uiMode = UIMode::NORMAL;
-  isRotatingCamera = false;
+  core().initLogic();
+  setDone(false);
+  setWinSize(V2i(WIN_WIDTH, WIN_HEIGHT));
+  setActiveTilePos(V2i(0, 0));
+  setMousePos(V2i(0, 0));
+  setUiMode(UIMode::NORMAL);
+  setIsRotatingCamera(false);
   SDL_Init(SDL_INIT_EVERYTHING);
-  screen = SDL_SetVideoMode(winSize.x(), winSize.y(),
+  mScreen = SDL_SetVideoMode(winSize().x(), winSize().y(),
       32, SDL_OPENGL | SDL_GL_DOUBLEBUFFER);
   initOpengl();
   initCamera();
   initWidgets();
-  font = openFont(DEFAULT_FONT, 10);
+  setFont(openFont(DEFAULT_FONT, 10));
   addButtons();
-  loadTexture(&floorTexture, DATA("floor.png"));
+  setFloorTexture(loadTexture(DATA("floor.png")));
   loadUnitResources();
   initVertexArrays();
 }
@@ -63,7 +163,7 @@ void Game::cleanup() {
 }
 
 V2f Game::v2iToV2f(const V2i& i) {
-  assert(core.inboard(i));
+  assert(core().inboard(i));
   return V2f(i.x() * TILE_SIZE, i.y() * TILE_SIZE);
 }
 
@@ -71,7 +171,7 @@ VertexArray Game::buildMapArray() {
   VertexArray v;
   V2i p;
   FOR_EACH_TILE(p) {
-    if (core.tile(p).obstacle) {
+    if (core().tile(p).obstacle) {
       continue;
     }
     V2f pos = v2iToV2f(p);
@@ -98,7 +198,7 @@ VertexArray Game::buildObstaclesArray() {
   VertexArray v;
   V2i p;
   FOR_EACH_TILE(p) {
-    if (!core.tile(p).obstacle) {
+    if (!core().tile(p).obstacle) {
       continue;
     }
     V2f pos = v2iToV2f(p);
@@ -125,7 +225,7 @@ VertexArray Game::buildFowArray() {
   VertexArray v;
   V2i p;
   FOR_EACH_TILE(p) {
-    if (core.tile(p).fow > 0) {
+    if (core().tile(p).fow > 0) {
       continue;
     }
     V2f pos = v2iToV2f(p);
@@ -147,10 +247,10 @@ VertexArray Game::buildWalkableArray() {
   VertexArray v;
   V2i p;
   FOR_EACH_TILE(p) {
-    Tile& t = core.tile(p);
+    Tile& t = core().tile(p);
     if (t.parent.value() != DirID::NONE && t.cost < 50) {
       V2i to = Dir::neib(p, t.parent);
-      if (core.inboard(to)) {
+      if (core().inboard(to)) {
         V2f fromF = v2iToV2f(p);
         V2f toF = v2iToV2f(to);
         appendV3f(&v.vertices, V3f(fromF.x(), fromF.y(), 0.1f));
@@ -165,17 +265,17 @@ void Game::drawMap() {
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glBindTexture(GL_TEXTURE_2D, floorTexture);
+  glBindTexture(GL_TEXTURE_2D, mFloorTexture);
 
   glColor3f(1.0f, 1.0f, 1.0f);
-  glTexCoordPointer(2, GL_FLOAT, 0, vaMap.textureCoordinates.data());
-  glVertexPointer(2, GL_FLOAT, 0, vaMap.vertices.data());
-  glDrawArrays(GL_TRIANGLES, 0, vaMap.vertices.size() / 2);
+  glTexCoordPointer(2, GL_FLOAT, 0, mVaMap.textureCoordinates.data());
+  glVertexPointer(2, GL_FLOAT, 0, mVaMap.vertices.data());
+  glDrawArrays(GL_TRIANGLES, 0, mVaMap.vertices.size() / 2);
 
   glColor3f(1.0f, 0.0f, 0.0f);
-  glTexCoordPointer(2, GL_FLOAT, 0, vaObstacles.textureCoordinates.data());
-  glVertexPointer(2, GL_FLOAT, 0, vaObstacles.vertices.data());
-  glDrawArrays(GL_TRIANGLES, 0, vaObstacles.vertices.size() / 2);
+  glTexCoordPointer(2, GL_FLOAT, 0, mVaObstacles.textureCoordinates.data());
+  glVertexPointer(2, GL_FLOAT, 0, mVaObstacles.vertices.data());
+  glDrawArrays(GL_TRIANGLES, 0, mVaObstacles.vertices.size() / 2);
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisable(GL_TEXTURE_2D);
@@ -183,14 +283,14 @@ void Game::drawMap() {
 
   glEnableClientState(GL_VERTEX_ARRAY);
   glColor3f(0.0f, 0.3f, 1.0f);
-  glVertexPointer(3, GL_FLOAT, 0, vaWalkableMap.vertices.data());
-  glDrawArrays(GL_LINES, 0, vaWalkableMap.vertices.size() / 3);
+  glVertexPointer(3, GL_FLOAT, 0, mVaWalkableMap.vertices.data());
+  glDrawArrays(GL_LINES, 0, mVaWalkableMap.vertices.size() / 3);
   glDisableClientState(GL_VERTEX_ARRAY);
 
   glEnableClientState(GL_VERTEX_ARRAY);
   glColor4f(0.0f, 0.0f, 0.0f, 0.2f);
-  glVertexPointer(3, GL_FLOAT, 0, vaFogOfWar.vertices.data());
-  glDrawArrays(GL_TRIANGLES, 0, vaFogOfWar.vertices.size() / 3);
+  glVertexPointer(3, GL_FLOAT, 0, mVaFogOfWar.vertices.data());
+  glDrawArrays(GL_TRIANGLES, 0, mVaFogOfWar.vertices.size() / 3);
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
@@ -198,11 +298,11 @@ void Game::drawUnitModel(const Unit& u) {
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glBindTexture(GL_TEXTURE_2D, textureUnits[u.typeID]);
+  glBindTexture(GL_TEXTURE_2D, mTextureUnits[u.typeID]);
   glColor3f(1, 1, 1);
-  glTexCoordPointer(2, GL_FLOAT, 0, vaUnits[u.typeID].textureCoordinates.data());
-  glVertexPointer(3, GL_FLOAT, 0, vaUnits[u.typeID].vertices.data());
-  glDrawArrays(GL_TRIANGLES, 0, vaUnits[u.typeID].vertices.size() / 3);
+  glTexCoordPointer(2, GL_FLOAT, 0, mVaUnits[u.typeID].textureCoordinates.data());
+  glVertexPointer(3, GL_FLOAT, 0, mVaUnits[u.typeID].vertices.data());
+  glDrawArrays(GL_TRIANGLES, 0, mVaUnits[u.typeID].vertices.size() / 3);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_TEXTURE_2D);
@@ -242,13 +342,13 @@ void Game::drawUnit(const Unit& u) {
 }
 
 void Game::drawUnits() {
-  for (auto u : core.units) {
-    if (uiMode == UIMode::SHOW_EVENT
-        && eventFilterUnit(*this, *core.currentEvent, *u))
+  for (auto u : core().units) {
+    if (uiMode() == UIMode::SHOW_EVENT
+        && eventFilterUnit(*this, *core().currentEvent, *u))
     {
       continue;
     }
-    if (core.tile(u->pos).fow == 0) {
+    if (core().tile(u->pos).fow == 0) {
       continue;
     }
     drawUnit(*u);
@@ -257,11 +357,11 @@ void Game::drawUnits() {
 
 void Game::draw() {
   glLoadIdentity();
-  camera.set();
+  camera().set();
   drawMap();
   drawUnits();
-  if (uiMode == UIMode::SHOW_EVENT) {
-    eventDraw(*this, *core.currentEvent);
+  if (uiMode() == UIMode::SHOW_EVENT) {
+    eventDraw(*this, *core().currentEvent);
   }
   drawButtons();
   SDL_GL_SwapBuffers();
@@ -276,116 +376,113 @@ void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
     }
     return;
   }
-  Unit* u = core.unitAt(activeTilePos);
-  Tile& t = core.tile(activeTilePos);
-  assert(core.currentPlayer);
+  Unit* u = core().unitAt(activeTilePos());
+  Tile& t = core().tile(activeTilePos());
+  assert(core().currentPlayer);
   UNUSED(e);
-  if (uiMode != UIMode::NORMAL) {
+  if (uiMode() != UIMode::NORMAL) {
     return;
   }
-  if (u && u->playerID == core.currentPlayer->id) {
-    core.selectedUnit = u;
-    core.pathfinder.fillMap(*core.selectedUnit);
-    vaWalkableMap = buildWalkableArray();
-  } else if (core.selectedUnit) {
-    auto type = getUnitType(core.selectedUnit->typeID);
+  if (u && u->playerID == core().currentPlayer->id) {
+    core().selectedUnit = u;
+    core().pathfinder.fillMap(*core().selectedUnit);
+    mVaWalkableMap = buildWalkableArray();
+  } else if (core().selectedUnit) {
+    auto type = getUnitType(core().selectedUnit->typeID);
     int ap = type.actionPoints;
-    if (u && u->playerID != core.currentPlayer->id) {
-      if (core.selectedUnit && u) {
-        core.shoot(core.selectedUnit, u);
+    if (u && u->playerID != core().currentPlayer->id) {
+      if (core().selectedUnit && u) {
+        core().shoot(core().selectedUnit, u);
       }
     } else if (t.cost <= ap && t.parent.value() != DirID::NONE) {
-      generateEventMove(core, *core.selectedUnit, activeTilePos);
+      generateEventMove(core(), *core().selectedUnit, activeTilePos());
       // TODO: Move this to uiEventMove?
-      vaWalkableMap.vertices.clear();
+      mVaWalkableMap.vertices.clear();
     }
   }
 }
 
 void Game::processSDLEvent(const SDL_MouseMotionEvent& e) {
-  mousePos = V2i(static_cast<int>(e.x), static_cast<int>(e.y));
-  if (isRotatingCamera) {
-    camera.zAngle -= e.xrel;
-    camera.xAngle -= e.yrel;
-    clampAngle(&camera.zAngle);
-    clampF(&camera.xAngle, 0, 50);
+  setMousePos(V2i(static_cast<int>(e.x), static_cast<int>(e.y)));
+  if (isRotatingCamera()) {
+    camera().zAngle -= e.xrel;
+    camera().xAngle -= e.yrel;
+    clampAngle(&camera().zAngle);
+    clampF(&camera().xAngle, 0, 50);
   }
 }
 
 void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
   switch (e.keysym.sym) {
   case SDLK_ESCAPE:
-  case SDLK_q: {
-    done = true;
+  case SDLK_q:
+    setDone(true);
     break;
-  }
   case SDLK_c: {
-    if (!core.selectedUnit) {
+    if (!core().selectedUnit) {
       return;
     }
-    V2f unitPos = v2iToV2f(core.selectedUnit->pos);
-    camera.pos = unitPos;
+    V2f unitPos = v2iToV2f(core().selectedUnit->pos);
+    camera().pos = unitPos;
     break;
   }
   case SDLK_t: {
-    Tile& t = core.tile(activeTilePos);
+    Tile& t = core().tile(activeTilePos());
     t.obstacle = !t.obstacle;
-    vaMap = buildMapArray();
-    vaObstacles = buildObstaclesArray();
-    core.calculateFow();
-    vaFogOfWar = buildFowArray();
-    if (core.selectedUnit) {
-      core.pathfinder.fillMap(*core.selectedUnit);
-      vaWalkableMap = buildWalkableArray();
+    mVaMap = buildMapArray();
+    mVaObstacles = buildObstaclesArray();
+    core().calculateFow();
+    mVaFogOfWar = buildFowArray();
+    if (core().selectedUnit) {
+      core().pathfinder.fillMap(*core().selectedUnit);
+      mVaWalkableMap = buildWalkableArray();
     }
     break;
   }
-  case SDLK_e: {
-    generateEventEndTurn(core);
+  case SDLK_e:
+    generateEventEndTurn(core());
     break;
-  }
-  case SDLK_u: {
-    core.addUnit(activeTilePos, core.currentPlayer->id);
-    if (core.selectedUnit) {
-      core.pathfinder.fillMap(*core.selectedUnit);
-      vaWalkableMap = buildWalkableArray();
+  case SDLK_u:
+    core().addUnit(activeTilePos(), core().currentPlayer->id);
+    if (core().selectedUnit) {
+      core().pathfinder.fillMap(*core().selectedUnit);
+      mVaWalkableMap = buildWalkableArray();
     }
     break;
-  }
   case SDLK_d: {
-    camera.zAngle += 15;
-    clampAngle(&camera.zAngle);
+    camera().zAngle += 15;
+    clampAngle(&camera().zAngle);
     break;
   }
   case SDLK_a: {
-    camera.zAngle -= 15;
-    clampAngle(&camera.zAngle);
+    camera().zAngle -= 15;
+    clampAngle(&camera().zAngle);
     break;
   }
   case SDLK_w: {
-    camera.zoom -= 10;
-    clampF(&camera.zoom, 30, 200);
+    camera().zoom -= 10;
+    clampF(&camera().zoom, 30, 200);
     break;
   }
   case SDLK_s: {
-    camera.zoom += 10;
-    clampF(&camera.zoom, 30, 200);
+    camera().zoom += 10;
+    clampF(&camera().zoom, 30, 200);
     break;
   }
   case SDLK_UP: {
-    camera.move(DirID::N);
+    camera().move(DirID::N);
     break;
   }
   case SDLK_DOWN: {
-    camera.move(DirID::S);
+    camera().move(DirID::S);
     break;
   }
   case SDLK_LEFT: {
-    camera.move(DirID::W);
+    camera().move(DirID::W);
     break;
   }
   case SDLK_RIGHT: {
-    camera.move(DirID::E);
+    camera().move(DirID::E);
     break;
   }
   default:
@@ -397,19 +494,19 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
 }
 
 void Game::screenScenarioMainEvents() {
-  core.currentEvent = core.getNextEvent();
-  lastMoveIndex = getLastEventIndex(*this, *core.currentEvent);
-  uiMode = UIMode::SHOW_EVENT;
-  currentMoveIndex = 0;
+  core().currentEvent = core().getNextEvent();
+  setLastMoveIndex(getLastEventIndex(*this, *core().currentEvent));
+  setUiMode(UIMode::SHOW_EVENT);
+  setCurrentMoveIndex(0);
   // TODO: Remove this hack
-  if (core.currentEvent->t == EventTypeID::END_TURN) {
-    core.applyEvent(*core.currentEvent);
-    uiMode = UIMode::NORMAL;
+  if (core().currentEvent->t == EventTypeID::END_TURN) {
+    core().applyEvent(*core().currentEvent);
+    setUiMode(UIMode::NORMAL);
   }
 }
 
 void Game::logic() {
-  while (uiMode == UIMode::NORMAL && core.unshownEventsLeft()) {
+  while (uiMode() == UIMode::NORMAL && core().unshownEventsLeft()) {
     screenScenarioMainEvents();
   }
 }
@@ -417,11 +514,10 @@ void Game::logic() {
 void Game::processSDLEvent(const SDL_Event& e) {
   switch (e.type) {
   case SDL_QUIT:
-    done = true;
+    setDone(true);
     break;
   case SDL_VIDEORESIZE:
-    screen = SDL_SetVideoMode(e.resize.w, e.resize.h,
-        32, SDL_RESIZABLE);
+    setScreen(SDL_SetVideoMode(e.resize.w, e.resize.h, 32, SDL_RESIZABLE));
     break;
   case SDL_KEYDOWN:
     processSDLEvent(e.key);
@@ -431,19 +527,19 @@ void Game::processSDLEvent(const SDL_Event& e) {
     break;
   case SDL_MOUSEBUTTONUP:
     if (e.button.button == SDL_BUTTON_RIGHT) {
-      isRotatingCamera = false;
+      setIsRotatingCamera(false);
     }
     if (e.button.button == SDL_BUTTON_WHEELUP) {
-      camera.zoom -= 5;
-      clampF(&camera.zoom, 30, 200);
+      camera().zoom -= 5;
+      clampF(&camera().zoom, 30, 200);
     } else if (e.button.button == SDL_BUTTON_WHEELDOWN) {
-      camera.zoom += 5;
-      clampF(&camera.zoom, 30, 200);
+      camera().zoom += 5;
+      clampF(&camera().zoom, 30, 200);
     }
     break;
   case SDL_MOUSEBUTTONDOWN:
     if (e.button.button == SDL_BUTTON_RIGHT) {
-      isRotatingCamera = true;
+      setIsRotatingCamera(true);
     } else if (e.button.button == SDL_BUTTON_LEFT) {
       processSDLEvent(e.button);
     }
@@ -502,50 +598,50 @@ bool Game::pickTile(V2i* p, const V2i* mousePos) {
 
 void Game::drawForPicking() {
   glLoadIdentity();
-  camera.set();
+  camera().set();
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_COLOR_ARRAY);
-  glColorPointer(3, GL_UNSIGNED_BYTE, 0, vaPick.colors.data());
-  glVertexPointer(2, GL_FLOAT, 0, vaPick.vertices.data());
-  glDrawArrays(GL_TRIANGLES, 0, vaPick.vertices.size() / 2);
+  glColorPointer(3, GL_UNSIGNED_BYTE, 0, mVaPick.colors.data());
+  glVertexPointer(2, GL_FLOAT, 0, mVaPick.vertices.data());
+  glDrawArrays(GL_TRIANGLES, 0, mVaPick.vertices.size() / 2);
   glDisableClientState(GL_COLOR_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void Game::scrollMap() {
-  const V2i *p = &mousePos;
+  const V2i& p = mousePos();
   int offset = 15;
-  if (p->x() < offset) {
-    camera.move(DirID::W);
-  } else if(p->x() > screen->w - offset) {
-    camera.move(DirID::E);
+  if (p.x() < offset) {
+    camera().move(DirID::W);
+  } else if(p.x() > screen()->w - offset) {
+    camera().move(DirID::E);
   }
-  if (p->y() < offset) {
-    camera.move(DirID::N);
-  } else if(p->y() > screen->h - offset) {
-    camera.move(DirID::S);
+  if (p.y() < offset) {
+    camera().move(DirID::N);
+  } else if(p.y() > screen()->h - offset) {
+    camera().move(DirID::S);
   }
-  if (camera.pos.x() > MAP_X * TILE_SIZE) {
-    camera.pos.setX(MAP_X * TILE_SIZE);
-  } else if (camera.pos.x() < 0) {
-    camera.pos.setX(0);
+  if (camera().pos.x() > MAP_X * TILE_SIZE) {
+    camera().pos.setX(MAP_X * TILE_SIZE);
+  } else if (camera().pos.x() < 0) {
+    camera().pos.setX(0);
   }
-  if (camera.pos.y() > MAP_Y * TILE_SIZE) {
-    camera.pos.setY(MAP_Y * TILE_SIZE);
-  } else if (camera.pos.y() < 0) {
-    camera.pos.setY(0);
+  if (camera().pos.y() > MAP_Y * TILE_SIZE) {
+    camera().pos.setY(MAP_Y * TILE_SIZE);
+  } else if (camera().pos.y() < 0) {
+    camera().pos.setY(0);
   }
 }
 
 void Game::mainloop() {
-  while (!done) {
+  while (!done()) {
     sdlEvents();
     logic();
     scrollMap();
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawForPicking();
-    pickTile(&activeTilePos, &mousePos);
+    pickTile(&mActiveTilePos, &mMousePos);
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     draw();
@@ -554,7 +650,7 @@ void Game::mainloop() {
 }
 
 void Game::initOpengl() {
-  float aspectRatio = static_cast<float>(winSize.y()) / winSize.x();
+  float aspectRatio = static_cast<float>(winSize().y()) / winSize().x();
   SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -579,28 +675,28 @@ void Game::initOpengl() {
 }
 
 void Game::initCamera() {
-  camera.xAngle = 45.0f;
-  camera.zAngle = 45.0f;
-  camera.pos = V2f(20, 20);
-  camera.zoom = 100.0f;
+  camera().xAngle = 45.0f;
+  camera().zAngle = 45.0f;
+  camera().pos = V2f(20, 20);
+  camera().zoom = 100.0f;
 }
 
 void Game::initVertexArrays() {
-  vaPick = buildPickingTilesArray();
-  vaMap = buildMapArray();
-  vaObstacles = buildObstaclesArray();
-  vaFogOfWar = buildFowArray();
+  mVaPick = buildPickingTilesArray();
+  mVaMap = buildMapArray();
+  mVaObstacles = buildObstaclesArray();
+  mVaFogOfWar = buildFowArray();
 }
 
 void Game::loadUnitResources() {
   int tankID = static_cast<int>(UnitTypeID::TANK);
   int truckID = static_cast<int>(UnitTypeID::TRUCK);
-  loadTexture(&textureUnits[tankID], DATA("tank.png"));
-  loadTexture(&textureUnits[truckID], DATA("truck.png"));
-  objUnits[tankID].read(DATA("tank.obj"));
-  objUnits[truckID].read(DATA("truck.obj"));
-  vaUnits[tankID] =  objUnits[tankID].build();
-  vaUnits[truckID] =  objUnits[truckID].build();
+  mTextureUnits[tankID] = loadTexture(DATA("tank.png"));
+  mTextureUnits[truckID] = loadTexture(DATA("truck.png"));
+  mObjUnits[tankID].read(DATA("tank.obj"));
+  mObjUnits[truckID].read(DATA("truck.obj"));
+  mVaUnits[tankID] = mObjUnits[tankID].build();
+  mVaUnits[truckID] = mObjUnits[truckID].build();
 }
 
 void Game::onTestButton() {
@@ -609,6 +705,6 @@ void Game::onTestButton() {
 
 void Game::addButtons() {
   V2i pos = {10, 10};
-  (void)addButton(font, &pos, "[CLICK ME!]",
+  (void)addButton(font(), &pos, "[CLICK ME!]",
       nullptr); // onTestButton);
 }
