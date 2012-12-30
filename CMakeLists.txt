@@ -48,3 +48,4 @@ add_executable(testMarauder
 target_link_libraries(testMarauder unittest++ SOURCES ${LIBS})
 enable_testing()
 add_test(testMarauder testMarauder)
+add_custom_target(runUnitTests ALL COMMAND testMarauder)
