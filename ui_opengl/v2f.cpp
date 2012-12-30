@@ -10,6 +10,12 @@ V2f::V2f(float x, float y)
 {
 }
 
+V2f::V2f(int x, int y)
+  : mX(static_cast<float>(x)),
+    mY(static_cast<float>(y))
+{
+}
+
 V2f::V2f()
   : mX(0.0f),
     mY(0.0f)

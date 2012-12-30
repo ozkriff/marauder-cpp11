@@ -10,6 +10,7 @@ private:
 
 public:
   V2f(float x, float y);
+  V2f(int x, int y);
   V2f();
   ~V2f();
 

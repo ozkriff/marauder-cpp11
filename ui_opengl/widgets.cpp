@@ -87,31 +87,29 @@ Button* v2iToButton(V2i pos) {
   return nullptr;
 }
 
-void drawButton(Button *b) {
-  float rect[4 * 2];
-  float textureCoord[4 * 2];
-  setXY(rect, 4, 0, 0, 0, static_cast<float>(b->size.y()));
-  setXY(rect, 4, 0, 1,
-      static_cast<float>(b->size.x()),
-      static_cast<float>(b->size.y()));
-  setXY(rect, 4, 0, 2, static_cast<float>(b->size.x()), 0);
-  setXY(rect, 4, 0, 3, 0, 0);
-  setXY(textureCoord, 4, 0, 0, 0, 1);
-  setXY(textureCoord, 4, 0, 1, 1, 1);
-  setXY(textureCoord, 4, 0, 2, 1, 0);
-  setXY(textureCoord, 4, 0, 3, 0, 0);
+void drawButton(const Button& b) {
+  std::vector<float> rect;
+  std::vector<float> textureCoord;
+  appendV2f(&rect, V2f(0, b.size.y()));
+  appendV2f(&rect, V2f(b.size.x(), b.size.y()));
+  appendV2f(&rect, V2f(b.size.x(), 0));
+  appendV2f(&rect, V2f(0, 0));
+  appendV2f(&textureCoord, V2f(0, 1));
+  appendV2f(&textureCoord, V2f(1, 1));
+  appendV2f(&textureCoord, V2f(1, 0));
+  appendV2f(&textureCoord, V2f(0, 0));
   glPushMatrix();
-  glTranslatef(static_cast<float>(b->pos.x()),
-      static_cast<float>(b->pos.y()), 0.0f);
+  glTranslatef(static_cast<float>(b.pos.x()),
+      static_cast<float>(b.pos.y()), 0.0f);
   glColor4f(0.3f, 0.3f, 0.3f, 0.6f);
-  glVertexPointer(2, GL_FLOAT, 0, rect);
+  glVertexPointer(2, GL_FLOAT, 0, rect.data());
   glDrawArrays(GL_QUADS, 0, 4);
   glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
   glEnable(GL_TEXTURE_2D);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glBindTexture(GL_TEXTURE_2D, b->textureID);
-  glVertexPointer(2, GL_FLOAT, 0, rect);
-  glTexCoordPointer(2, GL_FLOAT, 0, textureCoord);
+  glBindTexture(GL_TEXTURE_2D, b.textureID);
+  glVertexPointer(2, GL_FLOAT, 0, rect.data());
+  glTexCoordPointer(2, GL_FLOAT, 0, textureCoord.data());
   glDrawArrays(GL_QUADS, 0, 4);
   glDisable(GL_TEXTURE_2D);
   glPopMatrix();
@@ -144,7 +142,7 @@ static void set_2dWidgetsDrawingModeOff() {
 void drawButtons() {
   set_2dWidgetsDrawingModeOn();
   for (auto b : buttons) {
-    drawButton(b);
+    drawButton(*b);
   }
   set_2dWidgetsDrawingModeOff();
 }

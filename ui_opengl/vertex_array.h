@@ -3,24 +3,20 @@
 #ifndef UI_OPENGL_VERTEX_ARRAY_H
 #define UI_OPENGL_VERTEX_ARRAY_H
 
+#include <vector>
 #include <SDL/SDL_opengl.h>
+#include "ui_opengl/v2f.h"
+#include "ui_opengl/v3f.h"
 
 struct VertexArray {
-  float* v; // vertices
-  float* t; // [opt] texture coordinates
-  GLubyte* ubC; // [opt] colors
-  int count; // vertices count
+  std::vector<float> vertices;
+  std::vector<float> textureCoordinates;
+  std::vector<GLubyte> colors;
 };
 
-extern const VertexArray emptyVertexArray;
-
-void setXY(float* coords, int n, int i, int vi,
-    float x, float y);
-void setXYZ(float* verts, int n, int i, int vi,
-    float x, float y, float z);
-void setRGB(GLubyte* colors, int n, int i, int vi,
-    GLubyte r, GLubyte g, GLubyte b);
-void setRGBi(GLubyte* colors, int n, int i, int vi,
-    int r, int g, int b);
+void appendV2f(std::vector<float>* vertices, const V2f& vertex);
+void appendV3f(std::vector<float>* vertices, const V3f& vertex);
+void appendRGB(std::vector<GLubyte>* colors, GLubyte r, GLubyte g, GLubyte b);
+void appendRGB(std::vector<GLubyte>* colors, int r, int g, int b);
 
 #endif

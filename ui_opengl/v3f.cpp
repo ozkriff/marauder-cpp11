@@ -1,11 +1,11 @@
 // See LICENSE file for copyright and license details.
 
-#include <cassert>
 #include "ui_opengl/v3f.h"
+#include <cassert>
 
-void setV3f(V3f *v, float x, float y, float z) {
-  assert(v);
-  v->x = x;
-  v->y = y;
-  v->z = z;
+V3f::V3f(float x, float y, float z)
+  : x(x),
+    y(y),
+    z(z)
+{
 }

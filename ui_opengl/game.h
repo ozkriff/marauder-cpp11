@@ -49,12 +49,10 @@ public:
   void init();
   void cleanup();
   V2f v2iToV2f(const V2i& i);
-  void buildMapArray(VertexArray* v);
-  void buildObstaclesArray(VertexArray* v);
-  int calculateWalkableTilesCount();
-  int calculateFoggedTilesCount();
-  void buildFowArray(VertexArray* v);
-  void buildWalkableArray(VertexArray* v);
+  VertexArray buildMapArray();
+  VertexArray buildObstaclesArray();
+  VertexArray buildFowArray();
+  VertexArray buildWalkableArray();
   void drawMap();
   void drawUnitModel(const Unit& u);
   void drawUnitCircle(const Unit& u);
@@ -68,7 +66,7 @@ public:
   void logic();
   void processSDLEvent(const SDL_Event& e);
   void sdlEvents();
-  void buildPickingTilesArray(VertexArray* va);
+  VertexArray buildPickingTilesArray();
   bool pickTile(V2i* p, const V2i* mousePos);
   void drawForPicking();
   void scrollMap();

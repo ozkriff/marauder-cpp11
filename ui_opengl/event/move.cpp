@@ -56,18 +56,18 @@ static void endMovement(Game& game, const EventMove& e, const V2i *pos) {
   u->pos = *pos;
   if (game.core.selectedUnit) {
     game.core.pathfinder.fillMap(*u);
-    game.buildWalkableArray(&game.vaWalkableMap);
+    game.vaWalkableMap = game.buildWalkableArray();
     game.core.calculateFow();
-    game.buildFowArray(&game.vaFogOfWar);
+    game.vaFogOfWar = game.buildFowArray();
   }
   game.core.applyEvent(*game.core.currentEvent);
   game.core.currentEvent = nullptr;
   if (u->playerID == game.core.currentPlayer->id) {
     if (game.core.selectedUnit) {
       game.core.pathfinder.fillMap(*game.core.selectedUnit);
-      game.buildWalkableArray(&game.vaWalkableMap);
+      game.vaWalkableMap = game.buildWalkableArray();
     }
-    game.buildFowArray(&game.vaFogOfWar);
+    game.vaFogOfWar = game.buildFowArray();
   }
 }
 

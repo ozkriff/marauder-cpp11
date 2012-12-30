@@ -67,157 +67,98 @@ V2f Game::v2iToV2f(const V2i& i) {
   return V2f(i.x() * TILE_SIZE, i.y() * TILE_SIZE);
 }
 
-void Game::buildMapArray(VertexArray *v) {
+VertexArray Game::buildMapArray() {
+  VertexArray v;
   V2i p;
-  int i = 0; // tile's index
-  v->count = MAP_X * MAP_Y * 6;
-  if (v->v) {
-    delete[] v->v;
-    v->v = nullptr;
-  }
-  if (v->t) {
-    delete[] v->t;
-    v->t = nullptr;
-  }
-  v->v = (float*)new V3f[v->count];
-  v->t = (float*)new V2f[v->count];
   FOR_EACH_TILE(p) {
-    Tile& t = core.tile(p);
-    float n = TILE_SIZE_2;
-    if (t.obstacle) {
+    if (core.tile(p).obstacle) {
       continue;
     }
     V2f pos = v2iToV2f(p);
-    setXY(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
-    setXY(v->v, 3, i, 1, pos.x() + n, pos.y() - n);
-    setXY(v->v, 3, i, 2, pos.x() + n, pos.y() + n);
-    setXY(v->t, 3, i, 0, 0, 0);
-    setXY(v->t, 3, i, 1, 1, 0);
-    setXY(v->t, 3, i, 2, 1, 1);
-    i++;
-    setXY(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
-    setXY(v->v, 3, i, 1, pos.x() + n, pos.y() + n);
-    setXY(v->v, 3, i, 2, pos.x() - n, pos.y() + n);
-    setXY(v->t, 3, i, 0, 0, 0);
-    setXY(v->t, 3, i, 1, 1, 1);
-    setXY(v->t, 3, i, 2, 0, 1);
-    i++;
+    float n = TILE_SIZE_2;
+    float x = pos.x();
+    float y = pos.y();
+    appendV2f(&v.vertices, V2f(x - n, y - n));
+    appendV2f(&v.vertices, V2f(x + n, y - n));
+    appendV2f(&v.vertices, V2f(x + n, y + n));
+    appendV2f(&v.vertices, V2f(x - n, y - n));
+    appendV2f(&v.vertices, V2f(x + n, y + n));
+    appendV2f(&v.vertices, V2f(x - n, y + n));
+    appendV2f(&v.textureCoordinates, V2f(0, 0));
+    appendV2f(&v.textureCoordinates, V2f(1, 0));
+    appendV2f(&v.textureCoordinates, V2f(1, 1));
+    appendV2f(&v.textureCoordinates, V2f(0, 0));
+    appendV2f(&v.textureCoordinates, V2f(1, 1));
+    appendV2f(&v.textureCoordinates, V2f(0, 1));
   }
+  return v;
 }
 
-void Game::buildObstaclesArray(VertexArray *v) {
+VertexArray Game::buildObstaclesArray() {
+  VertexArray v;
   V2i p;
-  int i = 0; // tile's index
-  v->count = MAP_X * MAP_Y * 6;
-  if (v->v) {
-    delete[] v->v;
-    v->v = nullptr;
-  }
-  if (v->t) {
-    delete[] v->t;
-    v->t = nullptr;
-  }
-  v->v = (float *)new V3f[v->count];
-  v->t = (float *)new V2f[v->count];
   FOR_EACH_TILE(p) {
-    Tile& t = core.tile(p);
-    float n = TILE_SIZE_2;
-    if (!t.obstacle) {
+    if (!core.tile(p).obstacle) {
       continue;
     }
     V2f pos = v2iToV2f(p);
-    setXY(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
-    setXY(v->v, 3, i, 1, pos.x() + n, pos.y() - n);
-    setXY(v->v, 3, i, 2, pos.x() + n, pos.y() + n);
-    setXY(v->t, 3, i, 0, 0, 0);
-    setXY(v->t, 3, i, 1, 1, 0);
-    setXY(v->t, 3, i, 2, 1, 1);
-    i++;
-    setXY(v->v, 3, i, 0, pos.x() - n, pos.y() - n);
-    setXY(v->v, 3, i, 1, pos.x() + n, pos.y() + n);
-    setXY(v->v, 3, i, 2, pos.x() - n, pos.y() + n);
-    setXY(v->t, 3, i, 0, 0, 0);
-    setXY(v->t, 3, i, 1, 1, 1);
-    setXY(v->t, 3, i, 2, 0, 1);
-    i++;
-  }
-}
-
-int Game::calculateWalkableTilesCount() {
-  int count = 0;
-  V2i p;
-  FOR_EACH_TILE(p) {
-    Tile& t = core.tile(p);
-    if (t.parent.value() != DirID::NONE && t.cost != 30000) {
-      count++;
-    }
-  }
-  return count;
-}
-
-int Game::calculateFoggedTilesCount() {
-  int n = 0;
-  V2i p;
-  FOR_EACH_TILE(p) {
-    if (core.tile(p).fow == 0) {
-      n++;
-    }
-  }
-  return n;
-}
-
-void Game::buildFowArray(VertexArray *v) {
-  V2i p;
-  int i = 0; // tile's index
-  v->count = calculateFoggedTilesCount() * 6;
-  if (v->v) {
-    delete[] v->v;
-    v->v = nullptr;
-  }
-  v->v = (float *)new V3f[v->count];
-  FOR_EACH_TILE(p) {
     float n = TILE_SIZE_2;
+    float x = pos.x();
+    float y = pos.y();
+    appendV2f(&v.vertices, V2f(x - n, y - n));
+    appendV2f(&v.vertices, V2f(x + n, y - n));
+    appendV2f(&v.vertices, V2f(x + n, y + n));
+    appendV2f(&v.vertices, V2f(x - n, y - n));
+    appendV2f(&v.vertices, V2f(x + n, y + n));
+    appendV2f(&v.vertices, V2f(x - n, y + n));
+    appendV2f(&v.textureCoordinates, V2f(0, 0));
+    appendV2f(&v.textureCoordinates, V2f(1, 0));
+    appendV2f(&v.textureCoordinates, V2f(1, 1));
+    appendV2f(&v.textureCoordinates, V2f(0, 0));
+    appendV2f(&v.textureCoordinates, V2f(1, 1));
+    appendV2f(&v.textureCoordinates, V2f(0, 1));
+  }
+  return v;
+}
+
+VertexArray Game::buildFowArray() {
+  VertexArray v;
+  V2i p;
+  FOR_EACH_TILE(p) {
     if (core.tile(p).fow > 0) {
       continue;
     }
     V2f pos = v2iToV2f(p);
-    setXYZ(v->v, 3, i, 0, pos.x() - n, pos.y() - n, 0.05f);
-    setXYZ(v->v, 3, i, 1, pos.x() + n, pos.y() - n, 0.05f);
-    setXYZ(v->v, 3, i, 2, pos.x() + n, pos.y() + n, 0.05f);
-    i++;
-    setXYZ(v->v, 3, i, 0, pos.x() - n, pos.y() - n, 0.05f);
-    setXYZ(v->v, 3, i, 1, pos.x() + n, pos.y() + n, 0.05f);
-    setXYZ(v->v, 3, i, 2, pos.x() - n, pos.y() + n, 0.05f);
-    i++;
+    float n = TILE_SIZE_2;
+    float x = pos.x();
+    float y = pos.y();
+    float h = 0.01f;
+    appendV3f(&v.vertices, V3f(x - n, y - n, h));
+    appendV3f(&v.vertices, V3f(x + n, y - n, h));
+    appendV3f(&v.vertices, V3f(x + n, y + n, h));
+    appendV3f(&v.vertices, V3f(x - n, y - n, h));
+    appendV3f(&v.vertices, V3f(x + n, y + n, h));
+    appendV3f(&v.vertices, V3f(x - n, y + n, h));
   }
+  return v;
 }
 
-void Game::buildWalkableArray(VertexArray *v) {
+VertexArray Game::buildWalkableArray() {
+  VertexArray v;
   V2i p;
-  int i = 0; // tile's index
-  assert(v);
-  if (v->v) {
-    delete[] v->v;
-    v->v = nullptr;
-  }
-  v->count = calculateWalkableTilesCount() * 3;
-  if (v->count == 0) {
-    return;
-  }
-  v->v = (float *)new V3f[v->count];
   FOR_EACH_TILE(p) {
     Tile& t = core.tile(p);
     if (t.parent.value() != DirID::NONE && t.cost < 50) {
-      V2i p2 = Dir::neib(p, t.parent);
-      if (core.inboard(p2)) {
-        V2f pos1 = v2iToV2f(p);
-        V2f pos2 = v2iToV2f(p2);
-        setXYZ(v->v, 2, i, 0, pos1.x(), pos1.y(), 0.1f);
-        setXYZ(v->v, 2, i, 1, pos2.x(), pos2.y(), 0.1f);
-        i++;
+      V2i to = Dir::neib(p, t.parent);
+      if (core.inboard(to)) {
+        V2f fromF = v2iToV2f(p);
+        V2f toF = v2iToV2f(to);
+        appendV3f(&v.vertices, V3f(fromF.x(), fromF.y(), 0.1f));
+        appendV3f(&v.vertices, V3f(toF.x(), toF.y(), 0.1f));
       }
     }
   }
+  return v;
 }
 
 void Game::drawMap() {
@@ -227,14 +168,14 @@ void Game::drawMap() {
   glBindTexture(GL_TEXTURE_2D, floorTexture);
 
   glColor3f(1.0f, 1.0f, 1.0f);
-  glTexCoordPointer(2, GL_FLOAT, 0, vaMap.t);
-  glVertexPointer(2, GL_FLOAT, 0, vaMap.v);
-  glDrawArrays(GL_TRIANGLES, 0, vaMap.count);
+  glTexCoordPointer(2, GL_FLOAT, 0, vaMap.textureCoordinates.data());
+  glVertexPointer(2, GL_FLOAT, 0, vaMap.vertices.data());
+  glDrawArrays(GL_TRIANGLES, 0, vaMap.vertices.size() / 2);
 
   glColor3f(1.0f, 0.0f, 0.0f);
-  glTexCoordPointer(2, GL_FLOAT, 0, vaObstacles.t);
-  glVertexPointer(2, GL_FLOAT, 0, vaObstacles.v);
-  glDrawArrays(GL_TRIANGLES, 0, vaObstacles.count);
+  glTexCoordPointer(2, GL_FLOAT, 0, vaObstacles.textureCoordinates.data());
+  glVertexPointer(2, GL_FLOAT, 0, vaObstacles.vertices.data());
+  glDrawArrays(GL_TRIANGLES, 0, vaObstacles.vertices.size() / 2);
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisable(GL_TEXTURE_2D);
@@ -242,14 +183,14 @@ void Game::drawMap() {
 
   glEnableClientState(GL_VERTEX_ARRAY);
   glColor3f(0.0f, 0.3f, 1.0f);
-  glVertexPointer(3, GL_FLOAT, 0, vaWalkableMap.v);
-  glDrawArrays(GL_LINES, 0, vaWalkableMap.count);
+  glVertexPointer(3, GL_FLOAT, 0, vaWalkableMap.vertices.data());
+  glDrawArrays(GL_LINES, 0, vaWalkableMap.vertices.size() / 3);
   glDisableClientState(GL_VERTEX_ARRAY);
 
   glEnableClientState(GL_VERTEX_ARRAY);
   glColor4f(0.0f, 0.0f, 0.0f, 0.2f);
-  glVertexPointer(3, GL_FLOAT, 0, vaFogOfWar.v);
-  glDrawArrays(GL_TRIANGLES, 0, vaFogOfWar.count);
+  glVertexPointer(3, GL_FLOAT, 0, vaFogOfWar.vertices.data());
+  glDrawArrays(GL_TRIANGLES, 0, vaFogOfWar.vertices.size() / 3);
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
@@ -259,17 +200,16 @@ void Game::drawUnitModel(const Unit& u) {
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   glBindTexture(GL_TEXTURE_2D, textureUnits[u.typeID]);
   glColor3f(1, 1, 1);
-  glTexCoordPointer(2, GL_FLOAT, 0, vaUnits[u.typeID].t);
-  glVertexPointer(3, GL_FLOAT, 0, vaUnits[u.typeID].v);
-  glDrawArrays(GL_TRIANGLES, 0, vaUnits[u.typeID].count);
+  glTexCoordPointer(2, GL_FLOAT, 0, vaUnits[u.typeID].textureCoordinates.data());
+  glVertexPointer(3, GL_FLOAT, 0, vaUnits[u.typeID].vertices.data());
+  glDrawArrays(GL_TRIANGLES, 0, vaUnits[u.typeID].vertices.size() / 3);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_TEXTURE_2D);
 }
 
 void Game::drawUnitCircle(const Unit& u) {
-  float v[4 * 3];
-  float n = TILE_SIZE_2 * 0.9f;
+  std::vector<float> v;
   if (u.playerID == 0) {
     glColor3f(1, 0, 0);
   } else if (u.playerID == 1) {
@@ -277,14 +217,15 @@ void Game::drawUnitCircle(const Unit& u) {
   } else {
     die("drawUnitCircle(): You need more colors!");
   }
-  setXYZ(v, 2, 0, 0, +n, +n, 0.1f);
-  setXYZ(v, 2, 0, 1, +n, -n, 0.1f);
-  setXYZ(v, 2, 1, 0, -n, -n, 0.1f);
-  setXYZ(v, 2, 1, 1, -n, +n, 0.1f);
+  float n = TILE_SIZE_2 * 0.9f;
+  appendV3f(&v, V3f(n, n, 0.1f));
+  appendV3f(&v, V3f(n, -n, 0.1f));
+  appendV3f(&v, V3f(-n, -n, 0.1f));
+  appendV3f(&v, V3f(-n, n, 0.1f));
   glLineWidth(2);
   glEnableClientState(GL_VERTEX_ARRAY);
-  glVertexPointer(3, GL_FLOAT, 0, v);
-  glDrawArrays(GL_LINE_LOOP, 0, 4);
+  glVertexPointer(3, GL_FLOAT, 0, v.data());
+  glDrawArrays(GL_LINE_LOOP, 0, v.size() / 3);
   glDisableClientState(GL_VERTEX_ARRAY);
   glLineWidth(1);
 }
@@ -345,7 +286,7 @@ void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
   if (u && u->playerID == core.currentPlayer->id) {
     core.selectedUnit = u;
     core.pathfinder.fillMap(*core.selectedUnit);
-    buildWalkableArray(&vaWalkableMap);
+    vaWalkableMap = buildWalkableArray();
   } else if (core.selectedUnit) {
     auto type = getUnitType(core.selectedUnit->typeID);
     int ap = type.actionPoints;
@@ -356,8 +297,7 @@ void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
     } else if (t.cost <= ap && t.parent.value() != DirID::NONE) {
       generateEventMove(core, *core.selectedUnit, activeTilePos);
       // TODO: Move this to uiEventMove?
-      delete[] vaWalkableMap.v;
-      vaWalkableMap = emptyVertexArray;
+      vaWalkableMap.vertices.clear();
     }
   }
 }
@@ -390,13 +330,13 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
   case SDLK_t: {
     Tile& t = core.tile(activeTilePos);
     t.obstacle = !t.obstacle;
-    buildMapArray(&vaMap);
-    buildObstaclesArray(&vaObstacles);
+    vaMap = buildMapArray();
+    vaObstacles = buildObstaclesArray();
     core.calculateFow();
-    buildFowArray(&vaFogOfWar);
+    vaFogOfWar = buildFowArray();
     if (core.selectedUnit) {
       core.pathfinder.fillMap(*core.selectedUnit);
-      buildWalkableArray(&vaWalkableMap);
+      vaWalkableMap = buildWalkableArray();
     }
     break;
   }
@@ -408,7 +348,7 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
     core.addUnit(activeTilePos, core.currentPlayer->id);
     if (core.selectedUnit) {
       core.pathfinder.fillMap(*core.selectedUnit);
-      buildWalkableArray(&vaWalkableMap);
+      vaWalkableMap = buildWalkableArray();
     }
     break;
   }
@@ -520,34 +460,28 @@ void Game::sdlEvents() {
   }
 }
 
-void Game::buildPickingTilesArray(VertexArray *va) {
+VertexArray Game::buildPickingTilesArray() {
+  VertexArray v;
   V2i p;
-  int i = 0; // tile index
-  assert(va);
-  va->count = MAP_X * MAP_Y * 4;
-  if (va->v) {
-    delete[] va->v;
-    va->v = nullptr;
-  }
-  if (va->ubC) {
-    delete[] va->ubC;
-    va->ubC = nullptr;
-  }
-  va->v = (float *)new V3f[va->count];
-  va->ubC = new GLubyte[va->count * 3];
   FOR_EACH_TILE(p) {
     float n = TILE_SIZE_2;
     V2f pos = v2iToV2f(p);
-    setXY(va->v, 4, i, 0, pos.x() - n, pos.y() - n);
-    setXY(va->v, 4, i, 1, pos.x() + n, pos.y() - n);
-    setXY(va->v, 4, i, 2, pos.x() + n, pos.y() + n);
-    setXY(va->v, 4, i, 3, pos.x() - n, pos.y() + n);
-    setRGBi(va->ubC, 4, i, 0, p.x(), p.y(), 1);
-    setRGBi(va->ubC, 4, i, 1, p.x(), p.y(), 1);
-    setRGBi(va->ubC, 4, i, 2, p.x(), p.y(), 1);
-    setRGBi(va->ubC, 4, i, 3, p.x(), p.y(), 1);
-    i++;
+    float x = pos.x();
+    float y = pos.y();
+    appendV2f(&v.vertices, V2f(x - n, y - n));
+    appendV2f(&v.vertices, V2f(x + n, y - n));
+    appendV2f(&v.vertices, V2f(x + n, y + n));
+    appendV2f(&v.vertices, V2f(x - n, y - n));
+    appendV2f(&v.vertices, V2f(x + n, y + n));
+    appendV2f(&v.vertices, V2f(x - n, y + n));
+    appendRGB(&v.colors, p.x(), p.y(), 1);
+    appendRGB(&v.colors, p.x(), p.y(), 1);
+    appendRGB(&v.colors, p.x(), p.y(), 1);
+    appendRGB(&v.colors, p.x(), p.y(), 1);
+    appendRGB(&v.colors, p.x(), p.y(), 1);
+    appendRGB(&v.colors, p.x(), p.y(), 1);
   }
+  return v;
 }
 
 bool Game::pickTile(V2i* p, const V2i* mousePos) {
@@ -571,9 +505,9 @@ void Game::drawForPicking() {
   camera.set();
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_COLOR_ARRAY);
-  glColorPointer(3, GL_UNSIGNED_BYTE, 0, vaPick.ubC);
-  glVertexPointer(2, GL_FLOAT, 0, vaPick.v);
-  glDrawArrays(GL_QUADS, 0, vaPick.count);
+  glColorPointer(3, GL_UNSIGNED_BYTE, 0, vaPick.colors.data());
+  glVertexPointer(2, GL_FLOAT, 0, vaPick.vertices.data());
+  glDrawArrays(GL_TRIANGLES, 0, vaPick.vertices.size() / 2);
   glDisableClientState(GL_COLOR_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -652,15 +586,10 @@ void Game::initCamera() {
 }
 
 void Game::initVertexArrays() {
-  vaMap = emptyVertexArray;
-  vaPick = emptyVertexArray;
-  vaWalkableMap = emptyVertexArray;
-  vaFogOfWar = emptyVertexArray;
-  vaObstacles = emptyVertexArray;
-  buildPickingTilesArray(&vaPick);
-  buildMapArray(&vaMap);
-  buildObstaclesArray(&vaObstacles);
-  buildFowArray(&vaFogOfWar);
+  vaPick = buildPickingTilesArray();
+  vaMap = buildMapArray();
+  vaObstacles = buildObstaclesArray();
+  vaFogOfWar = buildFowArray();
 }
 
 void Game::loadUnitResources() {

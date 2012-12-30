@@ -78,18 +78,13 @@ void ObjModel::debugPrint() {
 
 VertexArray ObjModel::build() {
   VertexArray va;
-  va.count = mFaces.size() * 3;
-  va.v = new float[va.count * 3];
-  va.t = new float[va.count * 2];
   for (unsigned int i = 0; i < mFaces.size(); i++) {
     auto tri = mFaces[i];
     for (int j = 0; j < 3; j++) {
       int vertexID = tri.vertex[j] - 1;
       int textureCoordID = tri.texture[j] - 1;
-      V3f* vertex = &mVertices[vertexID];
-      V2f* textureCoord = &mTextureCoords[textureCoordID];
-      setXYZ(va.v, 3, i, j, vertex->x, vertex->y, vertex->z);
-      setXY(va.t, 3, i, j, textureCoord->x(), textureCoord->y());
+      appendV3f(&va.vertices, mVertices[vertexID]);
+      appendV2f(&va.textureCoordinates, mTextureCoords[textureCoordID]);
     }
   }
   return va;
