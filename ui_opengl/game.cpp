@@ -43,6 +43,10 @@ Core& Game::core() {
   return mCore;
 }
 
+const Core& Game::core() const {
+  return mCore;
+}
+
 const V2i& Game::winSize() {
   return mWinSize;
 }
@@ -162,7 +166,7 @@ void Game::cleanup() {
   SDL_Quit();
 }
 
-V2f Game::v2iToV2f(const V2i& i) {
+V2f Game::v2iToV2f(const V2i& i) const {
   assert(core().inboard(i));
   return V2f(i.x() * TILE_SIZE, i.y() * TILE_SIZE);
 }

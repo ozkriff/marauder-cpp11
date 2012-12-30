@@ -40,57 +40,11 @@ private:
   VertexArray mVaUnits[static_cast<int>(UnitTypeID::COUNT)];
   GLuint mTextureUnits[static_cast<int>(UnitTypeID::COUNT)];
   TTF_Font* mFont;
-
-public:
-  Game();
-  ~Game();
-
-  int currentMoveIndex();
-  int lastMoveIndex();
-  Core& core();
-  const V2i& winSize();
-  UIMode uiMode();
-  Camera& camera();
-  const V2i& activeTilePos();
-  bool isRotatingCamera();
-  const V2i& mousePos();
-  SDL_Surface* screen();
-  bool done();
-  TTF_Font* font();
-
-  void setDone(bool done);
-  void setWinSize(const V2i& winSize);
-  void setActiveTilePos(const V2i& activeTilePos);
-  void setMousePos(const V2i& mousePos);
-  void setUiMode(UIMode uiMode);
-  void setIsRotatingCamera(bool isRotatingCamera);
-  void setFont(TTF_Font* font);
-  void setFloorTexture(int textureID);
-  void setLastMoveIndex(int lastMoveIndex);
-  void setCurrentMoveIndex(int currentMoveIndex);
-  void setScreen(SDL_Surface* screen);
-  void setVaWalkableMap(const VertexArray& va);
-  void setVaFogOfWar(const VertexArray& va);
-
-  void run();
-  void init();
-  void cleanup();
-  V2f v2iToV2f(const V2i& i);
-  VertexArray buildMapArray();
-  VertexArray buildObstaclesArray();
-  VertexArray buildFowArray();
-  VertexArray buildWalkableArray();
-  void drawMap();
-  void drawUnitModel(const Unit& u);
-  void drawUnitCircle(const Unit& u);
-  void drawUnit(const Unit& u);
-  void drawUnits();
-  void draw();
+  
   void processSDLEvent(const SDL_MouseButtonEvent& e);
   void processSDLEvent(const SDL_MouseMotionEvent& e);
   void processSDLEvent(const SDL_KeyboardEvent& e);
-  void screenScenarioMainEvents();
-  void logic();
+  
   void processSDLEvent(const SDL_Event& e);
   void sdlEvents();
   VertexArray buildPickingTilesArray();
@@ -102,8 +56,59 @@ public:
   void initCamera();
   void initVertexArrays();
   void loadUnitResources();
+  void init();
+  void cleanup();
+  void drawMap();
+  void drawUnit(const Unit& u);
+  void drawUnits();
+  void draw();
+  void screenScenarioMainEvents();
+  void logic();
   void onTestButton();
   void addButtons();
+  
+  bool done();
+  SDL_Surface* screen();
+  UIMode uiMode();
+  TTF_Font* font();
+  bool isRotatingCamera();
+  const V2i& winSize();
+  const V2i& activeTilePos();
+  Camera& camera();
+  const V2i& mousePos();
+  
+  void setDone(bool done);
+  void setFont(TTF_Font* font);
+  void setFloorTexture(int textureID);
+  void setWinSize(const V2i& winSize);
+  void setScreen(SDL_Surface* screen);
+  void setActiveTilePos(const V2i& activeTilePos);
+  void setMousePos(const V2i& mousePos);
+  void setIsRotatingCamera(bool isRotatingCamera);
+
+public:
+  Game();
+  ~Game();
+
+  int currentMoveIndex();
+  int lastMoveIndex();
+  Core& core();
+  const Core& core() const;
+
+  void setUiMode(UIMode uiMode);
+  void setLastMoveIndex(int lastMoveIndex);
+  void setCurrentMoveIndex(int currentMoveIndex);
+  void setVaWalkableMap(const VertexArray& va);
+  void setVaFogOfWar(const VertexArray& va);
+
+  void run();
+  V2f v2iToV2f(const V2i& i) const;
+  VertexArray buildMapArray();
+  VertexArray buildObstaclesArray();
+  VertexArray buildFowArray();
+  VertexArray buildWalkableArray();
+  void drawUnitModel(const Unit& u);
+  void drawUnitCircle(const Unit& u);
 };
 
 #endif
