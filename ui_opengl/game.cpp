@@ -326,7 +326,7 @@ void Game::draw() {
   SDL_GL_SwapBuffers();
 }
 
-void Game::processMouseButtonDownEvent(const SDL_MouseButtonEvent& e) {
+void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
   V2i p(static_cast<int>(e.x), static_cast<int>(e.y));
   auto b = v2iToButton(p);
   if (b) {
@@ -362,7 +362,7 @@ void Game::processMouseButtonDownEvent(const SDL_MouseButtonEvent& e) {
   }
 }
 
-void Game::processMouseMotionEvent(const SDL_MouseMotionEvent& e) {
+void Game::processSDLEvent(const SDL_MouseMotionEvent& e) {
   mousePos = V2i(static_cast<int>(e.x), static_cast<int>(e.y));
   if (isRotatingCamera) {
     camera.zAngle -= e.xrel;
@@ -372,7 +372,7 @@ void Game::processMouseMotionEvent(const SDL_MouseMotionEvent& e) {
   }
 }
 
-void Game::processKeyDownEvent(const SDL_KeyboardEvent& e) {
+void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
   switch (e.keysym.sym) {
   case SDLK_ESCAPE:
   case SDLK_q: {
@@ -484,10 +484,10 @@ void Game::processSDLEvent(const SDL_Event& e) {
         32, SDL_RESIZABLE);
     break;
   case SDL_KEYDOWN:
-    processKeyDownEvent(e.key);
+    processSDLEvent(e.key);
     break;
   case SDL_MOUSEMOTION:
-    processMouseMotionEvent(e.motion);
+    processSDLEvent(e.motion);
     break;
   case SDL_MOUSEBUTTONUP:
     if (e.button.button == SDL_BUTTON_RIGHT) {
@@ -505,7 +505,7 @@ void Game::processSDLEvent(const SDL_Event& e) {
     if (e.button.button == SDL_BUTTON_RIGHT) {
       isRotatingCamera = true;
     } else if (e.button.button == SDL_BUTTON_LEFT) {
-      processMouseButtonDownEvent(e.button);
+      processSDLEvent(e.button);
     }
     break;
   default:

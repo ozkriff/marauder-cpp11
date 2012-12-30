@@ -61,9 +61,9 @@ public:
   void drawUnit(const Unit& u);
   void drawUnits();
   void draw();
-  void processMouseButtonDownEvent(const SDL_MouseButtonEvent& e);
-  void processMouseMotionEvent(const SDL_MouseMotionEvent& e);
-  void processKeyDownEvent(const SDL_KeyboardEvent& e);
+  void processSDLEvent(const SDL_MouseButtonEvent& e);
+  void processSDLEvent(const SDL_MouseMotionEvent& e);
+  void processSDLEvent(const SDL_KeyboardEvent& e);
   void screenScenarioMainEvents();
   void logic();
   void processSDLEvent(const SDL_Event& e);
