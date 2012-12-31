@@ -8,16 +8,52 @@
 #include "core/core.h"
 
 Core::Core()
-  : pathfinder(*this)
+  : mPathfinder(*this)
 {
 }
 
 Core::~Core() {
 }
 
+const std::list<Player*>& Core::players() {
+  return mPlayers;
+}
+
+Event const* Core::currentEvent() {
+  return mCurrentEvent;
+}
+
+Player* Core::currentPlayer() {
+  return mCurrentPlayer;
+}
+
+Unit* Core::selectedUnit() {
+  return mSelectedUnit;
+}
+
+std::list<Unit*>& Core::units() {
+  return mUnits;
+}
+
+Pathfinder& Core::pathfinder() {
+  return mPathfinder;
+}
+
+void Core::setSelectedUnit(Unit* unit) {
+  mSelectedUnit = unit;
+}
+
+void Core::setCurrentEvent(Event* event) {
+  mCurrentEvent = event;
+}
+
+void Core::setCurrentPlayer(Player* player) {
+  mCurrentPlayer = player;
+}
+  
 void Core::createLocalHuman(int id) {
   auto p = new Player;
-  players.push_back(p);
+  mPlayers.push_back(p);
   p->id = id;
   p->lastEventID = HAVE_NOT_SEEN_ANY_EVENTS;
 }
@@ -26,7 +62,7 @@ void Core::initLocalPlayers(int n, int* ids) {
   for (int i = 0; i < n; i++) {
     createLocalHuman(ids[i]);
   }
-  currentPlayer = players.back();
+  mCurrentPlayer = mPlayers.back();
 }
 
 bool Core::inboard(const V2i& p) const {
@@ -36,7 +72,7 @@ bool Core::inboard(const V2i& p) const {
 
 Tile& Core::tile(const V2i &p) {
   assert(inboard(p));
-  return map[p.y()][p.x()];
+  return mMap[p.y()][p.x()];
 }
 
 V2i Core::incV2i(const V2i& pos) const {
@@ -51,8 +87,8 @@ V2i Core::incV2i(const V2i& pos) const {
 }
 
 int Core::getNewEventId() {
-  if (!events.empty()) {
-    return events.back()->id + 1;
+  if (!mEvents.empty()) {
+    return mEvents.back()->id + 1;
   } else {
     return 0;
   }
@@ -60,14 +96,14 @@ int Core::getNewEventId() {
 
 // Undo all events that this player have not seen yet
 void Core::undoUnshownEvents() {
-  if (events.size() == 0) {
+  if (mEvents.size() == 0) {
     return;
   }
-  auto i = events.end();
+  auto i = mEvents.end();
   --i;
-  while (i != events.begin()) {
+  while (i != mEvents.begin()) {
     auto event = *i;
-    if (event->id == currentPlayer->lastEventID) {
+    if (event->id == mCurrentPlayer->lastEventID) {
       break;
     }
     undoEvent(*event);
@@ -76,7 +112,7 @@ void Core::undoUnshownEvents() {
 }
 
 void Core::applyEvent(const Event& e) {
-  currentPlayer->lastEventID = e.id;
+  mCurrentPlayer->lastEventID = e.id;
   switch (e.t) {
   case EventTypeID::MOVE:
     applyEventMove(*this, e.e.move);
@@ -116,7 +152,7 @@ void Core::applyInvisibleEvents() {
     } else {
       break;
     }
-    e = getNext(events, e);
+    e = getNext(mEvents, e);
     assert(e);
   }
 }
@@ -124,24 +160,24 @@ void Core::applyInvisibleEvents() {
 // TODO: Called before getNextEvent
 bool Core::unshownEventsLeft() {
   applyInvisibleEvents();
-  if (events.size() == 0) {
+  if (mEvents.size() == 0) {
     return false;
   } else {
-    auto e = events.back();
-    return e->id != currentPlayer->lastEventID;
+    auto e = mEvents.back();
+    return e->id != mCurrentPlayer->lastEventID;
   }
 }
 
 // Always called after applyInvisibleEvents
 Event* Core::getNextEvent() {
-  int id = currentPlayer->lastEventID; // shortcut
-  assert(events.size() > 0);
+  int id = mCurrentPlayer->lastEventID; // shortcut
+  assert(mEvents.size() > 0);
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
-    return events.front();
+    return mEvents.front();
   }
-  for (auto e : events) {
+  for (auto e : mEvents) {
     if (e->id == id) {
-      return getNext(events, e);
+      return getNext(mEvents, e);
     }
   }
   return nullptr;
@@ -150,7 +186,7 @@ Event* Core::getNextEvent() {
 void Core::addEvent(Event* e) {
   assert(e);
   e->id = getNewEventId();
-  events.push_back(e);
+  mEvents.push_back(e);
   // event2log(*e);
 #if 0
   // TODO
@@ -183,13 +219,13 @@ void Core::cleanFow() {
 }
 
 void Core::calculateFow() {
-  assert(currentPlayer);
+  assert(mCurrentPlayer);
   cleanFow();
   V2i p;
   FOR_EACH_TILE(p) {
-    for (auto u : units) {
+    for (auto u : mUnits) {
       int maxDist = getUnitType(u->typeID).rangeOfVision;
-      bool isPlayerOk = (u->playerID == currentPlayer->id);
+      bool isPlayerOk = (u->playerID == mCurrentPlayer->id);
       bool isDistanceOk = (p.distance(u->pos) < maxDist);
       bool isLosOk = isLosClear(p, u->pos);
       if (isPlayerOk && isDistanceOk && isLosOk) {
@@ -200,7 +236,7 @@ void Core::calculateFow() {
 }
 
 Unit* Core::unitAt(const V2i& pos) {
-  for (auto u : units) {
+  for (auto u : mUnits) {
     if (u->pos == pos) {
       return u;
     }
@@ -209,7 +245,7 @@ Unit* Core::unitAt(const V2i& pos) {
 }
 
 Unit* Core::id2unit(int id) {
-  for (auto u : units) {
+  for (auto u : mUnits) {
     if (u->id == id) {
       return u;
     }
@@ -218,8 +254,8 @@ Unit* Core::id2unit(int id) {
 }
 
 int Core::getNewUnitID() {
-  if (units.size() > 0) {
-    auto lastUnit = units.back();
+  if (mUnits.size() > 0) {
+    auto lastUnit = mUnits.back();
     return lastUnit->id + 1;
   } else {
     return 0;
@@ -235,7 +271,7 @@ void Core::addUnit(const V2i& p, int playerID) {
   u->playerID = playerID;
   u->dir = static_cast<Dir>(rnd(0, 7));
   u->typeID = rnd(0, (int)UnitTypeID::COUNT - 1);
-  units.push_back(u);
+  mUnits.push_back(u);
   calculateFow();
 #if 0
   buildFowArray(&vaFogOfWar);
@@ -244,10 +280,10 @@ void Core::addUnit(const V2i& p, int playerID) {
 
 void Core::killUnit(Unit* u) {
   // deleteNode(&units, data2node(units, u));
-  units.remove(u);
+  mUnits.remove(u);
   delete u;
-  if (selectedUnit) {
-    pathfinder.fillMap(*selectedUnit);
+  if (mSelectedUnit) {
+    mPathfinder.fillMap(*mSelectedUnit);
     calculateFow();
 #if 0
     buildWalkableArray(&vaWalkableMap);
@@ -263,7 +299,7 @@ void Core::shoot(Unit *shooter, Unit *target) {
 }
 
 void Core::initUnits() {
-  selectedUnit = nullptr;
+  mSelectedUnit = nullptr;
   for (int i = 0; i < 8; i++) {
     V2i p = V2i(rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
     if (!tile(p).obstacle && !unitAt(p)) {
@@ -289,7 +325,7 @@ void Core::initPlayers() {
 void Core::initLogic() {
   srand(time(nullptr));
   initUnitTypes();
-  pathfinder.cleanMap();
+  mPathfinder.cleanMap();
   cleanFow();
   initPlayers();
   initObstacles();
@@ -317,16 +353,16 @@ void Core::undoEvent(const Event& e) {
 // TODO: rename.
 Event* Core::getNextEventNode() {
   // Node *node;
-  int id = currentPlayer->lastEventID; // shortcut
-  if (events.size() == 0) {
+  int id = mCurrentPlayer->lastEventID; // shortcut
+  if (mEvents.size() == 0) {
     return nullptr;
   }
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
-    return events.front();
+    return mEvents.front();
   }
   // find last seen event
   Event *e = nullptr;
-  for (auto e : events) {
+  for (auto e : mEvents) {
     if (e->id == id) {
       break;
     }
@@ -334,7 +370,7 @@ Event* Core::getNextEventNode() {
   if (!e) {
     return nullptr;
   } else {
-    return getNext(events, e);
+    return getNext(mEvents, e);
   }
 }
 

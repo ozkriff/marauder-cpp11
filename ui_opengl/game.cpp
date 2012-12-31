@@ -346,9 +346,9 @@ void Game::drawUnit(const Unit& u) {
 }
 
 void Game::drawUnits() {
-  for (auto u : core().units) {
+  for (auto u : core().units()) {
     if (uiMode() == UIMode::SHOW_EVENT
-        && eventFilterUnit(*this, *core().currentEvent, *u))
+        && eventFilterUnit(*this, *core().currentEvent(), *u))
     {
       continue;
     }
@@ -365,7 +365,7 @@ void Game::draw() {
   drawMap();
   drawUnits();
   if (uiMode() == UIMode::SHOW_EVENT) {
-    eventDraw(*this, *core().currentEvent);
+    eventDraw(*this, *core().currentEvent());
   }
   drawButtons();
   SDL_GL_SwapBuffers();
@@ -382,24 +382,24 @@ void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
   }
   Unit* u = core().unitAt(activeTilePos());
   Tile& t = core().tile(activeTilePos());
-  assert(core().currentPlayer);
+  assert(core().currentPlayer());
   UNUSED(e);
   if (uiMode() != UIMode::NORMAL) {
     return;
   }
-  if (u && u->playerID == core().currentPlayer->id) {
-    core().selectedUnit = u;
-    core().pathfinder.fillMap(*core().selectedUnit);
+  if (u && u->playerID == core().currentPlayer()->id) {
+    core().setSelectedUnit(u);
+    core().pathfinder().fillMap(*core().selectedUnit());
     mVaWalkableMap = buildWalkableArray();
-  } else if (core().selectedUnit) {
-    auto type = getUnitType(core().selectedUnit->typeID);
+  } else if (core().selectedUnit()) {
+    auto type = getUnitType(core().selectedUnit()->typeID);
     int ap = type.actionPoints;
-    if (u && u->playerID != core().currentPlayer->id) {
-      if (core().selectedUnit && u) {
-        core().shoot(core().selectedUnit, u);
+    if (u && u->playerID != core().currentPlayer()->id) {
+      if (core().selectedUnit() && u) {
+        core().shoot(core().selectedUnit(), u);
       }
     } else if (t.cost <= ap && t.parent.value() != DirID::NONE) {
-      generateEventMove(core(), *core().selectedUnit, activeTilePos());
+      generateEventMove(core(), *core().selectedUnit(), activeTilePos());
       // TODO: Move this to uiEventMove?
       mVaWalkableMap.vertices.clear();
     }
@@ -423,10 +423,10 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
     setDone(true);
     break;
   case SDLK_c: {
-    if (!core().selectedUnit) {
+    if (!core().selectedUnit()) {
       return;
     }
-    V2f unitPos = v2iToV2f(core().selectedUnit->pos);
+    V2f unitPos = v2iToV2f(core().selectedUnit()->pos);
     camera().pos = unitPos;
     break;
   }
@@ -437,8 +437,8 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
     mVaObstacles = buildObstaclesArray();
     core().calculateFow();
     mVaFogOfWar = buildFowArray();
-    if (core().selectedUnit) {
-      core().pathfinder.fillMap(*core().selectedUnit);
+    if (core().selectedUnit()) {
+      core().pathfinder().fillMap(*core().selectedUnit());
       mVaWalkableMap = buildWalkableArray();
     }
     break;
@@ -447,9 +447,9 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
     generateEventEndTurn(core());
     break;
   case SDLK_u:
-    core().addUnit(activeTilePos(), core().currentPlayer->id);
-    if (core().selectedUnit) {
-      core().pathfinder.fillMap(*core().selectedUnit);
+    core().addUnit(activeTilePos(), core().currentPlayer()->id);
+    if (core().selectedUnit()) {
+      core().pathfinder().fillMap(*core().selectedUnit());
       mVaWalkableMap = buildWalkableArray();
     }
     break;
@@ -498,13 +498,13 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
 }
 
 void Game::screenScenarioMainEvents() {
-  core().currentEvent = core().getNextEvent();
-  setLastMoveIndex(getLastEventIndex(*this, *core().currentEvent));
+  core().setCurrentEvent(core().getNextEvent());
+  setLastMoveIndex(getLastEventIndex(*this, *core().currentEvent()));
   setUiMode(UIMode::SHOW_EVENT);
   setCurrentMoveIndex(0);
   // TODO: Remove this hack
-  if (core().currentEvent->t == EventTypeID::END_TURN) {
-    core().applyEvent(*core().currentEvent);
+  if (core().currentEvent()->t == EventTypeID::END_TURN) {
+    core().applyEvent(*core().currentEvent());
     setUiMode(UIMode::NORMAL);
   }
 }

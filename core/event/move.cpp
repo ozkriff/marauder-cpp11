@@ -20,7 +20,7 @@ void generateEventMove(
   }
   e->t = EventTypeID::MOVE;
   m.initialDirection = u.dir;
-  m.path = core.pathfinder.getPath(destination);
+  m.path = core.pathfinder().getPath(destination);
   m.length = m.path.size();
   m.unitID = u.id;
   core.addEvent(e);
@@ -32,7 +32,7 @@ void applyEventMove(Core& core, const EventMove& e) {
   assert(u);
   u->pos = p[e.length - 1];
   u->dir = Dir(p[e.length - 2], p[e.length - 1]);
-  if (u->playerID == core.currentPlayer->id) {
+  if (u->playerID == core.currentPlayer()->id) {
     core.calculateFow();
   }
 }

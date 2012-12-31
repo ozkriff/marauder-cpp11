@@ -45,17 +45,19 @@ struct Tile {
 
 class Core {
 public:
-  std::list<Player*> players;
-  Event const* currentEvent;
-  Player* currentPlayer;
-  Unit* selectedUnit;
-  std::list<Unit*> units;
-  Pathfinder pathfinder;
-  Tile map[MAP_Y][MAP_X];
-  std::list<Event*> events;
-
   Core();
   ~Core();
+  
+  const std::list<Player*>& players();
+  Event const* currentEvent();
+  Player* currentPlayer();
+  Unit* selectedUnit();
+  std::list<Unit*>& units();
+  Pathfinder& pathfinder();
+  
+  void setSelectedUnit(Unit* unit);
+  void setCurrentEvent(Event* event);
+  void setCurrentPlayer(Player* player);
 
   Tile& tile(const V2i &p);
   void calculateFow();
@@ -78,6 +80,15 @@ public:
   void undoUnshownEvents();
 
 private:
+  std::list<Player*> mPlayers;
+  Event const* mCurrentEvent;
+  Player* mCurrentPlayer;
+  Unit* mSelectedUnit;
+  std::list<Unit*> mUnits;
+  Pathfinder mPathfinder;
+  Tile mMap[MAP_Y][MAP_X];
+  std::list<Event*> mEvents;
+
   void createLocalHuman(int id);
   void initLocalPlayers(int n, int* ids);
   int getNewUnitID();

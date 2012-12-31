@@ -5,10 +5,10 @@
 #include "core/core.h"
 
 void applyEventEndTurn(Core& core, const EventEndturn& e) {
-  for (auto p : core.players) {
+  for (auto p : core.players()) {
     if (p->id == e.newID) {
-      if (core.currentPlayer->id == e.oldID) {
-        core.currentPlayer = p;
+      if (core.currentPlayer()->id == e.oldID) {
+        core.setCurrentPlayer(p);
         core.undoUnshownEvents();
       } else {
         // refreshUnits(currentPlayer->id);
@@ -21,12 +21,12 @@ void applyEventEndTurn(Core& core, const EventEndturn& e) {
 void generateEventEndTurn(Core& core) {
   Event* e = new Event;
   int playersCount = 2; // TODO
-  int newID = core.currentPlayer->id + 1;
+  int newID = core.currentPlayer()->id + 1;
   if (newID == playersCount) {
     newID = 0;
   }
   e->t = EventTypeID::END_TURN;
-  e->e.endTurn.oldID = core.currentPlayer->id;
+  e->e.endTurn.oldID = core.currentPlayer()->id;
   e->e.endTurn.newID = newID;
   core.addEvent(e);
 }

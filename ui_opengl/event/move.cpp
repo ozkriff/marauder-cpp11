@@ -52,17 +52,17 @@ static void endMovement(Game& game, const EventMove& e, const V2i& pos) {
   Unit* u = game.core().id2unit(e.unitID);
   game.setUiMode(UIMode::NORMAL);
   u->pos = pos;
-  if (game.core().selectedUnit) {
-    game.core().pathfinder.fillMap(*u);
+  if (game.core().selectedUnit()) {
+    game.core().pathfinder().fillMap(*u);
     game.setVaWalkableMap(game.buildWalkableArray());
     game.core().calculateFow();
     game.setVaFogOfWar(game.buildFowArray());
   }
-  game.core().applyEvent(*game.core().currentEvent);
-  game.core().currentEvent = nullptr;
-  if (u->playerID == game.core().currentPlayer->id) {
-    if (game.core().selectedUnit) {
-      game.core().pathfinder.fillMap(*game.core().selectedUnit);
+  game.core().applyEvent(*game.core().currentEvent());
+  game.core().setCurrentEvent(nullptr);
+  if (u->playerID == game.core().currentPlayer()->id) {
+    if (game.core().selectedUnit()) {
+      game.core().pathfinder().fillMap(*game.core().selectedUnit());
       game.setVaWalkableMap(game.buildWalkableArray());
     }
     game.setVaFogOfWar(game.buildFowArray());
