@@ -20,10 +20,9 @@ void Camera::set() {
   glTranslatef(-pos.x(), -pos.y(), 0);
 }
 
-void Camera::move(Dir d) {
-  assert(!d.isDiagonal());
+void Camera::move(float angle) {
   float speed = zoom / 20.0f;
-  float inRadians = deg2rad(zAngle - d.toAngle());
+  float inRadians = deg2rad(zAngle - angle);
   pos.setX(pos.x() + sin(inRadians) * speed);
   pos.setY(pos.y() + cos(inRadians) * speed);
 }

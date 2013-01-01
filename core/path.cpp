@@ -75,29 +75,10 @@ int Pathfinder::getTileCost(const Unit& u, const V2i& t, const V2i& nb) {
   Dir d(t, nb);
   Dir d2 = getParentDir(u, t);
   int dDiff = d.diff(d2);
-  int additionalCost[] = {0, 3, 20, 90, 90};
-  assert(dDiff >= 0 && dDiff <= 4);
-  return cost + additionalCost[dDiff];
-}
-
-bool Pathfinder::canMoveThere(const V2i& p1, const V2i& p2) {
-  assert(core.inboard(p1));
-  assert(core.inboard(p2));
-  assert(p1.distance(p2) == 1);
-  if (!Dir(p1, p2).isDiagonal()) {
-    return true;
-  }
-  V2i neibLeft = Dir::getNeib(p1, p2, -1);
-  V2i neibRight = Dir::getNeib(p1, p2, +1);
-  bool isLeftBlocked = core.inboard(neibLeft)
-      && core.tile(neibLeft).obstacle;
-  bool isRightBlocked = core.inboard(neibRight)
-      && core.tile(neibRight).obstacle;
-#if 0
-  return !isLeftBlocked && !isRightBlocked;
-#else
-  return !isLeftBlocked || !isRightBlocked;
-#endif
+  int additionalCost[] = {0, 5, 20, 90};
+  // assert(dDiff >= 0 && dDiff <= 2);
+  // return cost + additionalCost[dDiff];
+  return 2 + additionalCost[dDiff];
 }
 
 // TODO: rename
@@ -105,7 +86,7 @@ bool Pathfinder::canMoveThere(const V2i& p1, const V2i& p2) {
 void Pathfinder::processNeibor(const Unit& u, const V2i& p1, const V2i& p2) {
   Tile& t1 = core.tile(p1);
   Tile& t2 = core.tile(p2);
-  if (core.unitAt(p2) || t2.obstacle || !canMoveThere(p1, p2)) {
+  if (core.unitAt(p2) || t2.obstacle) {
     return;
   }
   int newcost = t1.cost + getTileCost(u, p1, p2);
@@ -129,7 +110,7 @@ void Pathfinder::cleanMap() {
 
 void Pathfinder::tryToPushNeibors(const Unit& u, const V2i& m) {
   assert(core.inboard(m));
-  for (int i = Dir(DirID::N).toInt(); i <= Dir(DirID::NW).toInt(); i++) {
+  for (int i = 0; i < 6; i++) {
     V2i neibM = Dir::neib(m, static_cast<DirID>(i));
     if (core.inboard(neibM)) {
       processNeibor(u, m, neibM);

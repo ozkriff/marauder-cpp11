@@ -9,8 +9,8 @@ SUITE(core_dir) {
   }
 
   TEST(ConstructorTest2) {
-    Dir dir(DirID::N);
-    CHECK(DirID::N == dir.value());
+    Dir dir(DirID::NE);
+    CHECK(DirID::NE == dir.value());
   }
 
   TEST(someTest) {

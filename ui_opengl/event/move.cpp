@@ -12,11 +12,7 @@
 #include "ui_opengl/game.h"
 
 static int getMoveLegth(const V2i& from, const V2i& to) {
-  if (Dir(from, to).isDiagonal()) {
-    return 14;
-  } else {
-    return 10;
-  }
+  return 10;
 }
 
 int getLastEventMoveIndex(Game& game, const Event &e) {
@@ -101,7 +97,7 @@ void drawMovingUnit(Game& game, const EventMove& e) {
   glTranslatef(p.x(), p.y(), 0.0f);
   // TODO: Remove '+ 4'! Rotate obj files!
   glRotatef(
-      (Dir(fromI, toI).toInt() + 4) * 45.0f,
+      Dir(fromI, toI).toInt() * 60.0f + 120.0f,
       0, 0, 1);
   game.drawUnitModel(*u);
   game.drawUnitCircle(*u);

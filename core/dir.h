@@ -7,11 +7,9 @@
 #include "core/v2i.h"
 
 enum class DirID {
-  N,
   NE,
   E,
   SE,
-  S,
   SW,
   W,
   NW,
@@ -34,7 +32,6 @@ public:
   DirID value() const;
   int toInt() const;
   float toAngle();
-  bool isDiagonal() const;
   Dir opposite() const;
   int diff(Dir d1);
 

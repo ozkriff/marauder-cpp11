@@ -70,7 +70,7 @@ bool Core::inboard(const V2i& p) const {
       && p.x() < MAP_X && p.y() < MAP_Y;
 }
 
-Tile& Core::tile(const V2i &p) {
+Tile& Core::tile(const V2i& p) {
   assert(inboard(p));
   return mMap[p.y()][p.x()];
 }

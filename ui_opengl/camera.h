@@ -17,7 +17,7 @@ public:
   ~Camera();
 
   void set();
-  void move(Dir d);
+  void move(float angle);
 };
 
 #endif

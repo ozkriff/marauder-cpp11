@@ -168,7 +168,11 @@ void Game::cleanup() {
 
 V2f Game::v2iToV2f(const V2i& i) const {
   assert(core().inboard(i));
-  return V2f(i.x() * TILE_SIZE, i.y() * TILE_SIZE);
+  V2f v(i.x() * TILE_SIZE, i.y() * TILE_SIZE);
+  if (i.y() % 2 == 0) {
+    v.setX(v.x() + TILE_SIZE_2);
+  }
+  return v;
 }
 
 VertexArray Game::buildMapArray() {
@@ -339,7 +343,7 @@ void Game::drawUnit(const Unit& u) {
   glColor3f(1, 0, 0);
   glPushMatrix();
   glTranslatef(f.x(), f.y(), 0);
-  glRotatef((u.dir.toInt() + 4) * 45.0f, 0, 0, 1);
+  glRotatef(u.dir.toInt() * 60.0f + 120.0f, 0, 0, 1);
   drawUnitModel(u);
   drawUnitCircle(u);
   glPopMatrix();
@@ -474,19 +478,19 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
     break;
   }
   case SDLK_UP: {
-    camera().move(DirID::N);
+    camera().move(0);
     break;
   }
   case SDLK_DOWN: {
-    camera().move(DirID::S);
+    camera().move(180);
     break;
   }
   case SDLK_LEFT: {
-    camera().move(DirID::W);
+    camera().move(270);
     break;
   }
   case SDLK_RIGHT: {
-    camera().move(DirID::E);
+    camera().move(90);
     break;
   }
   default:
@@ -616,14 +620,14 @@ void Game::scrollMap() {
   const V2i& p = mousePos();
   int offset = 15;
   if (p.x() < offset) {
-    camera().move(DirID::W);
+    camera().move(270);
   } else if(p.x() > screen()->w - offset) {
-    camera().move(DirID::E);
+    camera().move(90);
   }
   if (p.y() < offset) {
-    camera().move(DirID::N);
+    camera().move(0);
   } else if(p.y() > screen()->h - offset) {
-    camera().move(DirID::S);
+    camera().move(180);
   }
   if (camera().pos.x() > MAP_X * TILE_SIZE) {
     camera().pos.setX(MAP_X * TILE_SIZE);
