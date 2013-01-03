@@ -25,7 +25,10 @@
 #define FOR_EACH_TILE(p) \
   for (p = V2i(0, 0); core().inboard(p); p = core().incV2i(p))
 
-Game::Game() {
+Game::Game()
+  : mHexEx(TILE_SIZE_2),
+    mHexIn(sqrt(pow(mHexEx, 2) - pow(mHexEx / 2, 2)))
+{
 }
 
 Game::~Game() {
@@ -168,11 +171,17 @@ void Game::cleanup() {
 
 V2f Game::v2iToV2f(const V2i& i) const {
   assert(core().inboard(i));
-  V2f v(i.x() * TILE_SIZE, i.y() * TILE_SIZE);
+  V2f v(i.x() * mHexIn * 2, i.y() * mHexEx * 1.5);
   if (i.y() % 2 == 0) {
-    v.setX(v.x() + TILE_SIZE_2);
+    v.setX(v.x() + mHexIn);
   }
   return v;
+}
+
+V2f Game::indexToHexVertex(int i) {
+  return V2f(
+      mHexEx * cos(M_PI_2 + 2 * M_PI * i / 6),
+      mHexEx * sin(M_PI_2 + 2 * M_PI * i / 6));
 }
 
 VertexArray Game::buildMapArray() {
@@ -183,21 +192,14 @@ VertexArray Game::buildMapArray() {
       continue;
     }
     V2f pos = v2iToV2f(p);
-    float n = TILE_SIZE_2;
-    float x = pos.x();
-    float y = pos.y();
-    appendV2f(&v.vertices, V2f(x - n, y - n));
-    appendV2f(&v.vertices, V2f(x + n, y - n));
-    appendV2f(&v.vertices, V2f(x + n, y + n));
-    appendV2f(&v.vertices, V2f(x - n, y - n));
-    appendV2f(&v.vertices, V2f(x + n, y + n));
-    appendV2f(&v.vertices, V2f(x - n, y + n));
-    appendV2f(&v.textureCoordinates, V2f(0, 0));
-    appendV2f(&v.textureCoordinates, V2f(1, 0));
-    appendV2f(&v.textureCoordinates, V2f(1, 1));
-    appendV2f(&v.textureCoordinates, V2f(0, 0));
-    appendV2f(&v.textureCoordinates, V2f(1, 1));
-    appendV2f(&v.textureCoordinates, V2f(0, 1));
+    for (int i = 0; i < 6; i++) {
+      appendV2f(&v.vertices, pos + indexToHexVertex(i));
+      appendV2f(&v.vertices, pos + indexToHexVertex(i + 1));
+      appendV2f(&v.vertices, pos);
+      appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
+      appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
+      appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
+    }
   }
   return v;
 }
@@ -210,21 +212,14 @@ VertexArray Game::buildObstaclesArray() {
       continue;
     }
     V2f pos = v2iToV2f(p);
-    float n = TILE_SIZE_2;
-    float x = pos.x();
-    float y = pos.y();
-    appendV2f(&v.vertices, V2f(x - n, y - n));
-    appendV2f(&v.vertices, V2f(x + n, y - n));
-    appendV2f(&v.vertices, V2f(x + n, y + n));
-    appendV2f(&v.vertices, V2f(x - n, y - n));
-    appendV2f(&v.vertices, V2f(x + n, y + n));
-    appendV2f(&v.vertices, V2f(x - n, y + n));
-    appendV2f(&v.textureCoordinates, V2f(0, 0));
-    appendV2f(&v.textureCoordinates, V2f(1, 0));
-    appendV2f(&v.textureCoordinates, V2f(1, 1));
-    appendV2f(&v.textureCoordinates, V2f(0, 0));
-    appendV2f(&v.textureCoordinates, V2f(1, 1));
-    appendV2f(&v.textureCoordinates, V2f(0, 1));
+    for (int i = 0; i < 6; i++) {
+      appendV2f(&v.vertices, pos + indexToHexVertex(i));
+      appendV2f(&v.vertices, pos + indexToHexVertex(i + 1));
+      appendV2f(&v.vertices, pos);
+      appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
+      appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
+      appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
+    }
   }
   return v;
 }
@@ -237,16 +232,17 @@ VertexArray Game::buildFowArray() {
       continue;
     }
     V2f pos = v2iToV2f(p);
-    float n = TILE_SIZE_2;
-    float x = pos.x();
-    float y = pos.y();
-    float h = 0.01f;
-    appendV3f(&v.vertices, V3f(x - n, y - n, h));
-    appendV3f(&v.vertices, V3f(x + n, y - n, h));
-    appendV3f(&v.vertices, V3f(x + n, y + n, h));
-    appendV3f(&v.vertices, V3f(x - n, y - n, h));
-    appendV3f(&v.vertices, V3f(x + n, y + n, h));
-    appendV3f(&v.vertices, V3f(x - n, y + n, h));
+    float h = 0.05f;
+    for (int i = 0; i < 6; i++) {
+      V2f a = indexToHexVertex(i);
+      V2f b = indexToHexVertex(i + 1);
+      appendV3f(&v.vertices, V3f(pos.x() + a.x(), pos.y() + a.y(), h));
+      appendV3f(&v.vertices, V3f(pos.x() + b.x(), pos.y() + b.y(), h));
+      appendV3f(&v.vertices, V3f(pos.x(), pos.y(), h));
+      appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
+      appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
+      appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
+    }
   }
   return v;
 }
@@ -568,22 +564,15 @@ VertexArray Game::buildPickingTilesArray() {
   VertexArray v;
   V2i p;
   FOR_EACH_TILE(p) {
-    float n = TILE_SIZE_2;
     V2f pos = v2iToV2f(p);
-    float x = pos.x();
-    float y = pos.y();
-    appendV2f(&v.vertices, V2f(x - n, y - n));
-    appendV2f(&v.vertices, V2f(x + n, y - n));
-    appendV2f(&v.vertices, V2f(x + n, y + n));
-    appendV2f(&v.vertices, V2f(x - n, y - n));
-    appendV2f(&v.vertices, V2f(x + n, y + n));
-    appendV2f(&v.vertices, V2f(x - n, y + n));
-    appendRGB(&v.colors, p.x(), p.y(), 1);
-    appendRGB(&v.colors, p.x(), p.y(), 1);
-    appendRGB(&v.colors, p.x(), p.y(), 1);
-    appendRGB(&v.colors, p.x(), p.y(), 1);
-    appendRGB(&v.colors, p.x(), p.y(), 1);
-    appendRGB(&v.colors, p.x(), p.y(), 1);
+    for (int i = 0; i < 6; i++) {
+      appendV2f(&v.vertices, pos + indexToHexVertex(i));
+      appendV2f(&v.vertices, pos + indexToHexVertex(i + 1));
+      appendV2f(&v.vertices, pos);
+      appendRGB(&v.colors, p.x(), p.y(), 1);
+      appendRGB(&v.colors, p.x(), p.y(), 1);
+      appendRGB(&v.colors, p.x(), p.y(), 1);
+    }
   }
   return v;
 }

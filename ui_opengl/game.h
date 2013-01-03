@@ -19,6 +19,8 @@ enum class UIMode {
 
 class Game {
 private:
+  float mHexEx;
+  float mHexIn;
   Core mCore;
   UIMode mUiMode;
   int mLastMoveIndex;
@@ -66,6 +68,7 @@ private:
   void logic();
   void onTestButton();
   void addButtons();
+  V2f indexToHexVertex(int i);
   
   bool done();
   SDL_Surface* screen();
