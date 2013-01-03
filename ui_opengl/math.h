@@ -11,7 +11,7 @@
 #endif
 
 float getRotAngle(const V2f& a, const V2f& b);
-void clampF(float *n, float min, float max);
+float clampF(float n, float min, float max);
 float deg2rad(float deg);
 float rad2deg(float rad);
 void clampAngle(float *angle);

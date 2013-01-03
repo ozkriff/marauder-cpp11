@@ -20,12 +20,13 @@ float getRotAngle(const V2f& a, const V2f& b) {
   return angle;
 }
 
-void clampF(float *n, float min, float max) {
-  assert(n);
-  if (*n < min) {
-    *n = min;
-  } else if (*n > max) {
-    *n = max;
+float clampF(float n, float min, float max) {
+  if (n < min) {
+    return min;
+  } else if (n > max) {
+    return max;
+  } else {
+    return n;
   }
 }
 

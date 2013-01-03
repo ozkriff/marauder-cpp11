@@ -412,7 +412,7 @@ void Game::processSDLEvent(const SDL_MouseMotionEvent& e) {
     camera().zAngle -= e.xrel;
     camera().xAngle -= e.yrel;
     clampAngle(&camera().zAngle);
-    clampF(&camera().xAngle, 0, 50);
+    camera().xAngle = clampF(camera().xAngle, 0, 50);
   }
 }
 
@@ -465,12 +465,12 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
   }
   case SDLK_w: {
     camera().zoom -= 10;
-    clampF(&camera().zoom, 30, 200);
+    camera().zoom = clampF(camera().zoom, 30, 200);
     break;
   }
   case SDLK_s: {
     camera().zoom += 10;
-    clampF(&camera().zoom, 30, 200);
+    camera().zoom = clampF(camera().zoom, 30, 200);
     break;
   }
   case SDLK_UP: {
@@ -535,10 +535,10 @@ void Game::processSDLEvent(const SDL_Event& e) {
     }
     if (e.button.button == SDL_BUTTON_WHEELUP) {
       camera().zoom -= 5;
-      clampF(&camera().zoom, 30, 200);
+      camera().zoom = clampF(camera().zoom, 30, 200);
     } else if (e.button.button == SDL_BUTTON_WHEELDOWN) {
       camera().zoom += 5;
-      clampF(&camera().zoom, 30, 200);
+      camera().zoom = clampF(camera().zoom, 30, 200);
     }
     break;
   case SDL_MOUSEBUTTONDOWN:
