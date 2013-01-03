@@ -10,12 +10,6 @@ V2f::V2f(float x, float y)
 {
 }
 
-V2f::V2f(int x, int y)
-  : mX(static_cast<float>(x)),
-    mY(static_cast<float>(y))
-{
-}
-
 V2f::V2f()
   : mX(0.0f),
     mY(0.0f)
@@ -38,8 +32,6 @@ void V2f::rotate(V2f *p, float angle) {
   p->setY(sn * old.x() + cs * old.y());
 }
 
-V2f& V2f::operator+(const V2f& b) {
-  mX += b.x();
-  mY += b.y();
-  return *this;
+V2f V2f::operator+(const V2f& b) {
+  return V2f(x() + b.x(), y() + b.y());
 }

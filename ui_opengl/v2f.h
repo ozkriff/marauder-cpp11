@@ -10,7 +10,6 @@ private:
 
 public:
   V2f(float x, float y);
-  V2f(int x, int y);
   V2f();
   ~V2f();
 
@@ -21,7 +20,7 @@ public:
   void setY(float y) { mY = y; }
 
   void rotate(V2f *p, float angle);
-  V2f& operator+(const V2f& b);
+  V2f operator+(const V2f& b);
 };
 
 #endif
