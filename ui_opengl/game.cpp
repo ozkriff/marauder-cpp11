@@ -411,7 +411,7 @@ void Game::processSDLEvent(const SDL_MouseMotionEvent& e) {
   if (isRotatingCamera()) {
     camera().zAngle -= e.xrel;
     camera().xAngle -= e.yrel;
-    clampAngle(&camera().zAngle);
+    camera().zAngle = clampAngle(camera().zAngle);
     camera().xAngle = clampF(camera().xAngle, 0, 50);
   }
 }
@@ -455,12 +455,12 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
     break;
   case SDLK_d: {
     camera().zAngle += 15;
-    clampAngle(&camera().zAngle);
+    camera().zAngle = clampAngle(camera().zAngle);
     break;
   }
   case SDLK_a: {
     camera().zAngle -= 15;
-    clampAngle(&camera().zAngle);
+    camera().zAngle = clampAngle(camera().zAngle);
     break;
   }
   case SDLK_w: {

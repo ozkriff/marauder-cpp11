@@ -46,13 +46,14 @@ bool maxF(float a, float b) {
   return (a < b) ? b : a;
 }
 
-void clampAngle(float *angle) {
-  assert(angle);
-  if (*angle < 0.0f) {
-    *angle += 360.0f;
-  } else if (*angle > 360.0f) {
-    *angle -= 360.0f;
+float clampAngle(float angle) {
+  while (angle < 0.0f) {
+    angle += 360.0f;
   }
+  while (angle > 360.0f) {
+    angle -= 360.0f;
+  }
+  return angle;
 }
 
 float dist(const V2f& a, const V2f& b) {
