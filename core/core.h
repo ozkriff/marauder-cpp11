@@ -50,7 +50,7 @@ public:
   
   const std::list<Player*>& players();
   const Event& currentEvent();
-  Player* currentPlayer();
+  const Player& currentPlayer();
   Unit* selectedUnit();
   std::list<Unit*>& units();
   Pathfinder& pathfinder();

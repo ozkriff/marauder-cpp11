@@ -23,8 +23,8 @@ const Event& Core::currentEvent() {
   return *mCurrentEvent;
 }
 
-Player* Core::currentPlayer() {
-  return mCurrentPlayer;
+const Player& Core::currentPlayer() {
+  return *mCurrentPlayer;
 }
 
 Unit* Core::selectedUnit() {

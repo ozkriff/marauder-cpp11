@@ -55,7 +55,7 @@ static void endMovement(Game& game, const EventMove& e, const V2i& pos) {
   }
   game.core().applyEvent(game.core().currentEvent());
   game.core().setCurrentEvent(nullptr);
-  if (u->playerID == game.core().currentPlayer()->id) {
+  if (u->playerID == game.core().currentPlayer().id) {
     if (game.core().selectedUnit()) {
       game.core().pathfinder().fillMap(*game.core().selectedUnit());
       game.setVaWalkableMap(game.buildWalkableArray());

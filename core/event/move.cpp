@@ -33,7 +33,7 @@ void applyEventMove(Core& core, const EventMove& e) {
   u->pos = p[e.path.size() - 1];
   u->dir = Dir(p[e.path.size() - 2], p[e.path.size() - 1]);
   u->actionPoints -= e.cost;
-  if (u->playerID == core.currentPlayer()->id) {
+  if (u->playerID == core.currentPlayer().id) {
     core.calculateFow();
   }
 }

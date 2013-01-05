@@ -382,18 +382,17 @@ void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
   }
   Unit* u = core().unitAt(activeTilePos());
   Tile& t = core().tile(activeTilePos());
-  assert(core().currentPlayer());
   UNUSED(e);
   if (uiMode() != UIMode::NORMAL) {
     return;
   }
-  if (u && u->playerID == core().currentPlayer()->id) {
+  if (u && u->playerID == core().currentPlayer().id) {
     core().setSelectedUnit(u);
     core().pathfinder().fillMap(*core().selectedUnit());
     mVaWalkableMap = buildWalkableArray();
   } else if (core().selectedUnit()) {
     int ap = core().selectedUnit()->actionPoints;
-    if (u && u->playerID != core().currentPlayer()->id) {
+    if (u && u->playerID != core().currentPlayer().id) {
       if (core().selectedUnit() && u) {
         core().shoot(core().selectedUnit(), u);
       }
@@ -446,7 +445,7 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
     generateEventEndTurn(core());
     break;
   case SDLK_u:
-    core().addUnit(activeTilePos(), core().currentPlayer()->id);
+    core().addUnit(activeTilePos(), core().currentPlayer().id);
     if (core().selectedUnit()) {
       core().pathfinder().fillMap(*core().selectedUnit());
       mVaWalkableMap = buildWalkableArray();
