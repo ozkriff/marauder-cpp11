@@ -453,42 +453,34 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
       mVaWalkableMap = buildWalkableArray();
     }
     break;
-  case SDLK_d: {
+  case SDLK_d:
     camera().zAngle += 15;
     camera().zAngle = clampAngle(camera().zAngle);
     break;
-  }
-  case SDLK_a: {
+  case SDLK_a:
     camera().zAngle -= 15;
     camera().zAngle = clampAngle(camera().zAngle);
     break;
-  }
-  case SDLK_w: {
+  case SDLK_w:
     camera().zoom -= 10;
     camera().zoom = clampF(camera().zoom, 30, 200);
     break;
-  }
-  case SDLK_s: {
+  case SDLK_s:
     camera().zoom += 10;
     camera().zoom = clampF(camera().zoom, 30, 200);
     break;
-  }
-  case SDLK_UP: {
+  case SDLK_UP:
     camera().move(0);
     break;
-  }
-  case SDLK_DOWN: {
+  case SDLK_DOWN:
     camera().move(180);
     break;
-  }
-  case SDLK_LEFT: {
+  case SDLK_LEFT:
     camera().move(270);
     break;
-  }
-  case SDLK_RIGHT: {
+  case SDLK_RIGHT:
     camera().move(90);
     break;
-  }
   default:
     printf("processKeyDownEvent(): "
         "Unknown key (%d, 0x%x) was pressed.\n",
