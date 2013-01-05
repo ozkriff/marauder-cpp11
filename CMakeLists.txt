@@ -44,6 +44,7 @@ target_link_libraries(marauder SOURCES ${LIBS})
 add_executable(testMarauder
 	tests/runner.cpp
 	tests/testCoreDir.cpp
+	tests/testCoreLos.cpp
 )
 target_link_libraries(testMarauder unittest++ SOURCES ${LIBS})
 enable_testing()

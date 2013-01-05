@@ -3,7 +3,7 @@
 #include <unittest++/UnitTest++.h>
 #include "core/dir.h"
 
-SUITE(core_dir) {
+SUITE(coreDir) {
   TEST(ConstructorTest) {
     Dir dir;
   }
