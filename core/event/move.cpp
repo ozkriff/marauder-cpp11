@@ -21,7 +21,6 @@ void generateEventMove(
   e->t = EventTypeID::MOVE;
   m.initialDirection = u.dir;
   m.path = core.pathfinder().getPath(destination);
-  m.length = m.path.size();
   m.cost = core.tile(destination).cost;
   m.unitID = u.id;
   core.addEvent(e);
@@ -31,8 +30,8 @@ void applyEventMove(Core& core, const EventMove& e) {
   auto& p = e.path; // shortcut
   Unit* u = core.id2unit(e.unitID);
   assert(u);
-  u->pos = p[e.length - 1];
-  u->dir = Dir(p[e.length - 2], p[e.length - 1]);
+  u->pos = p[e.path.size() - 1];
+  u->dir = Dir(p[e.path.size() - 2], p[e.path.size() - 1]);
   u->actionPoints -= e.cost;
   if (u->playerID == core.currentPlayer()->id) {
     core.calculateFow();

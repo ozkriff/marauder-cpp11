@@ -19,8 +19,7 @@ int getLastEventMoveIndex(Game& game, const Event &e) {
   const EventMove* m = &e.e.move;
   auto& p = m->path; // shortcut
   int length = 0;
-  int i;
-  for (i = 1; i < m->length; i++) {
+  for (unsigned int i = 1; i < m->path.size(); i++) {
     length += getMoveLegth(p[i - 1], p[i]);
   }
   return length;

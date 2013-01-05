@@ -13,7 +13,6 @@ class EventMove {
 public:
   int unitID;
   std::vector<V2i> path;
-  int length;
   int cost;
   Dir initialDirection;
 
