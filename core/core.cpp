@@ -58,9 +58,9 @@ void Core::createLocalHuman(int id) {
   p->lastEventID = HAVE_NOT_SEEN_ANY_EVENTS;
 }
 
-void Core::initLocalPlayers(int n, int* ids) {
-  for (int i = 0; i < n; i++) {
-    createLocalHuman(ids[i]);
+void Core::initLocalPlayers(std::vector<int> unitIDs) {
+  for (int id : unitIDs) {
+    createLocalHuman(id);
   }
   mCurrentPlayer = mPlayers.back();
 }
@@ -327,8 +327,7 @@ void Core::initObstacles() {
 }
 
 void Core::initPlayers() {
-  int id[] = {0, 1};
-  initLocalPlayers(2, id);
+  initLocalPlayers({0, 1});
 }
 
 void Core::initLogic() {

@@ -91,7 +91,7 @@ private:
   std::list<Event*> mEvents;
 
   void createLocalHuman(int id);
-  void initLocalPlayers(int n, int* ids);
+  void initLocalPlayers(std::vector<int> unitIDs);
   int getNewUnitID();
   void initUnits();
   void initPlayers();
