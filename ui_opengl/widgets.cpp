@@ -40,7 +40,7 @@ void changeButtonText(Button* b, char* text) {
   b->textureID = ttfGlPrint(b->f, text, &b->size);
 }
 
-void changeButtonTextById(int id, char *text) {
+void changeButtonTextByID(int id, char *text) {
   for (auto b : buttons) {
     if (b->id == id) {
       changeButtonText(b, text);

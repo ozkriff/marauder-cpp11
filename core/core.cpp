@@ -86,7 +86,7 @@ V2i Core::incV2i(const V2i& pos) const {
   return newPos;
 }
 
-int Core::getNewEventId() {
+int Core::getNewEventID() {
   if (!mEvents.empty()) {
     return mEvents.back()->id + 1;
   } else {
@@ -185,7 +185,7 @@ Event* Core::getNextEvent() {
 
 void Core::addEvent(Event* e) {
   assert(e);
-  e->id = getNewEventId();
+  e->id = getNewEventID();
   mEvents.push_back(e);
   // event2log(*e);
 #if 0

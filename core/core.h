@@ -69,7 +69,7 @@ public:
   void initLogic();
   bool inboard(const V2i& p) const;
   V2i incV2i(const V2i& pos) const;
-  int getNewEventId();
+  int getNewEventID();
 
   void addEvent(Event* e);
   Event* getNextEvent();
