@@ -70,6 +70,7 @@ public:
   bool inboard(const V2i& p) const;
   V2i incV2i(const V2i& pos) const;
   int getNewEventID();
+  void refreshUnits(int playerID);
 
   void addEvent(Event* e);
   Event* getNextEvent();

@@ -11,7 +11,7 @@ void applyEventEndTurn(Core& core, const EventEndturn& e) {
         core.setCurrentPlayer(p);
         core.undoUnshownEvents();
       } else {
-        // refreshUnits(currentPlayer->id);
+        core.refreshUnits(core.currentPlayer()->id);
       }
       return;
     }

@@ -392,8 +392,7 @@ void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
     core().pathfinder().fillMap(*core().selectedUnit());
     mVaWalkableMap = buildWalkableArray();
   } else if (core().selectedUnit()) {
-    auto type = getUnitType(core().selectedUnit()->typeID);
-    int ap = type.actionPoints;
+    int ap = core().selectedUnit()->actionPoints;
     if (u && u->playerID != core().currentPlayer()->id) {
       if (core().selectedUnit() && u) {
         core().shoot(core().selectedUnit(), u);

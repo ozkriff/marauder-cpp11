@@ -94,6 +94,14 @@ int Core::getNewEventID() {
   }
 }
 
+void Core::refreshUnits(int playerID) {
+  for (auto u : units()) {
+    if (u->playerID == playerID) {
+      u->actionPoints = getUnitType(u->typeID).actionPoints;
+    }
+  }
+}
+
 // Undo all events that this player have not seen yet
 void Core::undoUnshownEvents() {
   if (mEvents.size() == 0) {
@@ -271,6 +279,7 @@ void Core::addUnit(const V2i& p, int playerID) {
   u->playerID = playerID;
   u->dir = static_cast<Dir>(rnd(0, 7));
   u->typeID = rnd(0, (int)UnitTypeID::COUNT - 1);
+  u->actionPoints = 10; // TODO: ...
   mUnits.push_back(u);
   calculateFow();
 #if 0

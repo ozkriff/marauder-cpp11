@@ -22,6 +22,7 @@ void generateEventMove(
   m.initialDirection = u.dir;
   m.path = core.pathfinder().getPath(destination);
   m.length = m.path.size();
+  m.cost = core.tile(destination).cost;
   m.unitID = u.id;
   core.addEvent(e);
 }
@@ -32,6 +33,7 @@ void applyEventMove(Core& core, const EventMove& e) {
   assert(u);
   u->pos = p[e.length - 1];
   u->dir = Dir(p[e.length - 2], p[e.length - 1]);
+  u->actionPoints -= e.cost;
   if (u->playerID == core.currentPlayer()->id) {
     core.calculateFow();
   }
@@ -41,6 +43,7 @@ void undoEventMove(Core& core, const EventMove& e) {
   Unit* u = core.id2unit(e.unitID);
   u->pos = e.path[0];
   u->dir = e.initialDirection;
+  u->actionPoints += e.cost;
 }
 
 bool isVisibleEventMove(const Core &core, const EventMove &e) {
