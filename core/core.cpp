@@ -279,7 +279,7 @@ void Core::addUnit(const V2i& p, int playerID) {
   u->playerID = playerID;
   u->dir = static_cast<Dir>(rnd(0, 7));
   u->typeID = rnd(0, (int)UnitTypeID::COUNT - 1);
-  u->actionPoints = 10; // TODO: ...
+  u->actionPoints = getUnitType(u->typeID).actionPoints;
   mUnits.push_back(u);
   calculateFow();
 #if 0
