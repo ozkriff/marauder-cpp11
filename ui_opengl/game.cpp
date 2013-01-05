@@ -348,7 +348,7 @@ void Game::drawUnit(const Unit& u) {
 void Game::drawUnits() {
   for (auto u : core().units()) {
     if (uiMode() == UIMode::SHOW_EVENT
-        && eventFilterUnit(*this, *core().currentEvent(), *u))
+        && eventFilterUnit(*this, core().currentEvent(), *u))
     {
       continue;
     }
@@ -365,7 +365,7 @@ void Game::draw() {
   drawMap();
   drawUnits();
   if (uiMode() == UIMode::SHOW_EVENT) {
-    eventDraw(*this, *core().currentEvent());
+    eventDraw(*this, core().currentEvent());
   }
   drawButtons();
   SDL_GL_SwapBuffers();
@@ -490,12 +490,12 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
 
 void Game::screenScenarioMainEvents() {
   core().setCurrentEvent(core().getNextEvent());
-  setLastMoveIndex(getLastEventIndex(*this, *core().currentEvent()));
+  setLastMoveIndex(getLastEventIndex(*this, core().currentEvent()));
   setUiMode(UIMode::SHOW_EVENT);
   setCurrentMoveIndex(0);
   // TODO: Remove this hack
-  if (core().currentEvent()->t == EventTypeID::END_TURN) {
-    core().applyEvent(*core().currentEvent());
+  if (core().currentEvent().t == EventTypeID::END_TURN) {
+    core().applyEvent(core().currentEvent());
     setUiMode(UIMode::NORMAL);
   }
 }

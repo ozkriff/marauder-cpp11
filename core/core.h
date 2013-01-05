@@ -49,7 +49,7 @@ public:
   ~Core();
   
   const std::list<Player*>& players();
-  Event const* currentEvent();
+  const Event& currentEvent();
   Player* currentPlayer();
   Unit* selectedUnit();
   std::list<Unit*>& units();

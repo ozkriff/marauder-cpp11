@@ -53,7 +53,7 @@ static void endMovement(Game& game, const EventMove& e, const V2i& pos) {
     game.core().calculateFow();
     game.setVaFogOfWar(game.buildFowArray());
   }
-  game.core().applyEvent(*game.core().currentEvent());
+  game.core().applyEvent(game.core().currentEvent());
   game.core().setCurrentEvent(nullptr);
   if (u->playerID == game.core().currentPlayer()->id) {
     if (game.core().selectedUnit()) {

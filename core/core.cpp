@@ -19,8 +19,8 @@ const std::list<Player*>& Core::players() {
   return mPlayers;
 }
 
-Event const* Core::currentEvent() {
-  return mCurrentEvent;
+const Event& Core::currentEvent() {
+  return *mCurrentEvent;
 }
 
 Player* Core::currentPlayer() {
