@@ -1,3 +1,7 @@
 tags
 *~
 CMakeLists.txt.user
+
+# kdevelop4 files
+.kdev4/
+main.kdev4
