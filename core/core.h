@@ -24,7 +24,7 @@ struct Unit {
 
 struct Player {
   int id;
-  int lastEventID;
+  int lastSeenEventID;
 };
 
 struct Tile {

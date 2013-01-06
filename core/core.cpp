@@ -55,7 +55,7 @@ void Core::createLocalHuman(int id) {
   auto p = new Player;
   mPlayers.push_back(p);
   p->id = id;
-  p->lastEventID = HAVE_NOT_SEEN_ANY_EVENTS;
+  p->lastSeenEventID = HAVE_NOT_SEEN_ANY_EVENTS;
 }
 
 void Core::initLocalPlayers(std::vector<int> unitIDs) {
@@ -111,7 +111,7 @@ void Core::undoUnshownEvents() {
   --i;
   while (i != mEvents.begin()) {
     auto event = *i;
-    if (event->id == mCurrentPlayer->lastEventID) {
+    if (event->id == mCurrentPlayer->lastSeenEventID) {
       break;
     }
     undoEvent(*event);
@@ -120,7 +120,7 @@ void Core::undoUnshownEvents() {
 }
 
 void Core::applyEvent(const Event& e) {
-  mCurrentPlayer->lastEventID = e.id;
+  mCurrentPlayer->lastSeenEventID = e.id;
   switch (e.t) {
   case EventTypeID::MOVE:
     applyEventMove(*this, e.e.move);
@@ -172,13 +172,13 @@ bool Core::unshownEventsLeft() {
     return false;
   } else {
     auto e = mEvents.back();
-    return e->id != mCurrentPlayer->lastEventID;
+    return e->id != mCurrentPlayer->lastSeenEventID;
   }
 }
 
 // Always called after applyInvisibleEvents
 Event* Core::getNextEvent() {
-  int id = mCurrentPlayer->lastEventID; // shortcut
+  int id = mCurrentPlayer->lastSeenEventID; // shortcut
   assert(mEvents.size() > 0);
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
     return mEvents.front();
@@ -361,7 +361,7 @@ void Core::undoEvent(const Event& e) {
 // TODO: rename.
 Event* Core::getNextEventNode() {
   // Node *node;
-  int id = mCurrentPlayer->lastEventID; // shortcut
+  int id = mCurrentPlayer->lastSeenEventID; // shortcut
   if (mEvents.size() == 0) {
     return nullptr;
   }
