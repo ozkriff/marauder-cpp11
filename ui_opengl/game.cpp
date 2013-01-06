@@ -50,6 +50,7 @@ Game::Game()
 }
 
 Game::~Game() {
+  SDL_Quit();
 }
 
 int Game::currentMoveIndex() {
@@ -158,11 +159,6 @@ void Game::setVaFogOfWar(const VertexArray& va) {
 
 void Game::run() {
   mainloop();
-  cleanup();
-}
-
-void Game::cleanup() {
-  SDL_Quit();
 }
 
 V2f Game::v2iToV2f(const V2i& i) const {
