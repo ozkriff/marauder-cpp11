@@ -58,7 +58,6 @@ private:
   void initCamera();
   void initVertexArrays();
   void loadUnitResources();
-  void init();
   void cleanup();
   void drawMap();
   void drawUnit(const Unit& u);

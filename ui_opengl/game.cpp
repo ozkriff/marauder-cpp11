@@ -29,6 +29,24 @@ Game::Game()
   : mHexEx(TILE_SIZE_2),
     mHexIn(sqrt(pow(mHexEx, 2) - pow(mHexEx / 2, 2)))
 {
+  core().initLogic();
+  setDone(false);
+  setWinSize(V2i(WIN_WIDTH, WIN_HEIGHT));
+  setActiveTilePos(V2i(0, 0));
+  setMousePos(V2i(0, 0));
+  setUiMode(UIMode::NORMAL);
+  setIsRotatingCamera(false);
+  SDL_Init(SDL_INIT_EVERYTHING);
+  Uint32 flags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER;
+  mScreen = SDL_SetVideoMode(winSize().x(), winSize().y(), 32, flags);
+  initOpengl();
+  initCamera();
+  initWidgets();
+  setFont(openFont(DEFAULT_FONT, 10));
+  addButtons();
+  setFloorTexture(loadTexture(DATA("floor.png")));
+  loadUnitResources();
+  initVertexArrays();
 }
 
 Game::~Game() {
@@ -139,30 +157,8 @@ void Game::setVaFogOfWar(const VertexArray& va) {
 }
 
 void Game::run() {
-  init();
   mainloop();
   cleanup();
-}
-
-void Game::init() {
-  core().initLogic();
-  setDone(false);
-  setWinSize(V2i(WIN_WIDTH, WIN_HEIGHT));
-  setActiveTilePos(V2i(0, 0));
-  setMousePos(V2i(0, 0));
-  setUiMode(UIMode::NORMAL);
-  setIsRotatingCamera(false);
-  SDL_Init(SDL_INIT_EVERYTHING);
-  Uint32 flags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER;
-  mScreen = SDL_SetVideoMode(winSize().x(), winSize().y(), 32, flags);
-  initOpengl();
-  initCamera();
-  initWidgets();
-  setFont(openFont(DEFAULT_FONT, 10));
-  addButtons();
-  setFloorTexture(loadTexture(DATA("floor.png")));
-  loadUnitResources();
-  initVertexArrays();
 }
 
 void Game::cleanup() {
