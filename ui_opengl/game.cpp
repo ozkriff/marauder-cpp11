@@ -153,8 +153,8 @@ void Game::init() {
   setUiMode(UIMode::NORMAL);
   setIsRotatingCamera(false);
   SDL_Init(SDL_INIT_EVERYTHING);
-  mScreen = SDL_SetVideoMode(winSize().x(), winSize().y(),
-      32, SDL_OPENGL | SDL_GL_DOUBLEBUFFER);
+  Uint32 flags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER;
+  mScreen = SDL_SetVideoMode(winSize().x(), winSize().y(), 32, flags);
   initOpengl();
   initCamera();
   initWidgets();
