@@ -87,9 +87,8 @@ int Dir::diff(Dir d1) {
 // Get tile's neiborhood by it's index
 V2i Dir::neib(const V2i& pos, Dir i) {
   assert(i.toInt() < 6);
-  int dx = dirToPosDiff[pos.y() % 2][i.toInt()].x();
-  int dy = dirToPosDiff[pos.y() % 2][i.toInt()].y();
-  return V2i(pos.x() + dx, pos.y() + dy);
+  V2i difference = dirToPosDiff[pos.y() % 2][i.toInt()];
+  return pos + difference;
 }
 
 // TODO rename
