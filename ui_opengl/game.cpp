@@ -553,8 +553,9 @@ bool Game::pickTile(V2i* p, const V2i* mousePos) {
   assert(p);
   glGetIntegerv(GL_VIEWPORT, viewport);
   viewport[3] -= 1;
+  void* pixelPointer = &pixel;
   glReadPixels(mousePos->x(), viewport[3] - mousePos->y(),
-      1, 1, GL_RGB, GL_UNSIGNED_BYTE, (void *)pixel);
+      1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixelPointer);
   if (pixel[2] != 1) {
     return false;
   }
