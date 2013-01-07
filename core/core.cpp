@@ -309,7 +309,7 @@ void Core::shoot(Unit *shooter, Unit *target) {
 void Core::initUnits() {
   mSelectedUnit = nullptr;
   for (int i = 0; i < 8; i++) {
-    V2i p = V2i(rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
+    V2i p(rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
     if (!tile(p).obstacle && !unitAt(p)) {
       addUnit(p, rnd(0, 1));
     } else {
