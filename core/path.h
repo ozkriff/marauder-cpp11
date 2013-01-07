@@ -11,7 +11,7 @@ class Core;
 
 class PathQueue {
 private:
-  Core& core;
+  Core& mCore;
   unsigned int mTailNodeIndex;
   unsigned int mHeadNodeIndex;
   std::vector<V2i> mNodes;
@@ -27,8 +27,8 @@ public:
 
 class Pathfinder {
 private:
-  PathQueue q;
-  Core& core;
+  PathQueue mQueue;
+  Core& mCore;
 
   void tryToPushNeibors(const Unit& u, const V2i& m);
   void processNeibor(const Unit& u, const V2i& p1, const V2i& p2);

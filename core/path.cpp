@@ -7,7 +7,7 @@
 #include "core/core.h"
 
 PathQueue::PathQueue(Core& core, int size)
-  : core(core),
+  : mCore(core),
     mTailNodeIndex(0),
     mHeadNodeIndex(0),
     mNodes(size)
@@ -23,7 +23,7 @@ bool PathQueue::isEmpty() const {
 }
 
 void PathQueue::push(const V2i& m, Dir parent, int newcost, Dir dir) {
-  Tile& t = core.tile(m);
+  Tile& t = mCore.tile(m);
   t.cost = newcost;
   t.parent = parent;
   t.dir = dir;
@@ -45,14 +45,14 @@ V2i PathQueue::pop() {
 }
 
 Pathfinder::Pathfinder(Core& core)
-  : q(core, 1000),
-    core(core)
+  : mQueue(core, 1000),
+    mCore(core)
 {
 }
 
 // If this is first(start) tile - no parent tile
 Dir Pathfinder::getParentDir(const Unit& u, const V2i& m) {
-  Tile& tile = core.tile(m);
+  Tile& tile = mCore.tile(m);
   if (tile.cost == 0) {
     return u.dir;
   } else {
@@ -84,48 +84,48 @@ int Pathfinder::getTileCost(const Unit& u, const V2i& t, const V2i& nb) {
 // TODO: rename
 // p1 - origPos, p2 - neib pos
 void Pathfinder::processNeibor(const Unit& u, const V2i& p1, const V2i& p2) {
-  Tile& t1 = core.tile(p1);
-  Tile& t2 = core.tile(p2);
-  if (core.unitAt(p2) || t2.obstacle) {
+  Tile& t1 = mCore.tile(p1);
+  Tile& t2 = mCore.tile(p2);
+  if (mCore.unitAt(p2) || t2.obstacle) {
     return;
   }
   int newcost = t1.cost + getTileCost(u, p1, p2);
   // int ap = getUnitType(u.typeID).actionPoints;
   int ap = u.actionPoints;
   if (t2.cost > newcost && newcost <= ap) {
-    q.push(p2, Dir(p2, p1), newcost, Dir(p1, p2));
+    mQueue.push(p2, Dir(p2, p1), newcost, Dir(p1, p2));
   }
 }
 
 #define FOR_EACH_TILE(p) \
-  for (p = V2i(0, 0); core.inboard(p); p = core.incV2i(p))
+  for (p = V2i(0, 0); mCore.inboard(p); p = mCore.incV2i(p))
 
 void Pathfinder::cleanMap() {
   V2i p;
   FOR_EACH_TILE(p) {
-    Tile& t = core.tile(p);
+    Tile& t = mCore.tile(p);
     t.cost = 30000;
     t.parent = DirID::NONE;
   }
 }
 
 void Pathfinder::tryToPushNeibors(const Unit& u, const V2i& m) {
-  assert(core.inboard(m));
+  assert(mCore.inboard(m));
   for (int i = 0; i < 6; i++) {
     V2i neibM = Dir::neib(m, static_cast<DirID>(i));
-    if (core.inboard(neibM)) {
+    if (mCore.inboard(neibM)) {
       processNeibor(u, m, neibM);
     }
   }
 }
 
 void Pathfinder::fillMap(const Unit& u) {
-  assert(q.isEmpty());
+  assert(mQueue.isEmpty());
   cleanMap();
   // Push start position
-  q.push(u.pos, DirID::NONE, 0, u.dir);
-  while (!q.isEmpty()) {
-    V2i p = q.pop();
+  mQueue.push(u.pos, DirID::NONE, 0, u.dir);
+  while (!mQueue.isEmpty()) {
+    V2i p = mQueue.pop();
     tryToPushNeibors(u, p);
   }
 }
@@ -133,11 +133,11 @@ void Pathfinder::fillMap(const Unit& u) {
 std::vector<V2i> Pathfinder::getPath(const V2i& pos) {
   V2i p = pos;
   std::vector<V2i> path;
-  assert(core.inboard(p));
-  while (core.tile(p).cost != 0) {
+  assert(mCore.inboard(p));
+  while (mCore.tile(p).cost != 0) {
     path.push_back(p);
-    p = Dir::neib(p, core.tile(p).parent);
-    assert(core.inboard(p));
+    p = Dir::neib(p, mCore.tile(p).parent);
+    assert(mCore.inboard(p));
   }
   // Add start position
   path.push_back(p);
