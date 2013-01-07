@@ -10,6 +10,14 @@
 Core::Core()
   : mPathfinder(*this)
 {
+  srand(time(nullptr));
+  initUnitTypes();
+  mPathfinder.cleanMap();
+  cleanFow();
+  initPlayers();
+  initObstacles();
+  initUnits();
+  calculateFow();
 }
 
 Core::~Core() {
@@ -327,17 +335,6 @@ void Core::initObstacles() {
 
 void Core::initPlayers() {
   initLocalPlayers({0, 1});
-}
-
-void Core::initLogic() {
-  srand(time(nullptr));
-  initUnitTypes();
-  mPathfinder.cleanMap();
-  cleanFow();
-  initPlayers();
-  initObstacles();
-  initUnits();
-  calculateFow();
 }
 
 void Core::undoEvent(const Event& e) {

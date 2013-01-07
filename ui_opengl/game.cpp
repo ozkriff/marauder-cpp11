@@ -29,7 +29,6 @@ Game::Game()
   : mHexEx(TILE_SIZE_2),
     mHexIn(sqrt(pow(mHexEx, 2) - pow(mHexEx / 2, 2)))
 {
-  core().initLogic();
   setDone(false);
   setWinSize(V2i(WIN_WIDTH, WIN_HEIGHT));
   setActiveTilePos(V2i(0, 0));

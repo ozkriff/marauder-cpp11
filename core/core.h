@@ -66,7 +66,6 @@ public:
   void addUnit(const V2i& p, int playerID);
   void shoot(Unit* shooter, Unit* target);
   void killUnit(Unit* u);
-  void initLogic();
   bool inboard(const V2i& p) const;
   V2i incV2i(const V2i& pos) const;
   int getNewEventID();
