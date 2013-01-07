@@ -61,7 +61,6 @@ private:
   Unit* mSelectedUnit;
   std::list<Unit*> mUnits;
   Pathfinder mPathfinder;
-  // Tile mMap[MAP_Y][MAP_X];
   Map mMap;
   std::list<Event*> mEvents;
 
