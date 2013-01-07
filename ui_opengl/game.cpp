@@ -547,14 +547,14 @@ VertexArray Game::buildPickingTilesArray() {
   return v;
 }
 
-bool Game::pickTile(V2i* p, const V2i* mousePos) {
+bool Game::pickTile(V2i* p, const V2i& mousePos) {
   GLint viewport[4];
   GLubyte pixel[3];
   assert(p);
   glGetIntegerv(GL_VIEWPORT, viewport);
   viewport[3] -= 1;
   void* pixelPointer = &pixel;
-  glReadPixels(mousePos->x(), viewport[3] - mousePos->y(),
+  glReadPixels(mousePos.x(), viewport[3] - mousePos.y(),
       1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixelPointer);
   if (pixel[2] != 1) {
     return false;
@@ -610,7 +610,7 @@ void Game::mainloop() {
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawForPicking();
-    pickTile(&mActiveTilePos, &mMousePos);
+    pickTile(&mActiveTilePos, mMousePos);
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     draw();
