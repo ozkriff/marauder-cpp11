@@ -47,6 +47,7 @@ void undoEventMove(Core& core, const EventMove& e) {
 
 bool isVisibleEventMove(const Core &core, const EventMove &e) {
   UNUSED(e);
+  UNUSED(core);
   // TODO
   return true;
 }

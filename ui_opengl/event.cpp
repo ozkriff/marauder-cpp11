@@ -16,6 +16,7 @@
 #include "ui_opengl/event/move.h"
 
 bool eventFilterUnit(Game& game, const Event& e, const Unit& u) {
+  UNUSED(game);
   switch (e.t) {
   case EventTypeID::END_TURN:
     return false;

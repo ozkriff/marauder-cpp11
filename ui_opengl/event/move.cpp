@@ -12,10 +12,13 @@
 #include "ui_opengl/game.h"
 
 static int getMoveLegth(const V2i& from, const V2i& to) {
+  UNUSED(from);
+  UNUSED(to);
   return 10;
 }
 
 int getLastEventMoveIndex(Game& game, const Event &e) {
+  UNUSED(game);
   const EventMove* m = &e.e.move;
   auto& p = m->path; // shortcut
   int length = 0;
