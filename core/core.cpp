@@ -220,12 +220,9 @@ bool Core::isLosClear(const V2i& from, const V2i& to) {
   return true;
 }
 
-#define FOR_EACH_TILE(p) \
-  for (p = V2i(0, 0); map().isInboard(p); p = map().incV2i(p))
-
 void Core::cleanFow() {
   V2i p;
-  FOR_EACH_TILE(p) {
+  FOR_EACH_TILE(map(), p) {
     tile(p).fow = 0;
   }
 }
@@ -234,7 +231,7 @@ void Core::calculateFow() {
   assert(mCurrentPlayer);
   cleanFow();
   V2i p;
-  FOR_EACH_TILE(p) {
+  FOR_EACH_TILE(map(), p) {
     for (auto u : mUnits) {
       int maxDist = getUnitType(u->typeID).rangeOfVision;
       bool isPlayerOk = (u->playerID == mCurrentPlayer->id);
@@ -324,7 +321,7 @@ void Core::initUnits() {
 
 void Core::initObstacles() {
   V2i p;
-  FOR_EACH_TILE(p) {
+  FOR_EACH_TILE(map(), p) {
     tile(p).obstacle = ((rand() % 100) > 85);
   }
 }

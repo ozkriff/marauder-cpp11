@@ -22,9 +22,6 @@
 #define TILE_SIZE 6.0f
 #define TILE_SIZE_2 (TILE_SIZE / 2.0f)
 
-#define FOR_EACH_TILE(p) \
-  for (p = V2i(0, 0); core().map().isInboard(p); p = core().map().incV2i(p))
-
 Game::Game()
   : mHexEx(TILE_SIZE_2),
     mHexIn(sqrt(pow(mHexEx, 2) - pow(mHexEx / 2, 2)))
@@ -178,7 +175,7 @@ V2f Game::indexToHexVertex(int i) {
 VertexArray Game::buildMapArray() {
   VertexArray v;
   V2i p;
-  FOR_EACH_TILE(p) {
+  FOR_EACH_TILE(core().map(), p) {
     if (core().tile(p).obstacle) {
       continue;
     }
@@ -198,7 +195,7 @@ VertexArray Game::buildMapArray() {
 VertexArray Game::buildObstaclesArray() {
   VertexArray v;
   V2i p;
-  FOR_EACH_TILE(p) {
+  FOR_EACH_TILE(core().map(), p) {
     if (!core().tile(p).obstacle) {
       continue;
     }
@@ -218,7 +215,7 @@ VertexArray Game::buildObstaclesArray() {
 VertexArray Game::buildFowArray() {
   VertexArray v;
   V2i p;
-  FOR_EACH_TILE(p) {
+  FOR_EACH_TILE(core().map(), p) {
     if (core().tile(p).fow > 0) {
       continue;
     }
@@ -241,7 +238,7 @@ VertexArray Game::buildFowArray() {
 VertexArray Game::buildWalkableArray() {
   VertexArray v;
   V2i p;
-  FOR_EACH_TILE(p) {
+  FOR_EACH_TILE(core().map(), p) {
     Tile& t = core().tile(p);
     if (t.parent.value() != DirID::NONE && t.cost < 50) {
       V2i to = Dir::neib(p, t.parent);
@@ -536,7 +533,7 @@ void Game::sdlEvents() {
 VertexArray Game::buildPickingTilesArray() {
   VertexArray v;
   V2i p;
-  FOR_EACH_TILE(p) {
+  FOR_EACH_TILE(core().map(), p) {
     V2f pos = v2iToV2f(p);
     for (int i = 0; i < 6; i++) {
       appendV2f(&v.vertices, pos + indexToHexVertex(i));

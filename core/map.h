@@ -6,6 +6,9 @@
 #include "core/tile.h"
 #include <vector>
 
+#define FOR_EACH_TILE(map, p) \
+  for (p = V2i(0, 0); map.isInboard(p); p = map.incV2i(p))
+
 class Map {
   std::vector<Tile> mTiles;
   V2i mSize;
