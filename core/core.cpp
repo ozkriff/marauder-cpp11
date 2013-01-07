@@ -288,7 +288,6 @@ void Core::addUnit(const V2i& p, int playerID) {
 }
 
 void Core::killUnit(Unit* u) {
-  // deleteNode(&units, data2node(units, u));
   mUnits.remove(u);
   delete u;
   if (mSelectedUnit) {
@@ -360,7 +359,6 @@ void Core::undoEvent(const Event& e) {
 
 // TODO: rename.
 Event* Core::getNextEventNode() {
-  // Node *node;
   int id = mCurrentPlayer->lastSeenEventID; // shortcut
   if (mEvents.size() == 0) {
     return nullptr;
