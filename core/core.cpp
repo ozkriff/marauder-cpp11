@@ -8,7 +8,8 @@
 #include "core/core.h"
 
 Core::Core()
-  : mPathfinder(*this)
+  : mPathfinder(*this),
+    mMap(V2i(20, 18))
 {
   srand(time(nullptr));
   initUnitTypes();
@@ -47,6 +48,14 @@ Pathfinder& Core::pathfinder() {
   return mPathfinder;
 }
 
+const Map& Core::map() const {
+  return mMap;
+}
+
+Map& Core::map() {
+  return mMap;
+}
+
 void Core::setSelectedUnit(Unit* unit) {
   mSelectedUnit = unit;
 }
@@ -74,20 +83,18 @@ void Core::initLocalPlayers(std::vector<int> unitIDs) {
 }
 
 bool Core::inboard(const V2i& p) const {
-  return p.x() >= 0 && p.y() >= 0
-      && p.x() < MAP_X && p.y() < MAP_Y;
+  return map().isInboard(p);
 }
 
 Tile& Core::tile(const V2i& p) {
-  assert(inboard(p));
-  return mMap[p.y()][p.x()];
+  return map().tile(p);
 }
 
 V2i Core::incV2i(const V2i& pos) const {
   assert(inboard(pos));
   V2i newPos = pos;
   newPos.setX(pos.x() + 1);
-  if (newPos.x() == MAP_X) {
+  if (newPos.x() == map().size().x()) {
     newPos.setX(0);
     newPos.setY(newPos.y() + 1);
   }
@@ -317,7 +324,7 @@ void Core::shoot(Unit *shooter, Unit *target) {
 void Core::initUnits() {
   mSelectedUnit = nullptr;
   for (int i = 0; i < 8; i++) {
-    V2i p(rnd(0, MAP_X - 1), rnd(0, MAP_Y - 1));
+    V2i p(rnd(0, map().size().x() - 1), rnd(0, map().size().y() - 1));
     if (!tile(p).obstacle && !unitAt(p)) {
       addUnit(p, rnd(0, 1));
     } else {

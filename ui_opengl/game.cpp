@@ -591,13 +591,14 @@ void Game::scrollMap() {
   } else if(p.y() > screen()->h - offset) {
     camera().move(180);
   }
-  if (camera().pos.x() > MAP_X * TILE_SIZE) {
-    camera().pos.setX(MAP_X * TILE_SIZE);
+  const V2i& mapSize = core().map().size();
+  if (camera().pos.x() > mapSize.x() * TILE_SIZE) {
+    camera().pos.setX(mapSize.x() * TILE_SIZE);
   } else if (camera().pos.x() < 0) {
     camera().pos.setX(0);
   }
-  if (camera().pos.y() > MAP_Y * TILE_SIZE) {
-    camera().pos.setY(MAP_Y * TILE_SIZE);
+  if (camera().pos.y() > mapSize.y() * TILE_SIZE) {
+    camera().pos.setY(mapSize.y() * TILE_SIZE);
   } else if (camera().pos.y() < 0) {
     camera().pos.setY(0);
   }

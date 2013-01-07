@@ -12,54 +12,29 @@
 #include "core/unit_type.h"
 #include "core/event.h"
 #include "core/path.h"
-
-struct Unit {
-  int typeID;
-  int id;
-  int playerID;
-  Dir dir;
-  int actionPoints;
-  V2i pos;
-};
-
-struct Player {
-  int id;
-  int lastSeenEventID;
-};
-
-struct Tile {
-  Unit* unit;
-  bool obstacle;
-  // TODO: move to pathfinding
-  int cost;
-  Dir parent;
-  Dir dir;
-  int fow; // how many units see this tile
-};
-
-#define MAP_X 20
-#define MAP_Y 20
-
-// Player.last_event_id
-#define HAVE_NOT_SEEN_ANY_EVENTS (-1)
+#include "core/map.h"
+#include "core/unit.h"
+#include "core/player.h"
 
 class Core {
 public:
   Core();
   ~Core();
-  
+
   const std::list<Player*>& players();
   const Event& currentEvent();
   const Player& currentPlayer();
   Unit* selectedUnit();
   std::list<Unit*>& units();
   Pathfinder& pathfinder();
-  
+  const Map& map() const;
+  Map& map();
+
   void setSelectedUnit(Unit* unit);
   void setCurrentEvent(Event* event);
   void setCurrentPlayer(Player* player);
 
-  Tile& tile(const V2i &p);
+  Tile& tile(const V2i& p);
   void calculateFow();
   Unit* unitAt(const V2i& pos);
   Unit* id2unit(int id);
@@ -86,7 +61,8 @@ private:
   Unit* mSelectedUnit;
   std::list<Unit*> mUnits;
   Pathfinder mPathfinder;
-  Tile mMap[MAP_Y][MAP_X];
+  // Tile mMap[MAP_Y][MAP_X];
+  Map mMap;
   std::list<Event*> mEvents;
 
   void createLocalHuman(int id);

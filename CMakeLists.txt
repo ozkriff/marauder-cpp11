@@ -29,6 +29,7 @@ add_library(SOURCES
 	core/event.cpp
 	core/core.cpp
 	core/math.cpp
+	core/map.cpp
 	core/event/move.cpp
 	core/event/end_turn.cpp
 )
