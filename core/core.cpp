@@ -369,17 +369,12 @@ Event* Core::getNextEventNode() {
     return mEvents.front();
   }
   // find last seen event
-  Event *e = nullptr;
   for (auto e : mEvents) {
     if (e->id == id) {
-      break;
+      return getNext(mEvents, e);
     }
   }
-  if (!e) {
-    return nullptr;
-  } else {
-    return getNext(mEvents, e);
-  }
+  return nullptr; // if there is no event with that id
 }
 
 void Core::event2log(const Event& e) {
