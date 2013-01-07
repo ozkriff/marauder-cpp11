@@ -90,17 +90,6 @@ Tile& Core::tile(const V2i& p) {
   return map().tile(p);
 }
 
-V2i Core::incV2i(const V2i& pos) const {
-  assert(inboard(pos));
-  V2i newPos = pos;
-  newPos.setX(pos.x() + 1);
-  if (newPos.x() == map().size().x()) {
-    newPos.setX(0);
-    newPos.setY(newPos.y() + 1);
-  }
-  return newPos;
-}
-
 int Core::getNewEventID() {
   if (!mEvents.empty()) {
     return mEvents.back()->id + 1;
@@ -232,7 +221,7 @@ bool Core::isLosClear(const V2i& from, const V2i& to) {
 }
 
 #define FOR_EACH_TILE(p) \
-  for (p = V2i(0, 0); inboard(p); p = incV2i(p))
+  for (p = V2i(0, 0); map().isInboard(p); p = map().incV2i(p))
 
 void Core::cleanFow() {
   V2i p;

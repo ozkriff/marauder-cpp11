@@ -21,6 +21,8 @@ public:
 
   const Tile& tile(const V2i& pos) const;
   Tile& tile(const V2i& pos);
+
+  V2i incV2i(const V2i& pos) const;
 };
 
 #endif

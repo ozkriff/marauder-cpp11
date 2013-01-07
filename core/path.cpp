@@ -98,7 +98,7 @@ void Pathfinder::processNeibor(const Unit& u, const V2i& p1, const V2i& p2) {
 }
 
 #define FOR_EACH_TILE(p) \
-  for (p = V2i(0, 0); mCore.inboard(p); p = mCore.incV2i(p))
+  for (p = V2i(0, 0); mCore.map().isInboard(p); p = mCore.map().incV2i(p))
 
 void Pathfinder::cleanMap() {
   V2i p;

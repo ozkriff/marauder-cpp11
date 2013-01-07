@@ -23,7 +23,7 @@
 #define TILE_SIZE_2 (TILE_SIZE / 2.0f)
 
 #define FOR_EACH_TILE(p) \
-  for (p = V2i(0, 0); core().inboard(p); p = core().incV2i(p))
+  for (p = V2i(0, 0); core().map().isInboard(p); p = core().map().incV2i(p))
 
 Game::Game()
   : mHexEx(TILE_SIZE_2),

@@ -32,3 +32,13 @@ const Tile& Map::tile(const V2i& pos) const {
   assert(isInboard(pos));
   return mTiles[pos.y() * mSize.x() + pos.x()];
 }
+
+V2i Map::incV2i(const V2i& pos) const {
+  assert(isInboard(pos));
+  V2i newPos = pos;
+  newPos.setX(pos.x() + 1);
+  if (newPos.x() == size().x()) {
+    newPos = V2i(0, newPos.y() + 1);
+  }
+  return newPos;
+}

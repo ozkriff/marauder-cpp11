@@ -42,7 +42,6 @@ public:
   void shoot(Unit* shooter, Unit* target);
   void killUnit(Unit* u);
   bool inboard(const V2i& p) const;
-  V2i incV2i(const V2i& pos) const;
   int getNewEventID();
   void refreshUnits(int playerID);
 
