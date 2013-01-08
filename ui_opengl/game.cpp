@@ -30,16 +30,16 @@ Game::Game()
     mMousePos(0, 0),
     mActiveTilePos(0, 0),
     mIsRotatingCamera(false),
-    mDone(false),
-    mFloorTexture(loadTexture(DATA("floor.png"))),
-    mFont(openFont(DEFAULT_FONT, 10))
+    mDone(false)
 {
   SDL_Init(SDL_INIT_EVERYTHING);
   Uint32 flags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER;
   mScreen = SDL_SetVideoMode(winSize().x(), winSize().y(), 32, flags);
   initOpengl();
+  setFloorTexture(loadTexture(DATA("floor.png")));
   initCamera();
   initWidgets();
+  setFont(openFont(DEFAULT_FONT, 10));
   addButtons();
   loadUnitResources();
   initVertexArrays();
