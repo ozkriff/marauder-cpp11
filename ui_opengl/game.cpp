@@ -24,23 +24,23 @@
 
 Game::Game()
   : mHexEx(TILE_SIZE_2),
-    mHexIn(sqrt(pow(mHexEx, 2) - pow(mHexEx / 2, 2)))
+    mHexIn(sqrt(pow(mHexEx, 2) - pow(mHexEx / 2, 2))),
+    mUiMode(UIMode::NORMAL),
+    mWinSize(WIN_WIDTH, WIN_HEIGHT),
+    mMousePos(0, 0),
+    mActiveTilePos(0, 0),
+    mIsRotatingCamera(false),
+    mDone(false),
+    mFloorTexture(loadTexture(DATA("floor.png"))),
+    mFont(openFont(DEFAULT_FONT, 10))
 {
-  setDone(false);
-  setWinSize(V2i(WIN_WIDTH, WIN_HEIGHT));
-  setActiveTilePos(V2i(0, 0));
-  setMousePos(V2i(0, 0));
-  setUiMode(UIMode::NORMAL);
-  setIsRotatingCamera(false);
   SDL_Init(SDL_INIT_EVERYTHING);
   Uint32 flags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER;
   mScreen = SDL_SetVideoMode(winSize().x(), winSize().y(), 32, flags);
   initOpengl();
   initCamera();
   initWidgets();
-  setFont(openFont(DEFAULT_FONT, 10));
   addButtons();
-  setFloorTexture(loadTexture(DATA("floor.png")));
   loadUnitResources();
   initVertexArrays();
 }
