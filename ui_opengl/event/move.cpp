@@ -1,5 +1,6 @@
 // See LICENSE file for copyright and license details.
 
+#include "ui_opengl/event/move.h"
 #include <cassert>
 #include <SDL/SDL_opengl.h>
 #include "core/misc.h"
@@ -11,21 +12,10 @@
 #include "ui_opengl/vertex_array.h"
 #include "ui_opengl/game.h"
 
-static int getMoveLegth(const V2i& from, const V2i& to) {
-  UNUSED(from);
-  UNUSED(to);
-  return 10;
-}
-
 int getLastEventMoveIndex(Game& game, const Event &e) {
   UNUSED(game);
   auto eventMove = dynamic_cast<const EventMove*>(&e);
-  auto& p = eventMove->path; // shortcut
-  int length = 0;
-  for (unsigned int i = 1; i < eventMove->path.size(); i++) {
-    length += getMoveLegth(p[i - 1], p[i]);
-  }
-  return length;
+  return (eventMove->path.size() - 1) * moveSpeed;
 }
 
 void getCurrentMovingNodes(
@@ -37,7 +27,7 @@ void getCurrentMovingNodes(
   assert(from);
   assert(to);
   for (j = 0; j < p.size() - 2; j++) {
-    i -= getMoveLegth(p[j], p[j + 1]);
+    i -= moveSpeed;
     if (i < 0) {
       break;
     }
@@ -72,7 +62,7 @@ static int getNodeIndex(Game& game, const EventMove& e) {
   int last = 0;
   int current = 0;
   for (unsigned int j = 0; j < p.size() - 2; j++) {
-    current += getMoveLegth(p[j], p[j + 1]);
+    current += moveSpeed;
     if (current > game.currentMoveIndex()) {
       break;
     }
@@ -89,7 +79,6 @@ void drawMovingUnit(Game& game, const EventMove& e) {
   getCurrentMovingNodes(game, e, &fromI, &toI);
   V2f fromF = game.v2iToV2f(fromI);
   V2f toF = game.v2iToV2f(toI);
-  int moveSpeed = getMoveLegth(fromI, toI);
   int nodeIndex = getNodeIndex(game, e);
   diff.setX((toF.x() - fromF.x()) / moveSpeed);
   diff.setY((toF.y() - fromF.y()) / moveSpeed);
