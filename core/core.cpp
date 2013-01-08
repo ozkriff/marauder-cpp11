@@ -128,7 +128,6 @@ void Core::applyEvent(Event& e) {
   e.apply(*this);
 }
 
-
 bool Core::isEventVisible(const Event& e) const {
   return e.isVisible(*this);
 }
