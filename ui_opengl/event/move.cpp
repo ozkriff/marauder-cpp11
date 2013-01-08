@@ -58,10 +58,9 @@ static void endMovement(Game& game, const EventMove& e, const V2i& pos) {
 }
 
 static int getNodeIndex(Game& game, const EventMove& e) {
-  auto& p = e.path; // shortcut
   int last = 0;
   int current = 0;
-  for (unsigned int j = 0; j < p.size() - 2; j++) {
+  for (unsigned int j = 0; j < e.path.size() - 2; j++) {
     current += moveSpeed;
     if (current > game.currentMoveIndex()) {
       break;
@@ -72,18 +71,14 @@ static int getNodeIndex(Game& game, const EventMove& e) {
 }
 
 void drawMovingUnit(Game& game, const EventMove& e) {
-  Unit *u = game.core().id2unit(e.unitID);
+  Unit* u = game.core().id2unit(e.unitID);
   V2i fromI, toI;
-  V2f diff;
-  V2f p;
   getCurrentMovingNodes(game, e, &fromI, &toI);
   V2f fromF = game.v2iToV2f(fromI);
   V2f toF = game.v2iToV2f(toI);
   int nodeIndex = getNodeIndex(game, e);
-  diff.setX((toF.x() - fromF.x()) / moveSpeed);
-  diff.setY((toF.y() - fromF.y()) / moveSpeed);
-  p.setX(fromF.x() + diff.x() * nodeIndex);
-  p.setY(fromF.y() + diff.y() * nodeIndex);
+  V2f diff = (toF - fromF) / moveSpeed;
+  V2f p = fromF + diff * nodeIndex;
   glPushMatrix();
   glTranslatef(p.x(), p.y(), 0.0f);
   // TODO: Remove '+ 4'! Rotate obj files!
