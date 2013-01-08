@@ -19,10 +19,10 @@ static int getMoveLegth(const V2i& from, const V2i& to) {
 
 int getLastEventMoveIndex(Game& game, const Event &e) {
   UNUSED(game);
-  const EventMove* m = &e.e.move;
-  auto& p = m->path; // shortcut
+  auto eventMove = dynamic_cast<const EventMove*>(&e);
+  auto& p = eventMove->path; // shortcut
   int length = 0;
-  for (unsigned int i = 1; i < m->path.size(); i++) {
+  for (unsigned int i = 1; i < eventMove->path.size(); i++) {
     length += getMoveLegth(p[i - 1], p[i]);
   }
   return length;

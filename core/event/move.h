@@ -5,11 +5,13 @@
 
 #include <vector>
 #include "core/v2i.h"
+#include "core/dir.h"
+#include "core/event.h"
 
 struct Unit;
 class Core;
 
-class EventMove {
+class EventMove : public Event {
 public:
   int unitID;
   std::vector<V2i> path;
@@ -17,14 +19,12 @@ public:
   Dir initialDirection;
 
 public:
-  EventMove();
-  ~EventMove();
+  virtual void apply(Core& core);
+  virtual void undo(Core& core);
+  virtual bool isVisible(const Core& core) const;
 };
 
 void generateEventMove(
     Core& core, const Unit& u, const V2i& destination);
-void applyEventMove(Core& core, const EventMove& e);
-void undoEventMove(Core& core, const EventMove& e);
-bool isVisibleEventMove(const Core& core, const EventMove& e);
 
 #endif

@@ -6,10 +6,3 @@
 #include "core/core.h"
 #include "core/event.h"
 #include "ui_opengl/game.h"
-
-Event::Event() {
-}
-
-Event::~Event() {
-
-}

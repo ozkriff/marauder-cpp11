@@ -3,12 +3,18 @@
 #ifndef CORE_END_TURN_H
 #define CORE_END_TURN_H
 
-typedef struct {
+#include "core/event.h"
+
+class EventEndturn : public Event {
+public:
   int oldID;
   int newID;
-} EventEndturn;
+
+  virtual void apply(Core& core);
+  virtual void undo(Core& core);
+  virtual bool isVisible(const Core& core) const;
+};
 
 void generateEventEndTurn(Core& core);
-void applyEventEndTurn(Core& core, const EventEndturn& e);
 
 #endif

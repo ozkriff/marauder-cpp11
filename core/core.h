@@ -11,6 +11,8 @@
 #include "core/los.h"
 #include "core/unit_type.h"
 #include "core/event.h"
+#include "core/event/move.h"
+#include "core/event/end_turn.h"
 #include "core/path.h"
 #include "core/map.h"
 #include "core/unit.h"
@@ -22,7 +24,7 @@ public:
   ~Core();
 
   const std::list<Player*>& players();
-  const Event& currentEvent();
+  Event& currentEvent();
   const Player& currentPlayer();
   Unit* selectedUnit();
   std::list<Unit*>& units();
@@ -50,12 +52,12 @@ public:
   bool unshownEventsLeft();
   void applyInvisibleEvents();
   bool isEventVisible(const Event& e) const;
-  void applyEvent(const Event& e);
+  void applyEvent(Event& e);
   void undoUnshownEvents();
 
 private:
   std::list<Player*> mPlayers;
-  Event const* mCurrentEvent;
+  Event* mCurrentEvent;
   Player* mCurrentPlayer;
   Unit* mSelectedUnit;
   std::list<Unit*> mUnits;
@@ -71,7 +73,7 @@ private:
   void initObstacles();
   void cleanFow();
   bool isLosClear(const V2i& from, const V2i& to);
-  void undoEvent(const Event& e);
+  void undoEvent(Event& e);
   Event* getNextEventNode();
   void event2log(const Event& e);
   void sendEvent(const Event& e);

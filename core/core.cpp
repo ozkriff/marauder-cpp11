@@ -28,7 +28,7 @@ const std::list<Player*>& Core::players() {
   return mPlayers;
 }
 
-const Event& Core::currentEvent() {
+Event& Core::currentEvent() {
   return *mCurrentEvent;
 }
 
@@ -123,35 +123,14 @@ void Core::undoUnshownEvents() {
   }
 }
 
-void Core::applyEvent(const Event& e) {
+void Core::applyEvent(Event& e) {
   mCurrentPlayer->lastSeenEventID = e.id;
-  switch (e.t) {
-  case EventTypeID::MOVE:
-    applyEventMove(*this, e.e.move);
-    break;
-  case EventTypeID::END_TURN:
-    applyEventEndTurn(*this, e.e.endTurn);
-    break;
-  default:
-    die("event: applyEvent(): "
-        "unknown event '%d'\n", e.t);
-    break;
-  }
-  // updateUnitsVisibility();
+  e.apply(*this);
 }
 
 
 bool Core::isEventVisible(const Event& e) const {
-  switch (e.t) {
-  case EventTypeID::MOVE:
-    return isVisibleEventMove(*this, e.e.move);
-  case EventTypeID::END_TURN:
-    return true;
-  default:
-    die("event: isEventVisible(): "
-        "unknown event '%d'\n", e.t);
-    return true;
-  }
+  return e.isVisible(*this);
 }
 
 // TODO simplify
@@ -330,21 +309,8 @@ void Core::initPlayers() {
   initLocalPlayers({0, 1});
 }
 
-void Core::undoEvent(const Event& e) {
-  switch (e.t) {
-  case EventTypeID::MOVE:
-    undoEventMove(*this, e.e.move);
-    break;
-  case EventTypeID::END_TURN:
-    // empty
-    // TODO: die()?
-    break;
-  default:
-    die("event: undoEvent(): "
-        "unknown event type '%d'\n", e.t);
-    break;
-  }
-  // updateUnitsVisibility();
+void Core::undoEvent(Event& e) {
+  e.undo(*this);
 }
 
 // TODO: rename.

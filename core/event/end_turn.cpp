@@ -1,13 +1,14 @@
 // See LICENSE file for copyright and license details.
 
+#include "core/event/end_turn.h"
 #include <cassert>
 #include <cstdio>
 #include "core/core.h"
 
-void applyEventEndTurn(Core& core, const EventEndturn& e) {
+void EventEndturn::apply(Core& core) {
   for (auto p : core.players()) {
-    if (p->id == e.newID) {
-      if (core.currentPlayer().id == e.oldID) {
+    if (p->id == newID) {
+      if (core.currentPlayer().id == oldID) {
         core.setCurrentPlayer(p);
         core.undoUnshownEvents();
       } else {
@@ -18,15 +19,24 @@ void applyEventEndTurn(Core& core, const EventEndturn& e) {
   }
 }
 
+void EventEndturn::undo(Core& core) {
+  UNUSED(core);
+}
+
+bool EventEndturn::isVisible(const Core& core) const {
+  UNUSED(core);
+  return true;
+}
+  
 void generateEventEndTurn(Core& core) {
-  Event* e = new Event;
+  auto e = new EventEndturn;
   int playersCount = 2; // TODO
   int newID = core.currentPlayer().id + 1;
   if (newID == playersCount) {
     newID = 0;
   }
   e->t = EventTypeID::END_TURN;
-  e->e.endTurn.oldID = core.currentPlayer().id;
-  e->e.endTurn.newID = newID;
+  e->oldID = core.currentPlayer().id;
+  e->newID = newID;
   core.addEvent(e);
 }

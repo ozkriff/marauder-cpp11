@@ -3,8 +3,7 @@
 #ifndef CORE_EVENT_H
 #define CORE_EVENT_H
 
-#include "core/event/move.h"
-#include "core/event/end_turn.h"
+class Core;
 
 enum class EventTypeID {
   MOVE,
@@ -15,21 +14,10 @@ class Event {
 public:
   EventTypeID t;
   int id;
-  union TMP {
-    EventMove move;
-    EventEndturn endTurn;
 
-    TMP() {
-      // Due to the Point member, a constructor definition is now required
-      new(&move) EventMove();
-    }
-    ~TMP() {
-
-    }
-  } e;
-
-  Event();
-  ~Event();
+  virtual void apply(Core& core) = 0;
+  virtual void undo(Core& core) = 0;
+  virtual bool isVisible(const Core& core) const = 0;
 };
 
 #endif

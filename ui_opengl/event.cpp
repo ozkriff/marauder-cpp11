@@ -20,8 +20,10 @@ bool eventFilterUnit(Game& game, const Event& e, const Unit& u) {
   switch (e.t) {
   case EventTypeID::END_TURN:
     return false;
-  case EventTypeID::MOVE:
-    return u.id == e.e.move.unitID;
+  case EventTypeID::MOVE: {
+    auto eventMove = dynamic_cast<const EventMove*>(&e);
+    return u.id == eventMove->unitID;
+  }
   default:
     die("uiEvent: eventFilterUnit(): "
         "unknow event '%d'.\n", e.t);
@@ -36,7 +38,8 @@ void eventDraw(Game& game, const Event& e) {
     break;
   }
   case EventTypeID::MOVE: {
-    drawMovingUnit(game, e.e.move);
+    auto eventMove = dynamic_cast<const EventMove*>(&e);
+    drawMovingUnit(game, *eventMove);
     break;
   }
   default:
