@@ -49,11 +49,11 @@ Game::~Game() {
   SDL_Quit();
 }
 
-int Game::currentMoveIndex() {
+int Game::currentMoveIndex() const {
   return mCurrentMoveIndex;
 }
 
-int Game::lastMoveIndex() {
+int Game::lastMoveIndex() const {
   return mLastMoveIndex;
 }
 

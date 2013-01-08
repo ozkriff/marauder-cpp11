@@ -91,8 +91,8 @@ public:
   Game();
   ~Game();
 
-  int currentMoveIndex();
-  int lastMoveIndex();
+  int currentMoveIndex() const;
+  int lastMoveIndex() const;
   Core& core();
   const Core& core() const;
 
