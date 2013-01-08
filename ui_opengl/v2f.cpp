@@ -35,3 +35,15 @@ void V2f::rotate(V2f *p, float angle) {
 V2f V2f::operator+(const V2f& b) {
   return V2f(x() + b.x(), y() + b.y());
 }
+
+V2f V2f::operator-(const V2f& b) {
+  return V2f(x() - b.x(), y() - b.y());
+}
+
+V2f V2f::operator*(float b) {
+  return V2f(x() * b, y() * b);
+}
+
+V2f V2f::operator/(float b) {
+  return V2f(x() / b, y() / b);
+}

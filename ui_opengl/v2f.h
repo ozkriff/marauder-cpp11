@@ -21,6 +21,9 @@ public:
 
   void rotate(V2f *p, float angle);
   V2f operator+(const V2f& b);
+  V2f operator-(const V2f& b);
+  V2f operator*(float b);
+  V2f operator/(float b);
 };
 
 #endif
