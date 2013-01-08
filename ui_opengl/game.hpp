@@ -50,7 +50,7 @@ private:
   void processSDLEvent(const SDL_Event& e);
   void sdlEvents();
   VertexArray buildPickingTilesArray();
-  bool pickTile(V2i* p, const V2i& mousePos);
+  V2i pickTile(const V2i& mousePos);
   void drawForPicking();
   void scrollMap();
   void mainloop();
