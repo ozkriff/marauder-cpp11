@@ -3,8 +3,8 @@
 #ifndef CORE_LOS_H
 #define CORE_LOS_H
 
-#include "core/v2i.h"
-#include "core/dir.h"
+#include "core/v2i.hpp"
+#include "core/dir.hpp"
 
 // http://zvold.blogspot.com/2010/01/bresenhams-line-drawing-algorithm-on_26.html
 

@@ -4,8 +4,8 @@
 #define CORE_PATH_H
 
 #include <vector>
-#include "core/dir.h"
-#include "core/pathQueue.h"
+#include "core/dir.hpp"
+#include "core/pathQueue.hpp"
 
 class Unit;
 class Core;

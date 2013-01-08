@@ -3,7 +3,7 @@
 #ifndef UI_OPENGL_EVENT_MOVE_H
 #define UI_OPENGL_EVENT_MOVE_H
 
-#include "core/event/move.h"
+#include "core/event/move.hpp"
 
 class Game;
 class Event;

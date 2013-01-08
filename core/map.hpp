@@ -3,7 +3,7 @@
 #ifndef CORE_MAP_H
 #define CORE_MAP_H
 
-#include "core/tile.h"
+#include "core/tile.hpp"
 #include <vector>
 
 #define FOR_EACH_TILE(map, p) \

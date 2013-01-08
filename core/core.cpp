@@ -5,7 +5,7 @@
 #include <cstring>
 #include <cassert>
 #include <ctime>
-#include "core/core.h"
+#include "core/core.hpp"
 
 Core::Core()
   : mPathfinder(*this),

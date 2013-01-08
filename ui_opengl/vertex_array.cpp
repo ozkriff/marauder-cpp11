@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
 #include <cassert>
-#include "ui_opengl/vertex_array.h"
+#include "ui_opengl/vertex_array.hpp"
 
 void appendV2f(std::vector<float>* vertices, const V2f& vertex) {
   assert(vertices);

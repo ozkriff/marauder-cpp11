@@ -3,8 +3,8 @@
 #ifndef CORE_UNIT_H
 #define CORE_UNIT_H
 
-#include "core/dir.h"
-#include "core/v2i.h"
+#include "core/dir.hpp"
+#include "core/v2i.hpp"
 
 struct Unit {
   int typeID;

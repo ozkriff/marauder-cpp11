@@ -3,7 +3,7 @@
 #ifndef CORE_TILE_H
 #define CORE_TILE_H
 
-#include "core/dir.h"
+#include "core/dir.hpp"
 
 struct Unit;
 

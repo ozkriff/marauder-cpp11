@@ -4,9 +4,9 @@
 #define CORE_MOVE_H
 
 #include <vector>
-#include "core/v2i.h"
-#include "core/dir.h"
-#include "core/event.h"
+#include "core/v2i.hpp"
+#include "core/dir.hpp"
+#include "core/event.hpp"
 
 struct Unit;
 class Core;

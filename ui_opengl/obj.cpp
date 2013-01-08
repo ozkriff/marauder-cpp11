@@ -4,11 +4,11 @@
 #include <cstdlib>
 #include <cassert>
 #include <GL/gl.h>
-#include "core/dir.h"
-#include "core/misc.h"
-#include "ui_opengl/math.h"
-#include "ui_opengl/vertex_array.h"
-#include "ui_opengl/obj.h"
+#include "core/dir.hpp"
+#include "core/misc.hpp"
+#include "ui_opengl/math.hpp"
+#include "ui_opengl/vertex_array.hpp"
+#include "ui_opengl/obj.hpp"
 
 // TODO "usemtl filename"
 void ObjModel::read(const std::string& filename) {

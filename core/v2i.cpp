@@ -1,6 +1,6 @@
 // See LICENSE file for copyright and license details.
 
-#include "core/v2i.h"
+#include "core/v2i.hpp"
 #include <cassert>
 #include <cstdlib>
 #include <cmath>

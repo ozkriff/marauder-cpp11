@@ -5,15 +5,15 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_opengl.h>
-#include "core/v2i.h"
-#include "core/dir.h"
-#include "core/misc.h"
-#include "ui_opengl/v2f.h"
-#include "ui_opengl/math.h"
-#include "ui_opengl/gl.h"
-#include "ui_opengl/vertex_array.h"
-#include "ui_opengl/widgets.h"
-#include "ui_opengl/config.h"
+#include "core/v2i.hpp"
+#include "core/dir.hpp"
+#include "core/misc.hpp"
+#include "ui_opengl/v2f.hpp"
+#include "ui_opengl/math.hpp"
+#include "ui_opengl/gl.hpp"
+#include "ui_opengl/vertex_array.hpp"
+#include "ui_opengl/widgets.hpp"
+#include "ui_opengl/config.hpp"
 
 std::list<Button*> buttons;
 

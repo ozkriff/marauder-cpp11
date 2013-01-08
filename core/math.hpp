@@ -3,7 +3,7 @@
 #ifndef CORE_MATH_H
 #define CORE_MATH_H
 
-#include "core/v2i.h"
+#include "core/v2i.hpp"
 
 int rnd(int min, int max);
 void clampInt(int *n, int min, int max);

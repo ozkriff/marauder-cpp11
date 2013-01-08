@@ -3,8 +3,8 @@
 #ifndef CORE_DIR_H
 #define CORE_DIR_H
 
-#include "core/misc.h"
-#include "core/v2i.h"
+#include "core/misc.hpp"
+#include "core/v2i.hpp"
 
 enum class DirID {
   NE,

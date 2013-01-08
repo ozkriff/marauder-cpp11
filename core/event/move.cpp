@@ -1,8 +1,8 @@
 // See LICENSE file for copyright and license details.
 
-#include "core/event/move.h"
+#include "core/event/move.hpp"
 #include <cassert>
-#include "core/core.h"
+#include "core/core.hpp"
 
 void generateEventMove(
     Core& core, const Unit& unit, const V2i& destination)

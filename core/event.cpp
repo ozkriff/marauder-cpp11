@@ -3,6 +3,6 @@
 #include <cassert>
 #include <cstdlib>
 #include <list>
-#include "core/core.h"
-#include "core/event.h"
-#include "ui_opengl/game.h"
+#include "core/core.hpp"
+#include "core/event.hpp"
+#include "ui_opengl/game.hpp"

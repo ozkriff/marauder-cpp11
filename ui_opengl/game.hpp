@@ -6,11 +6,11 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_opengl.h>
-#include "core/core.h"
-#include "ui_opengl/vertex_array.h"
-#include "ui_opengl/v2f.h"
-#include "ui_opengl/camera.h"
-#include "ui_opengl/obj.h"
+#include "core/core.hpp"
+#include "ui_opengl/vertex_array.hpp"
+#include "ui_opengl/v2f.hpp"
+#include "ui_opengl/camera.hpp"
+#include "ui_opengl/obj.hpp"
 
 enum class UIMode {
   NORMAL,

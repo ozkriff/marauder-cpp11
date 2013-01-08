@@ -3,7 +3,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <cmath>
-#include "core/math.h"
+#include "core/math.hpp"
 
 int rnd(int min, int max) {
   assert(min < max);

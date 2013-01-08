@@ -1,9 +1,9 @@
 // See LICENSE file for copyright and license details.
 
-#include "core/dir.h"
+#include "core/dir.hpp"
 #include <cassert>
 #include <cstdlib>
-#include "math.h"
+#include "math.hpp"
 
 static V2i dirToPosDiff[2][6] = {
   {

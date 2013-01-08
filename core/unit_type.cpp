@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
 #include <cassert>
-#include "core/unit_type.h"
+#include "core/unit_type.hpp"
 
 static UnitType unitTypes[static_cast<int>(UnitTypeID::COUNT)];
 

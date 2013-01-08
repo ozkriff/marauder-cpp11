@@ -4,8 +4,8 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 #include <SDL/SDL_image.h>
-#include "core/misc.h"
-#include "ui_opengl/gl.h"
+#include "core/misc.hpp"
+#include "ui_opengl/gl.hpp"
 
 static GLenum getTextureFormat(
     const SDL_Surface* surface, int nOfColors)

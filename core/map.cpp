@@ -1,4 +1,4 @@
-#include "core/map.h"
+#include "core/map.hpp"
 #include <cassert>
 
 Map::Map(const V2i& size)

@@ -3,17 +3,17 @@
 #include <cassert>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
-#include "core/v2i.h"
-#include "core/dir.h"
-#include "core/core.h"
-#include "core/misc.h"
-#include "core/event.h"
-#include "ui_opengl/v2f.h"
-#include "ui_opengl/v3f.h"
-#include "ui_opengl/math.h"
-#include "ui_opengl/vertex_array.h"
-#include "ui_opengl/event.h"
-#include "ui_opengl/event/move.h"
+#include "core/v2i.hpp"
+#include "core/dir.hpp"
+#include "core/core.hpp"
+#include "core/misc.hpp"
+#include "core/event.hpp"
+#include "ui_opengl/v2f.hpp"
+#include "ui_opengl/v3f.hpp"
+#include "ui_opengl/math.hpp"
+#include "ui_opengl/vertex_array.hpp"
+#include "ui_opengl/event.hpp"
+#include "ui_opengl/event/move.hpp"
 
 bool eventFilterUnit(Game& game, const Event& e, const Unit& u) {
   UNUSED(game);

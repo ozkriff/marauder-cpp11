@@ -3,8 +3,8 @@
 #include <cstdlib>
 #include <cassert>
 #include <algorithm>
-#include "core/path.h"
-#include "core/core.h"
+#include "core/path.hpp"
+#include "core/core.hpp"
 
 PathQueue::PathQueue(Core& core, int size)
   : mCore(core),

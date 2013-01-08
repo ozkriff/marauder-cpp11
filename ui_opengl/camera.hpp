@@ -3,7 +3,7 @@
 #ifndef UI_OPENGL_CAMERA_H
 #define UI_OPENGL_CAMERA_H
 
-#include "ui_opengl/v2f.h"
+#include "ui_opengl/v2f.hpp"
 
 class Camera {
 public:

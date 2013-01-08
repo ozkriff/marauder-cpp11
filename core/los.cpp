@@ -1,11 +1,11 @@
 // See LICENSE file for copyright and license details.
 
-#include "core/los.h"
+#include "core/los.hpp"
 #include <cassert>
 #include <cstdlib>
 #include <cmath>
 #include <algorithm>
-#include "core/math.h"
+#include "core/math.hpp"
 
 Dir Los::getBresDir(int signX, int signY) {
   if(signX == -1 && signY == -1) {

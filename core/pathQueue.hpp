@@ -4,7 +4,7 @@
 #define CORE_PATHQUEUE_H
 
 #include <vector>
-#include "core/dir.h"
+#include "core/dir.hpp"
 
 class Core;
 

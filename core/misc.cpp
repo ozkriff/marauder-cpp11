@@ -5,7 +5,7 @@
 #include <cstdarg>
 #include <cassert>
 #include <cstring>
-#include "core/misc.h"
+#include "core/misc.hpp"
 
 void die(const char *message, ...) {
   va_list argList;

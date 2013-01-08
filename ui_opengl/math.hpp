@@ -3,8 +3,8 @@
 #ifndef UI_OPENGL_MATH_H
 #define UI_OPENGL_MATH_H
 
-#include "ui_opengl/v2f.h"
-#include "ui_opengl/v3f.h"
+#include "ui_opengl/v2f.hpp"
+#include "ui_opengl/v3f.hpp"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846264338327

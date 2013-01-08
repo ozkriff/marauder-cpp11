@@ -1,9 +1,9 @@
 // See LICENSE file for copyright and license details.
 
-#include "core/event/end_turn.h"
+#include "core/event/end_turn.hpp"
 #include <cassert>
 #include <cstdio>
-#include "core/core.h"
+#include "core/core.hpp"
 
 void EventEndturn::apply(Core& core) {
   for (auto p : core.players()) {

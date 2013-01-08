@@ -5,14 +5,14 @@
 #include <cstring>
 #include <cassert>
 #include <ctime>
-#include "ui_opengl/math.h"
-#include "ui_opengl/vertex_array.h"
-#include "ui_opengl/game.h"
-#include "ui_opengl/gl.h"
-#include "ui_opengl/widgets.h"
-#include "ui_opengl/event/move.h"
-#include "ui_opengl/event.h"
-#include "ui_opengl/config.h"
+#include "ui_opengl/math.hpp"
+#include "ui_opengl/vertex_array.hpp"
+#include "ui_opengl/game.hpp"
+#include "ui_opengl/gl.hpp"
+#include "ui_opengl/widgets.hpp"
+#include "ui_opengl/event/move.hpp"
+#include "ui_opengl/event.hpp"
+#include "ui_opengl/config.hpp"
 
 #ifndef DATA_DIR
 #error DATA_DIR undefined!

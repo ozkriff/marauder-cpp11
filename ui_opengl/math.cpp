@@ -3,10 +3,10 @@
 #include <cassert>
 #include <cstdlib>
 #include <cmath>
-#include "core/v2i.h"
-#include "core/dir.h"
-#include "ui_opengl/v2f.h"
-#include "ui_opengl/math.h"
+#include "core/v2i.hpp"
+#include "core/dir.hpp"
+#include "ui_opengl/v2f.hpp"
+#include "ui_opengl/math.hpp"
 
 float getRotAngle(const V2f& a, const V2f& b) {
   V2f diff(

@@ -3,7 +3,7 @@
 #ifndef CORE_END_TURN_H
 #define CORE_END_TURN_H
 
-#include "core/event.h"
+#include "core/event.hpp"
 
 class EventEndturn : public Event {
 public:

@@ -4,19 +4,19 @@
 #define CORE_CORE_H
 
 #include <list>
-#include "core/misc.h"
-#include "core/v2i.h"
-#include "core/math.h"
-#include "core/dir.h"
-#include "core/los.h"
-#include "core/unit_type.h"
-#include "core/event.h"
-#include "core/event/move.h"
-#include "core/event/end_turn.h"
-#include "core/path.h"
-#include "core/map.h"
-#include "core/unit.h"
-#include "core/player.h"
+#include "core/misc.hpp"
+#include "core/v2i.hpp"
+#include "core/math.hpp"
+#include "core/dir.hpp"
+#include "core/los.hpp"
+#include "core/unit_type.hpp"
+#include "core/event.hpp"
+#include "core/event/move.hpp"
+#include "core/event/end_turn.hpp"
+#include "core/path.hpp"
+#include "core/map.hpp"
+#include "core/unit.hpp"
+#include "core/player.hpp"
 
 class Core {
 public:
