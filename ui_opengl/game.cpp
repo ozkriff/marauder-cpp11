@@ -348,6 +348,8 @@ void Game::drawUnits() {
 }
 
 void Game::draw() {
+  glClearColor(1.0, 1.0, 1.0, 1.0);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
   camera().set();
   drawMap();
@@ -605,8 +607,6 @@ void Game::mainloop() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawForPicking();
     setActiveTilePos(pickTile(mMousePos));
-    glClearColor(1.0, 1.0, 1.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     draw();
     // SDLDelay(1000.0f / 24.0f);
   }
