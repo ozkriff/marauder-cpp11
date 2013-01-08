@@ -598,15 +598,19 @@ void Game::scrollMap() {
   }
 }
 
+void Game::pickTile() {
+  glClearColor(0.0, 0.0, 0.0, 1.0);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  drawForPicking();
+  setActiveTilePos(pickTile(mMousePos));
+}
+
 void Game::mainloop() {
   while (!done()) {
     sdlEvents();
     logic();
     scrollMap();
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    drawForPicking();
-    setActiveTilePos(pickTile(mMousePos));
+    pickTile();
     draw();
     // SDLDelay(1000.0f / 24.0f);
   }

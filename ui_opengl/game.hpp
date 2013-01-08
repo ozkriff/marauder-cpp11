@@ -53,6 +53,7 @@ private:
   V2i pickTile(const V2i& mousePos);
   void drawForPicking();
   void scrollMap();
+  void pickTile();
   void mainloop();
   void initOpengl();
   void initCamera();
