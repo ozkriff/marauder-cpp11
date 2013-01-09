@@ -19,11 +19,9 @@
 #endif
 #define DATA(x) (DATA_DIR "/" x)
 
-#define TILE_SIZE 6.0f
-#define TILE_SIZE_2 (TILE_SIZE / 2.0f)
-
 Game::Game()
-  : mHexEx(TILE_SIZE_2),
+  : mTileSize(6.0f),
+    mHexEx(tileSize() / 2.0f),
     mHexIn(sqrt(pow(mHexEx, 2) - pow(mHexEx / 2, 2))),
     mUiMode(UIMode::NORMAL),
     mWinSize(WIN_WIDTH, WIN_HEIGHT),
@@ -91,6 +89,10 @@ const V2i& Game::mousePos() {
 
 SDL_Surface* Game::screen() {
   return mScreen;
+}
+
+float Game::tileSize() const {
+  return mTileSize;
 }
 
 bool Game::done() {
@@ -309,7 +311,7 @@ void Game::drawUnitCircle(const Unit& u) {
   } else {
     die("drawUnitCircle(): You need more colors!");
   }
-  float n = TILE_SIZE_2 * 0.9f;
+  float n = (tileSize() / 2.0f) * 0.9f;
   appendV3f(&v, V3f(n, n, 0.1f));
   appendV3f(&v, V3f(n, -n, 0.1f));
   appendV3f(&v, V3f(-n, -n, 0.1f));
@@ -586,13 +588,13 @@ void Game::scrollMap() {
     camera().move(180);
   }
   const V2i& mapSize = core().map().size();
-  if (camera().pos.x() > mapSize.x() * TILE_SIZE) {
-    camera().pos.setX(mapSize.x() * TILE_SIZE);
+  if (camera().pos.x() > mapSize.x() * tileSize()) {
+    camera().pos.setX(mapSize.x() * tileSize());
   } else if (camera().pos.x() < 0) {
     camera().pos.setX(0);
   }
-  if (camera().pos.y() > mapSize.y() * TILE_SIZE) {
-    camera().pos.setY(mapSize.y() * TILE_SIZE);
+  if (camera().pos.y() > mapSize.y() * tileSize()) {
+    camera().pos.setY(mapSize.y() * tileSize());
   } else if (camera().pos.y() < 0) {
     camera().pos.setY(0);
   }

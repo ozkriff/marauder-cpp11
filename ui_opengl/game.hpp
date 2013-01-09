@@ -19,6 +19,7 @@ enum class UIMode {
 
 class Game {
 private:
+  float mTileSize;
   float mHexEx;
   float mHexIn;
   Core mCore;
@@ -42,7 +43,7 @@ private:
   VertexArray mVaUnits[static_cast<int>(UnitTypeID::COUNT)];
   GLuint mTextureUnits[static_cast<int>(UnitTypeID::COUNT)];
   TTF_Font* mFont;
-  
+
   void processSDLEvent(const SDL_MouseButtonEvent& e);
   void processSDLEvent(const SDL_MouseMotionEvent& e);
   void processSDLEvent(const SDL_KeyboardEvent& e);
@@ -68,7 +69,8 @@ private:
   void onTestButton();
   void addButtons();
   V2f indexToHexVertex(int i);
-  
+
+  float tileSize() const;
   bool done();
   SDL_Surface* screen();
   UIMode uiMode();
