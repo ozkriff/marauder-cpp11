@@ -44,6 +44,9 @@ Game::Game()
 }
 
 Game::~Game() {
+  TTF_CloseFont(mFont);
+  setFont(nullptr);
+  TTF_Quit();
   SDL_Quit();
 }
 
