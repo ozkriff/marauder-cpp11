@@ -5,7 +5,7 @@
 #include <SDL/SDL_opengl.h>
 #include <SDL/SDL_image.h>
 #include "core/misc.hpp"
-#include "ui_opengl/gl.hpp"
+#include "ui/gl.hpp"
 
 static GLenum getTextureFormat(
     const SDL_Surface* surface, int nOfColors)
@@ -61,7 +61,7 @@ int loadTexture(const char *filename) {
   if (!isPowerOfTwo(surface->w)
       || !isPowerOfTwo(surface->h))
   {
-    die("ui_opengl/gl.c: loadTexture(): "
+    die("ui/gl.c: loadTexture(): "
         "image's height or width is not a power of 2\n");
   }
   GLint nOfColors = surface->format->BytesPerPixel;

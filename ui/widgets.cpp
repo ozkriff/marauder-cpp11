@@ -8,12 +8,12 @@
 #include "core/v2i.hpp"
 #include "core/dir.hpp"
 #include "core/misc.hpp"
-#include "ui_opengl/v2f.hpp"
-#include "ui_opengl/math.hpp"
-#include "ui_opengl/gl.hpp"
-#include "ui_opengl/vertex_array.hpp"
-#include "ui_opengl/widgets.hpp"
-#include "ui_opengl/config.hpp"
+#include "ui/v2f.hpp"
+#include "ui/math.hpp"
+#include "ui/gl.hpp"
+#include "ui/vertex_array.hpp"
+#include "ui/widgets.hpp"
+#include "ui/config.hpp"
 
 std::list<Button*> buttons;
 

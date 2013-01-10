@@ -7,10 +7,10 @@
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_opengl.h>
 #include "core/core.hpp"
-#include "ui_opengl/vertex_array.hpp"
-#include "ui_opengl/v2f.hpp"
-#include "ui_opengl/camera.hpp"
-#include "ui_opengl/obj.hpp"
+#include "ui/vertex_array.hpp"
+#include "ui/v2f.hpp"
+#include "ui/camera.hpp"
+#include "ui/obj.hpp"
 
 enum class UIMode {
   NORMAL,

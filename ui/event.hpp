@@ -3,7 +3,7 @@
 #ifndef UI_OPENGL_EVENT_H
 #define UI_OPENGL_EVENT_H
 
-#include "ui_opengl/game.hpp"
+#include "ui/game.hpp"
 
 int getLastEventIndex(Game& game, const Event& e);
 bool eventFilterUnit(Game& game, const Event& e, const Unit& u);

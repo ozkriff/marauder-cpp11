@@ -5,8 +5,8 @@
 #include <cmath>
 #include "core/v2i.hpp"
 #include "core/dir.hpp"
-#include "ui_opengl/v2f.hpp"
-#include "ui_opengl/math.hpp"
+#include "ui/v2f.hpp"
+#include "ui/math.hpp"
 
 float getRotAngle(const V2f& a, const V2f& b) {
   V2f diff(

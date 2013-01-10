@@ -1,6 +1,6 @@
 // See LICENSE file for copyright and license details.
 
-#include "ui_opengl/event/move.hpp"
+#include "ui/event/move.hpp"
 #include <cassert>
 #include <SDL/SDL_opengl.h>
 #include "core/misc.hpp"
@@ -8,9 +8,9 @@
 #include "core/dir.hpp"
 #include "core/core.hpp"
 #include "core/path.hpp"
-#include "ui_opengl/v2f.hpp"
-#include "ui_opengl/vertex_array.hpp"
-#include "ui_opengl/game.hpp"
+#include "ui/v2f.hpp"
+#include "ui/vertex_array.hpp"
+#include "ui/game.hpp"
 
 int getLastEventMoveIndex(Game& game, const Event &e) {
   UNUSED(game);

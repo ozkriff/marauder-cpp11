@@ -8,12 +8,12 @@
 #include "core/core.hpp"
 #include "core/misc.hpp"
 #include "core/event.hpp"
-#include "ui_opengl/v2f.hpp"
-#include "ui_opengl/v3f.hpp"
-#include "ui_opengl/math.hpp"
-#include "ui_opengl/vertex_array.hpp"
-#include "ui_opengl/event.hpp"
-#include "ui_opengl/event/move.hpp"
+#include "ui/v2f.hpp"
+#include "ui/v3f.hpp"
+#include "ui/math.hpp"
+#include "ui/vertex_array.hpp"
+#include "ui/event.hpp"
+#include "ui/event/move.hpp"
 
 bool eventFilterUnit(Game& game, const Event& e, const Unit& u) {
   UNUSED(game);

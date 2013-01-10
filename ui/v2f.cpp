@@ -2,7 +2,7 @@
 
 #include <cassert>
 #include <cmath>
-#include "ui_opengl/v2f.hpp"
+#include "ui/v2f.hpp"
 
 V2f::V2f(float x, float y)
   : mX(x),

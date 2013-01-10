@@ -4,8 +4,8 @@
 #include <cmath>
 #include <SDL/SDL_opengl.h>
 #include "core/dir.hpp"
-#include "ui_opengl/math.hpp"
-#include "ui_opengl/camera.hpp"
+#include "ui/math.hpp"
+#include "ui/camera.hpp"
 
 Camera::Camera() {
 }

@@ -5,4 +5,4 @@
 #include <list>
 #include "core/core.hpp"
 #include "core/event.hpp"
-#include "ui_opengl/game.hpp"
+#include "ui/game.hpp"

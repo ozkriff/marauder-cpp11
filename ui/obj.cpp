@@ -6,9 +6,9 @@
 #include <GL/gl.h>
 #include "core/dir.hpp"
 #include "core/misc.hpp"
-#include "ui_opengl/math.hpp"
-#include "ui_opengl/vertex_array.hpp"
-#include "ui_opengl/obj.hpp"
+#include "ui/math.hpp"
+#include "ui/vertex_array.hpp"
+#include "ui/obj.hpp"
 
 // TODO "usemtl filename"
 void ObjModel::read(const std::string& filename) {

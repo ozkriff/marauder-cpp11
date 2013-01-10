@@ -5,8 +5,8 @@
 
 #include <vector>
 #include <SDL/SDL_opengl.h>
-#include "ui_opengl/v2f.hpp"
-#include "ui_opengl/v3f.hpp"
+#include "ui/v2f.hpp"
+#include "ui/v3f.hpp"
 
 struct VertexArray {
   std::vector<float> vertices;

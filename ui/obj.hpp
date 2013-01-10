@@ -5,8 +5,8 @@
 
 #include <vector>
 #include <string>
-#include "ui_opengl/v3f.hpp"
-#include "ui_opengl/v2f.hpp"
+#include "ui/v3f.hpp"
+#include "ui/v2f.hpp"
 
 class ObjModel {
 private:
