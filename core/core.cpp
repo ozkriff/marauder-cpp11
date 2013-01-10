@@ -8,7 +8,10 @@
 #include "core/core.hpp"
 
 Core::Core()
-  : mPathfinder(*this),
+  : mCurrentEvent(nullptr),
+    mCurrentPlayer(nullptr),
+    mSelectedUnit(nullptr),
+    mPathfinder(*this),
     mMap(V2i(20, 18))
 {
   srand(time(nullptr));
@@ -286,7 +289,6 @@ void Core::shoot(Unit *shooter, Unit *target) {
 }
 
 void Core::initUnits() {
-  mSelectedUnit = nullptr;
   for (int i = 0; i < 8; i++) {
     V2i p(rnd(0, map().size().x() - 1), rnd(0, map().size().y() - 1));
     if (!tile(p).obstacle && !unitAt(p)) {
