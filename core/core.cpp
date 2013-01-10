@@ -85,7 +85,7 @@ void Core::initLocalPlayers(std::vector<int> unitIDs) {
   mCurrentPlayer = mPlayers.back();
 }
 
-bool Core::inboard(const V2i& p) const {
+bool Core::isInboard(const V2i& p) const {
   return map().isInboard(p);
 }
 
@@ -254,7 +254,7 @@ int Core::getNewUnitID() {
 
 void Core::addUnit(const V2i& p, int playerID) {
   auto u = new Unit;
-  assert(inboard(p));
+  assert(isInboard(p));
   assert(playerID >= 0 && playerID < 16);
   u->id = getNewUnitID();
   u->pos = p;

@@ -107,10 +107,10 @@ void Pathfinder::cleanMap() {
 }
 
 void Pathfinder::tryToPushNeibors(const Unit& u, const V2i& m) {
-  assert(mCore.inboard(m));
+  assert(mCore.isInboard(m));
   for (int i = 0; i < 6; i++) {
     V2i neibM = Dir::neib(m, static_cast<DirID>(i));
-    if (mCore.inboard(neibM)) {
+    if (mCore.isInboard(neibM)) {
       processNeibor(u, m, neibM);
     }
   }
@@ -130,11 +130,11 @@ void Pathfinder::fillMap(const Unit& u) {
 std::vector<V2i> Pathfinder::getPath(const V2i& pos) {
   V2i p = pos;
   std::vector<V2i> path;
-  assert(mCore.inboard(p));
+  assert(mCore.isInboard(p));
   while (mCore.tile(p).cost != 0) {
     path.push_back(p);
     p = Dir::neib(p, mCore.tile(p).parent);
-    assert(mCore.inboard(p));
+    assert(mCore.isInboard(p));
   }
   // Add start position
   path.push_back(p);

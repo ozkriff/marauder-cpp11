@@ -160,7 +160,7 @@ void Game::run() {
 }
 
 V2f Game::v2iToV2f(const V2i& i) const {
-  assert(core().inboard(i));
+  assert(core().isInboard(i));
   V2f v(i.x() * mHexIn * 2, i.y() * mHexEx * 1.5);
   if (i.y() % 2 == 0) {
     v.setX(v.x() + mHexIn);
@@ -244,7 +244,7 @@ VertexArray Game::buildWalkableArray() {
     Tile& t = core().tile(p);
     if (t.parent.value() != DirID::NONE && t.cost < 50) {
       V2i to = Dir::neib(p, t.parent);
-      if (core().inboard(to)) {
+      if (core().isInboard(to)) {
         V2f fromF = v2iToV2f(p);
         V2f toF = v2iToV2f(to);
         appendV3f(&v.vertices, V3f(fromF.x(), fromF.y(), 0.1f));

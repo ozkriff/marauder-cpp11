@@ -43,7 +43,7 @@ public:
   void addUnit(const V2i& p, int playerID);
   void shoot(Unit* shooter, Unit* target);
   void killUnit(Unit* u);
-  bool inboard(const V2i& p) const;
+  bool isInboard(const V2i& p) const;
   int getNewEventID();
   void refreshUnits(int playerID);
 
