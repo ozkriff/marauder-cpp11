@@ -20,7 +20,6 @@ V2i::V2i()
 V2i::~V2i() {
 }
 
-
 int V2i::x() const {
   return mX;
 }
