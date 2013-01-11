@@ -1,8 +1,6 @@
 // See LICENSE file for copyright and license details.
 
 #include <cstdlib>
-#include <cmath>
-#include <cstring>
 #include <cassert>
 #include <ctime>
 #include "core/core.hpp"
