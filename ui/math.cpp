@@ -9,9 +9,7 @@
 #include "ui/math.hpp"
 
 float getRotAngle(const V2f& a, const V2f& b) {
-  V2f diff(
-      static_cast<float>(pow(b.x() - a.x(), 2)),
-      static_cast<float>(pow(b.y() - a.y(), 2)));
+  V2f diff(pow(b.x() - a.x(), 2), pow(b.y() - a.y(), 2));
   float distance = sqrt(diff.x() + diff.y());
   float angle = rad2deg(asin((b.x() - a.x()) / distance));
   if (b.y() - a.y() > 0) {
