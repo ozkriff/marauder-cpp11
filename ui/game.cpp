@@ -407,20 +407,23 @@ void Game::processSDLEvent(const SDL_MouseMotionEvent& e) {
   }
 }
 
+void Game::centerCameraOnSelectedUnit() {
+  if (!core().selectedUnit()) {
+    return;
+  }
+  V2f unitPos = v2iToV2f(core().selectedUnit()->pos);
+  camera().pos = unitPos;
+}
+
 void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
   switch (e.keysym.sym) {
   case SDLK_ESCAPE:
   case SDLK_q:
     setDone(true);
     break;
-  case SDLK_c: {
-    if (!core().selectedUnit()) {
-      return;
-    }
-    V2f unitPos = v2iToV2f(core().selectedUnit()->pos);
-    camera().pos = unitPos;
+  case SDLK_c:
+    centerCameraOnSelectedUnit();
     break;
-  }
   case SDLK_t: {
     Tile& t = core().tile(activeTilePos());
     t.obstacle = !t.obstacle;
