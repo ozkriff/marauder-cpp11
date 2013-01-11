@@ -22,7 +22,7 @@
 Game::Game()
   : mTileSize(6.0f),
     mHexEx(tileSize() / 2.0f),
-    mHexIn(sqrt(pow(mHexEx, 2) - pow(mHexEx / 2, 2))),
+    mHexIn(std::sqrt(std::pow(mHexEx, 2) - std::pow(mHexEx / 2, 2))),
     mUiMode(UIMode::NORMAL),
     mWinSize(WIN_WIDTH, WIN_HEIGHT),
     mMousePos(0, 0),
