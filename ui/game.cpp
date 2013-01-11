@@ -591,16 +591,7 @@ void Game::scrollMap() {
     camera().move(180);
   }
   const V2i& mapSize = core().map().size();
-  if (camera().pos.x() > mapSize.x() * tileSize()) {
-    camera().pos.setX(mapSize.x() * tileSize());
-  } else if (camera().pos.x() < 0) {
-    camera().pos.setX(0);
-  }
-  if (camera().pos.y() > mapSize.y() * tileSize()) {
-    camera().pos.setY(mapSize.y() * tileSize());
-  } else if (camera().pos.y() < 0) {
-    camera().pos.setY(0);
-  }
+  camera().clampPosition(v2iToV2f(mapSize - 1));
 }
 
 void Game::pickTile() {

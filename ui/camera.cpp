@@ -26,3 +26,16 @@ void Camera::move(float angle) {
   pos.setX(pos.x() + sin(inRadians) * speed);
   pos.setY(pos.y() + cos(inRadians) * speed);
 }
+
+void Camera::clampPosition(const V2f& max) {
+  if (pos.x() > max.x()) {
+    pos.setX(max.x());
+  } else if (pos.x() < 0) {
+    pos.setX(0);
+  }
+  if (pos.y() > max.y()) {
+    pos.setY(max.y());
+  } else if (pos.y() < 0) {
+    pos.setY(0);
+  }
+}

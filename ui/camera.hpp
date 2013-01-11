@@ -18,6 +18,7 @@ public:
 
   void set();
   void move(float angle);
+  void clampPosition(const V2f& max);
 };
 
 #endif
