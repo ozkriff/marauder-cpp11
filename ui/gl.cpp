@@ -33,17 +33,12 @@ static GLenum getTextureFormat(
 }
 
 static void setTextureParameters() {
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D,
-      GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D,
-      GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D,
-      GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D,
-      GL_TEXTURE_MIN_FILTER,
-      GL_LINEAR_MIPMAP_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D,
-      GL_GENERATE_MIPMAP, GL_TRUE);
+      GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
 static bool isPowerOfTwo(int n) {
@@ -51,29 +46,24 @@ static bool isPowerOfTwo(int n) {
 }
 
 int loadTexture(const char *filename) {
-  GLuint id;
   SDL_Surface* surface = IMG_Load(filename);
   if (!surface) {
     die("gl.c: loadTexture(): Can't load file '%s'\n",
         filename);
-    return 0;
   }
-  if (!isPowerOfTwo(surface->w)
-      || !isPowerOfTwo(surface->h))
-  {
+  if (!isPowerOfTwo(surface->w) || !isPowerOfTwo(surface->h)) {
     die("ui/gl.c: loadTexture(): "
         "image's height or width is not a power of 2\n");
   }
   GLint nOfColors = surface->format->BytesPerPixel;
   GLenum textureFormat = getTextureFormat(surface, nOfColors);
+  GLuint id;
   glGenTextures(1, &id);
   glBindTexture(GL_TEXTURE_2D, id);
   setTextureParameters();
   glTexImage2D(GL_TEXTURE_2D, 0, nOfColors,
       surface->w, surface->h, 0,
       textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
-  if (surface) {
-    SDL_FreeSurface(surface);
-  }
+  SDL_FreeSurface(surface);
   return static_cast<int>(id);
 }
