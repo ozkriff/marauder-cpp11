@@ -77,7 +77,7 @@ Dir Dir::opposite() const {
 }
 
 int Dir::diff(Dir d1) {
-  int diff = abs(toInt() - d1.toInt());
+  int diff = std::abs(toInt() - d1.toInt());
   if (diff > 6 / 2) {
     diff = 6 - diff;
   }

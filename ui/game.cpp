@@ -173,8 +173,8 @@ V2f Game::v2iToV2f(const V2i& i) const {
 
 V2f Game::indexToHexVertex(int i) {
   return V2f(
-      mHexEx * cos(M_PI_2 + 2 * M_PI * i / 6),
-      mHexEx * sin(M_PI_2 + 2 * M_PI * i / 6));
+      mHexEx * std::cos(M_PI_2 + 2 * M_PI * i / 6),
+      mHexEx * std::sin(M_PI_2 + 2 * M_PI * i / 6));
 }
 
 VertexArray Game::buildMapArray() {

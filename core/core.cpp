@@ -12,7 +12,7 @@ Core::Core()
     mPathfinder(*this),
     mMap(V2i(20, 18))
 {
-  srand(time(nullptr));
+  srand(std::time(nullptr));
   initUnitTypes();
   mPathfinder.cleanMap();
   cleanFow();

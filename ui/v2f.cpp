@@ -20,16 +20,14 @@ V2f::~V2f() {
 }
 
 void V2f::rotate(V2f *p, float angle) {
-  V2f old;
-  float sn, cs;
   assert(p);
   assert(angle >= 0);
   assert(angle <= 360);
-  old = *p;
-  sn = sin(angle);
-  cs = cos(angle);
-  p->setX(cs * old.x() - sn * old.y());
-  p->setY(sn * old.x() + cs * old.y());
+  V2f old = *p;
+  float sin = std::sin(angle);
+  float cos = std::cos(angle);
+  p->setX(cos * old.x() - sin * old.y());
+  p->setY(sin * old.x() + cos * old.y());
 }
 
 V2f V2f::operator+(const V2f& b) {

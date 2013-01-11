@@ -9,9 +9,9 @@
 #include "ui/math.hpp"
 
 float getRotAngle(const V2f& a, const V2f& b) {
-  V2f diff(pow(b.x() - a.x(), 2), pow(b.y() - a.y(), 2));
-  float distance = sqrt(diff.x() + diff.y());
-  float angle = rad2deg(asin((b.x() - a.x()) / distance));
+  V2f diff(std::pow(b.x() - a.x(), 2), std::pow(b.y() - a.y(), 2));
+  float distance = std::sqrt(diff.x() + diff.y());
+  float angle = rad2deg(std::asin((b.x() - a.x()) / distance));
   if (b.y() - a.y() > 0) {
     angle = -(180 + angle);
   }
@@ -55,9 +55,9 @@ float clampAngle(float angle) {
 }
 
 float dist(const V2f& a, const V2f& b) {
-  double dx = abs(b.x() - a.x());
-  double dy = abs(b.y() - a.y());
-  return sqrt(pow(dx, 2) + pow(dy, 2));
+  double dx = std::abs(b.x() - a.x());
+  double dy = std::abs(b.y() - a.y());
+  return std::sqrt(std::pow(dx, 2) + std::pow(dy, 2));
 }
 
 void rotatePointAroundPoint(
@@ -68,10 +68,10 @@ void rotatePointAroundPoint(
   assert(angle >= 0);
   assert(angle <= 360);
   V2f old = *p;
-  float sn = sin(angle);
-  float cs = cos(angle);
+  float sin = std::sin(angle);
+  float cos = std::cos(angle);
   float dx = old.x() - o->x();
   float dy = old.y() - o->y();
-  p->setX(cs * dx - sn * dy + o->x());
-  p->setY(sn * dx + cs * dy + o->y());
+  p->setX(cos * dx - sin * dy + o->x());
+  p->setY(sin * dx + cos * dy + o->y());
 }
