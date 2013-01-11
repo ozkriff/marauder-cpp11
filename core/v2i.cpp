@@ -41,7 +41,7 @@ int V2i::distance(const V2i &b) const {
   int bx = b.x() + b.y() / 2;
   int dx = bx - ax;
   int dy = b.y() - y();
-  return (abs(dx) + abs(dy) + abs(dx - dy)) / 2;
+  return (std::abs(dx) + std::abs(dy) + std::abs(dx - dy)) / 2;
 }
 
 bool V2i::operator==(const V2i& b) const {
