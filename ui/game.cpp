@@ -415,6 +415,19 @@ void Game::centerCameraOnSelectedUnit() {
   camera().pos = unitPos;
 }
 
+void Game::switchActiveTileType() {
+  Tile& t = core().tile(activeTilePos());
+  t.obstacle = !t.obstacle;
+  mVaMap = buildMapArray();
+  mVaObstacles = buildObstaclesArray();
+  core().calculateFow();
+  mVaFogOfWar = buildFowArray();
+  if (core().selectedUnit()) {
+    core().pathfinder().fillMap(*core().selectedUnit());
+    mVaWalkableMap = buildWalkableArray();
+  }
+}
+
 void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
   switch (e.keysym.sym) {
   case SDLK_ESCAPE:
@@ -424,19 +437,9 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
   case SDLK_c:
     centerCameraOnSelectedUnit();
     break;
-  case SDLK_t: {
-    Tile& t = core().tile(activeTilePos());
-    t.obstacle = !t.obstacle;
-    mVaMap = buildMapArray();
-    mVaObstacles = buildObstaclesArray();
-    core().calculateFow();
-    mVaFogOfWar = buildFowArray();
-    if (core().selectedUnit()) {
-      core().pathfinder().fillMap(*core().selectedUnit());
-      mVaWalkableMap = buildWalkableArray();
-    }
+  case SDLK_t:
+    switchActiveTileType();
     break;
-  }
   case SDLK_e:
     generateEventEndTurn(core());
     break;
