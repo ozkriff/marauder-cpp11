@@ -22,6 +22,7 @@ public:
 
   bool operator==(const V2i& b) const;
   V2i operator-(const V2i& b) const;
+  V2i operator-(int b) const;
   V2i operator+(const V2i& b) const;
 
   static int distance(const V2i& a, const V2i &b);

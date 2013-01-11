@@ -52,6 +52,10 @@ V2i V2i::operator-(const V2i& b) const {
   return V2i(x() - b.x(), y() - b.y());
 }
 
+V2i V2i::operator-(int b) const {
+  return V2i(x() - b, y() - b);
+}
+
 V2i V2i::operator+(const V2i& b) const {
   return V2i(x() + b.x(), y() + b.y());
 }
