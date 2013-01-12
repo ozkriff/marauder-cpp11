@@ -428,6 +428,14 @@ void Game::switchActiveTileType() {
   }
 }
 
+void Game::createNewUnitInActiveTile() {
+  core().addUnit(activeTilePos(), core().currentPlayer().id);
+  if (core().selectedUnit()) {
+    core().pathfinder().fillMap(*core().selectedUnit());
+    mVaWalkableMap = buildWalkableArray();
+  }
+}
+
 void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
   switch (e.keysym.sym) {
   case SDLK_ESCAPE:
@@ -444,11 +452,7 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
     generateEventEndTurn(core());
     break;
   case SDLK_u:
-    core().addUnit(activeTilePos(), core().currentPlayer().id);
-    if (core().selectedUnit()) {
-      core().pathfinder().fillMap(*core().selectedUnit());
-      mVaWalkableMap = buildWalkableArray();
-    }
+    createNewUnitInActiveTile();
     break;
   case SDLK_d:
     camera().zAngle = clampAngle(camera().zAngle + 15);

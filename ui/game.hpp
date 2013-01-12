@@ -52,6 +52,7 @@ private:
   void sdlEvents();
   void centerCameraOnSelectedUnit();
   void switchActiveTileType();
+  void createNewUnitInActiveTile();
   VertexArray buildPickingTilesArray();
   V2i pickTile(const V2i& mousePos);
   void drawForPicking();
