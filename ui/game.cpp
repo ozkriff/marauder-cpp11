@@ -503,6 +503,8 @@ void Game::screenScenarioMainEvents() {
   if (core().currentEvent().t == EventTypeID::END_TURN) {
     core().applyEvent(core().currentEvent());
     setUiMode(UIMode::NORMAL);
+    core().calculateFow();
+    setVaFogOfWar(buildFowArray());
   }
 }
 
