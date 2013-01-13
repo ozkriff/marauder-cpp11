@@ -14,52 +14,31 @@
 #include "ui/vertex_array.hpp"
 #include "ui/event.hpp"
 #include "ui/event/move.hpp"
+#include "ui/event/end_turn.hpp"
 
-bool eventFilterUnit(Game& game, const Event& e, const Unit& u) {
-  UNUSED(game);
-  switch (e.t) {
+EventVisualizer::EventVisualizer(Game& game)
+  : mGame(game)
+{
+}
+
+EventVisualizer::~EventVisualizer() {
+}
+
+const Game& EventVisualizer::game() const {
+  return mGame;
+}
+
+Game& EventVisualizer::game() {
+  return mGame;
+}
+
+EventVisualizer* newEventVisualizer(Game& game, const Event& event) {
+  switch (event.t) {
+  case EventTypeID::MOVE:
+    return new EventMoveVisualizer(game, event);
   case EventTypeID::END_TURN:
-    return false;
-  case EventTypeID::MOVE: {
-    auto eventMove = dynamic_cast<const EventMove*>(&e);
-    return u.id == eventMove->unitID;
-  }
+    return new EventEndTurnVisualizer(game, event);
   default:
-    die("uiEvent: eventFilterUnit(): "
-        "unknow event '%d'.\n", e.t);
-    return false;
-  }
-}
-
-void eventDraw(Game& game, const Event& e) {
-  switch (e.t) {
-  case EventTypeID::END_TURN: {
-    die("TODO");
-    break;
-  }
-  case EventTypeID::MOVE: {
-    auto eventMove = dynamic_cast<const EventMove*>(&e);
-    drawMovingUnit(game, *eventMove);
-    break;
-  }
-  default:
-    die("uiEvent: eventDraw(): "
-        "unknow event '%d'.\n", e.t);
-    break;
-  }
-}
-
-int getLastEventIndex(Game& game, const Event& e) {
-  switch (e.t) {
-  case EventTypeID::END_TURN: {
-    return 0;
-  }
-  case EventTypeID::MOVE: {
-    return getLastEventMoveIndex(game, e);
-  }
-  default:
-    die("uiEvent: getLastEventIndex(): "
-        "unknow event '%d'.\n", e.t);
-    return 0;
+    return nullptr;
   }
 }

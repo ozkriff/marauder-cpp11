@@ -28,7 +28,8 @@ Game::Game()
     mMousePos(0, 0),
     mActiveTilePos(0, 0),
     mIsRotatingCamera(false),
-    mDone(false)
+    mDone(false),
+    mEventVisualizer(nullptr)
 {
   SDL_Init(SDL_INIT_EVERYTHING);
   Uint32 flags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER;
@@ -340,10 +341,11 @@ void Game::drawUnit(const Unit& u) {
 
 void Game::drawUnits() {
   for (auto u : core().units()) {
-    if (uiMode() == UIMode::SHOW_EVENT
-        && eventFilterUnit(*this, core().currentEvent(), *u))
-    {
-      continue;
+    if (uiMode() == UIMode::SHOW_EVENT) {
+      assert(mEventVisualizer);
+      if (mEventVisualizer->filterUnit(*u)) {
+        continue;
+      }
     }
     if (core().tile(u->pos).fow == 0) {
       continue;
@@ -360,7 +362,8 @@ void Game::draw() {
   drawMap();
   drawUnits();
   if (uiMode() == UIMode::SHOW_EVENT) {
-    eventDraw(*this, core().currentEvent());
+    assert(mEventVisualizer);
+    mEventVisualizer->draw();
   }
   drawButtons();
   SDL_GL_SwapBuffers();
@@ -488,7 +491,12 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
 
 void Game::screenScenarioMainEvents() {
   core().setCurrentEvent(core().getNextEvent());
-  setLastMoveIndex(getLastEventIndex(*this, core().currentEvent()));
+  if (mEventVisualizer) {
+    delete mEventVisualizer;
+  }
+  mEventVisualizer = newEventVisualizer(*this, core().currentEvent());
+  assert(mEventVisualizer);
+  setLastMoveIndex(mEventVisualizer->lastIndex());
   setUiMode(UIMode::SHOW_EVENT);
   setCurrentMoveIndex(0);
   // TODO: Remove this hack

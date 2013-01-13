@@ -20,6 +20,7 @@ add_library(SOURCES
 	ui/event.cpp
 	ui/math.cpp
 	ui/event/move.cpp
+	ui/event/end_turn.cpp
 	core/misc.cpp
 	core/v2i.cpp
 	core/path.cpp

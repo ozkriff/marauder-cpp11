@@ -12,6 +12,8 @@
 #include "ui/camera.hpp"
 #include "ui/obj.hpp"
 
+class EventVisualizer;
+
 enum class UIMode {
   NORMAL,
   SHOW_EVENT
@@ -43,6 +45,7 @@ private:
   VertexArray mVaUnits[static_cast<int>(UnitTypeID::COUNT)];
   GLuint mTextureUnits[static_cast<int>(UnitTypeID::COUNT)];
   TTF_Font* mFont;
+  EventVisualizer* mEventVisualizer;
 
   void processSDLEvent(const SDL_MouseButtonEvent& e);
   void processSDLEvent(const SDL_MouseMotionEvent& e);

@@ -5,7 +5,7 @@
 
 #include "core/event.hpp"
 
-class EventEndturn : public Event {
+class EventEndTurn : public Event {
 public:
   int oldID;
   int newID;

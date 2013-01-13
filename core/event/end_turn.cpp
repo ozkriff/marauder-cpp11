@@ -5,7 +5,7 @@
 #include <cstdio>
 #include "core/core.hpp"
 
-void EventEndturn::apply(Core& core) {
+void EventEndTurn::apply(Core& core) {
   for (auto p : core.players()) {
     if (p->id == newID) {
       if (core.currentPlayer().id == oldID) {
@@ -19,17 +19,17 @@ void EventEndturn::apply(Core& core) {
   }
 }
 
-void EventEndturn::undo(Core& core) {
+void EventEndTurn::undo(Core& core) {
   UNUSED(core);
 }
 
-bool EventEndturn::isVisible(const Core& core) const {
+bool EventEndTurn::isVisible(const Core& core) const {
   UNUSED(core);
   return true;
 }
   
 void generateEventEndTurn(Core& core) {
-  auto e = new EventEndturn;
+  auto e = new EventEndTurn;
   int playersCount = 2; // TODO
   int newID = core.currentPlayer().id + 1;
   if (newID == playersCount) {

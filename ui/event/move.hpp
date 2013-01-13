@@ -4,15 +4,27 @@
 #define UI_OPENGL_EVENT_MOVE_H
 
 #include "core/event/move.hpp"
+#include "ui/event.hpp"
 
-class Game;
 class Event;
 
-const int moveSpeed = 10;
+class EventMoveVisualizer : public EventVisualizer {
+private:
+  static const int moveSpeed = 10;
 
-int getLastEventMoveIndex(Game& game, const Event& e);
-void getCurrentMovingNodes(
-    Game& game, const EventMove& e, V2i* from, V2i* to);
-void drawMovingUnit(Game& game, const EventMove& e);
+  const EventMove& mEventMove;
+
+  int getNodeIndex();
+  void endMovement(const V2i& pos);
+  void getCurrentMovingNodes(V2i* from, V2i* to);
+
+public:
+  EventMoveVisualizer(Game& game, const Event& event);
+  virtual ~EventMoveVisualizer();
+
+  virtual int lastIndex();
+  virtual bool filterUnit(const Unit& u);
+  virtual void draw();
+};
 
 #endif
