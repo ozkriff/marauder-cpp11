@@ -35,7 +35,7 @@ void generateEventEndTurn(Core& core) {
   if (newID == playersCount) {
     newID = 0;
   }
-  e->t = EventTypeID::END_TURN;
+  e->setType(EventTypeID::END_TURN);
   e->oldID = core.currentPlayer().id;
   e->newID = newID;
   core.addEvent(e);

@@ -33,7 +33,7 @@ Game& EventVisualizer::game() {
 }
 
 EventVisualizer* newEventVisualizer(Game& game, const Event& event) {
-  switch (event.t) {
+  switch (event.type()) {
   case EventTypeID::MOVE:
     return new EventMoveVisualizer(game, event);
   case EventTypeID::END_TURN:

@@ -500,7 +500,7 @@ void Game::screenScenarioMainEvents() {
   setUiMode(UIMode::SHOW_EVENT);
   setCurrentMoveIndex(0);
   // TODO: Remove this hack
-  if (core().currentEvent().t == EventTypeID::END_TURN) {
+  if (core().currentEvent().type() == EventTypeID::END_TURN) {
     core().applyEvent(core().currentEvent());
     setUiMode(UIMode::NORMAL);
     core().calculateFow();

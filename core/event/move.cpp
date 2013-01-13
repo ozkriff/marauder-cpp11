@@ -12,7 +12,7 @@ void generateEventMove(
   if (core.tile(destination).cost > ap) {
     return;
   }
-  e->t = EventTypeID::MOVE;
+  e->setType(EventTypeID::MOVE);
   e->initialDirection = unit.dir;
   e->path = core.pathfinder().getPath(destination);
   e->cost = core.tile(destination).cost;

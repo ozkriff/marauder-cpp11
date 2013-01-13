@@ -93,7 +93,7 @@ Tile& Core::tile(const V2i& p) {
 
 int Core::getNewEventID() {
   if (!mEvents.empty()) {
-    return mEvents.back()->id + 1;
+    return mEvents.back()->id() + 1;
   } else {
     return 0;
   }
@@ -116,7 +116,7 @@ void Core::undoUnshownEvents() {
   --i;
   while (i != mEvents.begin()) {
     auto event = *i;
-    if (event->id == mCurrentPlayer->lastSeenEventID) {
+    if (event->id() == mCurrentPlayer->lastSeenEventID) {
       break;
     }
     undoEvent(*event);
@@ -125,7 +125,7 @@ void Core::undoUnshownEvents() {
 }
 
 void Core::applyEvent(Event& e) {
-  mCurrentPlayer->lastSeenEventID = e.id;
+  mCurrentPlayer->lastSeenEventID = e.id();
   e.apply(*this);
 }
 
@@ -155,7 +155,7 @@ bool Core::unshownEventsLeft() {
     return false;
   } else {
     auto e = mEvents.back();
-    return e->id != mCurrentPlayer->lastSeenEventID;
+    return e->id() != mCurrentPlayer->lastSeenEventID;
   }
 }
 
@@ -167,7 +167,7 @@ Event* Core::getNextEvent() {
     return mEvents.front();
   }
   for (auto e : mEvents) {
-    if (e->id == id) {
+    if (e->id() == id) {
       return getNext(mEvents, e);
     }
   }
@@ -176,7 +176,7 @@ Event* Core::getNextEvent() {
 
 void Core::addEvent(Event* e) {
   assert(e);
-  e->id = getNewEventID();
+  e->setID(getNewEventID());
   mEvents.push_back(e);
   // event2log(*e);
 #if 0
@@ -323,7 +323,7 @@ Event* Core::getNextEventNode() {
   }
   // find last seen event
   for (auto e : mEvents) {
-    if (e->id == id) {
+    if (e->id() == id) {
       return getNext(mEvents, e);
     }
   }
