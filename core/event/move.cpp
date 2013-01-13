@@ -40,7 +40,10 @@ void EventMove::undo(Core& core) {
 }
 
 bool EventMove::isVisible(const Core &core) const {
-  UNUSED(core);
-  // TODO
-  return true;
+  for (const V2i& pos : path) {
+    if (core.map().tile(pos).fow > 0) {
+      return true;
+    }
+  }
+  return false;
 }
