@@ -7,18 +7,19 @@
 #include "core/event.hpp"
 #include "ui/game.hpp"
 
+Event::Event(int id, EventTypeID type)
+  : mType(type),
+    mID(id)
+{
+}
+
+Event::~Event() {
+}
+
 EventTypeID Event::type() const {
   return mType;
 }
 
 int Event::id() const {
   return mID;
-}
-
-void Event::setID(int id) {
-  mID = id;
-}
-
-void Event::setType(EventTypeID type) {
-  mType = type;
 }

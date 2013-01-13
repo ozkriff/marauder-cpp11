@@ -16,11 +16,11 @@ private:
   int mID;
 
 public:
+  Event(int id, EventTypeID type);
+  virtual ~Event();
+
   EventTypeID type() const;
   int id() const;
-
-  void setID(int id); // TODO: remove this setter, use constructor
-  void setType(EventTypeID type); // TODO: remove this setter, use constructor
 
   virtual void apply(Core& core) = 0;
   virtual void undo(Core& core) = 0;

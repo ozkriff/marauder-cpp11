@@ -10,6 +10,9 @@ public:
   int oldID;
   int newID;
 
+  EventEndTurn(int id);
+  ~EventEndTurn();
+
   virtual void apply(Core& core);
   virtual void undo(Core& core);
   virtual bool isVisible(const Core& core) const;

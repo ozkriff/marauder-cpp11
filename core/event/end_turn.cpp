@@ -5,6 +5,14 @@
 #include <cstdio>
 #include "core/core.hpp"
 
+EventEndTurn::EventEndTurn(int id)
+  : Event(id, EventTypeID::END_TURN)
+{
+}
+
+EventEndTurn::~EventEndTurn() {
+}
+
 void EventEndTurn::apply(Core& core) {
   for (auto p : core.players()) {
     if (p->id == newID) {
@@ -29,13 +37,12 @@ bool EventEndTurn::isVisible(const Core& core) const {
 }
   
 void generateEventEndTurn(Core& core) {
-  auto e = new EventEndTurn;
+  auto e = new EventEndTurn(core.getNewEventID());
   int playersCount = 2; // TODO
   int newID = core.currentPlayer().id + 1;
   if (newID == playersCount) {
     newID = 0;
   }
-  e->setType(EventTypeID::END_TURN);
   e->oldID = core.currentPlayer().id;
   e->newID = newID;
   core.addEvent(e);

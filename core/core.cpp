@@ -176,7 +176,6 @@ Event* Core::getNextEvent() {
 
 void Core::addEvent(Event* e) {
   assert(e);
-  e->setID(getNewEventID());
   mEvents.push_back(e);
   // event2log(*e);
 #if 0

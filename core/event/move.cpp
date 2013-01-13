@@ -4,15 +4,22 @@
 #include <cassert>
 #include "core/core.hpp"
 
+EventMove::EventMove(int id)
+  : Event(id, EventTypeID::MOVE)
+{
+}
+
+EventMove::~EventMove() {
+}
+
 void generateEventMove(
     Core& core, const Unit& unit, const V2i& destination)
 {
-  auto e = new EventMove;
+  auto e = new EventMove(core.getNewEventID());
   int ap = getUnitType(unit.typeID).actionPoints;
   if (core.tile(destination).cost > ap) {
     return;
   }
-  e->setType(EventTypeID::MOVE);
   e->initialDirection = unit.dir;
   e->path = core.pathfinder().getPath(destination);
   e->cost = core.tile(destination).cost;

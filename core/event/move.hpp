@@ -19,6 +19,9 @@ public:
   Dir initialDirection;
 
 public:
+  EventMove(int id);
+  virtual ~EventMove();
+
   virtual void apply(Core& core);
   virtual void undo(Core& core);
   virtual bool isVisible(const Core& core) const;
