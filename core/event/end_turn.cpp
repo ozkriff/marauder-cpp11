@@ -5,18 +5,28 @@
 #include <cstdio>
 #include "core/core.hpp"
 
-EventEndTurn::EventEndTurn(int id)
-  : Event(id, EventTypeID::END_TURN)
+EventEndTurn::EventEndTurn(int eventID, int oldPlayerID, int newPlayerID)
+  : Event(eventID, EventTypeID::END_TURN),
+    mOldID(oldPlayerID),
+    mNewID(newPlayerID)
 {
 }
 
 EventEndTurn::~EventEndTurn() {
 }
 
+int EventEndTurn::newID() const {
+  return mNewID;
+}
+
+int EventEndTurn::oldID() const {
+  return mOldID;
+}
+
 void EventEndTurn::apply(Core& core) {
   for (auto p : core.players()) {
-    if (p->id == newID) {
-      if (core.currentPlayer().id == oldID) {
+    if (p->id == newID()) {
+      if (core.currentPlayer().id == oldID()) {
         core.setCurrentPlayer(p);
         core.undoUnshownEvents();
       } else {
@@ -35,15 +45,14 @@ bool EventEndTurn::isVisible(const Core& core) const {
   UNUSED(core);
   return true;
 }
-  
+
 void generateEventEndTurn(Core& core) {
-  auto e = new EventEndTurn(core.getNewEventID());
   int playersCount = 2; // TODO
-  int newID = core.currentPlayer().id + 1;
-  if (newID == playersCount) {
-    newID = 0;
+  int newPlayerID = core.currentPlayer().id + 1;
+  if (newPlayerID == playersCount) {
+    newPlayerID = 0;
   }
-  e->oldID = core.currentPlayer().id;
-  e->newID = newID;
+  int oldPlayerID = core.currentPlayer().id;
+  auto e = new EventEndTurn(core.getNewEventID(), oldPlayerID, newPlayerID);
   core.addEvent(e);
 }

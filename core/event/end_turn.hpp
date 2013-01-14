@@ -6,12 +6,16 @@
 #include "core/event.hpp"
 
 class EventEndTurn : public Event {
-public:
-  int oldID;
-  int newID;
+private:
+  int mOldID;
+  int mNewID;
 
-  EventEndTurn(int id);
+public:
+  EventEndTurn(int eventID, int oldPlayerID, int newPlayerID);
   ~EventEndTurn();
+
+  int oldID() const;
+  int newID() const;
 
   virtual void apply(Core& core);
   virtual void undo(Core& core);
