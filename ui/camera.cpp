@@ -39,17 +39,8 @@ void Camera::move(float angle) {
 }
 
 void Camera::clampPosition() {
-  const V2f& max = mMaxPos;
-  if (mPos.x() > max.x()) {
-    mPos.setX(max.x());
-  } else if (mPos.x() < 0) {
-    mPos.setX(0);
-  }
-  if (mPos.y() > max.y()) {
-    mPos.setY(max.y());
-  } else if (mPos.y() < 0) {
-    mPos.setY(0);
-  }
+  mPos.setX(clampF(mPos.x(), 0.0f, mMaxPos.x()));
+  mPos.setY(clampF(mPos.y(), 0.0f, mMaxPos.y()));
 }
 
 void Camera::setMaxXAxisAngle(float angle) {
