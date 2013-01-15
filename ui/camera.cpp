@@ -35,10 +35,11 @@ void Camera::move(float angle) {
   float inRadians = deg2rad(mZAngle - angle);
   mPos.setX(mPos.x() + sin(inRadians) * speed);
   mPos.setY(mPos.y() + cos(inRadians) * speed);
-  clampPosition(mMaxPos);
+  clampPosition();
 }
 
-void Camera::clampPosition(const V2f& max) {
+void Camera::clampPosition() {
+  const V2f& max = mMaxPos;
   if (mPos.x() > max.x()) {
     mPos.setX(max.x());
   } else if (mPos.x() < 0) {
@@ -79,10 +80,9 @@ void Camera::setMaxPos(const V2f& maxPos) {
   mMaxPos = maxPos;
 }
 
-// TODO: Simplify
 void Camera::setPos(const V2f& pos) {
   mPos = pos;
-  clampPosition(mMaxPos);
+  clampPosition();
 }
 
 void Camera::setMaxZoom(float n) {

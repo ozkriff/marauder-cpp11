@@ -17,7 +17,7 @@ private:
   float mMinZoom;
   float mZoom;
 
-  void clampPosition(const V2f& max);
+  void clampPosition();
 
 public:
   Camera();
