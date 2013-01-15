@@ -405,8 +405,8 @@ void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
 void Game::processSDLEvent(const SDL_MouseMotionEvent& e) {
   setMousePos(V2i(static_cast<int>(e.x), static_cast<int>(e.y)));
   if (isRotatingCamera()) {
-    camera().zAngle = clampAngle(camera().zAngle - e.xrel);
-    camera().xAngle = clampF(camera().xAngle - e.yrel, 0, 50);
+    camera().rotateAroundZAxis(-e.xrel);
+    camera().rotateAroundXAxis(-e.yrel);
   }
 }
 
@@ -415,7 +415,7 @@ void Game::centerCameraOnSelectedUnit() {
     return;
   }
   V2f unitPos = v2iToV2f(core().selectedUnit()->pos);
-  camera().pos = unitPos;
+  camera().setPos(unitPos);
 }
 
 void Game::switchActiveTileType() {
@@ -458,16 +458,16 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
     createNewUnitInActiveTile();
     break;
   case SDLK_d:
-    camera().zAngle = clampAngle(camera().zAngle + 15);
+    camera().rotateAroundZAxis(15);
     break;
   case SDLK_a:
-    camera().zAngle = clampAngle(camera().zAngle - 15);
+    camera().rotateAroundZAxis(-15);
     break;
   case SDLK_w:
-    camera().zoom = clampF(camera().zoom - 10, 30, 200);
+    camera().zoomIn(10);
     break;
   case SDLK_s:
-    camera().zoom = clampF(camera().zoom + 10, 30, 200);
+    camera().zoomOut(10);
     break;
   case SDLK_UP:
     camera().move(0);
@@ -533,9 +533,9 @@ void Game::processSDLEvent(const SDL_Event& e) {
       setIsRotatingCamera(false);
     }
     if (e.button.button == SDL_BUTTON_WHEELUP) {
-      camera().zoom = clampF(camera().zoom - 5, 30, 200);
+      camera().zoomIn(5);
     } else if (e.button.button == SDL_BUTTON_WHEELDOWN) {
-      camera().zoom = clampF(camera().zoom + 5, 30, 200);
+      camera().zoomOut(5);
     }
     break;
   case SDL_MOUSEBUTTONDOWN:
@@ -610,8 +610,6 @@ void Game::scrollMap() {
   } else if(p.y() > screen()->h - offset) {
     camera().move(180);
   }
-  const V2i& mapSize = core().map().size();
-  camera().clampPosition(v2iToV2f(mapSize - 1));
 }
 
 void Game::pickTile() {
@@ -658,10 +656,15 @@ void Game::initOpengl() {
 }
 
 void Game::initCamera() {
-  camera().xAngle = 45.0f;
-  camera().zAngle = 45.0f;
-  camera().pos = V2f(20, 20);
-  camera().zoom = 100.0f;
+  camera().setMaxXAxisAngle(50.0f);
+  camera().setMinXAxisAngle(0.0f);
+  camera().setXAxisAngle(45.0f);
+  camera().setZAxisAngle(45.0f);
+  camera().setMaxPos(v2iToV2f(core().map().size() - 1));
+  camera().setPos(V2f(0.0f, 0.0f));
+  camera().setMaxZoom(200.0f);
+  camera().setMinZoom(30.0f);
+  camera().setZoom(100.0f);
 }
 
 void Game::initVertexArrays() {
