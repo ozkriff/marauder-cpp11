@@ -24,9 +24,9 @@ Game::Game()
     mHexEx(tileSize() / 2.0f),
     mHexIn(std::sqrt(std::pow(mHexEx, 2) - std::pow(mHexEx / 2, 2))),
     mUiMode(UIMode::NORMAL),
-    mWinSize(WIN_WIDTH, WIN_HEIGHT),
-    mSDLFlags(SDL_OPENGL | SDL_GL_DOUBLEBUFFER),
+    mSDLFlags(SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_RESIZABLE),
     mBitsPerPixel(32),
+    mWinSize(WIN_WIDTH, WIN_HEIGHT),
     mMousePos(0, 0),
     mActiveTilePos(0, 0),
     mIsRotatingCamera(false),
@@ -34,8 +34,8 @@ Game::Game()
     mEventVisualizer(nullptr)
 {
   SDL_Init(SDL_INIT_EVERYTHING);
-  mScreen = SDL_SetVideoMode(winSize().x(), winSize().y(),
-      mBitsPerPixel, mSDLFlags);
+  setScreen(SDL_SetVideoMode(winSize().x(), winSize().y(),
+      mBitsPerPixel, mSDLFlags));
   initOpengl();
   setFloorTexture(loadTexture(DATA("floor.png")));
   initCamera();
@@ -522,7 +522,9 @@ void Game::processSDLEvent(const SDL_Event& e) {
     setDone(true);
     break;
   case SDL_VIDEORESIZE:
-    setScreen(SDL_SetVideoMode(e.resize.w, e.resize.h, 32, SDL_RESIZABLE));
+    setWinSize(V2i(e.resize.w, e.resize.h));
+    setScreen(SDL_SetVideoMode(winSize().x(), winSize().y(),
+	mBitsPerPixel, mSDLFlags));
     break;
   case SDL_KEYDOWN:
     processSDLEvent(e.key);
