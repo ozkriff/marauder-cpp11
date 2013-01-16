@@ -30,6 +30,8 @@ private:
   int mCurrentMoveIndex;
   VertexArray mVaWalkableMap;
   VertexArray mVaFogOfWar;
+  Uint32 mSDLFlags;
+  int mBitsPerPixel;
   V2i mWinSize;
   V2i mMousePos;
   V2i mActiveTilePos;

@@ -25,6 +25,8 @@ Game::Game()
     mHexIn(std::sqrt(std::pow(mHexEx, 2) - std::pow(mHexEx / 2, 2))),
     mUiMode(UIMode::NORMAL),
     mWinSize(WIN_WIDTH, WIN_HEIGHT),
+    mSDLFlags(SDL_OPENGL | SDL_GL_DOUBLEBUFFER),
+    mBitsPerPixel(32),
     mMousePos(0, 0),
     mActiveTilePos(0, 0),
     mIsRotatingCamera(false),
@@ -32,8 +34,8 @@ Game::Game()
     mEventVisualizer(nullptr)
 {
   SDL_Init(SDL_INIT_EVERYTHING);
-  Uint32 flags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER;
-  mScreen = SDL_SetVideoMode(winSize().x(), winSize().y(), 32, flags);
+  mScreen = SDL_SetVideoMode(winSize().x(), winSize().y(),
+      mBitsPerPixel, mSDLFlags);
   initOpengl();
   setFloorTexture(loadTexture(DATA("floor.png")));
   initCamera();
