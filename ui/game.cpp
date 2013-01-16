@@ -525,6 +525,7 @@ void Game::processSDLEvent(const SDL_Event& e) {
     setWinSize(V2i(e.resize.w, e.resize.h));
     setScreen(SDL_SetVideoMode(winSize().x(), winSize().y(),
 	mBitsPerPixel, mSDLFlags));
+    initOpengl();
     break;
   case SDL_KEYDOWN:
     processSDLEvent(e.key);
