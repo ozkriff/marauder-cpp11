@@ -76,6 +76,7 @@ private:
   void onTestButton();
   void addButtons();
   V2f indexToHexVertex(int i);
+  float aspectRatio() const;
 
   float tileSize() const;
   bool done();
@@ -83,7 +84,7 @@ private:
   UIMode uiMode();
   TTF_Font* font();
   bool isRotatingCamera();
-  const V2i& winSize();
+  const V2i& winSize() const;
   const V2i& activeTilePos();
   Camera& camera();
   const V2i& mousePos();

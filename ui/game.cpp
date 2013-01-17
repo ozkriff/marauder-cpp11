@@ -71,7 +71,7 @@ const Core& Game::core() const {
   return mCore;
 }
 
-const V2i& Game::winSize() {
+const V2i& Game::winSize() const {
   return mWinSize;
 }
 
@@ -180,6 +180,12 @@ V2f Game::indexToHexVertex(int i) {
   return V2f(
       mHexEx * std::cos(M_PI_2 + 2 * M_PI * i / 6),
       mHexEx * std::sin(M_PI_2 + 2 * M_PI * i / 6));
+}
+
+float Game::aspectRatio() const {
+  float x = winSize().x();
+  float y = winSize().y();
+  return y / x;
 }
 
 VertexArray Game::buildMapArray() {
@@ -637,7 +643,6 @@ void Game::mainloop() {
 }
 
 void Game::initOpengl() {
-  float aspectRatio = static_cast<float>(winSize().y()) / winSize().x();
   SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -647,8 +652,8 @@ void Game::initOpengl() {
   glLoadIdentity();
   GLdouble left = 0.5;
   GLdouble right = -0.5;
-  GLdouble bottom = -0.5 * aspectRatio;
-  GLdouble top = 0.5 * aspectRatio;
+  GLdouble bottom = -0.5 * aspectRatio();
+  GLdouble top = 0.5 * aspectRatio();
   GLdouble near = 1.0;
   GLdouble far = 500.0;
   glFrustum(left, right, bottom, top, near, far);
