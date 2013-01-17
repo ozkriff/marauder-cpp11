@@ -300,7 +300,7 @@ void Game::drawUnitModel(const Unit& u) {
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glBindTexture(GL_TEXTURE_2D, mTextureUnits[u.typeID]);
+  glBindTexture(GL_TEXTURE_2D, mUnitTextureIDs[u.typeID]);
   glColor3f(1, 1, 1);
   glTexCoordPointer(2, GL_FLOAT, 0, mVaUnits[u.typeID].textureCoordinates.data());
   glVertexPointer(3, GL_FLOAT, 0, mVaUnits[u.typeID].vertices.data());
@@ -684,8 +684,8 @@ void Game::initVertexArrays() {
 void Game::loadUnitResources() {
   int tankID = static_cast<int>(UnitTypeID::TANK);
   int truckID = static_cast<int>(UnitTypeID::TRUCK);
-  mTextureUnits[tankID] = loadTexture(DATA("tank.png"));
-  mTextureUnits[truckID] = loadTexture(DATA("truck.png"));
+  mUnitTextureIDs[tankID] = loadTexture(DATA("tank.png"));
+  mUnitTextureIDs[truckID] = loadTexture(DATA("truck.png"));
   mVaUnits[tankID] = ObjModel(DATA("tank.obj")).build();
   mVaUnits[truckID] = ObjModel(DATA("truck.obj")).build();
 }

@@ -44,7 +44,7 @@ private:
   VertexArray mVaObstacles;
   VertexArray mVaPick;
   VertexArray mVaUnits[static_cast<int>(UnitTypeID::COUNT)];
-  GLuint mTextureUnits[static_cast<int>(UnitTypeID::COUNT)];
+  GLuint mUnitTextureIDs[static_cast<int>(UnitTypeID::COUNT)];
   TTF_Font* mFont;
   EventVisualizer* mEventVisualizer;
 
