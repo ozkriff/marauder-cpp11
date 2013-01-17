@@ -76,7 +76,7 @@ void EventMoveVisualizer::endMovement() {
     core.calculateFow();
     game().setVaFogOfWar(game().buildFowArray());
   }
-  if (u->playerID == game().core().currentPlayer().id) {
+  if (u->playerID == core.currentPlayer().id) {
     if (core.selectedUnit()) {
       core.pathfinder().fillMap(*core.selectedUnit());
       game().setVaWalkableMap(game().buildWalkableArray());
