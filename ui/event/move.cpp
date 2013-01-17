@@ -66,10 +66,10 @@ void EventMoveVisualizer::getCurrentMovingNodes(V2i* from, V2i* to) {
   *to = p[j + 1];
 }
 
-void EventMoveVisualizer::endMovement(const V2i& pos) {
+void EventMoveVisualizer::endMovement() {
   Core& core = game().core();
   Unit* u = core.id2unit(mEventMove.unitID);
-  u->pos = pos;
+  u->pos = mEventMove.path.back();
   if (core.selectedUnit()) {
     core.pathfinder().fillMap(*u);
     game().setVaWalkableMap(game().buildWalkableArray());
@@ -99,5 +99,5 @@ int EventMoveVisualizer::getNodeIndex() {
 }
 
 void EventMoveVisualizer::end() {
-  endMovement(mEventMove.path.back());
+  endMovement();
 }

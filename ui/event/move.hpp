@@ -15,7 +15,7 @@ private:
   const EventMove& mEventMove;
 
   int getNodeIndex();
-  void endMovement(const V2i& pos);
+  void endMovement();
   void getCurrentMovingNodes(V2i* from, V2i* to);
 
 public:
