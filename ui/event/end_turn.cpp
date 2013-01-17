@@ -25,7 +25,7 @@ int EventEndTurnVisualizer::framesCount() {
   return 0;
 }
 
-bool EventEndTurnVisualizer::filterUnit(const Unit& u) {
+bool EventEndTurnVisualizer::isUnitVisible(const Unit& u) {
   UNUSED(u);
   return false;
 }

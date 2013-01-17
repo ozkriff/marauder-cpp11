@@ -347,7 +347,7 @@ void Game::drawUnits() {
   for (auto u : core().units()) {
     if (uiMode() == UIMode::SHOW_EVENT) {
       assert(mEventVisualizer);
-      if (mEventVisualizer->filterUnit(*u)) {
+      if (mEventVisualizer->isUnitVisible(*u)) {
         continue;
       }
     }

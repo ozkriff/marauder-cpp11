@@ -25,7 +25,7 @@ int EventMoveVisualizer::framesCount() {
   return (mEventMove.path.size() - 1) * moveSpeed;
 }
 
-bool EventMoveVisualizer::filterUnit(const Unit& u) {
+bool EventMoveVisualizer::isUnitVisible(const Unit& u) {
   return u.id == mEventMove.unitID;
 }
 

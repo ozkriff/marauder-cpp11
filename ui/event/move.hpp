@@ -23,7 +23,7 @@ public:
   virtual ~EventMoveVisualizer();
 
   virtual int framesCount();
-  virtual bool filterUnit(const Unit& u);
+  virtual bool isUnitVisible(const Unit& u);
   virtual void draw();
   virtual void end();
 };
