@@ -17,7 +17,7 @@ struct Button {
 };
 
 void initWidgets();
-TTF_Font* openFont(const char* fontName, int size);
+TTF_Font* openFont(const std::string& fontName, int size);
 Button* v2iToButton(V2i pos);
 int addButton(TTF_Font* f, const V2i* pos,
     const char* text, ButtonCallback callback);

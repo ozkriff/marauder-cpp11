@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <list>
+#include <string>
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_opengl.h>
@@ -147,8 +148,8 @@ void drawButtons() {
   set_2dWidgetsDrawingModeOff();
 }
 
-TTF_Font* openFont(const char* fontName, int size) {
-  TTF_Font *f = TTF_OpenFont(fontName, size);
+TTF_Font* openFont(const std::string& fontName, int size) {
+  TTF_Font *f = TTF_OpenFont(fontName.c_str(), size);
   if (!f) {
     die("openFont(): "
         "Unable to open font file: '%s'\n",

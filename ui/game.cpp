@@ -42,7 +42,7 @@ Game::Game()
   initWidgets();
   std::string fontName(
     "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf");
-  setFont(openFont(fontName.c_str(), 10)); // TODO: Remove c_str()
+  setFont(openFont(fontName, 10));
   addButtons();
   loadUnitResources();
   initVertexArrays();
