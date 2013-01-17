@@ -22,7 +22,7 @@
 Game::Game()
   : mTileSize(6.0f),
     mHexEx(tileSize() / 2.0f),
-    mHexIn(std::sqrt(std::pow(mHexEx, 2) - std::pow(mHexEx / 2, 2))),
+    mHexIn(std::sqrt(std::pow(mHexEx, 2) - std::pow(mHexEx / 2.0f, 2))),
     mUiMode(UIMode::NORMAL),
     mSDLFlags(SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_RESIZABLE),
     mBitsPerPixel(32),
