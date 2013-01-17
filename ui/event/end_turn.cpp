@@ -21,8 +21,8 @@ EventEndTurnVisualizer::EventEndTurnVisualizer(Game& game, const Event& event)
 EventEndTurnVisualizer::~EventEndTurnVisualizer() {
 }
 
-int EventEndTurnVisualizer::framesCount() {
-  return 0;
+bool EventEndTurnVisualizer::isFinished() {
+  return true;
 }
 
 bool EventEndTurnVisualizer::isUnitVisible(const Unit& u) {

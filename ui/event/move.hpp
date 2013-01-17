@@ -13,16 +13,18 @@ private:
   static const int moveSpeed = 10;
 
   const EventMove& mEventMove;
+  int mCurrentMoveIndex;
 
   int getNodeIndex();
   void endMovement();
   void getCurrentMovingNodes(V2i* from, V2i* to);
+  int framesCount();
 
 public:
   EventMoveVisualizer(Game& game, const Event& event);
   virtual ~EventMoveVisualizer();
 
-  virtual int framesCount();
+  virtual bool isFinished();
   virtual bool isUnitVisible(const Unit& u);
   virtual void draw();
   virtual void end();

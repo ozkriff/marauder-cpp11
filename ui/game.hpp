@@ -26,8 +26,6 @@ private:
   float mHexIn;
   Core mCore;
   UIMode mUiMode;
-  int mLastMoveIndex;
-  int mCurrentMoveIndex;
   VertexArray mVaWalkableMap;
   VertexArray mVaFogOfWar;
   Uint32 mSDLFlags;
@@ -102,14 +100,10 @@ public:
   Game();
   ~Game();
 
-  int currentMoveIndex() const;
-  int lastMoveIndex() const;
   Core& core();
   const Core& core() const;
 
   void setUiMode(UIMode uiMode);
-  void setLastMoveIndex(int lastMoveIndex);
-  void setCurrentMoveIndex(int currentMoveIndex);
   void setVaWalkableMap(const VertexArray& va);
   void setVaFogOfWar(const VertexArray& va);
 

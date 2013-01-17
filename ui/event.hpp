@@ -17,7 +17,7 @@ public:
   EventVisualizer(Game& game);
   virtual ~EventVisualizer();
 
-  virtual int framesCount() = 0;
+  virtual bool isFinished() = 0;
   virtual bool isUnitVisible(const Unit& u) = 0;
   virtual void draw() = 0;
   virtual void end() = 0;

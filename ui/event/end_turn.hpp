@@ -16,7 +16,7 @@ public:
   EventEndTurnVisualizer(Game& game, const Event& event);
   virtual ~EventEndTurnVisualizer();
 
-  virtual int framesCount();
+  virtual bool isFinished();
   virtual bool isUnitVisible(const Unit& u);
   virtual void draw();
   virtual void end();

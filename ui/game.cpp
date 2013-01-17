@@ -55,14 +55,6 @@ Game::~Game() {
   SDL_Quit();
 }
 
-int Game::currentMoveIndex() const {
-  return mCurrentMoveIndex;
-}
-
-int Game::lastMoveIndex() const {
-  return mLastMoveIndex;
-}
-
 Core& Game::core() {
   return mCore;
 }
@@ -141,14 +133,6 @@ void Game::setFont(TTF_Font* font) {
 
 void Game::setFloorTexture(int textureID) {
   mFloorTexture = textureID;
-}
-
-void Game::setLastMoveIndex(int lastMoveIndex) {
-  mLastMoveIndex = lastMoveIndex;
-}
-
-void Game::setCurrentMoveIndex(int currentMoveIndex) {
-  mCurrentMoveIndex = currentMoveIndex;
 }
 
 void Game::setScreen(SDL_Surface* screen) {
@@ -373,8 +357,7 @@ void Game::draw() {
   if (uiMode() == UIMode::SHOW_EVENT) {
     assert(mEventVisualizer);
     mEventVisualizer->draw();
-    assert(currentMoveIndex() <= lastMoveIndex());
-    if (currentMoveIndex() == lastMoveIndex()) {
+    if (mEventVisualizer->isFinished()) {
       core().applyEvent(core().currentEvent());
       core().setCurrentEvent(nullptr);
       setUiMode(UIMode::NORMAL);
@@ -512,9 +495,7 @@ void Game::screenScenarioMainEvents() {
   }
   mEventVisualizer = newEventVisualizer(*this, core().currentEvent());
   assert(mEventVisualizer);
-  setLastMoveIndex(mEventVisualizer->framesCount());
   setUiMode(UIMode::SHOW_EVENT);
-  setCurrentMoveIndex(0);
 }
 
 void Game::logic() {
