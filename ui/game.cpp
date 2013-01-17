@@ -75,7 +75,7 @@ const V2i& Game::winSize() const {
   return mWinSize;
 }
 
-UIMode Game::uiMode() {
+UIMode Game::uiMode() const {
   return mUiMode;
 }
 
@@ -83,15 +83,15 @@ Camera& Game::camera() {
   return mCamera;
 }
 
-const V2i& Game::activeTilePos() {
+const V2i& Game::activeTilePos() const {
   return mActiveTilePos;
 }
 
-bool Game::isRotatingCamera() {
+bool Game::isRotatingCamera() const {
   return mIsRotatingCamera;
 }
 
-const V2i& Game::mousePos() {
+const V2i& Game::mousePos() const {
   return mMousePos;
 }
 
@@ -103,7 +103,7 @@ float Game::tileSize() const {
   return mTileSize;
 }
 
-bool Game::done() {
+bool Game::done() const {
   return mDone;
 }
 

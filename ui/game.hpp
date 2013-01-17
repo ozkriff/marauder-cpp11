@@ -79,15 +79,15 @@ private:
   float aspectRatio() const;
 
   float tileSize() const;
-  bool done();
+  bool done() const;
   SDL_Surface* screen();
-  UIMode uiMode();
+  UIMode uiMode() const;
   TTF_Font* font();
-  bool isRotatingCamera();
+  bool isRotatingCamera() const;
   const V2i& winSize() const;
-  const V2i& activeTilePos();
+  const V2i& activeTilePos() const;
   Camera& camera();
-  const V2i& mousePos();
+  const V2i& mousePos() const;
   
   void setDone(bool done);
   void setFont(TTF_Font* font);
