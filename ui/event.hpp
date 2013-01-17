@@ -20,6 +20,7 @@ public:
   virtual int framesCount() = 0;
   virtual bool filterUnit(const Unit& u) = 0;
   virtual void draw() = 0;
+  virtual void end() = 0;
 };
 
 EventVisualizer* newEventVisualizer(Game& game, const Event& event);

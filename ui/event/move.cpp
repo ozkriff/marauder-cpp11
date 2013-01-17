@@ -48,9 +48,6 @@ void EventMoveVisualizer::draw() {
   game().drawUnitCircle(*u);
   glPopMatrix();
   game().setCurrentMoveIndex(game().currentMoveIndex() + 1);
-  if (game().currentMoveIndex() == game().lastMoveIndex()) {
-    endMovement(toI);
-  }
 }
 
 void EventMoveVisualizer::getCurrentMovingNodes(V2i* from, V2i* to) {
@@ -72,7 +69,6 @@ void EventMoveVisualizer::getCurrentMovingNodes(V2i* from, V2i* to) {
 void EventMoveVisualizer::endMovement(const V2i& pos) {
   Core& core = game().core();
   Unit* u = core.id2unit(mEventMove.unitID);
-  game().setUiMode(UIMode::NORMAL);
   u->pos = pos;
   if (core.selectedUnit()) {
     core.pathfinder().fillMap(*u);
@@ -80,8 +76,6 @@ void EventMoveVisualizer::endMovement(const V2i& pos) {
     core.calculateFow();
     game().setVaFogOfWar(game().buildFowArray());
   }
-  core.applyEvent(core.currentEvent());
-  core.setCurrentEvent(nullptr);
   if (u->playerID == game().core().currentPlayer().id) {
     if (core.selectedUnit()) {
       core.pathfinder().fillMap(*core.selectedUnit());
@@ -102,4 +96,8 @@ int EventMoveVisualizer::getNodeIndex() {
     last = current;
   }
   return game().currentMoveIndex() - last;
+}
+
+void EventMoveVisualizer::end() {
+  endMovement(mEventMove.path.back());
 }

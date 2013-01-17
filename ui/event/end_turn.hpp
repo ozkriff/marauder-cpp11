@@ -19,6 +19,7 @@ public:
   virtual int framesCount();
   virtual bool filterUnit(const Unit& u);
   virtual void draw();
+  virtual void end();
 };
 
 #endif

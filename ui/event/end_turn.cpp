@@ -31,5 +31,10 @@ bool EventEndTurnVisualizer::filterUnit(const Unit& u) {
 }
 
 void EventEndTurnVisualizer::draw() {
-  die("TODO");
+  // die("TODO"); // TODO: ...
+}
+
+void EventEndTurnVisualizer::end() {
+  game().core().calculateFow();
+  game().setVaFogOfWar(game().buildFowArray());
 }

@@ -368,6 +368,13 @@ void Game::draw() {
   if (uiMode() == UIMode::SHOW_EVENT) {
     assert(mEventVisualizer);
     mEventVisualizer->draw();
+    assert(currentMoveIndex() <= lastMoveIndex());
+    if (currentMoveIndex() == lastMoveIndex()) {
+      core().applyEvent(core().currentEvent());
+      core().setCurrentEvent(nullptr);
+      setUiMode(UIMode::NORMAL);
+      mEventVisualizer->end();
+    }
   }
   drawButtons();
   SDL_GL_SwapBuffers();
@@ -503,13 +510,6 @@ void Game::screenScenarioMainEvents() {
   setLastMoveIndex(mEventVisualizer->framesCount());
   setUiMode(UIMode::SHOW_EVENT);
   setCurrentMoveIndex(0);
-  // TODO: Remove this hack
-  if (core().currentEvent().type() == EventTypeID::END_TURN) {
-    core().applyEvent(core().currentEvent());
-    setUiMode(UIMode::NORMAL);
-    core().calculateFow();
-    setVaFogOfWar(buildFowArray());
-  }
 }
 
 void Game::logic() {
