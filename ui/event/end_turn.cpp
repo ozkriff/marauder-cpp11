@@ -37,4 +37,5 @@ void EventEndTurnVisualizer::draw() {
 void EventEndTurnVisualizer::end() {
   game().core().calculateFow();
   game().setVaFogOfWar(game().buildFowArray());
+  game().setVaWalkableMap(VertexArray());
 }
