@@ -40,7 +40,9 @@ Game::Game()
   setFloorTexture(loadTexture(DATA("floor.png")));
   initCamera();
   initWidgets();
-  setFont(openFont(DEFAULT_FONT, 10));
+  std::string fontName(
+    "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf");
+  setFont(openFont(fontName.c_str(), 10)); // TODO: Remove c_str()
   addButtons();
   loadUnitResources();
   initVertexArrays();
