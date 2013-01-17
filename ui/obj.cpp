@@ -10,6 +10,10 @@
 #include "ui/vertex_array.hpp"
 #include "ui/obj.hpp"
 
+ObjModel::ObjModel(const std::string& filename) {
+  read(filename);
+}
+
 // TODO "usemtl filename"
 void ObjModel::read(const std::string& filename) {
   auto file = fopen(filename.c_str(), "r");

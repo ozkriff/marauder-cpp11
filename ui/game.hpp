@@ -43,7 +43,6 @@ private:
   VertexArray mVaMap;
   VertexArray mVaObstacles;
   VertexArray mVaPick;
-  ObjModel mObjUnits[static_cast<int>(UnitTypeID::COUNT)];
   VertexArray mVaUnits[static_cast<int>(UnitTypeID::COUNT)];
   GLuint mTextureUnits[static_cast<int>(UnitTypeID::COUNT)];
   TTF_Font* mFont;

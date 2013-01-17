@@ -22,9 +22,12 @@ private:
   std::vector<V2f> mTextureCoords;
   std::vector<ObjTriangle> mFaces;
 
-public:
-  VertexArray build();
   void read(const std::string& filename);
+
+public:
+  ObjModel(const std::string& filename);
+
+  VertexArray build();
   void debugPrint();
 };
 
