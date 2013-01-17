@@ -14,7 +14,8 @@
 
 EventMoveVisualizer::EventMoveVisualizer(Game& game, const Event& event)
   : EventVisualizer(game),
-    mEventMove(dynamic_cast<const EventMove&>(event))
+    mEventMove(dynamic_cast<const EventMove&>(event)),
+    mCurrentMoveIndex(0)
 {
 }
 
@@ -23,6 +24,11 @@ EventMoveVisualizer::~EventMoveVisualizer() {
 
 int EventMoveVisualizer::framesCount() {
   return (mEventMove.path.size() - 1) * moveSpeed;
+}
+
+bool EventMoveVisualizer::isFinished() {
+  assert(mCurrentMoveIndex <= framesCount());
+  return (mCurrentMoveIndex == framesCount());
 }
 
 bool EventMoveVisualizer::isUnitVisible(const Unit& u) {
@@ -47,11 +53,11 @@ void EventMoveVisualizer::draw() {
   game().drawUnitModel(*u);
   game().drawUnitCircle(*u);
   glPopMatrix();
-  game().setCurrentMoveIndex(game().currentMoveIndex() + 1);
+  mCurrentMoveIndex++;
 }
 
 void EventMoveVisualizer::getCurrentMovingNodes(V2i* from, V2i* to) {
-  int i = game().currentMoveIndex();
+  int i = mCurrentMoveIndex;
   auto& p = mEventMove.path; // shortcut
   unsigned int j; // node id
   assert(from);
@@ -90,12 +96,12 @@ int EventMoveVisualizer::getNodeIndex() {
   int current = 0;
   for (unsigned int j = 0; j < mEventMove.path.size() - 2; j++) {
     current += moveSpeed;
-    if (current > game().currentMoveIndex()) {
+    if (current > mCurrentMoveIndex) {
       break;
     }
     last = current;
   }
-  return game().currentMoveIndex() - last;
+  return mCurrentMoveIndex - last;
 }
 
 void EventMoveVisualizer::end() {
