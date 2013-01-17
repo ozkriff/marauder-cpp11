@@ -17,6 +17,7 @@ EventMoveVisualizer::EventMoveVisualizer(Game& game, const Event& event)
     mEventMove(dynamic_cast<const EventMove&>(event)),
     mCurrentMoveIndex(0)
 {
+  game.setVaWalkableMap(VertexArray());
 }
 
 EventMoveVisualizer::~EventMoveVisualizer() {

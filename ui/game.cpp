@@ -395,8 +395,6 @@ void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
       }
     } else if (t.cost <= ap && t.parent.value() != DirID::NONE) {
       generateEventMove(core(), *core().selectedUnit(), activeTilePos());
-      // TODO: Move this to uiEventMove?
-      mVaWalkableMap.vertices.clear();
     }
   }
 }
