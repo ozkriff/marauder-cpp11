@@ -351,10 +351,9 @@ void Game::drawUnits() {
         continue;
       }
     }
-    if (core().tile(u->pos).fow == 0) {
-      continue;
+    if (core().tile(u->pos).fow > 0) {
+      drawUnit(*u);
     }
-    drawUnit(*u);
   }
 }
 
