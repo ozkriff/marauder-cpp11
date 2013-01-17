@@ -645,8 +645,13 @@ void Game::initOpengl() {
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glFrustum(0.5, -0.5, -0.5 * aspectRatio,
-      0.5 * aspectRatio, 1, 500);
+  GLdouble left = 0.5;
+  GLdouble right = -0.5;
+  GLdouble bottom = -0.5 * aspectRatio;
+  GLdouble top = 0.5 * aspectRatio;
+  GLdouble near = 1.0;
+  GLdouble far = 500.0;
+  glFrustum(left, right, bottom, top, near, far);
   glMatrixMode(GL_MODELVIEW);
   glEnable(GL_BLEND);
   glShadeModel(GL_SMOOTH);
