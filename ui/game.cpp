@@ -653,7 +653,7 @@ void Game::initOpengl() {
   glEnable(GL_COLOR_MATERIAL);
   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
   glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-  glClearColor(0, 0, 0, 1);
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glEnable(GL_TEXTURE_2D);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_ALPHA_TEST);
