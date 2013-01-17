@@ -21,7 +21,7 @@ EventMoveVisualizer::EventMoveVisualizer(Game& game, const Event& event)
 EventMoveVisualizer::~EventMoveVisualizer() {
 }
 
-int EventMoveVisualizer::lastIndex() {
+int EventMoveVisualizer::framesCount() {
   return (mEventMove.path.size() - 1) * moveSpeed;
 }
 

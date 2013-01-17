@@ -17,8 +17,7 @@ public:
   EventVisualizer(Game& game);
   virtual ~EventVisualizer();
 
-  // TODO: Rename: framesCount?
-  virtual int lastIndex() = 0;
+  virtual int framesCount() = 0;
   virtual bool filterUnit(const Unit& u) = 0;
   virtual void draw() = 0;
 };

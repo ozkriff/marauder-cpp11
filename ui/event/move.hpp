@@ -22,7 +22,7 @@ public:
   EventMoveVisualizer(Game& game, const Event& event);
   virtual ~EventMoveVisualizer();
 
-  virtual int lastIndex();
+  virtual int framesCount();
   virtual bool filterUnit(const Unit& u);
   virtual void draw();
 };

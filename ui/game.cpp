@@ -500,7 +500,7 @@ void Game::screenScenarioMainEvents() {
   }
   mEventVisualizer = newEventVisualizer(*this, core().currentEvent());
   assert(mEventVisualizer);
-  setLastMoveIndex(mEventVisualizer->lastIndex());
+  setLastMoveIndex(mEventVisualizer->framesCount());
   setUiMode(UIMode::SHOW_EVENT);
   setCurrentMoveIndex(0);
   // TODO: Remove this hack

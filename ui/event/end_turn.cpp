@@ -21,7 +21,7 @@ EventEndTurnVisualizer::EventEndTurnVisualizer(Game& game, const Event& event)
 EventEndTurnVisualizer::~EventEndTurnVisualizer() {
 }
 
-int EventEndTurnVisualizer::lastIndex() {
+int EventEndTurnVisualizer::framesCount() {
   return 0;
 }
 
