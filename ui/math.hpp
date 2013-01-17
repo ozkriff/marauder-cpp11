@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef UI_OPENGL_MATH_H
-#define UI_OPENGL_MATH_H
+#ifndef UI__MATH_HPP
+#define UI__MATH_HPP
 
 #include "ui/v2f.hpp"
 #include "ui/v3f.hpp"

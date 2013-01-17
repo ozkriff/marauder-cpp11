@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef CORE_TILE_H
-#define CORE_TILE_H
+#ifndef CORE__TILE_HPP
+#define CORE__TILE_HPP
 
 #include "core/dir.hpp"
 

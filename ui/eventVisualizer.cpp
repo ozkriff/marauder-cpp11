@@ -11,10 +11,10 @@
 #include "ui/v2f.hpp"
 #include "ui/v3f.hpp"
 #include "ui/math.hpp"
-#include "ui/vertex_array.hpp"
-#include "ui/event.hpp"
-#include "ui/event/move.hpp"
-#include "ui/event/end_turn.hpp"
+#include "ui/vertexArray.hpp"
+#include "ui/eventVisualizer.hpp"
+#include "ui/event/eventMoveVisualizer.hpp"
+#include "ui/event/eventEndTurnVisualizer.hpp"
 
 EventVisualizer::EventVisualizer(Game& game)
   : mGame(game)

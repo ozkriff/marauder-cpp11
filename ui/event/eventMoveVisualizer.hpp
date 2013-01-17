@@ -1,10 +1,10 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef UI_OPENGL_EVENT_MOVE_H
-#define UI_OPENGL_EVENT_MOVE_H
+#ifndef UI__EVENT__EVENT_MOVE_VISUALIZER_HPP
+#define UI__EVENT__EVENT_MOVE_VISUALIZER_HPP
 
-#include "core/event/move.hpp"
-#include "ui/event.hpp"
+#include "core/event/eventMove.hpp"
+#include "ui/eventVisualizer.hpp"
 
 class Event;
 

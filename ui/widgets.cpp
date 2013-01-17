@@ -12,7 +12,7 @@
 #include "ui/v2f.hpp"
 #include "ui/math.hpp"
 #include "ui/gl.hpp"
-#include "ui/vertex_array.hpp"
+#include "ui/vertexArray.hpp"
 #include "ui/widgets.hpp"
 #include "ui/config.hpp"
 

@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef UI_OPENGL_WIDGETS_H
-#define UI_OPENGL_WIDGETS_H
+#ifndef UI_WIDGETS_HPP
+#define UI_WIDGETS_HPP
 
 typedef void (*ButtonCallback)();
 

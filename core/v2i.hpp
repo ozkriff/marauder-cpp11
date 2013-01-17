@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef CORE_V2I_H
-#define CORE_V2I_H
+#ifndef CORE__V2I_HPP
+#define CORE__V2I_HPP
 
 class V2i {
 private:

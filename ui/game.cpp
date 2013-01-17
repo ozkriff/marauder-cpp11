@@ -6,12 +6,12 @@
 #include <cassert>
 #include <ctime>
 #include "ui/math.hpp"
-#include "ui/vertex_array.hpp"
+#include "ui/vertexArray.hpp"
 #include "ui/game.hpp"
 #include "ui/gl.hpp"
 #include "ui/widgets.hpp"
-#include "ui/event/move.hpp"
-#include "ui/event.hpp"
+#include "ui/event/eventEndTurnVisualizer.hpp"
+#include "ui/eventVisualizer.hpp"
 #include "ui/config.hpp"
 
 #ifndef DATA_DIR

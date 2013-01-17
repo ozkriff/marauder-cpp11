@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef UI_OPENGL_EVENT_H
-#define UI_OPENGL_EVENT_H
+#ifndef UI__EVENT_VISUALIZER_HPP
+#define UI__EVENT_VISUALIZER_HPP
 
 #include "ui/game.hpp"
 

@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef UI_OPENGL_VERTEX_ARRAY_H
-#define UI_OPENGL_VERTEX_ARRAY_H
+#ifndef UI__VERTEX_ARRAY_HPP
+#define UI__VERTEX_ARRAY_HPP
 
 #include <vector>
 #include <SDL/SDL_opengl.h>

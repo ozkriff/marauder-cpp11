@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef CORE_UNIT_TYPE_H
-#define CORE_UNIT_TYPE_H
+#ifndef CORE__UNIT_TYPE_HPP
+#define CORE__UNIT_TYPE_HPP
 
 enum class UnitTypeID {
   TANK,

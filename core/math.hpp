@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef CORE_MATH_H
-#define CORE_MATH_H
+#ifndef CORE__MATH_HPP
+#define CORE__MATH_HPP
 
 #include "core/v2i.hpp"
 

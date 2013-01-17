@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef CORE_MAP_H
-#define CORE_MAP_H
+#ifndef CORE__MAP_HPP
+#define CORE__MAP_HPP
 
 #include "core/tile.hpp"
 #include <vector>

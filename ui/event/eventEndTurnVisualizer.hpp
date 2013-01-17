@@ -1,10 +1,10 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef UI_OPENGL_EVENT_END_TURN_H
-#define UI_OPENGL_EVENT_END_TURN_H
+#ifndef UI__EVENT__EVENT_END_TURN_VISUALIZER_HPP
+#define UI__EVENT__EVENT_END_TURN_VISUALIZER_HPP
 
-#include "core/event/end_turn.hpp"
-#include "ui/event.hpp"
+#include "core/event/eventEndTurn.hpp"
+#include "ui/eventVisualizer.hpp"
 
 class Event;
 

@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef UI_OPENGL_OBJ_H
-#define UI_OPENGL_OBJ_H
+#ifndef UI__OBJ_MODEL_HPP
+#define UI__OBJ_MODEL_HPP
 
 #include <vector>
 #include <string>

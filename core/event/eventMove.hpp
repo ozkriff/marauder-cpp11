@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef CORE_MOVE_H
-#define CORE_MOVE_H
+#ifndef CORE__EVENT__EVENT_MOVE_HPP
+#define CORE__EVENT__EVENT_MOVE_HPP
 
 #include <vector>
 #include "core/v2i.hpp"

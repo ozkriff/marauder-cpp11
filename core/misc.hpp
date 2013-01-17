@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef CORE_MISC_H
-#define CORE_MISC_H
+#ifndef CORE__MISC_HPP
+#define CORE__MISC_HPP
 
 #include <list>
 

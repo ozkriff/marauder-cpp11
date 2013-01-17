@@ -11,29 +11,29 @@ endif()
 add_library(SOURCES
 	ui/widgets.cpp
 	ui/game.cpp
-	ui/obj.cpp
-	ui/vertex_array.cpp
+	ui/objModel.cpp
+	ui/vertexArray.cpp
 	ui/v2f.cpp
 	ui/v3f.cpp
 	ui/gl.cpp
 	ui/camera.cpp
-	ui/event.cpp
+	ui/eventVisualizer.cpp
 	ui/math.cpp
-	ui/event/move.cpp
-	ui/event/end_turn.cpp
+	ui/event/eventMoveVisualizer.cpp
+	ui/event/eventEndTurnVisualizer.cpp
 	core/misc.cpp
 	core/v2i.cpp
-	core/path.cpp
+	core/pathfinder.cpp
 	core/pathQueue.cpp
 	core/dir.cpp
 	core/los.cpp
-	core/unit_type.cpp
+	core/unitType.cpp
 	core/event.cpp
 	core/core.cpp
 	core/math.cpp
 	core/map.cpp
-	core/event/move.cpp
-	core/event/end_turn.cpp
+	core/event/eventMove.cpp
+	core/event/eventEndTurn.cpp
 )
 add_executable(marauder ui/main.cpp)
 set(LIBS

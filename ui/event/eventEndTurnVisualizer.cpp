@@ -1,15 +1,15 @@
 // See LICENSE file for copyright and license details.
 
-#include "ui/event/end_turn.hpp"
+#include "ui/event/eventEndTurnVisualizer.hpp"
 #include <cassert>
 #include <SDL/SDL_opengl.h>
 #include "core/misc.hpp"
 #include "core/v2i.hpp"
 #include "core/dir.hpp"
 #include "core/core.hpp"
-#include "core/path.hpp"
+#include "core/pathfinder.hpp"
 #include "ui/v2f.hpp"
-#include "ui/vertex_array.hpp"
+#include "ui/vertexArray.hpp"
 #include "ui/game.hpp"
 
 EventEndTurnVisualizer::EventEndTurnVisualizer(Game& game, const Event& event)

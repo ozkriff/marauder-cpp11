@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef CORE_PATHQUEUE_H
-#define CORE_PATHQUEUE_H
+#ifndef CORE__PATHQUEUE_HPP
+#define CORE__PATHQUEUE_HPP
 
 #include <vector>
 #include "core/dir.hpp"

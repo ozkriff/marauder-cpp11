@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
 #include <cassert>
-#include "ui/vertex_array.hpp"
+#include "ui/vertexArray.hpp"
 
 void appendV2f(std::vector<float>* vertices, const V2f& vertex) {
   assert(vertices);

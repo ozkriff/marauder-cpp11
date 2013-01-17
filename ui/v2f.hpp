@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef UI_OPENGL_V2F_H
-#define UI_OPENGL_V2F_H
+#ifndef UI__V2F_HPP
+#define UI__V2F_HPP
 
 class V2f {
 private:

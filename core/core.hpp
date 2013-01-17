@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef CORE_CORE_H
-#define CORE_CORE_H
+#ifndef CORE__CORE_HPP
+#define CORE__CORE_HPP
 
 #include <list>
 #include "core/misc.hpp"
@@ -9,11 +9,11 @@
 #include "core/math.hpp"
 #include "core/dir.hpp"
 #include "core/los.hpp"
-#include "core/unit_type.hpp"
+#include "core/unitType.hpp"
 #include "core/event.hpp"
-#include "core/event/move.hpp"
-#include "core/event/end_turn.hpp"
-#include "core/path.hpp"
+#include "core/event/eventMove.hpp"
+#include "core/event/eventEndTurn.hpp"
+#include "core/pathfinder.hpp"
 #include "core/map.hpp"
 #include "core/unit.hpp"
 #include "core/player.hpp"

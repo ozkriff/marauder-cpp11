@@ -7,8 +7,8 @@
 #include "core/dir.hpp"
 #include "core/misc.hpp"
 #include "ui/math.hpp"
-#include "ui/vertex_array.hpp"
-#include "ui/obj.hpp"
+#include "ui/vertexArray.hpp"
+#include "ui/objModel.hpp"
 
 ObjModel::ObjModel(const std::string& filename) {
   read(filename);

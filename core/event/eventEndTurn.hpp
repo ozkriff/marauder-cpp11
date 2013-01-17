@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef CORE_END_TURN_H
-#define CORE_END_TURN_H
+#ifndef CORE__EVENT__EVENT_END_TURN_HPP
+#define CORE__EVENT__EVENT_END_TURN_HPP
 
 #include "core/event.hpp"
 

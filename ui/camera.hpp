@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef UI_OPENGL_CAMERA_H
-#define UI_OPENGL_CAMERA_H
+#ifndef UI__CAMERA_HPP
+#define UI__CAMERA_HPP
 
 #include "ui/v2f.hpp"
 

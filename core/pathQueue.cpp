@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 #include <cassert>
-#include "core/path.hpp"
+#include "core/pathfinder.hpp"
 #include "core/core.hpp"
 
 PathQueue::PathQueue(Core& core, int size)

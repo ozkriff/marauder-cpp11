@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef CORE_UNIT_H
-#define CORE_UNIT_H
+#ifndef CORE__UNIT_HPP
+#define CORE__UNIT_HPP
 
 #include "core/dir.hpp"
 #include "core/v2i.hpp"

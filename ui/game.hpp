@@ -1,16 +1,16 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef UI_OPENGL_GAME_H
-#define UI_OPENGL_GAME_H
+#ifndef UI__GAME_HPP
+#define UI__GAME_HPP
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_opengl.h>
 #include "core/core.hpp"
-#include "ui/vertex_array.hpp"
+#include "ui/vertexArray.hpp"
 #include "ui/v2f.hpp"
 #include "ui/camera.hpp"
-#include "ui/obj.hpp"
+#include "ui/objModel.hpp"
 
 class EventVisualizer;
 

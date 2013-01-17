@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef CORE_EVENT_H
-#define CORE_EVENT_H
+#ifndef CORE__EVENT_HPP
+#define CORE__EVENT_HPP
 
 class Core;
 
