@@ -4,7 +4,6 @@
 #define UI__GAME_HPP
 
 #include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
 #include <SDL/SDL_opengl.h>
 #include "core/core.hpp"
 #include "ui/vertexArray.hpp"
@@ -43,7 +42,6 @@ private:
   VertexArray mVaPick;
   VertexArray mVaUnits[static_cast<int>(UnitTypeID::COUNT)];
   GLuint mUnitTextureIDs[static_cast<int>(UnitTypeID::COUNT)];
-  TTF_Font* mFont;
   EventVisualizer* mEventVisualizer;
 
   void processSDLEvent(const SDL_MouseButtonEvent& e);
@@ -78,7 +76,6 @@ private:
   bool done() const;
   SDL_Surface* screen();
   UIMode uiMode() const;
-  TTF_Font* font();
   bool isRotatingCamera() const;
   const V2i& winSize() const;
   const V2i& activeTilePos() const;
@@ -86,7 +83,6 @@ private:
   const V2i& mousePos() const;
   
   void setDone(bool done);
-  void setFont(TTF_Font* font);
   void setFloorTexture(int textureID);
   void setWinSize(const V2i& winSize);
   void setScreen(SDL_Surface* screen);

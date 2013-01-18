@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 2.6)
 project(marauder)
 find_package(OpenGL REQUIRED)
 find_package(SDL REQUIRED)
-find_package(SDL_ttf REQUIRED)
 find_package(SDL_image REQUIRED)
 include_directories(.)
 if(UNIX)
@@ -38,7 +37,6 @@ add_executable(marauder ui/main.cpp)
 set(LIBS
 	${OPENGL_LIBRARIES}
 	${SDL_LIBRARY}
-	${SDLTTF_LIBRARY}
 	${SDLIMAGE_LIBRARY}
 )
 target_link_libraries(marauder SOURCES ${LIBS})

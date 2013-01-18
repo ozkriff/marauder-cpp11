@@ -40,9 +40,6 @@ Game::Game()
 }
 
 Game::~Game() {
-  TTF_CloseFont(mFont);
-  setFont(nullptr);
-  TTF_Quit();
   SDL_Quit();
 }
 
@@ -90,10 +87,6 @@ bool Game::done() const {
   return mDone;
 }
 
-TTF_Font* Game::font() {
-  return mFont;
-}
-
 void Game::setDone(bool done) {
   mDone = done;
 }
@@ -116,10 +109,6 @@ void Game::setUiMode(UIMode uiMode) {
 
 void Game::setIsRotatingCamera(bool isRotatingCamera) {
   mIsRotatingCamera = isRotatingCamera;
-}
-
-void Game::setFont(TTF_Font* font) {
-  mFont = font;
 }
 
 void Game::setFloorTexture(int textureID) {
