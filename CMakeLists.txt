@@ -9,7 +9,6 @@ if(UNIX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra --pedantic -std=c++0x")
 endif()
 add_library(SOURCES
-	ui/widgets.cpp
 	ui/game.cpp
 	ui/objModel.cpp
 	ui/vertexArray.cpp

@@ -9,7 +9,6 @@
 #include "ui/vertexArray.hpp"
 #include "ui/game.hpp"
 #include "ui/gl.hpp"
-#include "ui/widgets.hpp"
 #include "ui/event/eventEndTurnVisualizer.hpp"
 #include "ui/eventVisualizer.hpp"
 #include "ui/config.hpp"
@@ -39,11 +38,6 @@ Game::Game()
   initOpengl();
   setFloorTexture(loadTexture(DATA("floor.png")));
   initCamera();
-  initWidgets();
-  std::string fontName(
-    "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf");
-  setFont(openFont(fontName, 10));
-  addButtons();
   loadUnitResources();
   initVertexArrays();
 }
@@ -364,19 +358,10 @@ void Game::draw() {
       mEventVisualizer->end();
     }
   }
-  drawButtons();
   SDL_GL_SwapBuffers();
 }
 
 void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
-  V2i p(static_cast<int>(e.x), static_cast<int>(e.y));
-  auto b = v2iToButton(p);
-  if (b) {
-    if (b->callback) {
-      b->callback();
-    }
-    return;
-  }
   Unit* u = core().unitAt(activeTilePos());
   Tile& t = core().tile(activeTilePos());
   UNUSED(e);
@@ -676,14 +661,4 @@ void Game::loadUnitResources() {
   mUnitTextureIDs[truckID] = loadTexture(DATA("truck.png"));
   mVaUnits[tankID] = ObjModel(DATA("tank.obj")).build();
   mVaUnits[truckID] = ObjModel(DATA("truck.obj")).build();
-}
-
-void Game::onTestButton() {
-  printf("BUTTON CLICKED\n");
-}
-
-void Game::addButtons() {
-  V2i pos = {10, 10};
-  (void)addButton(font(), &pos, "[CLICK ME!]",
-      nullptr); // onTestButton);
 }

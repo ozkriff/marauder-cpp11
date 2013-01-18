@@ -71,8 +71,6 @@ private:
   void draw();
   void screenScenarioMainEvents();
   void logic();
-  void onTestButton();
-  void addButtons();
   V2f indexToHexVertex(int i);
   float aspectRatio() const;
 
