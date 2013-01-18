@@ -3,6 +3,8 @@
 #ifndef UI__GL_HPP
 #define UI__GL_HPP
 
-int loadTexture(const char* filename);
+#include <string>
+
+int loadTexture(const std::string& filename);
 
 #endif

@@ -45,11 +45,11 @@ static bool isPowerOfTwo(int n) {
   return ((n & (n - 1)) == 0);
 }
 
-int loadTexture(const char *filename) {
-  SDL_Surface* surface = IMG_Load(filename);
+int loadTexture(const std::string& filename) {
+  SDL_Surface* surface = IMG_Load(filename.c_str());
   if (!surface) {
     die("gl.c: loadTexture(): Can't load file '%s'\n",
-        filename);
+        filename.c_str());
   }
   if (!isPowerOfTwo(surface->w) || !isPowerOfTwo(surface->h)) {
     die("ui/gl.c: loadTexture(): "
