@@ -11,11 +11,8 @@
 #include "ui/gl.hpp"
 #include "ui/event/eventEndTurnVisualizer.hpp"
 #include "ui/eventVisualizer.hpp"
-#include "ui/config.hpp"
 
-#ifndef DATA_DIR
-#error DATA_DIR undefined!
-#endif
+#define DATA_DIR "/home/ozkriff/projects/my/marauder/data/"
 #define DATA(x) (DATA_DIR "/" x)
 
 Game::Game()
@@ -25,7 +22,7 @@ Game::Game()
     mUiMode(UIMode::NORMAL),
     mSDLFlags(SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_RESIZABLE),
     mBitsPerPixel(32),
-    mWinSize(WIN_WIDTH, WIN_HEIGHT),
+    mWinSize(640, 480),
     mMousePos(0, 0),
     mActiveTilePos(0, 0),
     mIsRotatingCamera(false),
