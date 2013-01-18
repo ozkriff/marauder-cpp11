@@ -61,9 +61,14 @@ int loadTexture(const std::string& filename) {
   glGenTextures(1, &id);
   glBindTexture(GL_TEXTURE_2D, id);
   setTextureParameters();
-  glTexImage2D(GL_TEXTURE_2D, 0, nOfColors,
-      surface->w, surface->h, 0,
-      textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
+  GLenum target = GL_TEXTURE_2D;
+  GLint level = 0;
+  GLint internalFormat = nOfColors;
+  GLint border = 0;
+  GLenum type = GL_UNSIGNED_BYTE;
+  glTexImage2D(target, level, internalFormat,
+      surface->w, surface->h, border,
+      textureFormat, type, surface->pixels);
   SDL_FreeSurface(surface);
   return static_cast<int>(id);
 }
