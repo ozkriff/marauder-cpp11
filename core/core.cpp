@@ -109,7 +109,7 @@ void Core::refreshUnits(int playerID) {
 
 // Undo all events that this player have not seen yet
 void Core::undoUnshownEvents() {
-  if (mEvents.size() == 0) {
+  if (mEvents.empty()) {
     return;
   }
   auto i = mEvents.end();
@@ -151,7 +151,7 @@ void Core::applyInvisibleEvents() {
 // TODO: Called before getNextEvent
 bool Core::unshownEventsLeft() {
   applyInvisibleEvents();
-  if (mEvents.size() == 0) {
+  if (mEvents.empty()) {
     return false;
   } else {
     auto e = mEvents.back();
@@ -162,7 +162,7 @@ bool Core::unshownEventsLeft() {
 // Always called after applyInvisibleEvents
 Event* Core::getNextEvent() {
   int id = mCurrentPlayer->lastSeenEventID; // shortcut
-  assert(mEvents.size() > 0);
+  assert(!mEvents.empty());
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
     return mEvents.front();
   }
@@ -241,7 +241,7 @@ Unit* Core::id2unit(int id) {
 }
 
 int Core::getNewUnitID() {
-  if (mUnits.size() > 0) {
+  if (!mUnits.empty()) {
     auto lastUnit = mUnits.back();
     return lastUnit->id + 1;
   } else {
@@ -314,7 +314,7 @@ void Core::undoEvent(Event& e) {
 // TODO: rename.
 Event* Core::getNextEventNode() {
   int id = mCurrentPlayer->lastSeenEventID; // shortcut
-  if (mEvents.size() == 0) {
+  if (mEvents.empty()) {
     return nullptr;
   }
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
