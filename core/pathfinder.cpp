@@ -23,24 +23,11 @@ Dir Pathfinder::getParentDir(const Unit& u, const V2i& m) {
 }
 
 int Pathfinder::getTileCost(const Unit& u, const V2i& t, const V2i& nb) {
-  int cost = 1;
-  int dx = abs(t.x() - nb.x());
-  int dy = abs(t.y() - nb.y());
-  assert(dx <= 1);
-  assert(dy <= 1);
-  if (dx != 0) {
-    cost++;
-  }
-  if (dy != 0) {
-    cost++;
-  }
-  Dir d(t, nb);
-  Dir d2 = getParentDir(u, t);
-  int dDiff = d.diff(d2);
-  int additionalCost[] = {0, 5, 20, 90};
-  // assert(dDiff >= 0 && dDiff <= 2);
-  // return cost + additionalCost[dDiff];
-  return 2 + additionalCost[dDiff];
+  int diff = Dir(t, nb).diff(getParentDir(u, t));
+  int maxAP = getUnitType(u.typeID).actionPoints - 1;
+  int additionalCost[] = {0, 3, std::min<int>(maxAP, 6), maxAP};
+  assert(diff >= 0 && diff <= 3);
+  return 1 + additionalCost[diff];
 }
 
 // TODO: rename
