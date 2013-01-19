@@ -5,7 +5,7 @@ find_package(SDL REQUIRED)
 find_package(SDL_image REQUIRED)
 include_directories(.)
 if(UNIX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra --pedantic -std=c++0x")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wold-style-cast -Wall -Wextra --pedantic -std=c++0x")
 endif()
 add_library(SOURCES
 	ui/game.cpp
