@@ -39,6 +39,7 @@ EventVisualizer* newEventVisualizer(Game& game, const Event& event) {
   case EventTypeID::END_TURN:
     return new EventEndTurnVisualizer(game, event);
   default:
+    die("default case!");
     return nullptr;
   }
 }
