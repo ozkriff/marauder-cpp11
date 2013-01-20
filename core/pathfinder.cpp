@@ -39,7 +39,6 @@ void Pathfinder::processNeibor(const Unit& u, const V2i& p1, const V2i& p2) {
     return;
   }
   int newcost = t1.cost + getTileCost(u, p1, p2);
-  // int ap = getUnitType(u.typeID).actionPoints;
   int ap = u.actionPoints;
   if (t2.cost > newcost && newcost <= ap) {
     mQueue.push(p2, Dir(p2, p1), newcost, Dir(p1, p2));
