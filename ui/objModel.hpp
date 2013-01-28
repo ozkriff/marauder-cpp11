@@ -11,7 +11,8 @@
 class ObjModel {
 private:
   // indices
-  struct ObjTriangle {
+  class ObjTriangle {
+  public:
     int vertex[3];
     int texture[3];
     int normal[3];

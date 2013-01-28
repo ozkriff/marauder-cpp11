@@ -5,9 +5,10 @@
 
 #include "core/dir.hpp"
 
-struct Unit;
+class Unit;
 
-struct Tile {
+class Tile {
+public:
   Unit* unit;
   bool obstacle;
   // TODO: move to pathfinding

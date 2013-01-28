@@ -9,7 +9,8 @@ enum class UnitTypeID {
   COUNT
 };
 
-struct UnitType {
+class UnitType {
+public:
   int rangeOfVision;
   int actionPoints;
 };

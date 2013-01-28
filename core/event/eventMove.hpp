@@ -8,7 +8,7 @@
 #include "core/dir.hpp"
 #include "core/event.hpp"
 
-struct Unit;
+class Unit;
 class Core;
 
 class EventMove : public Event {

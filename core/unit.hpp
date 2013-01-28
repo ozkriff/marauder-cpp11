@@ -6,7 +6,8 @@
 #include "core/dir.hpp"
 #include "core/v2i.hpp"
 
-struct Unit {
+class Unit {
+public:
   int typeID;
   int id;
   int playerID;

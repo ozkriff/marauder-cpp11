@@ -8,7 +8,8 @@
 #include "ui/v2f.hpp"
 #include "ui/v3f.hpp"
 
-struct VertexArray {
+class VertexArray {
+public:
   std::vector<float> vertices;
   std::vector<float> textureCoordinates;
   std::vector<GLubyte> colors;

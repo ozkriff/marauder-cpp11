@@ -5,7 +5,8 @@
 
 #define HAVE_NOT_SEEN_ANY_EVENTS (-1)
 
-struct Player {
+class Player {
+public:
   int id;
   int lastSeenEventID;
 };
