@@ -195,6 +195,12 @@ void Core::addEvent(Event* e) {
 bool Core::isLosClear(const V2i& from, const V2i& to) {
   Los los(from, to);
   for (V2i p = los.getNext(); !los.isFinished(); p = los.getNext()) {
+#if 1
+    // TODO: temp hack. fix los, remove this.
+    if (!isInboard(p)) {
+      return false;
+    }
+#endif
     if (unitAt(p) || tile(p).obstacle) {
       return false;
     }
