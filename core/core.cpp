@@ -45,6 +45,10 @@ std::list<Unit*>& Core::units() {
   return mUnits;
 }
 
+std::list<Unit*>& Core::deadUnits() {
+  return mDeadUnits;
+}
+
 Pathfinder& Core::pathfinder() {
   return mPathfinder;
 }

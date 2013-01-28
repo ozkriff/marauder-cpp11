@@ -15,6 +15,7 @@
 #include "ui/eventVisualizer.hpp"
 #include "ui/event/eventMoveVisualizer.hpp"
 #include "ui/event/eventEndTurnVisualizer.hpp"
+#include "ui/event/eventAttackVisualizer.hpp"
 
 EventVisualizer::EventVisualizer(Game& game)
   : mGame(game)
@@ -38,6 +39,8 @@ EventVisualizer* newEventVisualizer(Game& game, const Event& event) {
     return new EventMoveVisualizer(game, event);
   case EventTypeID::END_TURN:
     return new EventEndTurnVisualizer(game, event);
+  case EventTypeID::ATTACK:
+    return new EventAttackVisualizer(game, event);
   default:
     die("default case!");
     return nullptr;

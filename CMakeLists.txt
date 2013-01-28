@@ -17,6 +17,7 @@ add_library(SOURCES
 	ui/camera.cpp
 	ui/eventVisualizer.cpp
 	ui/math.cpp
+	ui/event/eventAttackVisualizer.cpp
 	ui/event/eventMoveVisualizer.cpp
 	ui/event/eventEndTurnVisualizer.cpp
 	core/misc.cpp
@@ -30,6 +31,7 @@ add_library(SOURCES
 	core/core.cpp
 	core/math.cpp
 	core/map.cpp
+	core/event/eventAttack.cpp
 	core/event/eventMove.cpp
 	core/event/eventEndTurn.cpp
 )

@@ -11,6 +11,7 @@
 #include "ui/gl.hpp"
 #include "ui/event/eventEndTurnVisualizer.hpp"
 #include "ui/eventVisualizer.hpp"
+#include "ui/event/eventAttackVisualizer.hpp"
 
 #define DATA_DIR "/home/ozkriff/projects/my/marauder/data/"
 #define DATA(x) (DATA_DIR "/" x)
@@ -362,7 +363,7 @@ void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
     int ap = core().selectedUnit()->actionPoints;
     if (u && u->playerID != core().currentPlayer().id) {
       if (core().selectedUnit() && u) {
-        core().shoot(core().selectedUnit(), u);
+        EventAttack::generate(core(), *core().selectedUnit(), *u);
       }
     } else if (t.cost <= ap && t.parent.value() != DirID::NONE) {
       generateEventMove(core(), *core().selectedUnit(), activeTilePos());

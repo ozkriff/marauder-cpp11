@@ -28,6 +28,7 @@ public:
   const Player& currentPlayer();
   Unit* selectedUnit();
   std::list<Unit*>& units();
+  std::list<Unit*>& deadUnits();
   Pathfinder& pathfinder();
   const Map& map() const;
   Map& map();
@@ -46,6 +47,7 @@ public:
   bool isInboard(const V2i& p) const;
   int getNewEventID();
   void refreshUnits(int playerID);
+  bool isLosClear(const V2i& from, const V2i& to);
 
   void addEvent(Event* e);
   Event* getNextEvent();
@@ -61,6 +63,7 @@ private:
   Player* mCurrentPlayer;
   Unit* mSelectedUnit;
   std::list<Unit*> mUnits;
+  std::list<Unit*> mDeadUnits;
   Pathfinder mPathfinder;
   Map mMap;
   std::list<Event*> mEvents;
@@ -72,7 +75,6 @@ private:
   void initPlayers();
   void initObstacles();
   void cleanFow();
-  bool isLosClear(const V2i& from, const V2i& to);
   void undoEvent(Event& e);
   Event* getNextEventNode();
   void event2log(const Event& e);
