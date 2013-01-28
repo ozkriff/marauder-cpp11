@@ -11,6 +11,7 @@ class Event;
 class EventAttackVisualizer : public EventVisualizer {
 private:
   const EventAttack& mEventAttack;
+  int mFrame;
 
 public:
   EventAttackVisualizer(Game& game, const Event& event);

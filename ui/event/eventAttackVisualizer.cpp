@@ -6,12 +6,14 @@
 #include "core/core.hpp"
 #include "core/misc.hpp"
 #include "ui/v2f.hpp"
+#include "ui/v3f.hpp"
 #include "ui/vertexArray.hpp"
 #include "ui/game.hpp"
 
 EventAttackVisualizer::EventAttackVisualizer(Game& game, const Event& event)
   : EventVisualizer(game),
-    mEventAttack(dynamic_cast<const EventAttack&>(event))
+    mEventAttack(dynamic_cast<const EventAttack&>(event)),
+    mFrame(0)
 {
   game.setVaWalkableMap(VertexArray());
 }
@@ -20,17 +22,27 @@ EventAttackVisualizer::~EventAttackVisualizer() {
 }
 
 bool EventAttackVisualizer::isFinished() {
-  return true;
+  return mFrame >= 60; // TODO: magic! magic!
 }
 
 bool EventAttackVisualizer::isUnitVisible(const Unit& u) {
-  UNUSED(u);
-  return true;
+  return u.id == mEventAttack.mVictimID;
 }
 
 void EventAttackVisualizer::draw() {
   // TODO: animate shooting
-  // TODO: animate unit moveing underground
+  Unit* u = game().core().id2unit(mEventAttack.mVictimID);
+  assert(u);
+  V2f posTmp = game().v2iToV2f(u->pos);
+  V3f pos(posTmp.x(), posTmp.y(), -0.1f * mFrame); // TODO: magic!
+  glPushMatrix();
+  glTranslatef(pos.x, pos.y, 0.0f);
+  glRotatef(u->dir.toAngle() + 120.0f, 0, 0, 1); // TODO: Remove '+ 120'! Rotate obj files!
+  game().drawUnitCircle(*u);
+  glTranslatef(0.0f, 0.0f, pos.z);
+  game().drawUnitModel(*u);
+  glPopMatrix();
+  mFrame++;
 }
 
 void EventAttackVisualizer::end() {
