@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cassert>
 #include <ctime>
+#include <stdexcept>
 #include "core/core.hpp"
 
 Core::Core()
@@ -37,8 +38,12 @@ const Player& Core::currentPlayer() {
   return *mCurrentPlayer;
 }
 
-Unit* Core::selectedUnit() {
-  return mSelectedUnit;
+Unit& Core::selectedUnit() {
+  return *mSelectedUnit;
+}
+
+bool Core::isAnyUnitSelected() {
+  return mSelectedUnit != NULL;
 }
 
 std::list<Unit*>& Core::units() {
@@ -61,8 +66,8 @@ Map& Core::map() {
   return mMap;
 }
 
-void Core::setSelectedUnit(Unit* unit) {
-  mSelectedUnit = unit;
+void Core::setSelectedUnit(Unit& unit) {
+  mSelectedUnit = &unit;
 }
 
 void Core::setCurrentEvent(Event* event) {
@@ -201,7 +206,7 @@ bool Core::isLosClear(const V2i& from, const V2i& to) {
       return false;
     }
 #endif
-    if (unitAt(p) || tile(p).obstacle) {
+    if (isUnitAt(p) || tile(p).obstacle) {
       return false;
     }
   }
@@ -232,13 +237,26 @@ void Core::calculateFow() {
   }
 }
 
-Unit* Core::unitAt(const V2i& pos) {
+Unit& Core::unitAt(const V2i& pos) {
   for (auto u : mUnits) {
     if (u->pos == pos) {
-      return u;
+      return *u;
     }
   }
-  return nullptr;
+  throw std::logic_error("No unit at pos!");
+}
+
+bool Core::isUnitAt(const V2i& pos) {
+#if 0
+  return (map().tile(pos).unit != NULL);
+#else
+  for (auto u : mUnits) {
+    if (u->pos == pos) {
+      return true;
+    }
+  }
+  return false;
+#endif
 }
 
 Unit* Core::id2unit(int id) {
@@ -298,7 +316,7 @@ void Core::shoot(Unit *shooter, Unit *target) {
 void Core::initUnits() {
   for (int i = 0; i < 8; i++) {
     V2i p(rnd(0, map().size().x() - 1), rnd(0, map().size().y() - 1));
-    if (!tile(p).obstacle && !unitAt(p)) {
+    if (!tile(p).obstacle && !isUnitAt(p)) {
       addUnit(p, rnd(0, 1));
     } else {
       i--;

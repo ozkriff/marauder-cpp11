@@ -77,15 +77,15 @@ void EventMoveVisualizer::endMovement() {
   Core& core = game().core();
   Unit* u = core.id2unit(mEventMove.unitID);
   u->pos = mEventMove.path.back();
-  if (core.selectedUnit()) {
+  if (core.isAnyUnitSelected()) {
     core.pathfinder().fillMap(*u);
     game().setVaWalkableMap(game().buildWalkableArray());
     core.calculateFow();
     game().setVaFogOfWar(game().buildFowArray());
   }
   if (u->playerID == core.currentPlayer().id) {
-    if (core.selectedUnit()) {
-      core.pathfinder().fillMap(*core.selectedUnit());
+    if (core.isAnyUnitSelected()) {
+      core.pathfinder().fillMap(core.selectedUnit());
       game().setVaWalkableMap(game().buildWalkableArray());
     }
     game().setVaFogOfWar(game().buildFowArray());

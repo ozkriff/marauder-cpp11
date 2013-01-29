@@ -35,7 +35,7 @@ int Pathfinder::getTileCost(const Unit& u, const V2i& t, const V2i& nb) {
 void Pathfinder::processNeibor(const Unit& u, const V2i& p1, const V2i& p2) {
   Tile& t1 = mCore.tile(p1);
   Tile& t2 = mCore.tile(p2);
-  if (mCore.unitAt(p2) || t2.obstacle) {
+  if (mCore.isUnitAt(p2) || t2.obstacle) {
     return;
   }
   int newcost = t1.cost + getTileCost(u, p1, p2);

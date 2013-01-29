@@ -349,24 +349,24 @@ void Game::draw() {
 }
 
 void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
-  Unit* u = core().unitAt(activeTilePos());
-  Tile& t = core().tile(activeTilePos());
   UNUSED(e);
   if (uiMode() != UIMode::NORMAL) {
     return;
   }
-  if (u && u->playerID == core().currentPlayer().id) {
-    core().setSelectedUnit(u);
-    core().pathfinder().fillMap(*core().selectedUnit());
-    mVaWalkableMap = buildWalkableArray();
-  } else if (core().selectedUnit()) {
-    int ap = core().selectedUnit()->actionPoints;
-    if (u && u->playerID != core().currentPlayer().id) {
-      if (core().selectedUnit() && u) {
-        EventAttack::generate(core(), *core().selectedUnit(), *u);
-      }
-    } else if (t.cost <= ap && t.parent.value() != DirID::NONE) {
-      generateEventMove(core(), *core().selectedUnit(), activeTilePos());
+  if (core().isUnitAt(activeTilePos())) {
+    Unit& unit = core().unitAt(activeTilePos());
+    if (unit.playerID == core().currentPlayer().id) {
+      core().setSelectedUnit(unit);
+      core().pathfinder().fillMap(core().selectedUnit());
+      setVaWalkableMap(buildWalkableArray());
+    } else if (core().isAnyUnitSelected()) {
+      EventAttack::generate(core(), core().selectedUnit(), unit);
+    }
+  } else if (core().isAnyUnitSelected()) {
+    Tile& tile = core().tile(activeTilePos());
+    int actionPoints = core().selectedUnit().actionPoints;
+    if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
+      generateEventMove(core(), core().selectedUnit(), activeTilePos());
     }
   }
 }
@@ -380,10 +380,10 @@ void Game::processSDLEvent(const SDL_MouseMotionEvent& e) {
 }
 
 void Game::centerCameraOnSelectedUnit() {
-  if (!core().selectedUnit()) {
+  if (!core().isAnyUnitSelected()) {
     return;
   }
-  V2f unitPos = v2iToV2f(core().selectedUnit()->pos);
+  V2f unitPos = v2iToV2f(core().selectedUnit().pos);
   camera().setPos(unitPos);
 }
 
@@ -394,16 +394,16 @@ void Game::switchActiveTileType() {
   mVaObstacles = buildObstaclesArray();
   core().calculateFow();
   mVaFogOfWar = buildFowArray();
-  if (core().selectedUnit()) {
-    core().pathfinder().fillMap(*core().selectedUnit());
+  if (core().isAnyUnitSelected()) {
+    core().pathfinder().fillMap(core().selectedUnit());
     mVaWalkableMap = buildWalkableArray();
   }
 }
 
 void Game::createNewUnitInActiveTile() {
   core().addUnit(activeTilePos(), core().currentPlayer().id);
-  if (core().selectedUnit()) {
-    core().pathfinder().fillMap(*core().selectedUnit());
+  if (core().isAnyUnitSelected()) {
+    core().pathfinder().fillMap(core().selectedUnit());
     mVaWalkableMap = buildWalkableArray();
   }
 }

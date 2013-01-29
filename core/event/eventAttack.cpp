@@ -17,8 +17,8 @@ void EventAttack::apply(Core& core) {
   assert(u);
   core.deadUnits().push_back(u);
   core.units().remove(u);
-  if (core.selectedUnit()) {
-    core.pathfinder().fillMap(*core.selectedUnit());
+  if (core.isAnyUnitSelected()) {
+    core.pathfinder().fillMap(core.selectedUnit());
     core.calculateFow();
   }
 }
@@ -29,8 +29,8 @@ void EventAttack::undo(Core& core) {
   assert(u);
   core.deadUnits().remove(u);
   core.units().push_back(u);
-  if (core.selectedUnit()) {
-    core.pathfinder().fillMap(*core.selectedUnit());
+  if (core.isAnyUnitSelected()) {
+    core.pathfinder().fillMap(core.selectedUnit());
     core.calculateFow();
   }
 }

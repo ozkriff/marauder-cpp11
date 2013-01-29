@@ -26,20 +26,22 @@ public:
   const std::list<Player*>& players();
   Event& currentEvent();
   const Player& currentPlayer();
-  Unit* selectedUnit();
+  Unit& selectedUnit();
+  bool isAnyUnitSelected();
   std::list<Unit*>& units();
   std::list<Unit*>& deadUnits();
   Pathfinder& pathfinder();
   const Map& map() const;
   Map& map();
 
-  void setSelectedUnit(Unit* unit);
+  void setSelectedUnit(Unit& unit);
   void setCurrentEvent(Event* event);
   void setCurrentPlayer(Player* player);
 
   Tile& tile(const V2i& p);
   void calculateFow();
-  Unit* unitAt(const V2i& pos);
+  Unit& unitAt(const V2i& pos);
+  bool isUnitAt(const V2i& pos);
   Unit* id2unit(int id);
   void addUnit(const V2i& p, int playerID);
   void shoot(Unit* shooter, Unit* target);
