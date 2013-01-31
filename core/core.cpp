@@ -284,7 +284,7 @@ void Core::addUnit(const V2i& p, int playerID) {
   u->id = getNewUnitID();
   u->pos = p;
   u->playerID = playerID;
-  u->dir = static_cast<Dir>(rnd(0, 6 - 1));
+  u->dir = Dir(rnd(0, 6 - 1));
   u->typeID = rnd(0, static_cast<int>(UnitTypeID::COUNT) - 1);
   u->actionPoints = getUnitType(u->typeID).actionPoints;
   mUnits.push_back(u);
