@@ -44,8 +44,6 @@ public:
   bool isUnitAt(const V2i& pos);
   Unit* id2unit(int id);
   void addUnit(const V2i& p, int playerID);
-  void shoot(Unit* shooter, Unit* target);
-  void killUnit(Unit* u);
   bool isInboard(const V2i& p) const;
   int getNewEventID();
   void refreshUnits(int playerID);

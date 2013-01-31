@@ -294,25 +294,6 @@ void Core::addUnit(const V2i& p, int playerID) {
 #endif
 }
 
-void Core::killUnit(Unit* u) {
-  mUnits.remove(u);
-  delete u;
-  if (mSelectedUnit) {
-    mPathfinder.fillMap(*mSelectedUnit);
-    calculateFow();
-#if 0
-    buildWalkableArray(&vaWalkableMap);
-    buildFowArray(&vaFogOfWar);
-#endif
-  }
-}
-
-void Core::shoot(Unit *shooter, Unit *target) {
-  if (isLosClear(shooter->pos, target->pos)) {
-    killUnit(target);
-  }
-}
-
 void Core::initUnits() {
   for (int i = 0; i < 8; i++) {
     V2i p(rnd(0, map().size().x() - 1), rnd(0, map().size().y() - 1));
