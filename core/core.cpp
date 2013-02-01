@@ -92,14 +92,6 @@ void Core::initLocalPlayers(std::vector<int> unitIDs) {
   mCurrentPlayer = mPlayers.back();
 }
 
-bool Core::isInboard(const V2i& p) const {
-  return map().isInboard(p);
-}
-
-Tile& Core::tile(const V2i& p) {
-  return map().tile(p);
-}
-
 int Core::getNewEventID() {
   if (!mEvents.empty()) {
     return mEvents.back()->id() + 1;
@@ -202,11 +194,11 @@ bool Core::isLosClear(const V2i& from, const V2i& to) {
   for (V2i p = los.getNext(); !los.isFinished(); p = los.getNext()) {
 #if 1
     // TODO: temp hack. fix los, remove this.
-    if (!isInboard(p)) {
+    if (!map().isInboard(p)) {
       return false;
     }
 #endif
-    if (isUnitAt(p) || tile(p).obstacle) {
+    if (isUnitAt(p) || map().tile(p).obstacle) {
       return false;
     }
   }
@@ -216,7 +208,7 @@ bool Core::isLosClear(const V2i& from, const V2i& to) {
 void Core::cleanFow() {
   V2i p;
   FOR_EACH_TILE(map(), p) {
-    tile(p).fow = 0;
+    map().tile(p).fow = 0;
   }
 }
 
@@ -231,7 +223,7 @@ void Core::calculateFow() {
       bool isDistanceOk = (p.distance(u->pos) < maxDist);
       bool isLosOk = isLosClear(p, u->pos);
       if (isPlayerOk && isDistanceOk && isLosOk) {
-        tile(p).fow++;
+        map().tile(p).fow++;
       }
     }
   }
@@ -279,7 +271,7 @@ int Core::getNewUnitID() {
 
 void Core::addUnit(const V2i& p, int playerID) {
   auto u = new Unit;
-  assert(isInboard(p));
+  assert(map().isInboard(p));
   assert(playerID >= 0 && playerID < 16);
   u->id = getNewUnitID();
   u->pos = p;
@@ -297,7 +289,7 @@ void Core::addUnit(const V2i& p, int playerID) {
 void Core::initUnits() {
   for (int i = 0; i < 8; i++) {
     V2i p(rnd(0, map().size().x() - 1), rnd(0, map().size().y() - 1));
-    if (!tile(p).obstacle && !isUnitAt(p)) {
+    if (!map().tile(p).obstacle && !isUnitAt(p)) {
       addUnit(p, rnd(0, 1));
     } else {
       i--;
@@ -308,7 +300,7 @@ void Core::initUnits() {
 void Core::initObstacles() {
   V2i p;
   FOR_EACH_TILE(map(), p) {
-    tile(p).obstacle = ((rand() % 100) > 85);
+    map().tile(p).obstacle = ((rand() % 100) > 85);
   }
 }
 

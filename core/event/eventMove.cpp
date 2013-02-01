@@ -19,12 +19,12 @@ void generateEventMove(
 {
   auto e = new EventMove(core.getNewEventID());
   int ap = getUnitType(unit.typeID).actionPoints;
-  if (core.tile(destination).cost > ap) {
+  if (core.map().tile(destination).cost > ap) {
     return;
   }
   e->initialDirection = unit.dir;
   e->path = core.pathfinder().getPath(destination);
-  e->cost = core.tile(destination).cost;
+  e->cost = core.map().tile(destination).cost;
   e->unitID = unit.id;
   core.addEvent(e);
 }

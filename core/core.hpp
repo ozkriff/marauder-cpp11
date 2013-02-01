@@ -38,13 +38,11 @@ public:
   void setCurrentEvent(Event* event);
   void setCurrentPlayer(Player* player);
 
-  Tile& tile(const V2i& p);
   void calculateFow();
   Unit& unitAt(const V2i& pos);
   bool isUnitAt(const V2i& pos);
   Unit* id2unit(int id);
   void addUnit(const V2i& p, int playerID);
-  bool isInboard(const V2i& p) const;
   int getNewEventID();
   void refreshUnits(int playerID);
   bool isLosClear(const V2i& from, const V2i& to);

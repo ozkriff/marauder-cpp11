@@ -22,7 +22,7 @@ bool PathQueue::isEmpty() const {
 }
 
 void PathQueue::push(const V2i& m, Dir parent, int newcost, Dir dir) {
-  Tile& t = mCore.tile(m);
+  Tile& t = mCore.map().tile(m);
   t.cost = newcost;
   t.parent = parent;
   t.dir = dir;

@@ -133,7 +133,7 @@ void Game::run() {
 }
 
 V2f Game::v2iToV2f(const V2i& i) const {
-  assert(core().isInboard(i));
+  assert(core().map().isInboard(i));
   V2f v(i.x() * mHexIn * 2, i.y() * mHexEx * 1.5);
   if (i.y() % 2 == 0) {
     v.setX(v.x() + mHexIn);
@@ -157,7 +157,7 @@ VertexArray Game::buildMapArray() {
   VertexArray v;
   V2i p;
   FOR_EACH_TILE(core().map(), p) {
-    if (core().tile(p).obstacle) {
+    if (core().map().tile(p).obstacle) {
       continue;
     }
     V2f pos = v2iToV2f(p);
@@ -177,7 +177,7 @@ VertexArray Game::buildObstaclesArray() {
   VertexArray v;
   V2i p;
   FOR_EACH_TILE(core().map(), p) {
-    if (!core().tile(p).obstacle) {
+    if (!core().map().tile(p).obstacle) {
       continue;
     }
     V2f pos = v2iToV2f(p);
@@ -197,7 +197,7 @@ VertexArray Game::buildFowArray() {
   VertexArray v;
   V2i p;
   FOR_EACH_TILE(core().map(), p) {
-    if (core().tile(p).fow > 0) {
+    if (core().map().tile(p).fow > 0) {
       continue;
     }
     V2f pos = v2iToV2f(p);
@@ -220,10 +220,10 @@ VertexArray Game::buildWalkableArray() {
   VertexArray v;
   V2i p;
   FOR_EACH_TILE(core().map(), p) {
-    Tile& t = core().tile(p);
+    Tile& t = core().map().tile(p);
     if (t.parent.value() != DirID::NONE && t.cost < 50) {
       V2i to = Dir::neib(p, t.parent);
-      if (core().isInboard(to)) {
+      if (core().map().isInboard(to)) {
         V2f fromF = v2iToV2f(p);
         V2f toF = v2iToV2f(to);
         appendV3f(&v.vertices, V3f(fromF.x(), fromF.y(), 0.1f));
@@ -322,7 +322,7 @@ void Game::drawUnits() {
         continue;
       }
     }
-    if (core().tile(u->pos).fow > 0) {
+    if (core().map().tile(u->pos).fow > 0) {
       drawUnit(*u);
     }
   }
@@ -363,7 +363,7 @@ void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
       EventAttack::generate(core(), core().selectedUnit(), unit);
     }
   } else if (core().isAnyUnitSelected()) {
-    Tile& tile = core().tile(activeTilePos());
+    Tile& tile = core().map().tile(activeTilePos());
     int actionPoints = core().selectedUnit().actionPoints;
     if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
       generateEventMove(core(), core().selectedUnit(), activeTilePos());
@@ -388,7 +388,7 @@ void Game::centerCameraOnSelectedUnit() {
 }
 
 void Game::switchActiveTileType() {
-  Tile& t = core().tile(activeTilePos());
+  Tile& t = core().map().tile(activeTilePos());
   t.obstacle = !t.obstacle;
   mVaMap = buildMapArray();
   mVaObstacles = buildObstaclesArray();

@@ -14,7 +14,7 @@ Pathfinder::Pathfinder(Core& core)
 
 // If this is first(start) tile - no parent tile
 Dir Pathfinder::getParentDir(const Unit& u, const V2i& m) {
-  Tile& tile = mCore.tile(m);
+  Tile& tile = mCore.map().tile(m);
   if (tile.cost == 0) {
     return u.dir;
   } else {
@@ -33,8 +33,8 @@ int Pathfinder::getTileCost(const Unit& u, const V2i& t, const V2i& nb) {
 // TODO: rename
 // p1 - origPos, p2 - neib pos
 void Pathfinder::processNeibor(const Unit& u, const V2i& p1, const V2i& p2) {
-  Tile& t1 = mCore.tile(p1);
-  Tile& t2 = mCore.tile(p2);
+  Tile& t1 = mCore.map().tile(p1);
+  Tile& t2 = mCore.map().tile(p2);
   if (mCore.isUnitAt(p2) || t2.obstacle) {
     return;
   }
@@ -48,17 +48,17 @@ void Pathfinder::processNeibor(const Unit& u, const V2i& p1, const V2i& p2) {
 void Pathfinder::cleanMap() {
   V2i p;
   FOR_EACH_TILE(mCore.map(), p) {
-    Tile& t = mCore.tile(p);
+    Tile& t = mCore.map().tile(p);
     t.cost = 30000;
     t.parent = DirID::NONE;
   }
 }
 
 void Pathfinder::tryToPushNeibors(const Unit& u, const V2i& m) {
-  assert(mCore.isInboard(m));
+  assert(mCore.map().isInboard(m));
   for (int i = 0; i < 6; i++) {
     V2i neibM = Dir::neib(m, static_cast<DirID>(i));
-    if (mCore.isInboard(neibM)) {
+    if (mCore.map().isInboard(neibM)) {
       processNeibor(u, m, neibM);
     }
   }
@@ -78,11 +78,11 @@ void Pathfinder::fillMap(const Unit& u) {
 std::vector<V2i> Pathfinder::getPath(const V2i& pos) {
   V2i p = pos;
   std::vector<V2i> path;
-  assert(mCore.isInboard(p));
-  while (mCore.tile(p).cost != 0) {
+  assert(mCore.map().isInboard(p));
+  while (mCore.map().tile(p).cost != 0) {
     path.push_back(p);
-    p = Dir::neib(p, mCore.tile(p).parent);
-    assert(mCore.isInboard(p));
+    p = Dir::neib(p, mCore.map().tile(p).parent);
+    assert(mCore.map().isInboard(p));
   }
   // Add start position
   path.push_back(p);
