@@ -11,8 +11,6 @@
 #include "core/los.hpp"
 #include "core/unitType.hpp"
 #include "core/event.hpp"
-#include "core/event/eventMove.hpp"
-#include "core/event/eventEndTurn.hpp"
 #include "core/pathfinder.hpp"
 #include "core/map.hpp"
 #include "core/unit.hpp"

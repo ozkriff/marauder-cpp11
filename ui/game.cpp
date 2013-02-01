@@ -12,6 +12,7 @@
 #include "ui/event/eventEndTurnVisualizer.hpp"
 #include "ui/eventVisualizer.hpp"
 #include "ui/event/eventAttackVisualizer.hpp"
+#include "ui/event/eventMoveVisualizer.hpp"
 
 #define DATA_DIR "/home/ozkriff/projects/my/marauder/data/"
 #define DATA(x) (DATA_DIR "/" x)
