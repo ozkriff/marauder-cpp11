@@ -14,10 +14,9 @@ EventAttack::~EventAttack() {
 }
 
 void EventAttack::apply(Core& core) {
-  Unit* u = core.id2unit(mVictimID);
-  assert(u);
-  core.deadUnits().push_back(u);
-  core.units().remove(u);
+  Unit& u = core.id2unit(mVictimID);
+  core.deadUnits().push_back(&u);
+  core.units().remove(&u);
   if (core.isAnyUnitSelected()) {
     core.pathfinder().fillMap(core.selectedUnit());
     core.calculateFow();

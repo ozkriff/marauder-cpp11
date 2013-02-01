@@ -41,7 +41,7 @@ public:
   void calculateFow();
   Unit& unitAt(const V2i& pos);
   bool isUnitAt(const V2i& pos);
-  Unit* id2unit(int id);
+  Unit& id2unit(int id);
   void addUnit(const V2i& p, int playerID);
   int getNewEventID();
   void refreshUnits(int playerID);

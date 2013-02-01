@@ -251,13 +251,13 @@ bool Core::isUnitAt(const V2i& pos) {
 #endif
 }
 
-Unit* Core::id2unit(int id) {
+Unit& Core::id2unit(int id) {
   for (auto u : mUnits) {
     if (u->id == id) {
-      return u;
+      return *u;
     }
   }
-  return nullptr;
+  throw std::logic_error("No unit with this ID!");
 }
 
 int Core::getNewUnitID() {

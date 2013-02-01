@@ -31,16 +31,15 @@ bool EventAttackVisualizer::isUnitVisible(const Unit& u) {
 
 void EventAttackVisualizer::draw() {
   // TODO: animate shooting
-  Unit* u = game().core().id2unit(mEventAttack.mVictimID);
-  assert(u);
-  V2f posTmp = game().v2iToV2f(u->pos);
+  Unit& u = game().core().id2unit(mEventAttack.mVictimID);
+  V2f posTmp = game().v2iToV2f(u.pos);
   V3f pos(posTmp.x(), posTmp.y(), -0.1f * mFrame); // TODO: magic!
   glPushMatrix();
   glTranslatef(pos.x, pos.y, 0.0f);
-  glRotatef(u->dir.toAngle() + 120.0f, 0, 0, 1); // TODO: Remove '+ 120'! Rotate obj files!
-  game().drawUnitCircle(*u);
+  glRotatef(u.dir.toAngle() + 120.0f, 0, 0, 1); // TODO: Remove '+ 120'! Rotate obj files!
+  game().drawUnitCircle(u);
   glTranslatef(0.0f, 0.0f, pos.z);
-  game().drawUnitModel(*u);
+  game().drawUnitModel(u);
   glPopMatrix();
   mFrame++;
 }

@@ -37,7 +37,7 @@ bool EventMoveVisualizer::isUnitVisible(const Unit& u) {
 }
 
 void EventMoveVisualizer::draw() {
-  Unit* u = game().core().id2unit(mEventMove.unitID);
+  Unit& u = game().core().id2unit(mEventMove.unitID);
   V2i fromI, toI;
   getCurrentMovingNodes(&fromI, &toI);
   V2f fromF = game().v2iToV2f(fromI);
@@ -51,8 +51,8 @@ void EventMoveVisualizer::draw() {
   glRotatef(
       Dir(fromI, toI).toInt() * 60.0f + 120.0f,
       0, 0, 1);
-  game().drawUnitModel(*u);
-  game().drawUnitCircle(*u);
+  game().drawUnitModel(u);
+  game().drawUnitCircle(u);
   glPopMatrix();
   mCurrentMoveIndex++;
 }
@@ -75,15 +75,15 @@ void EventMoveVisualizer::getCurrentMovingNodes(V2i* from, V2i* to) {
 
 void EventMoveVisualizer::endMovement() {
   Core& core = game().core();
-  Unit* u = core.id2unit(mEventMove.unitID);
-  u->pos = mEventMove.path.back();
+  Unit& u = core.id2unit(mEventMove.unitID);
+  u.pos = mEventMove.path.back();
   if (core.isAnyUnitSelected()) {
-    core.pathfinder().fillMap(*u);
+    core.pathfinder().fillMap(u);
     game().setVaWalkableMap(game().buildWalkableArray());
     core.calculateFow();
     game().setVaFogOfWar(game().buildFowArray());
   }
-  if (u->playerID == core.currentPlayer().id) {
+  if (u.playerID == core.currentPlayer().id) {
     if (core.isAnyUnitSelected()) {
       core.pathfinder().fillMap(core.selectedUnit());
       game().setVaWalkableMap(game().buildWalkableArray());

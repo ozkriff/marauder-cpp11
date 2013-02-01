@@ -30,22 +30,20 @@ void generateEventMove(
 }
 
 void EventMove::apply(Core& core) {
-  Unit* u = core.id2unit(unitID);
-  assert(u);
-  u->pos = path[path.size() - 1];
-  u->dir = Dir(path[path.size() - 2], path[path.size() - 1]);
-  u->actionPoints -= cost;
-  if (u->playerID == core.currentPlayer().id) {
+  Unit& u = core.id2unit(unitID);
+  u.pos = path[path.size() - 1];
+  u.dir = Dir(path[path.size() - 2], path[path.size() - 1]);
+  u.actionPoints -= cost;
+  if (u.playerID == core.currentPlayer().id) {
     core.calculateFow();
   }
 }
 
 void EventMove::undo(Core& core) {
-  Unit* u = core.id2unit(unitID);
-  assert(u);
-  u->pos = path[0];
-  u->dir = initialDirection;
-  u->actionPoints += cost;
+  Unit& u = core.id2unit(unitID);
+  u.pos = path[0];
+  u.dir = initialDirection;
+  u.actionPoints += cost;
 }
 
 bool EventMove::isVisible(const Core &core) const {
