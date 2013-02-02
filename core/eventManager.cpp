@@ -74,9 +74,6 @@ void EventManager::applyInvisibleEvents() {
   }
 }
 
-bool EventManager::isEventVisible(const Event& e) const {
-  return e.isVisible(mCore);
-}
 
 void EventManager::applyEvent(Event& e) {
   mCore.currentPlayer().lastSeenEventID = e.id();
@@ -109,6 +106,10 @@ int EventManager::getNewEventID() {
 }
 
 // private
+
+bool EventManager::isEventVisible(const Event& e) const {
+  return e.isVisible(mCore);
+}
 
 void EventManager::undoEvent(Event& e) {
   e.undo(mCore);
