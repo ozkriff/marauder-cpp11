@@ -1,16 +1,12 @@
 // See LICENSE file for copyright and license details.
 
-#include <cstdlib>
+#include "ui/game.hpp"
 #include <cmath>
-#include <cstring>
 #include <cassert>
-#include <ctime>
 #include "ui/math.hpp"
 #include "ui/vertexArray.hpp"
-#include "ui/game.hpp"
 #include "ui/gl.hpp"
 #include "ui/event/eventEndTurnVisualizer.hpp"
-#include "ui/eventVisualizer.hpp"
 #include "ui/event/eventAttackVisualizer.hpp"
 #include "ui/event/eventMoveVisualizer.hpp"
 
