@@ -340,8 +340,8 @@ void Game::draw() {
     assert(mEventVisualizer);
     mEventVisualizer->draw();
     if (mEventVisualizer->isFinished()) {
-      core().applyEvent(core().currentEvent());
-      core().setCurrentEvent(nullptr);
+      core().eventManager().applyEvent(core().eventManager().currentEvent()); // TODO: applyCurrentEvent();
+      core().eventManager().setCurrentEvent(nullptr);
       setUiMode(UIMode::NORMAL);
       mEventVisualizer->end();
     }
@@ -460,17 +460,17 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
 }
 
 void Game::screenScenarioMainEvents() {
-  core().setCurrentEvent(core().getNextEvent());
+  core().eventManager().setCurrentEvent(core().eventManager().getNextEvent());
   if (mEventVisualizer) {
     delete mEventVisualizer;
   }
-  mEventVisualizer = newEventVisualizer(*this, core().currentEvent());
+  mEventVisualizer = newEventVisualizer(*this, core().eventManager().currentEvent());
   assert(mEventVisualizer);
   setUiMode(UIMode::SHOW_EVENT);
 }
 
 void Game::logic() {
-  while (uiMode() == UIMode::NORMAL && core().unshownEventsLeft()) {
+  while (uiMode() == UIMode::NORMAL && core().eventManager().unshownEventsLeft()) {
     screenScenarioMainEvents();
   }
 }

@@ -28,7 +28,7 @@ void EventEndTurn::apply(Core& core) {
     if (p->id == newID()) {
       if (core.currentPlayer().id == oldID()) {
         core.setCurrentPlayer(p);
-        core.undoUnshownEvents();
+        core.eventManager().undoUnshownEvents();
       } else {
         core.refreshUnits(core.currentPlayer().id);
       }
@@ -52,6 +52,7 @@ void generateEventEndTurn(Core& core) {
     newPlayerID = 0;
   }
   int oldPlayerID = core.currentPlayer().id;
-  auto e = new EventEndTurn(core.getNewEventID(), oldPlayerID, newPlayerID);
-  core.addEvent(e);
+  auto e = new EventEndTurn(
+      core.eventManager().getNewEventID(), oldPlayerID, newPlayerID);
+  core.eventManager().addEvent(e);
 }

@@ -17,7 +17,7 @@ EventMove::~EventMove() {
 void generateEventMove(
     Core& core, const Unit& unit, const V2i& destination)
 {
-  auto e = new EventMove(core.getNewEventID());
+  auto e = new EventMove(core.eventManager().getNewEventID());
   int ap = getUnitType(unit.typeID).actionPoints;
   if (core.map().tile(destination).cost > ap) {
     return;
@@ -26,7 +26,7 @@ void generateEventMove(
   e->path = core.pathfinder().getPath(destination);
   e->cost = core.map().tile(destination).cost;
   e->unitID = unit.id;
-  core.addEvent(e);
+  core.eventManager().addEvent(e);
 }
 
 void EventMove::apply(Core& core) {

@@ -7,11 +7,11 @@
 #include "core/core.hpp"
 
 Core::Core()
-  : mCurrentEvent(nullptr),
-    mCurrentPlayer(nullptr),
+  : mCurrentPlayer(nullptr),
     mSelectedUnit(nullptr),
     mPathfinder(*this),
-    mMap(V2i(20, 18))
+    mMap(V2i(20, 18)),
+    mEventManager(*this)
 {
   srand(std::time(nullptr));
   initUnitTypes();
@@ -30,11 +30,11 @@ const std::list<Player*>& Core::players() {
   return mPlayers;
 }
 
-Event& Core::currentEvent() {
-  return *mCurrentEvent;
+const Player& Core::currentPlayer() const {
+  return *mCurrentPlayer;
 }
 
-const Player& Core::currentPlayer() {
+Player& Core::currentPlayer() {
   return *mCurrentPlayer;
 }
 
@@ -66,12 +66,12 @@ Map& Core::map() {
   return mMap;
 }
 
-void Core::setSelectedUnit(Unit& unit) {
-  mSelectedUnit = &unit;
+EventManager& Core::eventManager() {
+  return mEventManager;
 }
 
-void Core::setCurrentEvent(Event* event) {
-  mCurrentEvent = event;
+void Core::setSelectedUnit(Unit& unit) {
+  mSelectedUnit = &unit;
 }
 
 void Core::setCurrentPlayer(Player* player) {
@@ -92,101 +92,12 @@ void Core::initLocalPlayers(std::vector<int> unitIDs) {
   mCurrentPlayer = mPlayers.back();
 }
 
-int Core::getNewEventID() {
-  if (!mEvents.empty()) {
-    return mEvents.back()->id() + 1;
-  } else {
-    return 0;
-  }
-}
-
 void Core::refreshUnits(int playerID) {
   for (auto u : units()) {
     if (u->playerID == playerID) {
       u->actionPoints = getUnitType(u->typeID).actionPoints;
     }
   }
-}
-
-// Undo all events that this player have not seen yet
-void Core::undoUnshownEvents() {
-  if (mEvents.empty()) {
-    return;
-  }
-  auto i = mEvents.end();
-  --i;
-  while (i != mEvents.begin()) {
-    auto event = *i;
-    if (event->id() == mCurrentPlayer->lastSeenEventID) {
-      break;
-    }
-    undoEvent(*event);
-    --i;
-  }
-}
-
-void Core::applyEvent(Event& e) {
-  mCurrentPlayer->lastSeenEventID = e.id();
-  e.apply(*this);
-}
-
-bool Core::isEventVisible(const Event& e) const {
-  return e.isVisible(*this);
-}
-
-// TODO simplify
-void Core::applyInvisibleEvents() {
-  Event* e = getNextEventNode();
-  while (e) {
-    assert(e);
-    if (!isEventVisible(*e)) {
-      applyEvent(*e);
-    } else {
-      break;
-    }
-    e = getNext(mEvents, e);
-    assert(e);
-  }
-}
-
-// TODO: Called before getNextEvent
-bool Core::unshownEventsLeft() {
-  applyInvisibleEvents();
-  if (mEvents.empty()) {
-    return false;
-  } else {
-    auto e = mEvents.back();
-    return e->id() != mCurrentPlayer->lastSeenEventID;
-  }
-}
-
-// Always called after applyInvisibleEvents
-Event* Core::getNextEvent() {
-  int id = mCurrentPlayer->lastSeenEventID; // shortcut
-  assert(!mEvents.empty());
-  if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
-    return mEvents.front();
-  }
-  for (auto e : mEvents) {
-    if (e->id() == id) {
-      return getNext(mEvents, e);
-    }
-  }
-  return nullptr;
-}
-
-void Core::addEvent(Event* e) {
-  assert(e);
-  mEvents.push_back(e);
-  // event2log(*e);
-#if 0
-  // TODO
-  if (!isLocal) {
-    sendEvent(e);
-  }
-#else
-  // UNUSED(sendEvent);
-#endif
 }
 
 bool Core::isLosClear(const V2i& from, const V2i& to) {
@@ -308,34 +219,3 @@ void Core::initPlayers() {
   initLocalPlayers({0, 1});
 }
 
-void Core::undoEvent(Event& e) {
-  e.undo(*this);
-}
-
-// TODO: rename.
-Event* Core::getNextEventNode() {
-  int id = mCurrentPlayer->lastSeenEventID; // shortcut
-  if (mEvents.empty()) {
-    return nullptr;
-  }
-  if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
-    return mEvents.front();
-  }
-  // find last seen event
-  for (auto e : mEvents) {
-    if (e->id() == id) {
-      return getNext(mEvents, e);
-    }
-  }
-  return nullptr; // if there is no event with that id
-}
-
-void Core::event2log(const Event& e) {
-  UNUSED(e);
-  // TODO
-}
-
-void Core::sendEvent(const Event& e) {
-  UNUSED(e);
-  // TODO
-}
