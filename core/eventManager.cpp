@@ -59,22 +59,6 @@ bool EventManager::unshownEventsLeft() {
   }
 }
 
-// TODO simplify
-void EventManager::applyInvisibleEvents() {
-  Event* e = getNextEventNode();
-  while (e) {
-    assert(e);
-    if (!isEventVisible(*e)) {
-      applyEvent(*e);
-    } else {
-      break;
-    }
-    e = getNext(mEvents, e);
-    assert(e);
-  }
-}
-
-
 void EventManager::applyEvent(Event& e) {
   mCore.currentPlayer().lastSeenEventID = e.id();
   e.apply(mCore);
@@ -106,6 +90,21 @@ int EventManager::getNewEventID() {
 }
 
 // private
+
+// TODO simplify
+void EventManager::applyInvisibleEvents() {
+  Event* e = getNextEventNode();
+  while (e) {
+    assert(e);
+    if (!isEventVisible(*e)) {
+      applyEvent(*e);
+    } else {
+      break;
+    }
+    e = getNext(mEvents, e);
+    assert(e);
+  }
+}
 
 bool EventManager::isEventVisible(const Event& e) const {
   return e.isVisible(mCore);
