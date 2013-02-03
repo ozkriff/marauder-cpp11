@@ -219,4 +219,3 @@ void Core::initObstacles() {
 void Core::initPlayers() {
   initLocalPlayers({0, 1});
 }
-
