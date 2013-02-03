@@ -94,8 +94,8 @@ void Core::initLocalPlayers(std::vector<int> unitIDs) {
 
 void Core::refreshUnits(int playerID) {
   for (auto u : units()) {
-    if (u->playerID == playerID) {
-      u->actionPoints = getUnitType(u->typeID).actionPoints;
+    if (u->playerID() == playerID) {
+      u->setActionPoints(getUnitType(u->typeID()).actionPoints);
     }
   }
 }
@@ -129,10 +129,10 @@ void Core::calculateFow() {
   V2i p;
   FOR_EACH_TILE(map(), p) {
     for (auto u : mUnits) {
-      int maxDist = getUnitType(u->typeID).rangeOfVision;
-      bool isPlayerOk = (u->playerID == mCurrentPlayer->id);
-      bool isDistanceOk = (p.distance(u->pos) < maxDist);
-      bool isLosOk = isLosClear(p, u->pos);
+      int maxDist = getUnitType(u->typeID()).rangeOfVision;
+      bool isPlayerOk = (u->playerID() == mCurrentPlayer->id);
+      bool isDistanceOk = (p.distance(u->position()) < maxDist);
+      bool isLosOk = isLosClear(p, u->position());
       if (isPlayerOk && isDistanceOk && isLosOk) {
         map().tile(p).fow++;
       }
@@ -142,7 +142,7 @@ void Core::calculateFow() {
 
 Unit& Core::unitAt(const V2i& pos) {
   for (auto u : mUnits) {
-    if (u->pos == pos) {
+    if (u->position() == pos) {
       return *u;
     }
   }
@@ -154,7 +154,7 @@ bool Core::isUnitAt(const V2i& pos) {
   return (map().tile(pos).unit != NULL);
 #else
   for (auto u : mUnits) {
-    if (u->pos == pos) {
+    if (u->position() == pos) {
       return true;
     }
   }
@@ -164,7 +164,7 @@ bool Core::isUnitAt(const V2i& pos) {
 
 Unit& Core::id2unit(int id) {
   for (auto u : mUnits) {
-    if (u->id == id) {
+    if (u->id() == id) {
       return *u;
     }
   }
@@ -174,27 +174,22 @@ Unit& Core::id2unit(int id) {
 int Core::getNewUnitID() {
   if (!mUnits.empty()) {
     auto lastUnit = mUnits.back();
-    return lastUnit->id + 1;
+    return lastUnit->id() + 1;
   } else {
     return 0;
   }
 }
 
 void Core::addUnit(const V2i& p, int playerID) {
-  auto u = new Unit;
   assert(map().isInboard(p));
   assert(playerID >= 0 && playerID < 16);
-  u->id = getNewUnitID();
-  u->pos = p;
-  u->playerID = playerID;
-  u->dir = Dir(rnd(0, 6 - 1));
-  u->typeID = rnd(0, static_cast<int>(UnitTypeID::COUNT) - 1);
-  u->actionPoints = getUnitType(u->typeID).actionPoints;
+  int typeID = rnd(0, static_cast<int>(UnitTypeID::COUNT) - 1);
+  auto u = new Unit(getNewUnitID(), playerID, typeID);
+  u->setPosition(p);
+  u->setDirection(Dir(rnd(0, 6 - 1)));
+  u->setActionPoints(getUnitType(u->typeID()).actionPoints);
   mUnits.push_back(u);
   calculateFow();
-#if 0
-  buildFowArray(&vaFogOfWar);
-#endif
 }
 
 void Core::initUnits() {

@@ -33,7 +33,7 @@ bool EventMoveVisualizer::isFinished() {
 }
 
 bool EventMoveVisualizer::isUnitVisible(const Unit& u) {
-  return u.id == mEventMove.unitID;
+  return u.id() == mEventMove.unitID;
 }
 
 void EventMoveVisualizer::draw() {
@@ -76,14 +76,14 @@ void EventMoveVisualizer::getCurrentMovingNodes(V2i* from, V2i* to) {
 void EventMoveVisualizer::endMovement() {
   Core& core = game().core();
   Unit& u = core.id2unit(mEventMove.unitID);
-  u.pos = mEventMove.path.back();
+  u.setPosition(mEventMove.path.back());
   if (core.isAnyUnitSelected()) {
     core.pathfinder().fillMap(u);
     game().setVaWalkableMap(game().buildWalkableArray());
     core.calculateFow();
     game().setVaFogOfWar(game().buildFowArray());
   }
-  if (u.playerID == core.currentPlayer().id) {
+  if (u.playerID() == core.currentPlayer().id) {
     if (core.isAnyUnitSelected()) {
       core.pathfinder().fillMap(core.selectedUnit());
       game().setVaWalkableMap(game().buildWalkableArray());

@@ -18,32 +18,32 @@ void generateEventMove(
     Core& core, const Unit& unit, const V2i& destination)
 {
   auto e = new EventMove(core.eventManager().getNewEventID());
-  int ap = getUnitType(unit.typeID).actionPoints;
+  int ap = getUnitType(unit.typeID()).actionPoints;
   if (core.map().tile(destination).cost > ap) {
     return;
   }
-  e->initialDirection = unit.dir;
+  e->initialDirection = unit.direction();
   e->path = core.pathfinder().getPath(destination);
   e->cost = core.map().tile(destination).cost;
-  e->unitID = unit.id;
+  e->unitID = unit.id();
   core.eventManager().addEvent(e);
 }
 
 void EventMove::apply(Core& core) {
   Unit& u = core.id2unit(unitID);
-  u.pos = path[path.size() - 1];
-  u.dir = Dir(path[path.size() - 2], path[path.size() - 1]);
-  u.actionPoints -= cost;
-  if (u.playerID == core.currentPlayer().id) {
+  u.setPosition(path[path.size() - 1]);
+  u.setDirection(Dir(path[path.size() - 2], path[path.size() - 1]));
+  u.setActionPoints(u.actionPoints() - cost);
+  if (u.playerID() == core.currentPlayer().id) {
     core.calculateFow();
   }
 }
 
 void EventMove::undo(Core& core) {
   Unit& u = core.id2unit(unitID);
-  u.pos = path[0];
-  u.dir = initialDirection;
-  u.actionPoints += cost;
+  u.setPosition(path[0]);
+  u.setDirection(initialDirection);
+  u.setActionPoints(u.actionPoints() + cost);
 }
 
 bool EventMove::isVisible(const Core &core) const {

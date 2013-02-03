@@ -268,11 +268,11 @@ void Game::drawUnitModel(const Unit& u) {
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glBindTexture(GL_TEXTURE_2D, mUnitTextureIDs[u.typeID]);
+  glBindTexture(GL_TEXTURE_2D, mUnitTextureIDs[u.typeID()]);
   glColor3f(1, 1, 1);
-  glTexCoordPointer(2, GL_FLOAT, 0, mVaUnits[u.typeID].textureCoordinates.data());
-  glVertexPointer(3, GL_FLOAT, 0, mVaUnits[u.typeID].vertices.data());
-  glDrawArrays(GL_TRIANGLES, 0, mVaUnits[u.typeID].vertices.size() / 3);
+  glTexCoordPointer(2, GL_FLOAT, 0, mVaUnits[u.typeID()].textureCoordinates.data());
+  glVertexPointer(3, GL_FLOAT, 0, mVaUnits[u.typeID()].vertices.data());
+  glDrawArrays(GL_TRIANGLES, 0, mVaUnits[u.typeID()].vertices.size() / 3);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_TEXTURE_2D);
@@ -280,9 +280,9 @@ void Game::drawUnitModel(const Unit& u) {
 
 void Game::drawUnitCircle(const Unit& u) {
   std::vector<float> v;
-  if (u.playerID == 0) {
+  if (u.playerID() == 0) {
     glColor3f(1, 0, 0);
-  } else if (u.playerID == 1) {
+  } else if (u.playerID() == 1) {
     glColor3f(0, 0, 1);
   } else {
     die("drawUnitCircle(): You need more colors!");
@@ -301,11 +301,11 @@ void Game::drawUnitCircle(const Unit& u) {
 }
 
 void Game::drawUnit(const Unit& u) {
-  V2f f = v2iToV2f(u.pos);
+  V2f f = v2iToV2f(u.position());
   glColor3f(1, 0, 0);
   glPushMatrix();
   glTranslatef(f.x(), f.y(), 0);
-  glRotatef(u.dir.toInt() * 60.0f + 120.0f, 0, 0, 1);
+  glRotatef(u.direction().toInt() * 60.0f + 120.0f, 0, 0, 1);
   drawUnitModel(u);
   drawUnitCircle(u);
   glPopMatrix();
@@ -319,7 +319,7 @@ void Game::drawUnits() {
         continue;
       }
     }
-    if (core().map().tile(u->pos).fow > 0) {
+    if (core().map().tile(u->position()).fow > 0) {
       drawUnit(*u);
     }
   }
@@ -352,7 +352,7 @@ void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
   }
   if (core().isUnitAt(activeTilePos())) {
     Unit& unit = core().unitAt(activeTilePos());
-    if (unit.playerID == core().currentPlayer().id) {
+    if (unit.playerID() == core().currentPlayer().id) {
       core().setSelectedUnit(unit);
       core().pathfinder().fillMap(core().selectedUnit());
       setVaWalkableMap(buildWalkableArray());
@@ -361,7 +361,7 @@ void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
     }
   } else if (core().isAnyUnitSelected()) {
     Tile& tile = core().map().tile(activeTilePos());
-    int actionPoints = core().selectedUnit().actionPoints;
+    int actionPoints = core().selectedUnit().actionPoints();
     if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
       generateEventMove(core(), core().selectedUnit(), activeTilePos());
     }
@@ -380,7 +380,7 @@ void Game::centerCameraOnSelectedUnit() {
   if (!core().isAnyUnitSelected()) {
     return;
   }
-  V2f unitPos = v2iToV2f(core().selectedUnit().pos);
+  V2f unitPos = v2iToV2f(core().selectedUnit().position());
   camera().setPos(unitPos);
 }
 

@@ -16,7 +16,7 @@ Pathfinder::Pathfinder(Core& core)
 Dir Pathfinder::getParentDir(const Unit& u, const V2i& m) {
   Tile& tile = mCore.map().tile(m);
   if (tile.cost == 0) {
-    return u.dir;
+    return u.direction();
   } else {
     return tile.parent.opposite();
   }
@@ -24,7 +24,7 @@ Dir Pathfinder::getParentDir(const Unit& u, const V2i& m) {
 
 int Pathfinder::getTileCost(const Unit& u, const V2i& t, const V2i& nb) {
   int diff = Dir(t, nb).diff(getParentDir(u, t));
-  int maxAP = getUnitType(u.typeID).actionPoints - 1;
+  int maxAP = getUnitType(u.typeID()).actionPoints - 1;
   int additionalCost[] = {0, 3, std::min<int>(maxAP, 6), maxAP};
   assert(diff >= 0 && diff <= 3);
   return 1 + additionalCost[diff];
@@ -39,7 +39,7 @@ void Pathfinder::processNeibor(const Unit& u, const V2i& p1, const V2i& p2) {
     return;
   }
   int newcost = t1.cost + getTileCost(u, p1, p2);
-  int ap = u.actionPoints;
+  int ap = u.actionPoints();
   if (t2.cost > newcost && newcost <= ap) {
     mQueue.push(p2, Dir(p2, p1), newcost, Dir(p1, p2));
   }
@@ -68,7 +68,7 @@ void Pathfinder::fillMap(const Unit& u) {
   assert(mQueue.isEmpty());
   cleanMap();
   // Push start position
-  mQueue.push(u.pos, DirID::NONE, 0, u.dir);
+  mQueue.push(u.position(), DirID::NONE, 0, u.direction());
   while (!mQueue.isEmpty()) {
     V2i p = mQueue.pop();
     tryToPushNeibors(u, p);

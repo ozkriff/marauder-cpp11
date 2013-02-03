@@ -26,6 +26,7 @@ add_library(SOURCES
 	core/pathQueue.cpp
 	core/dir.cpp
 	core/los.cpp
+	core/unit.cpp
 	core/unitType.cpp
 	core/event.cpp
 	core/core.cpp

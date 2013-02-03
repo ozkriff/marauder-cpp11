@@ -44,10 +44,10 @@ void EventAttack::generate(
     Core& core, const Unit& u, const Unit& otherUnit)
 {
   auto event = new EventAttack(core.eventManager().getNewEventID());
-  if (!core.isLosClear(u.pos, otherUnit.pos)) {
+  if (!core.isLosClear(u.position(), otherUnit.position())) {
     return;
   }
-  event->mAttackerID = u.id;
-  event->mVictimID = otherUnit.id;
+  event->mAttackerID = u.id();
+  event->mVictimID = otherUnit.id();
   core.eventManager().addEvent(event);
 }

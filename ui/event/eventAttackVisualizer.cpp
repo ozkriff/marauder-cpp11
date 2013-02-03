@@ -26,17 +26,17 @@ bool EventAttackVisualizer::isFinished() {
 }
 
 bool EventAttackVisualizer::isUnitVisible(const Unit& u) {
-  return u.id == mEventAttack.mVictimID;
+  return u.id() == mEventAttack.mVictimID;
 }
 
 void EventAttackVisualizer::draw() {
   // TODO: animate shooting
   Unit& u = game().core().id2unit(mEventAttack.mVictimID);
-  V2f posTmp = game().v2iToV2f(u.pos);
+  V2f posTmp = game().v2iToV2f(u.position());
   V3f pos(posTmp.x(), posTmp.y(), -0.1f * mFrame); // TODO: magic!
   glPushMatrix();
   glTranslatef(pos.x, pos.y, 0.0f);
-  glRotatef(u.dir.toAngle() + 120.0f, 0, 0, 1); // TODO: Remove '+ 120'! Rotate obj files!
+  glRotatef(u.direction().toAngle() + 120.0f, 0, 0, 1); // TODO: Remove '+ 120'! Rotate obj files!
   game().drawUnitCircle(u);
   glTranslatef(0.0f, 0.0f, pos.z);
   game().drawUnitModel(u);
