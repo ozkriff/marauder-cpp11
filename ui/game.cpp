@@ -336,8 +336,7 @@ void Game::draw() {
     assert(mEventVisualizer);
     mEventVisualizer->draw();
     if (mEventVisualizer->isFinished()) {
-      core().eventManager().applyEvent(core().eventManager().currentEvent()); // TODO: applyCurrentEvent();
-      core().eventManager().setCurrentEvent(nullptr);
+      core().eventManager().applyCurrentEvent();
       setUiMode(UIMode::NORMAL);
       mEventVisualizer->end();
     }

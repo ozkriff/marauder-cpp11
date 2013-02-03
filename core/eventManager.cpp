@@ -59,9 +59,9 @@ bool EventManager::unshownEventsLeft() {
   }
 }
 
-void EventManager::applyEvent(Event& e) {
-  mCore.currentPlayer().lastSeenEventID = e.id();
-  e.apply(mCore);
+void EventManager::applyCurrentEvent() {
+  applyEvent(currentEvent());
+  setCurrentEvent(nullptr);
 }
 
 // Undo all events that this player have not seen yet
@@ -90,6 +90,11 @@ int EventManager::getNewEventID() {
 }
 
 // private
+
+void EventManager::applyEvent(Event& e) {
+  mCore.currentPlayer().lastSeenEventID = e.id();
+  e.apply(mCore);
+}
 
 // TODO simplify
 void EventManager::applyInvisibleEvents() {

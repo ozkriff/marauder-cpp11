@@ -20,7 +20,7 @@ public:
   void addEvent(Event* e);
   Event* getNextEvent();
   bool unshownEventsLeft();
-  void applyEvent(Event& e);
+  void applyCurrentEvent();
   void undoUnshownEvents();
   int getNewEventID();
 
@@ -29,6 +29,7 @@ private:
   std::list<Event*> mEvents;
   Event* mCurrentEvent;
 
+  void applyEvent(Event& e);
   void applyInvisibleEvents();
   bool isEventVisible(const Event& e) const;
   void undoEvent(Event& e);
