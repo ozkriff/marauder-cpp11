@@ -31,9 +31,9 @@ public:
 
   DirID value() const;
   int toInt() const;
-  float toAngle();
+  float toAngle() const;
   Dir opposite() const;
-  int diff(Dir d1);
+  int diff(Dir d1) const;
 
   static V2i neib(const V2i& pos, Dir i);
 

@@ -63,7 +63,7 @@ int Dir::toInt() const {
   return static_cast<int>(mValue);
 }
 
-float Dir::toAngle() {
+float Dir::toAngle() const {
   assert(toInt() < 6);
   return (360 / 6) * toInt();
 }
@@ -76,7 +76,7 @@ Dir Dir::opposite() const {
   return Dir(directionIndex);
 }
 
-int Dir::diff(Dir d1) {
+int Dir::diff(Dir d1) const {
   int diff = std::abs(toInt() - d1.toInt());
   if (diff > 6 / 2) {
     diff = 6 - diff;
