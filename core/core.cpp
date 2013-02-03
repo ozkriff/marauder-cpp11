@@ -201,7 +201,8 @@ void Core::initUnits() {
   for (int i = 0; i < 8; i++) {
     V2i p(rnd(0, map().size().x() - 1), rnd(0, map().size().y() - 1));
     if (!map().tile(p).obstacle && !isUnitAt(p)) {
-      addUnit(p, rnd(0, 1));
+      int playerID = rnd(0, 1);
+      addUnit(p, playerID);
     } else {
       i--;
     }
