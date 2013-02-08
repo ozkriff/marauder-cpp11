@@ -49,7 +49,7 @@ void EventMoveVisualizer::draw() {
   glTranslatef(p.x(), p.y(), 0.0f);
   // TODO: Remove '+ 4'! Rotate obj files!
   glRotatef(
-      Dir(fromI, toI).toInt() * 60.0f + 120.0f,
+      Dir(fromI, toI).toAngle() + 120.0f,
       0, 0, 1);
   game().drawUnitModel(u);
   game().drawUnitCircle(u);
