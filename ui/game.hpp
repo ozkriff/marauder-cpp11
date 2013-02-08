@@ -47,7 +47,8 @@ private:
   void processSDLEvent(const SDL_MouseButtonEvent& e);
   void processSDLEvent(const SDL_MouseMotionEvent& e);
   void processSDLEvent(const SDL_KeyboardEvent& e);
-  
+  void processSDLEvent(const SDL_ResizeEvent& e);
+
   void processSDLEvent(const SDL_Event& e);
   void sdlEvents();
   void centerCameraOnSelectedUnit();
@@ -81,7 +82,7 @@ private:
   const V2i& activeTilePos() const;
   Camera& camera();
   const V2i& mousePos() const;
-  
+
   void setDone(bool done);
   void setFloorTexture(int textureID);
   void setWinSize(const V2i& winSize);

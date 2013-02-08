@@ -454,6 +454,13 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
   }
 }
 
+void Game::processSDLEvent(const SDL_ResizeEvent& e) {
+  setWinSize(V2i(e.w, e.h));
+  setScreen(SDL_SetVideoMode(winSize().x(), winSize().y(),
+      mBitsPerPixel, mSDLFlags));
+  initOpengl();
+}
+
 void Game::screenScenarioMainEvents() {
   core().eventManager().switchToNextEvent();
   if (mEventVisualizer) {
@@ -476,10 +483,7 @@ void Game::processSDLEvent(const SDL_Event& e) {
     setDone(true);
     break;
   case SDL_VIDEORESIZE:
-    setWinSize(V2i(e.resize.w, e.resize.h));
-    setScreen(SDL_SetVideoMode(winSize().x(), winSize().y(),
-        mBitsPerPixel, mSDLFlags));
-    initOpengl();
+    processSDLEvent(e.resize);
     break;
   case SDL_KEYDOWN:
     processSDLEvent(e.key);
