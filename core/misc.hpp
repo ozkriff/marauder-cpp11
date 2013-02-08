@@ -10,16 +10,14 @@
 template <class T>
 T* getNext(std::list<T*> &list, T* node) {
   assert(node);
-  auto it = list.begin();
-  while (it != list.end()) {
+  for (auto it = list.begin(); it != list.end(); ++it) {
     if (*it == node) {
       ++it;
-      if (it == list.end()) {
-        return nullptr;
+      if (it != list.end()) {
+        return *it;
       }
-      return *it;
+      return nullptr;
     }
-    ++it;
   }
   return nullptr;
 }
