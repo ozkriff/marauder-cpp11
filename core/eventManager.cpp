@@ -18,8 +18,8 @@ Event& EventManager::currentEvent() {
   return *mCurrentEvent;
 }
 
-void EventManager::setCurrentEvent(Event* event) {
-  mCurrentEvent = event;
+void EventManager::switchToNextEvent() {
+    mCurrentEvent = getNextEvent();
 }
 
 void EventManager::addEvent(Event* e) {
@@ -31,21 +31,6 @@ void EventManager::addEvent(Event* e) {
     sendEvent(e);
   }
 #endif
-}
-
-// Always called after applyInvisibleEvents
-Event* EventManager::getNextEvent() {
-  int id = mCore.currentPlayer().lastSeenEventID; // shortcut
-  assert(!mEvents.empty());
-  if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
-    return mEvents.front();
-  }
-  for (auto e : mEvents) {
-    if (e->id() == id) {
-      return getNext(mEvents, e);
-    }
-  }
-  return nullptr;
 }
 
 // TODO: Called before getNextEvent
@@ -61,7 +46,7 @@ bool EventManager::unshownEventsLeft() {
 
 void EventManager::applyCurrentEvent() {
   applyEvent(currentEvent());
-  setCurrentEvent(nullptr);
+  mCurrentEvent = nullptr;
 }
 
 // Undo all events that this player have not seen yet
@@ -90,6 +75,21 @@ int EventManager::getNewEventID() {
 }
 
 // private
+
+// Always called after applyInvisibleEvents
+Event* EventManager::getNextEvent() {
+  int id = mCore.currentPlayer().lastSeenEventID; // shortcut
+  assert(!mEvents.empty());
+  if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
+    return mEvents.front();
+  }
+  for (auto e : mEvents) {
+    if (e->id() == id) {
+      return getNext(mEvents, e);
+    }
+  }
+  return nullptr;
+}
 
 void EventManager::applyEvent(Event& e) {
   mCore.currentPlayer().lastSeenEventID = e.id();

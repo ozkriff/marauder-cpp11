@@ -15,10 +15,9 @@ public:
 
   Event& currentEvent();
 
-  void setCurrentEvent(Event* event);
-
+  void switchToNextEvent();
   void addEvent(Event* e);
-  Event* getNextEvent();
+
   bool unshownEventsLeft();
   void applyCurrentEvent();
   void undoUnshownEvents();
@@ -29,6 +28,7 @@ private:
   std::list<Event*> mEvents;
   Event* mCurrentEvent;
 
+  Event* getNextEvent();
   void applyEvent(Event& e);
   void applyInvisibleEvents();
   bool isEventVisible(const Event& e) const;
