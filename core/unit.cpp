@@ -4,9 +4,9 @@
 #include <cassert>
 
 Unit::Unit(int id, int playerID, int typeID)
-  : mID(id),
-    mPlayerID(playerID),
-    mTypeID(typeID)
+  : mTypeID(typeID),
+    mID(id),
+    mPlayerID(playerID)
 {
 }
 
