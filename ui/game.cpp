@@ -344,8 +344,7 @@ void Game::draw() {
   SDL_GL_SwapBuffers();
 }
 
-void Game::processSDLEvent(const SDL_MouseButtonEvent& e) {
-  UNUSED(e);
+void Game::processClickOnTile() {
   if (uiMode() != UIMode::NORMAL) {
     return;
   }
@@ -461,6 +460,25 @@ void Game::processSDLEvent(const SDL_ResizeEvent& e) {
   initOpengl();
 }
 
+void Game::processSDLEventButtonUp(const SDL_MouseButtonEvent& e) {
+  if (e.button == SDL_BUTTON_RIGHT) {
+    setIsRotatingCamera(false);
+  }
+  if (e.button == SDL_BUTTON_WHEELUP) {
+    camera().zoomIn(5);
+  } else if (e.button == SDL_BUTTON_WHEELDOWN) {
+    camera().zoomOut(5);
+  }
+}
+
+void Game::processSDLEventButtonDown(const SDL_MouseButtonEvent& e) {
+  if (e.button == SDL_BUTTON_RIGHT) {
+    setIsRotatingCamera(true);
+  } else if (e.button == SDL_BUTTON_LEFT) {
+    processClickOnTile();
+  }
+}
+
 void Game::screenScenarioMainEvents() {
   core().eventManager().switchToNextEvent();
   if (mEventVisualizer) {
@@ -492,21 +510,10 @@ void Game::processSDLEvent(const SDL_Event& e) {
     processSDLEvent(e.motion);
     break;
   case SDL_MOUSEBUTTONUP:
-    if (e.button.button == SDL_BUTTON_RIGHT) {
-      setIsRotatingCamera(false);
-    }
-    if (e.button.button == SDL_BUTTON_WHEELUP) {
-      camera().zoomIn(5);
-    } else if (e.button.button == SDL_BUTTON_WHEELDOWN) {
-      camera().zoomOut(5);
-    }
+    processSDLEventButtonUp(e.button);
     break;
   case SDL_MOUSEBUTTONDOWN:
-    if (e.button.button == SDL_BUTTON_RIGHT) {
-      setIsRotatingCamera(true);
-    } else if (e.button.button == SDL_BUTTON_LEFT) {
-      processSDLEvent(e.button);
-    }
+    processSDLEventButtonDown(e.button);
     break;
   default:
     break;

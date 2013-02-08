@@ -44,12 +44,14 @@ private:
   GLuint mUnitTextureIDs[static_cast<int>(UnitTypeID::COUNT)];
   EventVisualizer* mEventVisualizer;
 
-  void processSDLEvent(const SDL_MouseButtonEvent& e);
   void processSDLEvent(const SDL_MouseMotionEvent& e);
   void processSDLEvent(const SDL_KeyboardEvent& e);
   void processSDLEvent(const SDL_ResizeEvent& e);
+  void processSDLEventButtonUp(const SDL_MouseButtonEvent& e);
+  void processSDLEventButtonDown(const SDL_MouseButtonEvent& e);
 
   void processSDLEvent(const SDL_Event& e);
+  void processClickOnTile();
   void sdlEvents();
   void centerCameraOnSelectedUnit();
   void switchActiveTileType();
