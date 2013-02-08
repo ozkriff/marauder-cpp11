@@ -15,9 +15,11 @@ private:
   const EventMove& mEventMove;
   int mCurrentMoveIndex;
 
-  int getNodeIndex();
+  int currentTileIndex();
+  int calculateNodeIndex();
   void endMovement();
-  void getCurrentMovingNodes(V2i* from, V2i* to);
+  const V2i& currentTile();
+  const V2i& nextTile();
   int framesCount();
 
 public:

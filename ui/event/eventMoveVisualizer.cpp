@@ -38,11 +38,11 @@ bool EventMoveVisualizer::isUnitVisible(const Unit& u) {
 
 void EventMoveVisualizer::draw() {
   Unit& u = game().core().id2unit(mEventMove.unitID);
-  V2i fromI, toI;
-  getCurrentMovingNodes(&fromI, &toI);
+  V2i fromI = currentTile();
+  V2i toI = nextTile();
   V2f fromF = game().v2iToV2f(fromI);
   V2f toF = game().v2iToV2f(toI);
-  int nodeIndex = getNodeIndex();
+  int nodeIndex = calculateNodeIndex();
   V2f diff = (toF - fromF) / moveSpeed;
   V2f p = fromF + diff * nodeIndex;
   glPushMatrix();
@@ -57,20 +57,12 @@ void EventMoveVisualizer::draw() {
   mCurrentMoveIndex++;
 }
 
-void EventMoveVisualizer::getCurrentMovingNodes(V2i* from, V2i* to) {
-  int i = mCurrentMoveIndex;
-  auto& p = mEventMove.path; // shortcut
-  unsigned int j; // node id
-  assert(from);
-  assert(to);
-  for (j = 0; j < p.size() - 2; j++) {
-    i -= moveSpeed;
-    if (i < 0) {
-      break;
-    }
-  }
-  *from = p[j];
-  *to = p[j + 1];
+const V2i& EventMoveVisualizer::currentTile() {
+  return mEventMove.path[currentTileIndex()];
+}
+
+const V2i& EventMoveVisualizer::nextTile() {
+  return mEventMove.path[currentTileIndex() + 1];
 }
 
 void EventMoveVisualizer::endMovement() {
@@ -92,17 +84,12 @@ void EventMoveVisualizer::endMovement() {
   }
 }
 
-int EventMoveVisualizer::getNodeIndex() {
-  int last = 0;
-  int current = 0;
-  for (unsigned int j = 0; j < mEventMove.path.size() - 2; j++) {
-    current += moveSpeed;
-    if (current > mCurrentMoveIndex) {
-      break;
-    }
-    last = current;
-  }
-  return mCurrentMoveIndex - last;
+int EventMoveVisualizer::currentTileIndex() {
+  return mCurrentMoveIndex / moveSpeed;
+}
+
+int EventMoveVisualizer::calculateNodeIndex() {
+  return mCurrentMoveIndex - currentTileIndex() * moveSpeed;
 }
 
 void EventMoveVisualizer::end() {
