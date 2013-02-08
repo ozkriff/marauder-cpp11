@@ -6,8 +6,9 @@ find_package(SDL_image REQUIRED)
 include_directories(.)
 set(CMAKE_CXX_COMPILER clang++)
 set(CMAKE_BUILD_TYPE Debug)
+set(WARNINGS "-Wold-style-cast -Wall -Wextra --pedantic")
 if(UNIX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wold-style-cast -Wall -Wextra --pedantic -stdlib=libc++ -std=c++11")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${WARNINGS} -stdlib=libc++ -std=c++11")
 endif()
 add_library(SOURCES
 	ui/game.cpp
