@@ -85,6 +85,7 @@ private:
   Camera& camera();
   const V2i& mousePos() const;
 
+  void setUiMode(UIMode uiMode);
   void setDone(bool done);
   void setFloorTexture(int textureID);
   void setWinSize(const V2i& winSize);
@@ -100,7 +101,6 @@ public:
   Core& core();
   const Core& core() const;
 
-  void setUiMode(UIMode uiMode);
   void setVaWalkableMap(const VertexArray& va);
   void setVaFogOfWar(const VertexArray& va);
 
