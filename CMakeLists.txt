@@ -4,8 +4,10 @@ find_package(OpenGL REQUIRED)
 find_package(SDL REQUIRED)
 find_package(SDL_image REQUIRED)
 include_directories(.)
+set(CMAKE_CXX_COMPILER clang++)
+set(CMAKE_BUILD_TYPE Debug)
 if(UNIX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wold-style-cast -Wall -Wextra --pedantic -std=c++0x")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wold-style-cast -Wall -Wextra --pedantic -stdlib=libc++ -std=c++11")
 endif()
 add_library(SOURCES
 	ui/game.cpp
