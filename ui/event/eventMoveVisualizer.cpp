@@ -37,22 +37,13 @@ bool EventMoveVisualizer::isUnitVisible(const Unit& u) {
 }
 
 void EventMoveVisualizer::draw() {
-  Unit& u = game().core().id2unit(mEventMove.unitID);
-  V2i fromI = currentTile();
-  V2i toI = nextTile();
-  V2f fromF = game().v2iToV2f(fromI);
-  V2f toF = game().v2iToV2f(toI);
-  int nodeIndex = calculateNodeIndex();
-  V2f diff = (toF - fromF) / moveSpeed;
-  V2f p = fromF + diff * nodeIndex;
+  const Unit& unit = game().core().id2unit(mEventMove.unitID);
+  V2f pos = currentPos();
   glPushMatrix();
-  glTranslatef(p.x(), p.y(), 0.0f);
-  // TODO: Remove '+ 4'! Rotate obj files!
-  glRotatef(
-      Dir(fromI, toI).toAngle() + 120.0f,
-      0, 0, 1);
-  game().drawUnitModel(u);
-  game().drawUnitCircle(u);
+  glTranslatef(pos.x(), pos.y(), 0.0f);
+  glRotatef(currentAngle(), 0, 0, 1);
+  game().drawUnitModel(unit);
+  game().drawUnitCircle(unit);
   glPopMatrix();
   mCurrentMoveIndex++;
 }
@@ -94,4 +85,17 @@ int EventMoveVisualizer::calculateNodeIndex() {
 
 void EventMoveVisualizer::end() {
   endMovement();
+}
+
+float EventMoveVisualizer::currentAngle() {
+  // TODO: Remove '+ 120.0f'! Rotate models in obj files instead!
+  return Dir(currentTile(), nextTile()).toAngle() + 120.0f;
+}
+
+V2f EventMoveVisualizer::currentPos() {
+  V2f from = game().v2iToV2f(currentTile());
+  V2f to = game().v2iToV2f(nextTile());
+  V2f diff = (to - from) / moveSpeed;
+  int nodeIndex = calculateNodeIndex();
+  return from + (diff * nodeIndex);
 }
