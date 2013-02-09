@@ -12,6 +12,9 @@ EventManager::EventManager(Core& core)
 }
 
 EventManager::~EventManager() {
+  for (auto e : mEvents) {
+    delete e;
+  }
 }
 
 const Event& EventManager::currentEvent() const {
