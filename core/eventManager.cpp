@@ -36,7 +36,6 @@ void EventManager::addEvent(Event* e) {
 #endif
 }
 
-// TODO: Called before getNextEvent
 bool EventManager::unshownEventsLeft() {
   applyInvisibleEvents();
   if (mEvents.empty()) {
@@ -79,7 +78,6 @@ int EventManager::getNewEventID() const {
 
 // private
 
-// Always called after applyInvisibleEvents
 Event* EventManager::getNextEvent() {
   int id = mCore.currentPlayer().lastSeenEventID; // shortcut
   assert(!mEvents.empty());
