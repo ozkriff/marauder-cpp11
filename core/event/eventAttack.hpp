@@ -13,10 +13,10 @@ class Core;
 
 class EventAttack : public Event {
 public:
+  // TODO: make data private
   int mAttackerID;
   int mVictimID;
 
-public:
   EventAttack(int id);
   virtual ~EventAttack();
 

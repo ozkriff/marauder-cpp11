@@ -10,9 +10,6 @@
   for (p = V2i(0, 0); map.isInboard(p); p = map.incV2i(p))
 
 class Map {
-  std::vector<Tile> mTiles;
-  V2i mSize;
-
 public:
   Map(const V2i& size);
   ~Map();
@@ -26,6 +23,10 @@ public:
   Tile& tile(const V2i& pos);
 
   V2i incV2i(const V2i& pos) const;
+
+private:
+  std::vector<Tile> mTiles;
+  V2i mSize;
 };
 
 #endif

@@ -9,7 +9,7 @@
 #include "ui/v3f.hpp"
 
 class VertexArray {
-public:
+public: // TODO: make private
   std::vector<float> vertices;
   std::vector<float> textureCoordinates;
   std::vector<GLubyte> colors;

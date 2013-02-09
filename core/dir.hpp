@@ -19,9 +19,6 @@ enum class DirID {
 };
 
 class Dir {
-private:
-  DirID mValue;
-
 public:
   Dir();
   Dir(DirID value);
@@ -39,6 +36,9 @@ public:
 
   // TODO: rename
   static V2i getNeib(const V2i& p1, const V2i& p2, int addMe);
+
+private:
+  DirID mValue;
 };
 
 #endif

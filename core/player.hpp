@@ -6,7 +6,7 @@
 #define HAVE_NOT_SEEN_ANY_EVENTS (-1)
 
 class Player {
-public:
+public: // TODO: make private
   int id;
   int lastSeenEventID;
 };

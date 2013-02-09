@@ -8,7 +8,7 @@
 class Unit;
 
 class Tile {
-public:
+public: // TODO: make private
   Unit* unit;
   bool obstacle;
   // TODO: move to pathfinding

@@ -9,10 +9,6 @@
 class Event;
 
 class EventAttackVisualizer : public EventVisualizer {
-private:
-  const EventAttack& mEventAttack;
-  int mFrame;
-
 public:
   EventAttackVisualizer(Game& game, const Event& event);
   virtual ~EventAttackVisualizer();
@@ -21,6 +17,10 @@ public:
   virtual bool isUnitVisible(const Unit& u);
   virtual void draw();
   virtual void end();
+
+private:
+  const EventAttack& mEventAttack;
+  int mFrame;
 };
 
 #endif

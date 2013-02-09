@@ -9,6 +9,15 @@
 class Event;
 
 class EventMoveVisualizer : public EventVisualizer {
+public:
+  EventMoveVisualizer(Game& game, const Event& event);
+  virtual ~EventMoveVisualizer();
+
+  virtual bool isFinished();
+  virtual bool isUnitVisible(const Unit& u);
+  virtual void draw();
+  virtual void end();
+
 private:
   static const int moveSpeed = 10;
 
@@ -21,15 +30,6 @@ private:
   const V2i& currentTile();
   const V2i& nextTile();
   int framesCount();
-
-public:
-  EventMoveVisualizer(Game& game, const Event& event);
-  virtual ~EventMoveVisualizer();
-
-  virtual bool isFinished();
-  virtual bool isUnitVisible(const Unit& u);
-  virtual void draw();
-  virtual void end();
 };
 
 #endif

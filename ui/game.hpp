@@ -19,6 +19,25 @@ enum class UIMode {
 };
 
 class Game {
+public:
+  Game();
+  ~Game();
+
+  Core& core();
+  const Core& core() const;
+
+  void setVaWalkableMap(const VertexArray& va);
+  void setVaFogOfWar(const VertexArray& va);
+
+  void run();
+  V2f v2iToV2f(const V2i& i) const;
+  VertexArray buildMapArray();
+  VertexArray buildObstaclesArray();
+  VertexArray buildFowArray();
+  VertexArray buildWalkableArray();
+  void drawUnitModel(const Unit& u);
+  void drawUnitCircle(const Unit& u);
+
 private:
   float mTileSize;
   float mHexEx;
@@ -93,25 +112,6 @@ private:
   void setActiveTilePos(const V2i& activeTilePos);
   void setMousePos(const V2i& mousePos);
   void setIsRotatingCamera(bool isRotatingCamera);
-
-public:
-  Game();
-  ~Game();
-
-  Core& core();
-  const Core& core() const;
-
-  void setVaWalkableMap(const VertexArray& va);
-  void setVaFogOfWar(const VertexArray& va);
-
-  void run();
-  V2f v2iToV2f(const V2i& i) const;
-  VertexArray buildMapArray();
-  VertexArray buildObstaclesArray();
-  VertexArray buildFowArray();
-  VertexArray buildWalkableArray();
-  void drawUnitModel(const Unit& u);
-  void drawUnitCircle(const Unit& u);
 };
 
 #endif

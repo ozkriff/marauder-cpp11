@@ -12,7 +12,7 @@ class Unit;
 class Core;
 
 class EventMove : public Event {
-public:
+public: // TODO: make private
   int unitID;
   std::vector<V2i> path;
   int cost;

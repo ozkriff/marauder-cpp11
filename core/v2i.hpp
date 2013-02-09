@@ -4,10 +4,6 @@
 #define CORE__V2I_HPP
 
 class V2i {
-private:
-  int mX;
-  int mY;
-
 public:
   V2i(int x, int y);
   V2i();
@@ -26,6 +22,10 @@ public:
   V2i operator+(const V2i& b) const;
 
   static int distance(const V2i& a, const V2i &b);
+
+private:
+  int mX;
+  int mY;
 };
 
 #endif

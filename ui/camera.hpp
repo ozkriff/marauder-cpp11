@@ -6,19 +6,6 @@
 #include "ui/v2f.hpp"
 
 class Camera {
-private:
-  float mMaxXAxisAngle;
-  float mMinXAxisAngle;
-  float mXAngle;
-  float mZAngle;
-  V2f mMaxPos;
-  V2f mPos;
-  float mMaxZoom;
-  float mMinZoom;
-  float mZoom;
-
-  void clampPosition();
-
 public:
   Camera();
   ~Camera();
@@ -42,6 +29,19 @@ public:
   void zoomOut(float n);
 
   void set();
+
+private:
+  float mMaxXAxisAngle;
+  float mMinXAxisAngle;
+  float mXAngle;
+  float mZAngle;
+  V2f mMaxPos;
+  V2f mPos;
+  float mMaxZoom;
+  float mMinZoom;
+  float mZoom;
+
+  void clampPosition();
 };
 
 #endif

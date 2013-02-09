@@ -4,10 +4,6 @@
 #define UI__V2F_HPP
 
 class V2f {
-private:
-  float mX;
-  float mY;
-
 public:
   V2f(float x, float y);
   V2f();
@@ -24,6 +20,10 @@ public:
   V2f operator-(const V2f& b);
   V2f operator*(float b);
   V2f operator/(float b);
+
+private:
+  float mX;
+  float mY;
 };
 
 #endif

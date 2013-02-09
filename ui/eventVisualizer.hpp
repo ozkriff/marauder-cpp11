@@ -6,13 +6,6 @@
 #include "ui/game.hpp"
 
 class EventVisualizer {
-private:
-  Game& mGame;
-
-protected:
-  const Game& game() const;
-  Game& game();
-
 public:
   EventVisualizer(Game& game);
   virtual ~EventVisualizer();
@@ -21,6 +14,13 @@ public:
   virtual bool isUnitVisible(const Unit& u) = 0;
   virtual void draw() = 0;
   virtual void end() = 0;
+
+protected:
+  const Game& game() const;
+  Game& game();
+
+private:
+  Game& mGame;
 };
 
 EventVisualizer* newEventVisualizer(Game& game, const Event& event);

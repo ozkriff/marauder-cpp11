@@ -9,9 +9,6 @@
 class Event;
 
 class EventEndTurnVisualizer : public EventVisualizer {
-private:
-  const EventEndTurn& mEventEndTurn;
-
 public:
   EventEndTurnVisualizer(Game& game, const Event& event);
   virtual ~EventEndTurnVisualizer();
@@ -20,6 +17,9 @@ public:
   virtual bool isUnitVisible(const Unit& u);
   virtual void draw();
   virtual void end();
+
+private:
+  const EventEndTurn& mEventEndTurn;
 };
 
 #endif

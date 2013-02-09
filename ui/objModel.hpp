@@ -9,6 +9,12 @@
 #include "ui/v2f.hpp"
 
 class ObjModel {
+public:
+  ObjModel(const std::string& filename);
+
+  VertexArray build();
+  void debugPrint();
+
 private:
   // indices
   class ObjTriangle {
@@ -24,12 +30,6 @@ private:
   std::vector<ObjTriangle> mFaces;
 
   void read(const std::string& filename);
-
-public:
-  ObjModel(const std::string& filename);
-
-  VertexArray build();
-  void debugPrint();
 };
 
 #endif

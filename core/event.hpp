@@ -12,10 +12,6 @@ enum class EventTypeID {
 };
 
 class Event {
-private:
-  EventTypeID mType;
-  int mID;
-
 public:
   Event(int id, EventTypeID type);
   virtual ~Event();
@@ -26,6 +22,10 @@ public:
   virtual void apply(Core& core) const = 0;
   virtual void undo(Core& core) const = 0;
   virtual bool isVisible(const Core& core) const = 0;
+
+private:
+  EventTypeID mType;
+  int mID;
 };
 
 #endif
