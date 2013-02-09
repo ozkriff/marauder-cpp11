@@ -361,7 +361,7 @@ void Game::processClickOnTile() {
     Tile& tile = core().map().tile(activeTilePos());
     int actionPoints = core().selectedUnit().actionPoints();
     if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
-      generateEventMove(core(), core().selectedUnit(), activeTilePos());
+      EventMove::generate(core(), core().selectedUnit(), activeTilePos());
     }
   }
 }
@@ -416,7 +416,7 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
     switchActiveTileType();
     break;
   case SDLK_e:
-    generateEventEndTurn(core());
+    EventEndTurn::generate(core());
     break;
   case SDLK_u:
     createNewUnitInActiveTile();

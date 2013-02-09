@@ -25,9 +25,9 @@ public:
   virtual void apply(Core& core) const;
   virtual void undo(Core& core) const;
   virtual bool isVisible(const Core& core) const;
-};
 
-void generateEventMove(
-    Core& core, const Unit& u, const V2i& destination);
+  static void generate(
+      Core& core, const Unit& u, const V2i& destination);
+};
 
 #endif

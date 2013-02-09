@@ -17,11 +17,11 @@ public:
   virtual void undo(Core& core) const;
   virtual bool isVisible(const Core& core) const;
 
+  static void generate(Core& core);
+
 private:
   int mOldID;
   int mNewID;
 };
-
-void generateEventEndTurn(Core& core);
 
 #endif

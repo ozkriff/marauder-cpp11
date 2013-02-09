@@ -46,7 +46,7 @@ bool EventEndTurn::isVisible(const Core& core) const {
   return true;
 }
 
-void generateEventEndTurn(Core& core) {
+void EventEndTurn::generate(Core& core) {
   unsigned int newPlayerID = core.currentPlayer().id + 1;
   if (newPlayerID == core.players().size()) {
     newPlayerID = 0;

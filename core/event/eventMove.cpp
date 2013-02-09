@@ -14,7 +14,7 @@ EventMove::EventMove(int id)
 EventMove::~EventMove() {
 }
 
-void generateEventMove(
+void EventMove::generate(
     Core& core, const Unit& unit, const V2i& destination)
 {
   auto e = new EventMove(core.eventManager().getNewEventID());
