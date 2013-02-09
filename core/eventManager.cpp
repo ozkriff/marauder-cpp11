@@ -22,7 +22,7 @@ const Event& EventManager::currentEvent() const {
 }
 
 void EventManager::switchToNextEvent() {
-    mCurrentEvent = getNextEvent();
+  mCurrentEvent = getNextEvent();
 }
 
 void EventManager::addEvent(Event* e) {
