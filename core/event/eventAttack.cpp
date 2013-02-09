@@ -13,7 +13,7 @@ EventAttack::EventAttack(int id)
 EventAttack::~EventAttack() {
 }
 
-void EventAttack::apply(Core& core) {
+void EventAttack::apply(Core& core) const {
   Unit& u = core.id2unit(mVictimID);
   core.deadUnits().push_back(&u);
   core.units().remove(&u);
@@ -23,7 +23,7 @@ void EventAttack::apply(Core& core) {
   }
 }
 
-void EventAttack::undo(Core& core) {
+void EventAttack::undo(Core& core) const {
   assert(!core.deadUnits().empty());
   Unit* u = core.deadUnits().back();
   assert(u);

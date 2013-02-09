@@ -29,7 +29,7 @@ void generateEventMove(
   core.eventManager().addEvent(e);
 }
 
-void EventMove::apply(Core& core) {
+void EventMove::apply(Core& core) const {
   Unit& u = core.id2unit(unitID);
   u.setPosition(path[path.size() - 1]);
   u.setDirection(Dir(path[path.size() - 2], path[path.size() - 1]));
@@ -39,7 +39,7 @@ void EventMove::apply(Core& core) {
   }
 }
 
-void EventMove::undo(Core& core) {
+void EventMove::undo(Core& core) const {
   Unit& u = core.id2unit(unitID);
   u.setPosition(path[0]);
   u.setDirection(initialDirection);

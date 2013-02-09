@@ -13,7 +13,7 @@ public:
   EventManager(Core& core);
   ~EventManager();
 
-  Event& currentEvent();
+  const Event& currentEvent() const;
 
   void switchToNextEvent();
   void addEvent(Event* e);
@@ -21,7 +21,7 @@ public:
   bool unshownEventsLeft();
   void applyCurrentEvent();
   void undoUnshownEvents();
-  int getNewEventID();
+  int getNewEventID() const;
 
 private:
   Core& mCore;
@@ -29,10 +29,10 @@ private:
   Event* mCurrentEvent;
 
   Event* getNextEvent();
-  void applyEvent(Event& e);
+  void applyEvent(const Event& e);
   void applyInvisibleEvents();
   bool isEventVisible(const Event& e) const;
-  void undoEvent(Event& e);
+  void undoEvent(const Event& e);
   Event* getNextEventNode();
   void event2log(const Event& e);
   void sendEvent(const Event& e);

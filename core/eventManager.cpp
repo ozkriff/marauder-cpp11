@@ -14,7 +14,7 @@ EventManager::EventManager(Core& core)
 EventManager::~EventManager() {
 }
 
-Event& EventManager::currentEvent() {
+const Event& EventManager::currentEvent() const {
   return *mCurrentEvent;
 }
 
@@ -66,7 +66,7 @@ void EventManager::undoUnshownEvents() {
   }
 }
 
-int EventManager::getNewEventID() {
+int EventManager::getNewEventID() const {
   if (!mEvents.empty()) {
     return mEvents.back()->id() + 1;
   } else {
@@ -91,7 +91,7 @@ Event* EventManager::getNextEvent() {
   return nullptr;
 }
 
-void EventManager::applyEvent(Event& e) {
+void EventManager::applyEvent(const Event& e) {
   mCore.currentPlayer().lastSeenEventID = e.id();
   e.apply(mCore);
 }
@@ -115,7 +115,7 @@ bool EventManager::isEventVisible(const Event& e) const {
   return e.isVisible(mCore);
 }
 
-void EventManager::undoEvent(Event& e) {
+void EventManager::undoEvent(const Event& e) {
   e.undo(mCore);
 }
 

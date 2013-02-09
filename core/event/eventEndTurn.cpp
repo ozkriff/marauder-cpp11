@@ -23,7 +23,7 @@ int EventEndTurn::oldID() const {
   return mOldID;
 }
 
-void EventEndTurn::apply(Core& core) {
+void EventEndTurn::apply(Core& core) const {
   for (auto p : core.players()) {
     if (p->id == newID()) {
       if (core.currentPlayer().id == oldID()) {
@@ -37,7 +37,7 @@ void EventEndTurn::apply(Core& core) {
   }
 }
 
-void EventEndTurn::undo(Core& core) {
+void EventEndTurn::undo(Core& core) const {
   UNUSED(core);
 }
 

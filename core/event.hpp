@@ -23,8 +23,8 @@ public:
   EventTypeID type() const;
   int id() const;
 
-  virtual void apply(Core& core) = 0;
-  virtual void undo(Core& core) = 0;
+  virtual void apply(Core& core) const = 0;
+  virtual void undo(Core& core) const = 0;
   virtual bool isVisible(const Core& core) const = 0;
 };
 

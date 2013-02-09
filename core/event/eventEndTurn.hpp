@@ -17,8 +17,8 @@ public:
   int oldID() const;
   int newID() const;
 
-  virtual void apply(Core& core);
-  virtual void undo(Core& core);
+  virtual void apply(Core& core) const;
+  virtual void undo(Core& core) const;
   virtual bool isVisible(const Core& core) const;
 };
 
