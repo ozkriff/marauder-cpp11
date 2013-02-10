@@ -97,18 +97,13 @@ void EventManager::applyEvent(const Event& e) {
   e.apply(mCore);
 }
 
-// TODO simplify
 void EventManager::applyInvisibleEvents() {
-  Event* e = getNextEventNode();
-  while (e) {
+  for (const Event* e = getNextEventNode();
+      e && !isEventVisible(*e);
+      e = getNext(mEvents, e))
+  {
     assert(e);
-    if (!isEventVisible(*e)) {
-      applyEvent(*e);
-    } else {
-      break;
-    }
-    e = getNext(mEvents, e);
-    assert(e);
+    applyEvent(*e);
   }
 }
 
@@ -121,7 +116,7 @@ void EventManager::undoEvent(const Event& e) {
 }
 
 // TODO: rename.
-Event* EventManager::getNextEventNode() {
+const Event* EventManager::getNextEventNode() {
   int id = mCore.currentPlayer().lastSeenEventID; // shortcut
   if (mEvents.empty()) {
     return nullptr;
