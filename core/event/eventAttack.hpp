@@ -13,12 +13,11 @@ class Core;
 
 class EventAttack : public Event {
 public:
-  // TODO: make data private
-  int mAttackerID;
-  int mVictimID;
-
   EventAttack(int id);
   virtual ~EventAttack();
+
+  int victimID() const;
+  int attackerID() const;
 
   virtual void apply(Core& core) const;
   virtual void undo(Core& core) const;
@@ -26,6 +25,10 @@ public:
 
   static void generate(
       Core& core, const Unit& attacker, const Unit& victim);
+
+private:
+  int mAttackerID;
+  int mVictimID;
 };
 
 #endif

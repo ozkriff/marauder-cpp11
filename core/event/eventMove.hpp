@@ -12,15 +12,12 @@ class Unit;
 class Core;
 
 class EventMove : public Event {
-public: // TODO: make private
-  int unitID;
-  std::vector<V2i> path;
-  int cost;
-  Dir initialDirection;
-
 public:
   EventMove(int id);
   virtual ~EventMove();
+
+  int unitID() const;
+  const std::vector<V2i>& path() const;
 
   virtual void apply(Core& core) const;
   virtual void undo(Core& core) const;
@@ -28,6 +25,12 @@ public:
 
   static void generate(
       Core& core, const Unit& u, const V2i& destination);
+
+private:
+  int mUnitID;
+  std::vector<V2i> mPath;
+  int mCost;
+  Dir mInitialDirection;
 };
 
 #endif

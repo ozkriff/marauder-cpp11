@@ -6,12 +6,20 @@
 
 EventMove::EventMove(int id)
   : Event(id, EventTypeID::MOVE),
-    unitID(0),
-    cost(0)
+    mUnitID(0),
+    mCost(0)
 {
 }
 
 EventMove::~EventMove() {
+}
+
+int EventMove::unitID() const {
+  return mUnitID;
+}
+
+const std::vector<V2i>& EventMove::path() const {
+  return mPath;
 }
 
 void EventMove::generate(
@@ -22,32 +30,32 @@ void EventMove::generate(
   if (core.map().tile(destination).cost > ap) {
     return;
   }
-  e->initialDirection = unit.direction();
-  e->path = core.pathfinder().getPath(destination);
-  e->cost = core.map().tile(destination).cost;
-  e->unitID = unit.id();
+  e->mInitialDirection = unit.direction();
+  e->mPath = core.pathfinder().getPath(destination);
+  e->mCost = core.map().tile(destination).cost;
+  e->mUnitID = unit.id();
   core.eventManager().addEvent(e);
 }
 
 void EventMove::apply(Core& core) const {
-  Unit& u = core.id2unit(unitID);
-  u.setPosition(path[path.size() - 1]);
-  u.setDirection(Dir(path[path.size() - 2], path[path.size() - 1]));
-  u.setActionPoints(u.actionPoints() - cost);
+  Unit& u = core.id2unit(mUnitID);
+  u.setPosition(mPath[mPath.size() - 1]);
+  u.setDirection(Dir(mPath[mPath.size() - 2], mPath[mPath.size() - 1]));
+  u.setActionPoints(u.actionPoints() - mCost);
   if (u.playerID() == core.currentPlayer().id) {
     core.calculateFow();
   }
 }
 
 void EventMove::undo(Core& core) const {
-  Unit& u = core.id2unit(unitID);
-  u.setPosition(path[0]);
-  u.setDirection(initialDirection);
-  u.setActionPoints(u.actionPoints() + cost);
+  Unit& u = core.id2unit(mUnitID);
+  u.setPosition(mPath[0]);
+  u.setDirection(mInitialDirection);
+  u.setActionPoints(u.actionPoints() + mCost);
 }
 
 bool EventMove::isVisible(const Core &core) const {
-  for (const V2i& pos : path) {
+  for (const V2i& pos : mPath) {
     if (core.map().tile(pos).fow > 0) {
       return true;
     }

@@ -26,12 +26,12 @@ bool EventAttackVisualizer::isFinished() {
 }
 
 bool EventAttackVisualizer::isUnitVisible(const Unit& u) {
-  return u.id() == mEventAttack.mVictimID;
+  return u.id() == mEventAttack.victimID();
 }
 
 void EventAttackVisualizer::draw() {
   // TODO: animate shooting
-  Unit& u = game().core().id2unit(mEventAttack.mVictimID);
+  const Unit& u = game().core().id2unit(mEventAttack.victimID());
   V2f posTmp = game().v2iToV2f(u.position());
   V3f pos(posTmp.x(), posTmp.y(), -0.1f * mFrame); // TODO: magic!
   glPushMatrix();

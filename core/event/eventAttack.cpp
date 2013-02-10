@@ -13,6 +13,14 @@ EventAttack::EventAttack(int id)
 EventAttack::~EventAttack() {
 }
 
+int EventAttack::victimID() const {
+  return mVictimID;
+}
+
+int EventAttack::attackerID() const {
+  return mAttackerID;
+}
+
 void EventAttack::apply(Core& core) const {
   Unit& u = core.id2unit(mVictimID);
   core.deadUnits().push_back(&u);

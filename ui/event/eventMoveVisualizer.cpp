@@ -24,7 +24,7 @@ EventMoveVisualizer::~EventMoveVisualizer() {
 }
 
 int EventMoveVisualizer::framesCount() {
-  return (mEventMove.path.size() - 1) * moveSpeed;
+  return (mEventMove.path().size() - 1) * moveSpeed;
 }
 
 bool EventMoveVisualizer::isFinished() {
@@ -33,11 +33,11 @@ bool EventMoveVisualizer::isFinished() {
 }
 
 bool EventMoveVisualizer::isUnitVisible(const Unit& u) {
-  return u.id() == mEventMove.unitID;
+  return u.id() == mEventMove.unitID();
 }
 
 void EventMoveVisualizer::draw() {
-  const Unit& unit = game().core().id2unit(mEventMove.unitID);
+  const Unit& unit = game().core().id2unit(mEventMove.unitID());
   V2f pos = currentPos();
   glPushMatrix();
   glTranslatef(pos.x(), pos.y(), 0.0f);
@@ -49,17 +49,17 @@ void EventMoveVisualizer::draw() {
 }
 
 const V2i& EventMoveVisualizer::currentTile() {
-  return mEventMove.path[currentTileIndex()];
+  return mEventMove.path()[currentTileIndex()];
 }
 
 const V2i& EventMoveVisualizer::nextTile() {
-  return mEventMove.path[currentTileIndex() + 1];
+  return mEventMove.path()[currentTileIndex() + 1];
 }
 
 void EventMoveVisualizer::endMovement() {
   Core& core = game().core();
-  Unit& u = core.id2unit(mEventMove.unitID);
-  u.setPosition(mEventMove.path.back());
+  Unit& u = core.id2unit(mEventMove.unitID());
+  u.setPosition(mEventMove.path().back());
   if (core.isAnyUnitSelected()) {
     core.pathfinder().fillMap(u);
     game().setVaWalkableMap(game().buildWalkableArray());
