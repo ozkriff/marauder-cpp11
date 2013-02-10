@@ -8,7 +8,7 @@
 
 // TODO: Rewrite :(
 template <class T>
-T* getNext(std::list<T*> &list, T* node) {
+T* getNext(const std::list<T*> &list, const T* node) {
   assert(node);
   for (auto it = list.begin(); it != list.end(); ++it) {
     if (*it == node) {
