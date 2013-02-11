@@ -41,6 +41,7 @@ void EventAttackVisualizer::draw() {
   glTranslatef(0.0f, 0.0f, pos.z);
   game().drawUnitModel(u);
   glPopMatrix();
+  drawLineOfFire();
   mFrame++;
 }
 
@@ -49,4 +50,25 @@ void EventAttackVisualizer::end() {
     game().core().pathfinder().fillMap(game().core().selectedUnit());
     game().setVaWalkableMap(game().buildWalkableArray());
   }
+}
+
+// private:
+
+void EventAttackVisualizer::drawLineOfFire() {
+  const Unit& attacker = game().core().id2unit(mEventAttack.attackerID());
+  const Unit& victim = game().core().id2unit(mEventAttack.victimID());
+  V2f from = game().v2iToV2f(attacker.position());
+  V2f to = game().v2iToV2f(victim.position());
+  std::vector<float> v;
+  appendV3f(&v, V3f(from.x(), from.y(), 1.0f));
+  appendV3f(&v, V3f(
+      to.x() + rnd(0, 30) / 10.0f,
+      to.y() + rnd(0, 30) / 10.0f,
+      (rnd(0, 20) / 10.0f)));
+  glLineWidth(rnd(1, 30) / 10.0f);
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertexPointer(3, GL_FLOAT, 0, v.data());
+  glDrawArrays(GL_LINES, 0, v.size() / 3);
+  glDisableClientState(GL_VERTEX_ARRAY);
 }

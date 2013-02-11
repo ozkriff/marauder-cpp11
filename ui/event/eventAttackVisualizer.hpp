@@ -21,6 +21,8 @@ public:
 private:
   const EventAttack& mEventAttack;
   int mFrame;
+
+  void drawLineOfFire();
 };
 
 #endif
