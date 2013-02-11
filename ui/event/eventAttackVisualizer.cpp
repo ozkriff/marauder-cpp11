@@ -13,7 +13,9 @@
 EventAttackVisualizer::EventAttackVisualizer(Game& game, const Event& event)
   : EventVisualizer(game),
     mEventAttack(dynamic_cast<const EventAttack&>(event)),
-    mFrame(0)
+    mFrame(0),
+    mAttacker(game.core().id2unit(mEventAttack.attackerID())),
+    mVictim(game.core().id2unit(mEventAttack.victimID()))
 {
   game.setVaWalkableMap(VertexArray());
 }
@@ -31,15 +33,14 @@ bool EventAttackVisualizer::isUnitVisible(const Unit& u) {
 
 void EventAttackVisualizer::draw() {
   // TODO: animate shooting
-  const Unit& u = game().core().id2unit(mEventAttack.victimID());
-  V2f posTmp = game().v2iToV2f(u.position());
+  V2f posTmp = game().v2iToV2f(mVictim.position());
   V3f pos(posTmp.x(), posTmp.y(), -0.1f * mFrame); // TODO: magic!
   glPushMatrix();
   glTranslatef(pos.x, pos.y, 0.0f);
-  glRotatef(u.direction().toAngle() + 120.0f, 0, 0, 1); // TODO: Remove '+ 120'! Rotate obj files!
-  game().drawUnitCircle(u);
+  glRotatef(mVictim.direction().toAngle() + 120.0f, 0, 0, 1); // TODO: Remove '+ 120'! Rotate obj files!
+  game().drawUnitCircle(mVictim);
   glTranslatef(0.0f, 0.0f, pos.z);
-  game().drawUnitModel(u);
+  game().drawUnitModel(mVictim);
   glPopMatrix();
   drawLineOfFire();
   mFrame++;
@@ -55,10 +56,8 @@ void EventAttackVisualizer::end() {
 // private:
 
 void EventAttackVisualizer::drawLineOfFire() {
-  const Unit& attacker = game().core().id2unit(mEventAttack.attackerID());
-  const Unit& victim = game().core().id2unit(mEventAttack.victimID());
-  V2f from = game().v2iToV2f(attacker.position());
-  V2f to = game().v2iToV2f(victim.position());
+  V2f from = game().v2iToV2f(mAttacker.position());
+  V2f to = game().v2iToV2f(mVictim.position());
   std::vector<float> v;
   appendV3f(&v, V3f(from.x(), from.y(), 1.0f));
   appendV3f(&v, V3f(
