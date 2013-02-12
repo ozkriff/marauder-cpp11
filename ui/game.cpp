@@ -122,11 +122,11 @@ void Game::setVaWalkableMap(const VertexArray& va) {
 }
 
 void Game::cleanWalkableMapArray() {
-  setVaWalkableMap(buildWalkableArray());
+  setVaWalkableMap(VertexArray());
 }
 
 void Game::rebuildWalkableMapArray() {
-  setVaWalkableMap(VertexArray());
+  setVaWalkableMap(buildWalkableArray());
 }
 
 void Game::rebuildMapArray() {
