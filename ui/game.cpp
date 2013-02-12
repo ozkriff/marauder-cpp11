@@ -166,9 +166,6 @@ VertexArray Game::buildMapArray() {
   VertexArray v;
   V2i p;
   FOR_EACH_TILE(core().map(), p) {
-    if (core().map().tile(p).obstacle) {
-      continue;
-    }
     V2f pos = v2iToV2f(p);
     for (int i = 0; i < 6; i++) {
       appendV2f(&v.vertices, pos + indexToHexVertex(i));
@@ -198,8 +195,8 @@ VertexArray Game::buildObstaclesArray() {
     }
     V2f pos = v2iToV2f(p);
     for (int i = 0; i < 6; i++) {
-      appendV2f(&v.vertices, pos + indexToHexVertex(i));
-      appendV2f(&v.vertices, pos + indexToHexVertex(i + 1));
+      appendV2f(&v.vertices, pos + indexToHexVertex(i) * 0.7f);
+      appendV2f(&v.vertices, pos + indexToHexVertex(i + 1) * 0.7f);
       appendV2f(&v.vertices, pos);
       appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
       appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
@@ -240,10 +237,13 @@ void Game::drawMap() {
   glDrawArrays(GL_TRIANGLES, 0, mVaMap.vertices.size() / 2);
   glDisableClientState(GL_COLOR_ARRAY);
 
-  glColor3f(1.0f, 0.0f, 0.0f);
+  glColor3f(0.4f, 0.1f, 0.0f);
+  glPushMatrix();
+  glTranslatef(0.0f, 0.0f, 0.1f);
   glTexCoordPointer(2, GL_FLOAT, 0, mVaObstacles.textureCoordinates.data());
   glVertexPointer(2, GL_FLOAT, 0, mVaObstacles.vertices.data());
   glDrawArrays(GL_TRIANGLES, 0, mVaObstacles.vertices.size() / 2);
+  glPopMatrix();
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisable(GL_TEXTURE_2D);
