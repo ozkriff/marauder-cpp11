@@ -9,11 +9,11 @@ public:
   V2f();
   ~V2f();
 
-  float x() const { return mX; }
-  float y() const { return mY; }
+  float x() const;
+  float y() const;
 
-  void setX(float x) { mX = x; }
-  void setY(float y) { mY = y; }
+  void setX(float x);
+  void setY(float y);
 
   void rotate(V2f *p, float angle);
   V2f operator+(const V2f& b);

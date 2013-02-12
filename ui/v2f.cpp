@@ -19,6 +19,22 @@ V2f::V2f()
 V2f::~V2f() {
 }
 
+float V2f::x() const {
+  return mX;
+}
+
+float V2f::y() const {
+  return mY;
+}
+
+void V2f::setX(float x) {
+  mX = x;
+}
+
+void V2f::setY(float y) {
+  mY = y;
+}
+
 void V2f::rotate(V2f *p, float angle) {
   assert(p);
   assert(angle >= 0);
