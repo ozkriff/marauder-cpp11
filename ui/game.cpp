@@ -38,6 +38,10 @@ Game::Game()
 }
 
 Game::~Game() {
+  if (mEventVisualizer) {
+    delete mEventVisualizer;
+    mEventVisualizer = nullptr;
+  }
   SDL_Quit();
 }
 
