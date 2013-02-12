@@ -26,15 +26,12 @@ public:
   Core& core();
   const Core& core() const;
 
-  void setVaWalkableMap(const VertexArray& va);
-  void setVaFogOfWar(const VertexArray& va);
+  void cleanWalkableMapArray();
+  void rebuildWalkableMapArray();
+  void rebuildMapArray();
 
   void run();
   V2f v2iToV2f(const V2i& i) const;
-  VertexArray buildMapArray();
-  VertexArray buildObstaclesArray();
-  VertexArray buildFowArray();
-  VertexArray buildWalkableArray();
   void drawUnitModel(const Unit& u);
   void drawUnitCircle(const Unit& u);
 
@@ -45,7 +42,6 @@ private:
   Core mCore;
   UIMode mUiMode;
   VertexArray mVaWalkableMap;
-  VertexArray mVaFogOfWar;
   Uint32 mSDLFlags;
   int mBitsPerPixel;
   V2i mWinSize;
@@ -76,6 +72,9 @@ private:
   void switchActiveTileType();
   void createNewUnitInActiveTile();
   VertexArray buildPickingTilesArray();
+  VertexArray buildMapArray();
+  VertexArray buildObstaclesArray();
+  VertexArray buildWalkableArray();
   V2i pickTile(const V2i& mousePos);
   void drawForPicking();
   void scrollMap();
@@ -104,6 +103,7 @@ private:
   Camera& camera();
   const V2i& mousePos() const;
 
+  void setVaWalkableMap(const VertexArray& va);
   void setUiMode(UIMode uiMode);
   void setDone(bool done);
   void setFloorTexture(int textureID);

@@ -77,7 +77,7 @@ void Core::setSelectedUnit(Unit& unit) {
 void Core::setCurrentPlayer(Player* player) {
   mCurrentPlayer = player;
 }
-  
+
 void Core::createLocalHuman(int id) {
   auto p = new Player;
   mPlayers.push_back(p);

@@ -17,7 +17,7 @@ EventAttackVisualizer::EventAttackVisualizer(Game& game, const Event& event)
     mAttacker(game.core().id2unit(mEventAttack.attackerID())),
     mVictim(game.core().id2unit(mEventAttack.victimID()))
 {
-  game.setVaWalkableMap(VertexArray());
+  game.cleanWalkableMapArray();
 }
 
 EventAttackVisualizer::~EventAttackVisualizer() {
@@ -49,7 +49,7 @@ void EventAttackVisualizer::draw() {
 void EventAttackVisualizer::end() {
   if (game().core().isAnyUnitSelected()) {
     game().core().pathfinder().fillMap(game().core().selectedUnit());
-    game().setVaWalkableMap(game().buildWalkableArray());
+    game().rebuildWalkableMapArray();
   }
 }
 

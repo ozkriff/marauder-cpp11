@@ -17,7 +17,7 @@ EventMoveVisualizer::EventMoveVisualizer(Game& game, const Event& event)
     mEventMove(dynamic_cast<const EventMove&>(event)),
     mCurrentMoveIndex(0)
 {
-  game.setVaWalkableMap(VertexArray());
+  game.cleanWalkableMapArray();
 }
 
 EventMoveVisualizer::~EventMoveVisualizer() {
@@ -62,16 +62,16 @@ void EventMoveVisualizer::endMovement() {
   u.setPosition(mEventMove.path().back());
   if (core.isAnyUnitSelected()) {
     core.pathfinder().fillMap(u);
-    game().setVaWalkableMap(game().buildWalkableArray());
+    game().rebuildWalkableMapArray();
     core.calculateFow();
-    game().setVaFogOfWar(game().buildFowArray());
+    game().rebuildMapArray();
   }
   if (u.playerID() == core.currentPlayer().id) {
     if (core.isAnyUnitSelected()) {
       core.pathfinder().fillMap(core.selectedUnit());
-      game().setVaWalkableMap(game().buildWalkableArray());
+      game().rebuildWalkableMapArray();
     }
-    game().setVaFogOfWar(game().buildFowArray());
+    game().rebuildMapArray();
   }
 }
 

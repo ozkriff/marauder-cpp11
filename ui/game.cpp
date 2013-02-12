@@ -121,8 +121,16 @@ void Game::setVaWalkableMap(const VertexArray& va) {
   mVaWalkableMap = va;
 }
 
-void Game::setVaFogOfWar(const VertexArray& va) {
-  mVaFogOfWar = va;
+void Game::cleanWalkableMapArray() {
+  setVaWalkableMap(buildWalkableArray());
+}
+
+void Game::rebuildWalkableMapArray() {
+  setVaWalkableMap(VertexArray());
+}
+
+void Game::rebuildMapArray() {
+  mVaMap = buildMapArray();
 }
 
 void Game::run() {
@@ -165,6 +173,13 @@ VertexArray Game::buildMapArray() {
       appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
       appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
       appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
+      for (int tmp = 0; tmp < 3; tmp++) {
+        if (core().map().tile(p).fow == 0) {
+          appendRGB(&v.colors, 180, 180, 180);
+        } else {
+          appendRGB(&v.colors, 255, 255, 255);
+        }
+      }
     }
   }
   return v;
@@ -182,29 +197,6 @@ VertexArray Game::buildObstaclesArray() {
       appendV2f(&v.vertices, pos + indexToHexVertex(i));
       appendV2f(&v.vertices, pos + indexToHexVertex(i + 1));
       appendV2f(&v.vertices, pos);
-      appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
-      appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
-      appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
-    }
-  }
-  return v;
-}
-
-VertexArray Game::buildFowArray() {
-  VertexArray v;
-  V2i p;
-  FOR_EACH_TILE(core().map(), p) {
-    if (core().map().tile(p).fow > 0) {
-      continue;
-    }
-    V2f pos = v2iToV2f(p);
-    float h = 0.05f;
-    for (int i = 0; i < 6; i++) {
-      V2f a = indexToHexVertex(i);
-      V2f b = indexToHexVertex(i + 1);
-      appendV3f(&v.vertices, V3f(pos.x() + a.x(), pos.y() + a.y(), h));
-      appendV3f(&v.vertices, V3f(pos.x() + b.x(), pos.y() + b.y(), h));
-      appendV3f(&v.vertices, V3f(pos.x(), pos.y(), h));
       appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
       appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
       appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
@@ -237,10 +229,12 @@ void Game::drawMap() {
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   glBindTexture(GL_TEXTURE_2D, mFloorTexture);
 
-  glColor3f(1.0f, 1.0f, 1.0f);
+  glEnableClientState(GL_COLOR_ARRAY);
+  glColorPointer(3, GL_UNSIGNED_BYTE, 0, mVaMap.colors.data());
   glTexCoordPointer(2, GL_FLOAT, 0, mVaMap.textureCoordinates.data());
   glVertexPointer(2, GL_FLOAT, 0, mVaMap.vertices.data());
   glDrawArrays(GL_TRIANGLES, 0, mVaMap.vertices.size() / 2);
+  glDisableClientState(GL_COLOR_ARRAY);
 
   glColor3f(1.0f, 0.0f, 0.0f);
   glTexCoordPointer(2, GL_FLOAT, 0, mVaObstacles.textureCoordinates.data());
@@ -255,12 +249,6 @@ void Game::drawMap() {
   glColor3f(0.0f, 0.3f, 1.0f);
   glVertexPointer(3, GL_FLOAT, 0, mVaWalkableMap.vertices.data());
   glDrawArrays(GL_LINES, 0, mVaWalkableMap.vertices.size() / 3);
-  glDisableClientState(GL_VERTEX_ARRAY);
-
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glColor4f(0.0f, 0.0f, 0.0f, 0.2f);
-  glVertexPointer(3, GL_FLOAT, 0, mVaFogOfWar.vertices.data());
-  glDrawArrays(GL_TRIANGLES, 0, mVaFogOfWar.vertices.size() / 3);
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
@@ -388,7 +376,7 @@ void Game::switchActiveTileType() {
   mVaMap = buildMapArray();
   mVaObstacles = buildObstaclesArray();
   core().calculateFow();
-  mVaFogOfWar = buildFowArray();
+  rebuildMapArray();
   if (core().isAnyUnitSelected()) {
     core().pathfinder().fillMap(core().selectedUnit());
     mVaWalkableMap = buildWalkableArray();
@@ -645,7 +633,6 @@ void Game::initVertexArrays() {
   mVaPick = buildPickingTilesArray();
   mVaMap = buildMapArray();
   mVaObstacles = buildObstaclesArray();
-  mVaFogOfWar = buildFowArray();
 }
 
 void Game::loadUnitResources() {
