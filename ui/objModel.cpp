@@ -24,22 +24,22 @@ void ObjModel::read(const std::string& filename) {
   while (fgets(buffer, 100, file)) {
     if (buffer[0] == 'v' && buffer[1] == ' ') {
       // Vertex coords
-      V3f v;
+      float x, y, z;
       int items = sscanf(buffer, "v %f %f %f",
-          &v.x, &v.y, &v.z);
+          &x, &y, &z);
       if (items != 3) {
         die("objRead(): vertex coords: items != 3\n");
       }
-      mVertices.push_back(v);
+      mVertices.push_back({x, y, z});
     } else if (buffer[0] == 'v' && buffer[1] == 'n') {
       // Vertex normals
-      V3f norm;
+      float x, y, z;
       int items = sscanf(buffer, "vn %f %f %f",
-          &norm.x, &norm.y, &norm.z);
+          &x, &y, &z);
       if (items != 3) {
         die("objRead(): vertex normals: items != 3\n");
       }
-      mNormals.push_back(norm);
+      mNormals.push_back({x, y, z});
     } else if (buffer[0] == 'v' && buffer[1] == 't') {
       // Texture coords
       float x, y;
@@ -67,7 +67,7 @@ void ObjModel::read(const std::string& filename) {
 
 void ObjModel::debugPrint() {
   for (auto v : mVertices) {
-    printf("v %f %f %f\n", v.x, v.y, v.z);
+    printf("v %f %f %f\n", v.x(), v.y(), v.z());
   }
   for (auto v : mTextureCoords) {
     printf("t %f %f\n", v.x(), v.y());

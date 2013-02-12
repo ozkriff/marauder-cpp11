@@ -36,10 +36,10 @@ void EventAttackVisualizer::draw() {
   V2f posTmp = game().v2iToV2f(mVictim.position());
   V3f pos(posTmp.x(), posTmp.y(), -0.1f * mFrame); // TODO: magic!
   glPushMatrix();
-  glTranslatef(pos.x, pos.y, 0.0f);
+  glTranslatef(pos.x(), pos.y(), 0.0f);
   glRotatef(mVictim.direction().toAngle() + 120.0f, 0, 0, 1); // TODO: Remove '+ 120'! Rotate obj files!
   game().drawUnitCircle(mVictim);
-  glTranslatef(0.0f, 0.0f, pos.z);
+  glTranslatef(0.0f, 0.0f, pos.z());
   game().drawUnitModel(mVictim);
   glPopMatrix();
   drawLineOfFire();

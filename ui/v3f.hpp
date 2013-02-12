@@ -3,11 +3,25 @@
 #ifndef UI__V3F_HPP
 #define UI__V3F_HPP
 
+#include "ui/v2f.hpp"
+
 class V3f {
 public:
-  float x, y, z; // TODO: make private - see V2f
-
   V3f(float x = 0.0f, float y = 0.0f, float z = 0.0f);
+  V3f(const V2f& v2f);
+
+  float x() const;
+  float y() const;
+  float z() const;
+
+  void setX(float x);
+  void setY(float y);
+  void setZ(float z);
+
+private:
+  float mX;
+  float mY;
+  float mZ;
 };
 
 #endif

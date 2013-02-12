@@ -11,9 +11,9 @@ void appendV2f(std::vector<float>* vertices, const V2f& vertex) {
 
 void appendV3f(std::vector<float>* vertices, const V3f& vertex) {
   assert(vertices);
-  vertices->push_back(vertex.x);
-  vertices->push_back(vertex.y);
-  vertices->push_back(vertex.z);
+  vertices->push_back(vertex.x());
+  vertices->push_back(vertex.y());
+  vertices->push_back(vertex.z());
 }
 
 void appendRGB(std::vector<GLubyte>* colors, GLubyte r, GLubyte g, GLubyte b) {
