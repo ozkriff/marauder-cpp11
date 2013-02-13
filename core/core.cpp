@@ -192,13 +192,15 @@ void Core::addUnit(const V2i& p, int playerID) {
 }
 
 void Core::initUnits() {
-  for (int i = 0; i < 8; i++) {
-    V2i p(rnd(0, map().size().x() - 1), rnd(0, map().size().y() - 1));
-    if (!map().tile(p).obstacle && !isUnitAt(p)) {
-      int playerID = rnd(0, 1);
-      addUnit(p, playerID);
-    } else {
-      i--;
+  int unitsCount = 4;
+  for (auto player : players()) {
+    for (int i = 0; i < unitsCount; i++) {
+      V2i p(rnd(0, map().size().x() - 1), rnd(0, map().size().y() - 1));
+      if (!map().tile(p).obstacle && !isUnitAt(p)) {
+        addUnit(p, player->id);
+      } else {
+        i--;
+      }
     }
   }
 }
