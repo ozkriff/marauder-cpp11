@@ -15,7 +15,6 @@ Core::Core()
 {
   srand(std::time(nullptr));
   initUnitTypes();
-  mPathfinder.cleanMap();
   cleanFow();
   initPlayers();
   initObstacles();

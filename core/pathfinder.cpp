@@ -10,6 +10,7 @@ Pathfinder::Pathfinder(Core& core)
   : mQueue(core, 1000),
     mCore(core)
 {
+  cleanMap();
 }
 
 // If this is first(start) tile - no parent tile
