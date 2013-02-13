@@ -10,8 +10,6 @@
 #include "ui/event/eventAttackVisualizer.hpp"
 #include "ui/event/eventMoveVisualizer.hpp"
 
-#define DATA(x) (mPathToData + x)
-
 Game::Game()
   : mPathToData("/home/ozkriff/projects/my/marauder/data/"),
     mTileSize(6.0f),
@@ -31,7 +29,7 @@ Game::Game()
   setScreen(SDL_SetVideoMode(winSize().x(), winSize().y(),
       mBitsPerPixel, mSDLFlags));
   initOpengl();
-  setFloorTexture(loadTexture(DATA("floor.png")));
+  setFloorTexture(loadTexture(mPathToData + "floor.png"));
   initCamera();
   loadUnitResources();
   initVertexArrays();
@@ -642,8 +640,8 @@ void Game::initVertexArrays() {
 void Game::loadUnitResources() {
   int tankID = static_cast<int>(UnitTypeID::TANK);
   int truckID = static_cast<int>(UnitTypeID::TRUCK);
-  mUnitTextureIDs[tankID] = loadTexture(DATA("tank.png"));
-  mUnitTextureIDs[truckID] = loadTexture(DATA("truck.png"));
-  mVaUnits[tankID] = ObjModel(DATA("tank.obj")).build();
-  mVaUnits[truckID] = ObjModel(DATA("truck.obj")).build();
+  mUnitTextureIDs[tankID] = loadTexture(mPathToData + "tank.png");
+  mUnitTextureIDs[truckID] = loadTexture(mPathToData + "truck.png");
+  mVaUnits[tankID] = ObjModel(mPathToData + "tank.obj").build();
+  mVaUnits[truckID] = ObjModel(mPathToData + "truck.obj").build();
 }
