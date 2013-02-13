@@ -61,8 +61,8 @@ void EventAttackVisualizer::drawLineOfFire() {
   std::vector<float> v;
   appendV3f(&v, V3f(from.x(), from.y(), 1.0f));
   appendV3f(&v, V3f(
-      to.x() + rnd(0, 30) / 10.0f,
-      to.y() + rnd(0, 30) / 10.0f,
+      to.x() + rnd(-20, 20) / 10.0f,
+      to.y() + rnd(-20, 20) / 10.0f,
       (rnd(0, 20) / 10.0f)));
   glLineWidth(rnd(1, 30) / 10.0f);
   glEnableClientState(GL_VERTEX_ARRAY);
