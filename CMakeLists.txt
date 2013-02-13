@@ -10,6 +10,9 @@ set(WARNINGS "-Wold-style-cast -Wall -Wextra --pedantic")
 if(UNIX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${WARNINGS} -stdlib=libc++ -std=c++11")
 endif()
+include_directories("/usr/include/jsoncpp") # TODO: fix
+configure_file(confCore.json . COPYONLY)
+configure_file(confUI.json . COPYONLY)
 add_library(SOURCES
 	ui/game.cpp
 	ui/objModel.cpp
@@ -42,6 +45,7 @@ add_library(SOURCES
 )
 add_executable(marauder ui/main.cpp)
 set(LIBS
+	jsoncpp # TODO: fix
 	${OPENGL_LIBRARIES}
 	${SDL_LIBRARY}
 	${SDLIMAGE_LIBRARY}
@@ -53,7 +57,7 @@ add_executable(testMarauder
 	tests/testCoreDir.cpp
 	tests/testCoreLos.cpp
 )
-target_link_libraries(testMarauder unittest++ SOURCES ${LIBS})
+target_link_libraries(testMarauder unittest++ SOURCES ${LIBS}) # TODO: fix
 enable_testing()
 add_test(testMarauder testMarauder)
 add_custom_target(runUnitTests ALL COMMAND testMarauder)

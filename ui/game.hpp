@@ -5,6 +5,7 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
+#include "json/json.h"
 #include "core/core.hpp"
 #include "ui/vertexArray.hpp"
 #include "ui/v2f.hpp"
@@ -36,6 +37,7 @@ public:
   void drawUnitCircle(const Unit& u);
 
 private:
+  Json::Value mConfig;
   std::string mPathToData;
   float mTileSize;
   float mHexEx;

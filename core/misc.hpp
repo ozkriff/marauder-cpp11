@@ -5,6 +5,13 @@
 
 #include <cassert>
 #include <list>
+#include <string>
+
+namespace Json {
+  class Value;
+}
+
+Json::Value parseConfig(const std::string& fileName);
 
 // TODO: Rewrite :(
 template <class T>

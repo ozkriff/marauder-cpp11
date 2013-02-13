@@ -11,14 +11,17 @@
 #include "ui/event/eventMoveVisualizer.hpp"
 
 Game::Game()
-  : mPathToData("/home/ozkriff/projects/my/marauder/data/"),
+  : mConfig(parseConfig("confUI.json")),
+    mPathToData(mConfig["pathToData"].asString()),
     mTileSize(6.0f),
     mHexEx(tileSize() / 2.0f),
     mHexIn(std::sqrt(std::pow(mHexEx, 2) - std::pow(mHexEx / 2.0f, 2))),
     mUiMode(UIMode::NORMAL),
     mSDLFlags(SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_RESIZABLE),
-    mBitsPerPixel(32),
-    mWinSize(640, 480),
+    mBitsPerPixel(mConfig["bitsPerPixel"].asInt()),
+    mWinSize(
+        mConfig["resolution"]["x"].asInt(),
+        mConfig["resolution"]["y"].asInt()),
     mMousePos(0, 0),
     mActiveTilePos(0, 0),
     mIsRotatingCamera(false),

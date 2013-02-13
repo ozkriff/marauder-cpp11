@@ -4,6 +4,7 @@
 #define CORE__CORE_HPP
 
 #include <list>
+#include "json/json.h"
 #include "core/misc.hpp"
 #include "core/v2i.hpp"
 #include "core/math.hpp"
@@ -47,6 +48,7 @@ public:
   void refreshUnits(int playerID);
 
 private:
+  Json::Value mConfig;
   std::list<Player*> mPlayers;
   Player* mCurrentPlayer;
   Unit* mSelectedUnit;

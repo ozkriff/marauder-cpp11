@@ -7,13 +7,16 @@
 #include "core/core.hpp"
 
 Core::Core()
-  : mCurrentPlayer(nullptr),
+  : mConfig(parseConfig("confCore.json")),
+    mCurrentPlayer(nullptr),
     mSelectedUnit(nullptr),
     mPathfinder(*this),
-    mMap(V2i(20, 18)),
+    mMap(V2i(
+        mConfig["mapSize"]["x"].asInt(),
+        mConfig["mapSize"]["y"].asInt())),
     mEventManager(*this),
-    mInitialUnitsPerPlayerCount(4),
-    mPlayersCount(2)
+    mInitialUnitsPerPlayerCount(mConfig["initialUnitsPerPlayerCount"].asInt()),
+    mPlayersCount(mConfig["playersCount"].asInt())
 {
   srand(std::time(nullptr));
   initUnitTypes();
