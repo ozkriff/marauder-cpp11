@@ -11,7 +11,8 @@ Core::Core()
     mSelectedUnit(nullptr),
     mPathfinder(*this),
     mMap(V2i(20, 18)),
-    mEventManager(*this)
+    mEventManager(*this),
+    mInitialUnitsPerPlayerCount(4)
 {
   srand(std::time(nullptr));
   initUnitTypes();
@@ -192,9 +193,8 @@ void Core::addUnit(const V2i& p, int playerID) {
 }
 
 void Core::initUnits() {
-  int unitsCount = 4;
   for (auto player : players()) {
-    for (int i = 0; i < unitsCount; i++) {
+    for (int i = 0; i < mInitialUnitsPerPlayerCount; i++) {
       V2i p(rnd(0, map().size().x() - 1), rnd(0, map().size().y() - 1));
       if (!map().tile(p).obstacle && !isUnitAt(p)) {
         addUnit(p, player->id);

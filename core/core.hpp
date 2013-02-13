@@ -55,6 +55,7 @@ private:
   Pathfinder mPathfinder;
   Map mMap;
   EventManager mEventManager;
+  int mInitialUnitsPerPlayerCount;
 
   int getNewUnitID();
   void createLocalHuman(int id);
