@@ -12,7 +12,8 @@ Core::Core()
     mPathfinder(*this),
     mMap(V2i(20, 18)),
     mEventManager(*this),
-    mInitialUnitsPerPlayerCount(4)
+    mInitialUnitsPerPlayerCount(4),
+    mPlayersCount(2)
 {
   srand(std::time(nullptr));
   initUnitTypes();
@@ -213,5 +214,9 @@ void Core::initObstacles() {
 }
 
 void Core::initPlayers() {
-  initLocalPlayers({0, 1});
+  std::vector<int> playerIDs;
+  for (int i = 0; i < mPlayersCount; i++) {
+    playerIDs.push_back(i);
+  }
+  initLocalPlayers(playerIDs);
 }

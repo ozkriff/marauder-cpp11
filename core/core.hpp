@@ -56,6 +56,7 @@ private:
   Map mMap;
   EventManager mEventManager;
   int mInitialUnitsPerPlayerCount;
+  int mPlayersCount;
 
   int getNewUnitID();
   void createLocalHuman(int id);
