@@ -36,6 +36,7 @@ public:
   void drawUnitCircle(const Unit& u);
 
 private:
+  std::string mPathToData;
   float mTileSize;
   float mHexEx;
   float mHexIn;

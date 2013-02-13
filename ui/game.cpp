@@ -10,11 +10,11 @@
 #include "ui/event/eventAttackVisualizer.hpp"
 #include "ui/event/eventMoveVisualizer.hpp"
 
-#define DATA_DIR "/home/ozkriff/projects/my/marauder/data/"
-#define DATA(x) (DATA_DIR "/" x)
+#define DATA(x) (mPathToData + x)
 
 Game::Game()
-  : mTileSize(6.0f),
+  : mPathToData("/home/ozkriff/projects/my/marauder/data/"),
+    mTileSize(6.0f),
     mHexEx(tileSize() / 2.0f),
     mHexIn(std::sqrt(std::pow(mHexEx, 2) - std::pow(mHexEx / 2.0f, 2))),
     mUiMode(UIMode::NORMAL),
