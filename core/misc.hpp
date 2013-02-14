@@ -7,12 +7,6 @@
 #include <list>
 #include <string>
 
-namespace Json {
-  class Value;
-}
-
-Json::Value parseConfig(const std::string& fileName);
-
 // TODO: Rewrite :(
 template <class T>
 T* getNext(const std::list<T*> &list, const T* node) {

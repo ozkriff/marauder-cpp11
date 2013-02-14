@@ -5,17 +5,7 @@
 #include <cstdarg>
 #include <cassert>
 #include <cstring>
-#include <fstream>
-#include "json/json.h"
 #include "core/misc.hpp"
-
-Json::Value parseConfig(const std::string& fileName) {
-  Json::Value node;
-  Json::Reader reader;
-  std::ifstream f(fileName);
-  reader.parse(f, node);
-  return node;
-}
 
 void die(const char *message, ...) {
   va_list argList;
