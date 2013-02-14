@@ -98,7 +98,7 @@ void EventManager::applyEvent(const Event& e) {
 }
 
 void EventManager::applyInvisibleEvents() {
-  for (const Event* e = getNextEventNode();
+  for (const Event* e = getLastSeenEventNode();
       e && !isEventVisible(*e);
       e = getNext(mEvents, e))
   {
@@ -115,8 +115,7 @@ void EventManager::undoEvent(const Event& e) {
   e.undo(mCore);
 }
 
-// TODO: rename.
-const Event* EventManager::getNextEventNode() {
+const Event* EventManager::getLastSeenEventNode() {
   int id = mCore.currentPlayer().lastSeenEventID; // shortcut
   if (mEvents.empty()) {
     return nullptr;
