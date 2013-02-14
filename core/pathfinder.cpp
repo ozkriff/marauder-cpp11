@@ -46,12 +46,10 @@ void Pathfinder::processNeibor(const Unit& u, const V2i& p1, const V2i& p2) {
 }
 
 void Pathfinder::cleanMap() {
-  V2i p;
-  FOR_EACH_TILE(mCore.map(), p) {
-    Tile& t = mCore.map().tile(p);
-    t.cost = 30000;
-    t.parent = DirID::NONE;
-  }
+  mCore.map().forEachTile([](Tile& tile){
+    tile.cost = 30000;
+    tile.parent = DirID::NONE;
+  });
 }
 
 void Pathfinder::tryToPushNeibors(const Unit& u, const V2i& m) {

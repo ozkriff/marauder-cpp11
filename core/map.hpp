@@ -6,9 +6,6 @@
 #include "core/tile.hpp"
 #include <vector>
 
-#define FOR_EACH_TILE(map, p) \
-  for (p = V2i(0, 0); map.isInboard(p); p = map.incV2i(p))
-
 class Map {
 public:
   Map(const V2i& size);
@@ -23,6 +20,20 @@ public:
   Tile& tile(const V2i& pos);
 
   V2i incV2i(const V2i& pos) const;
+
+  template <class Func>
+  void forEachPos(Func f) {
+    for (V2i p = V2i(0, 0); isInboard(p); p = incV2i(p)) {
+      f(p);
+    }
+  }
+
+  template <class Func>
+  void forEachTile(Func f) {
+    for (Tile& tile : mTiles) {
+      f(tile);
+    }
+  }
 
 private:
   std::vector<Tile> mTiles;

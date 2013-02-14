@@ -164,8 +164,7 @@ float Game::aspectRatio() const {
 
 VertexArray Game::buildMapArray() {
   VertexArray v;
-  V2i p;
-  FOR_EACH_TILE(core().map(), p) {
+  core().map().forEachPos([&](const V2i& p) {
     V2f pos = v2iToV2f(p);
     for (int i = 0; i < 6; i++) {
       appendV2f(&v.vertices, pos + indexToHexVertex(i));
@@ -182,34 +181,31 @@ VertexArray Game::buildMapArray() {
         }
       }
     }
-  }
+  });
   return v;
 }
 
 VertexArray Game::buildObstaclesArray() {
   VertexArray v;
-  V2i p;
-  FOR_EACH_TILE(core().map(), p) {
-    if (!core().map().tile(p).obstacle) {
-      continue;
+  core().map().forEachPos([&](const V2i& p) {
+    if (core().map().tile(p).obstacle) {
+      V2f pos = v2iToV2f(p);
+      for (int i = 0; i < 6; i++) {
+        appendV2f(&v.vertices, pos + indexToHexVertex(i) * 0.7f);
+        appendV2f(&v.vertices, pos + indexToHexVertex(i + 1) * 0.7f);
+        appendV2f(&v.vertices, pos);
+        appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
+        appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
+        appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
+      }
     }
-    V2f pos = v2iToV2f(p);
-    for (int i = 0; i < 6; i++) {
-      appendV2f(&v.vertices, pos + indexToHexVertex(i) * 0.7f);
-      appendV2f(&v.vertices, pos + indexToHexVertex(i + 1) * 0.7f);
-      appendV2f(&v.vertices, pos);
-      appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
-      appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
-      appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
-    }
-  }
+  });
   return v;
 }
 
 VertexArray Game::buildWalkableArray() {
   VertexArray v;
-  V2i p;
-  FOR_EACH_TILE(core().map(), p) {
+  core().map().forEachPos([&](const V2i& p) {
     Tile& t = core().map().tile(p);
     if (t.parent.value() != DirID::NONE && t.cost < 50) {
       V2i to = Dir::neib(p, t.parent);
@@ -220,7 +216,7 @@ VertexArray Game::buildWalkableArray() {
         appendV3f(&v.vertices, V3f(toF.x(), toF.y(), 0.1f));
       }
     }
-  }
+  });
   return v;
 }
 
@@ -521,8 +517,7 @@ void Game::sdlEvents() {
 
 VertexArray Game::buildPickingTilesArray() {
   VertexArray v;
-  V2i p;
-  FOR_EACH_TILE(core().map(), p) {
+  core().map().forEachPos([&](const V2i& p) {
     V2f pos = v2iToV2f(p);
     for (int i = 0; i < 6; i++) {
       appendV2f(&v.vertices, pos + indexToHexVertex(i));
@@ -532,7 +527,7 @@ VertexArray Game::buildPickingTilesArray() {
       appendRGB(&v.colors, p.x(), p.y(), 1);
       appendRGB(&v.colors, p.x(), p.y(), 1);
     }
-  }
+  });
   return v;
 }
 
