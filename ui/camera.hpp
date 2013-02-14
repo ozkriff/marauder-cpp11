@@ -41,6 +41,7 @@ private:
   float mMinZoom;
   float mZoom;
 
+  float speed();
   void clampPosition();
 };
 

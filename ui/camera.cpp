@@ -31,11 +31,14 @@ void Camera::set() {
 }
 
 void Camera::move(float angle) {
-  float speed = mZoom / 20.0f; // TODO: do not calc here
   float speedInRadians = deg2rad(mZAngle - angle);
-  mPos.setX(mPos.x() + sin(speedInRadians) * speed);
-  mPos.setY(mPos.y() + cos(speedInRadians) * speed);
+  mPos.setX(mPos.x() + sin(speedInRadians) * speed());
+  mPos.setY(mPos.y() + cos(speedInRadians) * speed());
   clampPosition();
+}
+
+float Camera::speed() {
+  return mZoom / 20.0f;
 }
 
 void Camera::clampPosition() {
