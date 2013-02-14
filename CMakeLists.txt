@@ -42,6 +42,7 @@ add_library(SOURCES
   core/event/eventAttack.cpp
   core/event/eventMove.cpp
   core/event/eventEndTurn.cpp
+  core/jsonHelpers.cpp
 )
 add_executable(marauder ui/main.cpp)
 set(LIBS

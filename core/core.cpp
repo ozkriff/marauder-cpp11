@@ -5,15 +5,14 @@
 #include <ctime>
 #include <stdexcept>
 #include "core/core.hpp"
+#include "core/jsonHelpers.hpp"
 
 Core::Core()
   : mConfig(parseConfig("confCore.json")),
     mCurrentPlayer(nullptr),
     mSelectedUnit(nullptr),
     mPathfinder(*this),
-    mMap(V2i(
-        mConfig["mapSize"]["x"].asInt(),
-        mConfig["mapSize"]["y"].asInt())),
+    mMap(JsonValueToV2i(mConfig["mapSize"])),
     mEventManager(*this),
     mInitialUnitsPerPlayerCount(mConfig["initialUnitsPerPlayerCount"].asInt()),
     mPlayersCount(mConfig["playersCount"].asInt())

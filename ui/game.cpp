@@ -3,6 +3,7 @@
 #include "ui/game.hpp"
 #include <cmath>
 #include <cassert>
+#include "core/jsonHelpers.hpp"
 #include "ui/math.hpp"
 #include "ui/vertexArray.hpp"
 #include "ui/gl.hpp"
@@ -19,9 +20,7 @@ Game::Game()
     mUiMode(UIMode::NORMAL),
     mSDLFlags(SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_RESIZABLE),
     mBitsPerPixel(mConfig["bitsPerPixel"].asInt()),
-    mWinSize(
-        mConfig["resolution"]["x"].asInt(),
-        mConfig["resolution"]["y"].asInt()),
+    mWinSize(JsonValueToV2i(mConfig["resolution"])),
     mMousePos(0, 0),
     mActiveTilePos(0, 0),
     mIsRotatingCamera(false),
