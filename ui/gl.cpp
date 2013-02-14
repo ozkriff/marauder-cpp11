@@ -1,9 +1,9 @@
 // See LICENSE file for copyright and license details.
 
 #include <cassert>
-#include <SDL/SDL.h>
-#include <SDL/SDL_opengl.h>
-#include <SDL/SDL_image.h>
+#include "SDL.h"
+#include "SDL_opengl.h"
+#include "SDL_image.h"
 #include "core/misc.hpp"
 #include "ui/gl.hpp"
 

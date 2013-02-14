@@ -13,6 +13,7 @@ endif()
 include_directories("/usr/include/jsoncpp") # TODO: fix
 configure_file(confCore.json . COPYONLY)
 configure_file(confUI.json . COPYONLY)
+include_directories(${SDL_INCLUDE_DIR})
 add_library(SOURCES
   ui/game.cpp
   ui/objModel.cpp

@@ -3,8 +3,8 @@
 #ifndef UI__GAME_HPP
 #define UI__GAME_HPP
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_opengl.h>
+#include "SDL.h"
+#include "SDL_opengl.h"
 #include "json/json.h"
 #include "core/core.hpp"
 #include "ui/vertexArray.hpp"
