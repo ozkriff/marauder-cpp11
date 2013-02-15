@@ -6,7 +6,10 @@
 Unit::Unit(int id, int playerID, int typeID)
   : mTypeID(typeID),
     mID(id),
-    mPlayerID(playerID)
+    mPlayerID(playerID),
+    mDirection(DirID::NONE),
+    mActionPoints(0),
+    mPosition(0, 0)
 {
 }
 
