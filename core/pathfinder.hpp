@@ -4,8 +4,8 @@
 #define CORE__PATHFINDER_HPP
 
 #include <vector>
+#include <queue>
 #include "core/dir.hpp"
-#include "core/pathQueue.hpp"
 
 class Unit;
 class Core;
@@ -19,7 +19,7 @@ public:
   void cleanMap();
 
 private:
-  PathQueue mQueue;
+  std::queue<V2i> mQueue;
   Core& mCore;
 
   void tryToPushNeibors(const Unit& u, const V2i& m);

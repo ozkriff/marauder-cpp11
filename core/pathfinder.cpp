@@ -7,8 +7,7 @@
 #include "core/core.hpp"
 
 Pathfinder::Pathfinder(Core& core)
-  : mQueue(core, 1000),
-    mCore(core)
+  : mCore(core)
 {
 }
 
@@ -41,7 +40,11 @@ void Pathfinder::processNeibor(const Unit& u, const V2i& p1, const V2i& p2) {
   int newcost = t1.cost + getTileCost(u, p1, p2);
   int ap = u.actionPoints();
   if (t2.cost > newcost && newcost <= ap) {
-    mQueue.push(p2, Dir(p2, p1), newcost, Dir(p1, p2));
+    mQueue.push(p2);
+    // update neib tile info
+    t2.cost = newcost;
+    t2.dir = Dir(p2, p1);
+    t2.parent = Dir(p2, p1);
   }
 }
 
@@ -63,12 +66,17 @@ void Pathfinder::tryToPushNeibors(const Unit& u, const V2i& m) {
 }
 
 void Pathfinder::fillMap(const Unit& u) {
-  assert(mQueue.isEmpty());
+  assert(mQueue.empty());
   cleanMap();
   // Push start position
-  mQueue.push(u.position(), DirID::NONE, 0, u.direction());
-  while (!mQueue.isEmpty()) {
-    V2i p = mQueue.pop();
+  mQueue.push(u.position());
+  Tile& t = mCore.map().tile(u.position());
+  t.cost = 0;
+  t.parent = DirID::NONE;
+  t.dir = u.direction();
+  while (!mQueue.empty()) {
+    V2i p = mQueue.front();
+    mQueue.pop();
     tryToPushNeibors(u, p);
   }
 }

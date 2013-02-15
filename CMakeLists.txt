@@ -30,7 +30,6 @@ add_library(SOURCES
   core/misc.cpp
   core/v2i.cpp
   core/pathfinder.cpp
-  core/pathQueue.cpp
   core/dir.cpp
   core/los.cpp
   core/unit.cpp
