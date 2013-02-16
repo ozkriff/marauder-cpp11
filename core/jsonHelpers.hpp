@@ -5,7 +5,8 @@
 
 #include <string>
 #include "json/forwards.h"
-#include "core/v2i.hpp"
+
+class V2i;
 
 Json::Value parseConfig(const std::string& fileName);
 V2i JsonValueToV2i(const Json::Value& value);

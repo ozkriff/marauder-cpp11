@@ -3,6 +3,7 @@
 #include "core/jsonHelpers.hpp"
 #include <fstream>
 #include "json/json.h"
+#include "core/v2i.hpp"
 
 Json::Value parseConfig(const std::string& fileName) {
   Json::Value node;
