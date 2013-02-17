@@ -13,7 +13,9 @@
 EventAttackVisualizer::EventAttackVisualizer(Game& game, const Event& event)
   : EventVisualizer(game),
     mEventAttack(dynamic_cast<const EventAttack&>(event)),
+    mLastFrame(60),
     mFrame(0),
+    mFallingDownSpeed(0.1f),
     mAttacker(game.core().id2unit(mEventAttack.attackerID())),
     mVictim(game.core().id2unit(mEventAttack.victimID()))
 {
@@ -24,7 +26,7 @@ EventAttackVisualizer::~EventAttackVisualizer() {
 }
 
 bool EventAttackVisualizer::isFinished() {
-  return mFrame >= 60; // TODO: magic! magic!
+  return mFrame >= mLastFrame;
 }
 
 bool EventAttackVisualizer::isUnitVisible(const Unit& u) {
@@ -34,7 +36,7 @@ bool EventAttackVisualizer::isUnitVisible(const Unit& u) {
 void EventAttackVisualizer::draw() {
   // TODO: animate shooting
   V2f posTmp = game().v2iToV2f(mVictim.position());
-  V3f pos(posTmp.x(), posTmp.y(), -0.1f * mFrame); // TODO: magic!
+  V3f pos(posTmp.x(), posTmp.y(), -mFallingDownSpeed * mFrame);
   glPushMatrix();
   glTranslatef(pos.x(), pos.y(), 0.0f);
   glRotatef(mVictim.direction().toAngle() + 120.0f, 0, 0, 1); // TODO: Remove '+ 120'! Rotate obj files!

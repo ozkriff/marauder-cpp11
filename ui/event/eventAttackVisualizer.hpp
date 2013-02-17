@@ -21,6 +21,8 @@ public:
 private:
   const EventAttack& mEventAttack;
   int mFrame;
+  int mLastFrame;
+  float mFallingDownSpeed;
   const Unit& mAttacker;
   const Unit& mVictim;
 
