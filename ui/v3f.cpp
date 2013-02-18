@@ -10,10 +10,10 @@ V3f::V3f(float x, float y, float z)
 {
 }
 
-V3f::V3f(const V2f& v)
+V3f::V3f(const V2f& v, float z)
   : mX(v.x()),
     mY(v.y()),
-    mZ(0.0f)
+    mZ(z)
 {
 }
 
