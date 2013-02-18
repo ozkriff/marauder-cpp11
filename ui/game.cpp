@@ -275,11 +275,9 @@ void Game::drawUnitCircle(const Unit& u) {
   } else {
     die("drawUnitCircle(): You need more colors!");
   }
-  float n = (tileSize() / 2.0f) * 0.9f;
-  appendV3f(&v, V3f(n, n, 0.1f));
-  appendV3f(&v, V3f(n, -n, 0.1f));
-  appendV3f(&v, V3f(-n, -n, 0.1f));
-  appendV3f(&v, V3f(-n, n, 0.1f));
+  for (int i = 0; i < 6; i++) {
+    appendV3f(&v, V3f(indexToHexVertex(i) * 0.9f, 0.1f));
+  }
   glLineWidth(2);
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(3, GL_FLOAT, 0, v.data());
