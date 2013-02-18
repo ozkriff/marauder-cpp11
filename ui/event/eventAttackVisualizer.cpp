@@ -13,8 +13,8 @@
 EventAttackVisualizer::EventAttackVisualizer(Game& game, const Event& event)
   : EventVisualizer(game),
     mEventAttack(dynamic_cast<const EventAttack&>(event)),
-    mLastFrame(60),
     mFrame(0),
+    mLastFrame(60),
     mFallingDownSpeed(0.1f),
     mAttacker(game.core().id2unit(mEventAttack.attackerID())),
     mVictim(game.core().id2unit(mEventAttack.victimID()))
