@@ -610,6 +610,7 @@ void Game::initOpengl() {
   SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+  glViewport(0, 0, winSize().x(), winSize().y());
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   GLdouble left = 0.5;
