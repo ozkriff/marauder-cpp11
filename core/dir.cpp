@@ -90,18 +90,3 @@ V2i Dir::neib(const V2i& pos, Dir i) {
   V2i difference = dirToPosDiff[pos.y() % 2][i.toInt()];
   return pos + difference;
 }
-
-// TODO rename
-V2i Dir::getNeib(const V2i& p1, const V2i& p2, int addMe) {
-  assert(addMe >= -5);
-  assert(addMe <= 5);
-  int d = Dir(p1, p2).toInt() + addMe;
-  while (d > 6 - 1) {
-    d -= 6;
-  }
-  while (d < 0) {
-    d += 6;
-  }
-  assert(d >= 0 && d <= 6 - 1);
-  return neib(p1, Dir(d));
-}

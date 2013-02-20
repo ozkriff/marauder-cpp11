@@ -34,9 +34,6 @@ public:
 
   static V2i neib(const V2i& pos, Dir i);
 
-  // TODO: rename
-  static V2i getNeib(const V2i& p1, const V2i& p2, int addMe);
-
 private:
   DirID mValue;
 };
