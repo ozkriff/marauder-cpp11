@@ -50,7 +50,6 @@ void EventAttackVisualizer::draw() {
 
 void EventAttackVisualizer::end() {
   if (game().core().isAnyUnitSelected()) {
-    game().core().pathfinder().fillMap(game().core().selectedUnit());
     game().rebuildWalkableMapArray();
   }
 }

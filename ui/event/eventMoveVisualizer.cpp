@@ -59,18 +59,9 @@ const V2i& EventMoveVisualizer::nextTile() {
 void EventMoveVisualizer::endMovement() {
   Core& core = game().core();
   Unit& u = core.id2unit(mEventMove.unitID());
-  u.setPosition(mEventMove.path().back());
+  UNUSED(u);
   if (core.isAnyUnitSelected()) {
-    core.pathfinder().fillMap(u);
     game().rebuildWalkableMapArray();
-    core.calculateFow();
-    game().rebuildMapArray();
-  }
-  if (u.playerID() == core.currentPlayer().id) {
-    if (core.isAnyUnitSelected()) {
-      core.pathfinder().fillMap(core.selectedUnit());
-      game().rebuildWalkableMapArray();
-    }
     game().rebuildMapArray();
   }
 }

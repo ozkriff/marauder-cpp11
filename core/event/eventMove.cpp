@@ -45,6 +45,10 @@ void EventMove::apply(Core& core) const {
   if (u.playerID() == core.currentPlayer().id) {
     core.calculateFow();
   }
+  if (core.isAnyUnitSelected()) {
+    core.pathfinder().fillMap(core.selectedUnit());
+    core.calculateFow();
+  }
 }
 
 void EventMove::undo(Core& core) const {
