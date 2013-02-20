@@ -360,13 +360,23 @@ void Game::processClickOnTile() {
       core().pathfinder().fillMap(core().selectedUnit());
       setVaWalkableMap(buildWalkableArray());
     } else if (core().isAnyUnitSelected()) {
-      EventAttack::generate(core(), core().selectedUnit(), unit);
+      const V2i& from = core().selectedUnit().position();
+      const V2i& to = unit.position();
+      bool isLosClear = core().isLosClear(from, to);
+      if (isLosClear) {
+        Event* e = EventAttack::generate(core(), core().selectedUnit(), unit);
+        core().eventManager().addEvent(e);
+      }
     }
   } else if (core().isAnyUnitSelected()) {
     Tile& tile = core().map().tile(activeTilePos());
     int actionPoints = core().selectedUnit().actionPoints();
     if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
-      EventMove::generate(core(), core().selectedUnit(), activeTilePos());
+      if (core().map().tile(activeTilePos()).cost <= actionPoints) {
+        Event* e = EventMove::generate(
+            core(), core().selectedUnit(), activeTilePos());
+        core().eventManager().addEvent(e);
+      }
     }
   }
 }
@@ -420,9 +430,11 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
   case SDLK_t:
     switchActiveTileType();
     break;
-  case SDLK_e:
-    EventEndTurn::generate(core());
+  case SDLK_e: {
+    Event* e = EventEndTurn::generate(core());
+    core().eventManager().addEvent(e);
     break;
+  }
   case SDLK_u:
     createNewUnitInActiveTile();
     break;

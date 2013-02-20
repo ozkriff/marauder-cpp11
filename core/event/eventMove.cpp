@@ -22,19 +22,15 @@ const std::vector<V2i>& EventMove::path() const {
   return mPath;
 }
 
-void EventMove::generate(
+EventMove* EventMove::generate(
     Core& core, const Unit& unit, const V2i& destination)
 {
   auto e = new EventMove(core.eventManager().getNewEventID());
-  int ap = getUnitType(unit.typeID()).actionPoints;
-  if (core.map().tile(destination).cost > ap) {
-    return;
-  }
   e->mInitialDirection = unit.direction();
   e->mPath = core.pathfinder().getPath(destination);
   e->mCost = core.map().tile(destination).cost;
   e->mUnitID = unit.id();
-  core.eventManager().addEvent(e);
+  return e;
 }
 
 void EventMove::apply(Core& core) const {

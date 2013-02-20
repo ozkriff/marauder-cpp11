@@ -48,14 +48,11 @@ bool EventAttack::isVisible(const Core &core) const {
   return true;
 }
 
-void EventAttack::generate(
+EventAttack* EventAttack::generate(
     Core& core, const Unit& u, const Unit& otherUnit)
 {
-  auto event = new EventAttack(core.eventManager().getNewEventID());
-  if (!core.isLosClear(u.position(), otherUnit.position())) {
-    return;
-  }
+  auto* event = new EventAttack(core.eventManager().getNewEventID());
   event->mAttackerID = u.id();
   event->mVictimID = otherUnit.id();
-  core.eventManager().addEvent(event);
+  return event;
 }

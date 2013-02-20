@@ -23,7 +23,7 @@ public:
   virtual void undo(Core& core) const;
   virtual bool isVisible(const Core& core) const;
 
-  static void generate(
+  static EventMove* generate(
       Core& core, const Unit& u, const V2i& destination);
 
 private:
