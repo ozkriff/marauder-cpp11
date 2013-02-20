@@ -27,6 +27,15 @@ Core::Core()
 }
 
 Core::~Core() {
+  for (auto* unitPointer : mUnits) {
+    delete unitPointer;
+  }
+  for (auto* unitPointer : mDeadUnits) {
+    delete unitPointer;
+  }
+  for (auto* playerPointer : mPlayers) {
+    delete playerPointer;
+  }
 }
 
 const std::list<Player*>& Core::players() {
