@@ -14,7 +14,7 @@ class Pathfinder {
 public:
   Pathfinder(Core& core);
 
-  std::vector<V2i> getPath(const V2i& pos);
+  std::vector<V2i> getPath(const V2i& pos) const;
   void fillMap(const Unit& u);
   void cleanMap();
 

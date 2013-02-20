@@ -23,7 +23,7 @@ public:
   Core();
   ~Core();
 
-  const std::list<Player*>& players();
+  const std::list<Player*>& players() const;
   const Player& currentPlayer() const;
   Player& currentPlayer();
   Unit& selectedUnit();
@@ -31,9 +31,11 @@ public:
   std::list<Unit*>& units();
   std::list<Unit*>& deadUnits();
   Pathfinder& pathfinder();
+  const Pathfinder& pathfinder() const;
   const Map& map() const;
   Map& map();
   EventManager& eventManager();
+  const EventManager& eventManager() const;
 
   void setSelectedUnit(Unit& unit);
   void deselectedAnyUnits();

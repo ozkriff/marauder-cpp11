@@ -81,7 +81,7 @@ void Pathfinder::fillMap(const Unit& u) {
   }
 }
 
-std::vector<V2i> Pathfinder::getPath(const V2i& pos) {
+std::vector<V2i> Pathfinder::getPath(const V2i& pos) const {
   V2i p = pos;
   std::vector<V2i> path;
   assert(mCore.map().isInboard(p));

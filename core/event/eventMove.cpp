@@ -23,7 +23,7 @@ const std::vector<V2i>& EventMove::path() const {
 }
 
 EventMove* EventMove::generate(
-    Core& core, const Unit& unit, const V2i& destination)
+    const Core& core, const Unit& unit, const V2i& destination)
 {
   auto e = new EventMove(core.eventManager().getNewEventID());
   e->mInitialDirection = unit.direction();

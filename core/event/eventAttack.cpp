@@ -49,7 +49,7 @@ bool EventAttack::isVisible(const Core &core) const {
 }
 
 EventAttack* EventAttack::generate(
-    Core& core, const Unit& u, const Unit& otherUnit)
+    const Core& core, const Unit& u, const Unit& otherUnit)
 {
   auto* event = new EventAttack(core.eventManager().getNewEventID());
   event->mAttackerID = u.id();

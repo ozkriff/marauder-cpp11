@@ -38,7 +38,7 @@ Core::~Core() {
   }
 }
 
-const std::list<Player*>& Core::players() {
+const std::list<Player*>& Core::players() const {
   return mPlayers;
 }
 
@@ -70,6 +70,10 @@ Pathfinder& Core::pathfinder() {
   return mPathfinder;
 }
 
+const Pathfinder& Core::pathfinder() const {
+  return mPathfinder;
+}
+
 const Map& Core::map() const {
   return mMap;
 }
@@ -79,6 +83,10 @@ Map& Core::map() {
 }
 
 EventManager& Core::eventManager() {
+  return mEventManager;
+}
+
+const EventManager& Core::eventManager() const {
   return mEventManager;
 }
 

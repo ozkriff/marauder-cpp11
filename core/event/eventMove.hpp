@@ -24,7 +24,7 @@ public:
   virtual bool isVisible(const Core& core) const;
 
   static EventMove* generate(
-      Core& core, const Unit& u, const V2i& destination);
+      const Core& core, const Unit& u, const V2i& destination);
 
 private:
   int mUnitID;

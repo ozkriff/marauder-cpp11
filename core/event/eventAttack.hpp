@@ -24,7 +24,7 @@ public:
   virtual bool isVisible(const Core& core) const;
 
   static EventAttack* generate(
-      Core& core, const Unit& attacker, const Unit& victim);
+      const Core& core, const Unit& attacker, const Unit& victim);
 
 private:
   int mAttackerID;

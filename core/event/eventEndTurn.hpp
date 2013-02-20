@@ -17,7 +17,7 @@ public:
   virtual void undo(Core& core) const;
   virtual bool isVisible(const Core& core) const;
 
-  static EventEndTurn* generate(Core& core);
+  static EventEndTurn* generate(const Core &core);
 
 private:
   int mOldID;
