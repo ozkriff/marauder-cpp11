@@ -36,7 +36,7 @@ bool EventAttackVisualizer::isUnitVisible(const Unit& u) {
 void EventAttackVisualizer::draw() {
   // TODO: animate shooting
   V2f posTmp = game().v2iToV2f(mVictim.position());
-  V3f pos(posTmp.x(), posTmp.y(), -mFallingDownSpeed * mFrame);
+  V3f pos(posTmp, -mFallingDownSpeed * mFrame);
   glPushMatrix();
   glTranslatef(pos.x(), pos.y(), 0.0f);
   glRotatef(mVictim.direction().toAngle() + 120.0f, 0, 0, 1); // TODO: Remove '+ 120'! Rotate obj files!
@@ -60,10 +60,9 @@ void EventAttackVisualizer::drawLineOfFire() {
   V2f from = game().v2iToV2f(mAttacker.position());
   V2f to = game().v2iToV2f(mVictim.position());
   std::vector<float> v;
-  appendV3f(&v, V3f(from.x(), from.y(), 1.0f));
+  appendV3f(&v, V3f(from, 1.0f));
   appendV3f(&v, V3f(
-      to.x() + rnd(-20, 20) / 10.0f,
-      to.y() + rnd(-20, 20) / 10.0f,
+      to + rnd(-20, 20) / 10.0f,
       (rnd(0, 20) / 10.0f)));
   glLineWidth(rnd(1, 30) / 10.0f);
   glEnableClientState(GL_VERTEX_ARRAY);

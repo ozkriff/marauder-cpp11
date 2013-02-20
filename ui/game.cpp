@@ -212,8 +212,8 @@ VertexArray Game::buildWalkableArray() {
       if (core().map().isInboard(to)) {
         V2f fromF = v2iToV2f(p);
         V2f toF = v2iToV2f(to);
-        appendV3f(&v.vertices, V3f(fromF.x(), fromF.y(), 0.1f));
-        appendV3f(&v.vertices, V3f(toF.x(), toF.y(), 0.1f));
+        appendV3f(&v.vertices, V3f(fromF, 0.1f));
+        appendV3f(&v.vertices, V3f(toF, 0.1f));
       }
     }
   });
