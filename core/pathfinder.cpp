@@ -24,7 +24,7 @@ Dir Pathfinder::getParentDir(const Unit& u, const V2i& m) {
 int Pathfinder::getTileCost(const Unit& u, const V2i& t, const V2i& nb) {
   int diff = Dir(t, nb).diff(getParentDir(u, t));
   int maxAP = getUnitType(u.typeID()).actionPoints - 1;
-  int additionalCost[] = {0, 3, std::min<int>(maxAP, 6), maxAP};
+  int additionalCost[] = {0, 1, std::min<int>(maxAP, 4), maxAP};
   assert(diff >= 0 && diff <= 3);
   return 1 + additionalCost[diff];
 }

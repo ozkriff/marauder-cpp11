@@ -8,13 +8,13 @@ static UnitType unitTypes[static_cast<int>(UnitTypeID::COUNT)];
 static void initTank(UnitType* t) {
   assert(t);
   t->rangeOfVision = 4;
-  t->actionPoints = 5;
+  t->actionPoints = 4;
 }
 
 static void initTruck(UnitType* t) {
   assert(t);
-  t->rangeOfVision = 6;
-  t->actionPoints = 8;
+  t->rangeOfVision = 5;
+  t->actionPoints = 6;
 }
 
 const UnitType& getUnitType(int id) {
