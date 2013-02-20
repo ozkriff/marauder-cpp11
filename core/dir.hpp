@@ -32,6 +32,7 @@ public:
   Dir opposite() const;
   int diff(Dir d1) const;
 
+  // Get tile's neiborhood by it's index
   static V2i neib(const V2i& pos, Dir i);
 
 private:
