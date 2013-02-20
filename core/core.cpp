@@ -148,7 +148,6 @@ void Core::cleanFow() {
 
 void Core::calculateFow() {
   assert(mCurrentPlayer);
-  cleanFow();
   map().forEachPos([this](const V2i& p) {
     for (auto u : mUnits) {
       int maxDist = getUnitType(u->typeID()).rangeOfVision;

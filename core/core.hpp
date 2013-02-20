@@ -42,6 +42,7 @@ public:
   void setCurrentPlayer(Player* player);
 
   void calculateFow();
+  void cleanFow();
   bool isLosClear(const V2i& from, const V2i& to);
 
   Unit& unitAt(const V2i& pos);
@@ -69,7 +70,6 @@ private:
   void initUnits();
   void initPlayers();
   void initObstacles();
-  void cleanFow();
 };
 
 #endif

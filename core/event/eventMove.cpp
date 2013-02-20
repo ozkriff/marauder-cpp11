@@ -35,12 +35,16 @@ EventMove* EventMove::generate(
 
 void EventMove::apply(Core& core) const {
   Unit& u = core.id2unit(mUnitID);
+  if (u.playerID() == core.currentPlayer().id) {
+    for (const V2i& p : mPath) {
+      u.setPosition(p);
+      // TODO: u.setDirection?
+      core.calculateFow();
+    }
+  }
   u.setPosition(mPath[mPath.size() - 1]);
   u.setDirection(Dir(mPath[mPath.size() - 2], mPath[mPath.size() - 1]));
   u.setActionPoints(u.actionPoints() - mCost);
-  if (u.playerID() == core.currentPlayer().id) {
-    core.calculateFow();
-  }
   if (core.isAnyUnitSelected()) {
     core.pathfinder().fillMap(core.selectedUnit());
     core.calculateFow();
