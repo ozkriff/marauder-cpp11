@@ -18,7 +18,7 @@ Game::Game()
     mHexEx(tileSize() / 2.0f),
     mHexIn(std::sqrt(std::pow(mHexEx, 2) - std::pow(mHexEx / 2.0f, 2))),
     mUiMode(UIMode::NORMAL),
-    mSDLFlags(SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_RESIZABLE),
+    mSDLFlags(SDL_OPENGL | SDL_RESIZABLE),
     mBitsPerPixel(mConfig["bitsPerPixel"].asInt()),
     mWinSize(JsonValueToV2i(mConfig["resolution"])),
     mMousePos(0, 0),
