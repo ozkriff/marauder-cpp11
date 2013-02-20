@@ -19,7 +19,7 @@ namespace {
 
 V3f readVertexCoord(const char* buffer) {
   float x, y, z;
-  int items = sscanf(buffer, "v %f %f %f", &x, &y, &z);
+  int items = std::sscanf(buffer, "v %f %f %f", &x, &y, &z);
   if (items != 3) {
     throw std::logic_error("items != 3");
   }
@@ -28,7 +28,7 @@ V3f readVertexCoord(const char* buffer) {
 
 V3f readVertexNormal(const char* buffer) {
   float x, y, z;
-  int items = sscanf(buffer, "vn %f %f %f", &x, &y, &z);
+  int items = std::sscanf(buffer, "vn %f %f %f", &x, &y, &z);
   if (items != 3) {
     throw std::logic_error("items != 3");
   }
@@ -37,7 +37,7 @@ V3f readVertexNormal(const char* buffer) {
 
 V2f readTextureCoords(const char* buffer) {
   float x, y;
-  int items = sscanf(buffer, "vt %f %f", &x, &y);
+  int items = std::sscanf(buffer, "vt %f %f", &x, &y);
   if (items != 2) {
     throw std::logic_error("items != 3");
   }
@@ -47,7 +47,7 @@ V2f readTextureCoords(const char* buffer) {
 
 ObjModel::ObjTriangle readFace(const char* buffer) {
   ObjModel::ObjTriangle t;
-  int items = sscanf(buffer, "f %d/%d/%d %d/%d/%d %d/%d/%d",
+  int items = std::sscanf(buffer, "f %d/%d/%d %d/%d/%d %d/%d/%d",
       &t.vertex[0], &t.texture[0], &t.normal[0],
       &t.vertex[1], &t.texture[1], &t.normal[1],
       &t.vertex[2], &t.texture[2], &t.normal[2]);
@@ -61,12 +61,12 @@ ObjModel::ObjTriangle readFace(const char* buffer) {
 
 // TODO "usemtl filename"
 void ObjModel::read(const std::string& filename) {
-  auto file = fopen(filename.c_str(), "r");
+  auto file = std::fopen(filename.c_str(), "r");
   if (!file) {
     throw std::logic_error(std::string("can't find file: ") + filename);
   }
   char buffer[100];
-  while (fgets(buffer, 100, file)) {
+  while (std::fgets(buffer, 100, file)) {
     if (buffer[0] == 'v' && buffer[1] == ' ') {
       mVertices.push_back(readVertexCoord(buffer));
     } else if (buffer[0] == 'v' && buffer[1] == 'n') {
@@ -77,18 +77,18 @@ void ObjModel::read(const std::string& filename) {
       mFaces.push_back(readFace(buffer));
     }
   }
-  fclose(file);
+  std::fclose(file);
 }
 
 void ObjModel::debugPrint() {
   for (auto v : mVertices) {
-    printf("v %f %f %f\n", v.x(), v.y(), v.z());
+    std::printf("v %f %f %f\n", v.x(), v.y(), v.z());
   }
   for (auto v : mTextureCoords) {
-    printf("t %f %f\n", v.x(), v.y());
+    std::printf("t %f %f\n", v.x(), v.y());
   }
   for (auto f : mFaces) {
-    printf("f %d/%d/%d %d/%d/%d %d/%d/%d\n",
+    std::printf("f %d/%d/%d %d/%d/%d %d/%d/%d\n",
         f.vertex[0], f.texture[0], f.normal[0],
         f.vertex[1], f.texture[1], f.normal[1],
         f.vertex[2], f.texture[2], f.normal[2]);
