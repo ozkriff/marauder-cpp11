@@ -29,9 +29,9 @@ int Pathfinder::getTileCost(const Unit& u, const V2i& t, const V2i& nb) {
   return 1 + additionalCost[diff];
 }
 
-// TODO: rename
-// p1 - origPos, p2 - neib pos
-void Pathfinder::processNeibor(const Unit& u, const V2i& p1, const V2i& p2) {
+void Pathfinder::processNeighbourPosition(
+    const Unit& u, const V2i& p1, const V2i& p2)
+{
   Tile& t1 = mCore.map().tile(p1);
   Tile& t2 = mCore.map().tile(p2);
   if (mCore.isUnitAt(p2) || t2.obstacle) {
@@ -41,7 +41,7 @@ void Pathfinder::processNeibor(const Unit& u, const V2i& p1, const V2i& p2) {
   int ap = u.actionPoints();
   if (t2.cost > newcost && newcost <= ap) {
     mQueue.push(p2);
-    // update neib tile info
+    // update neighbour tile info
     t2.cost = newcost;
     t2.dir = Dir(p2, p1);
     t2.parent = Dir(p2, p1);
@@ -55,12 +55,12 @@ void Pathfinder::cleanMap() {
   });
 }
 
-void Pathfinder::tryToPushNeibors(const Unit& u, const V2i& m) {
+void Pathfinder::tryToPushNeighbours(const Unit& u, const V2i& m) {
   assert(mCore.map().isInboard(m));
   for (int i = 0; i < 6; i++) {
-    V2i neibM = Dir::neib(m, static_cast<DirID>(i));
-    if (mCore.map().isInboard(neibM)) {
-      processNeibor(u, m, neibM);
+    V2i neighbourPos = Dir::getNeighbourPos(m, static_cast<DirID>(i));
+    if (mCore.map().isInboard(neighbourPos)) {
+      processNeighbourPosition(u, m, neighbourPos);
     }
   }
 }
@@ -77,7 +77,7 @@ void Pathfinder::fillMap(const Unit& u) {
   while (!mQueue.empty()) {
     V2i p = mQueue.front();
     mQueue.pop();
-    tryToPushNeibors(u, p);
+    tryToPushNeighbours(u, p);
   }
 }
 
@@ -87,7 +87,7 @@ std::vector<V2i> Pathfinder::getPath(const V2i& pos) {
   assert(mCore.map().isInboard(p));
   while (mCore.map().tile(p).cost != 0) {
     path.push_back(p);
-    p = Dir::neib(p, mCore.map().tile(p).parent);
+    p = Dir::getNeighbourPos(p, mCore.map().tile(p).parent);
     assert(mCore.map().isInboard(p));
   }
   // Add start position

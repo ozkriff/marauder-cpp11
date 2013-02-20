@@ -22,8 +22,12 @@ private:
   std::queue<V2i> mQueue;
   Core& mCore;
 
-  void tryToPushNeibors(const Unit& u, const V2i& m);
-  void processNeibor(const Unit& u, const V2i& p1, const V2i& p2);
+  void tryToPushNeighbours(const Unit& u, const V2i& m);
+
+  // TODO: rename
+  // p1 - origPos, p2 - neighbour position
+  void processNeighbourPosition(const Unit& u, const V2i& p1, const V2i& p2);
+
   bool canMoveThere(const V2i& p1, const V2i& p2);
   Dir getParentDir(const Unit& u, const V2i& m);
   int getTileCost(const Unit& u, const V2i& t, const V2i& nb);

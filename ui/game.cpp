@@ -208,7 +208,7 @@ VertexArray Game::buildWalkableArray() {
   core().map().forEachPos([&](const V2i& p) {
     Tile& t = core().map().tile(p);
     if (t.parent.value() != DirID::NONE && t.cost < 50) {
-      V2i to = Dir::neib(p, t.parent);
+      V2i to = Dir::getNeighbourPos(p, t.parent);
       if (core().map().isInboard(to)) {
         V2f fromF = v2iToV2f(p);
         V2f toF = v2iToV2f(to);
