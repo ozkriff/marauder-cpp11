@@ -7,10 +7,3 @@
 #include <cstring>
 #include "core/misc.hpp"
 
-void die(const char *message, ...) {
-  va_list argList;
-  va_start(argList, message);
-  vfprintf(stderr, message, argList);
-  va_end(argList);
-  exit(EXIT_FAILURE);
-}

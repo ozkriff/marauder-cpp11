@@ -20,7 +20,7 @@ V3f readVertexCoord(const char* buffer) {
   float x, y, z;
   int items = sscanf(buffer, "v %f %f %f", &x, &y, &z);
   if (items != 3) {
-    die("readVertexCoord(): items != 3\n");
+    throw std::logic_error("items != 3");
   }
   return V3f(x, y, z);
 }
@@ -29,7 +29,7 @@ V3f readVertexNormal(const char* buffer) {
   float x, y, z;
   int items = sscanf(buffer, "vn %f %f %f", &x, &y, &z);
   if (items != 3) {
-    die("readVertexNormal(): items != 3\n");
+    throw std::logic_error("items != 3");
   }
   return V3f(x, y, z);
 }
@@ -38,7 +38,7 @@ V2f readTextureCoords(const char* buffer) {
   float x, y;
   int items = sscanf(buffer, "vt %f %f", &x, &y);
   if (items != 2) {
-    die("readVertexNormal(): items != 3\n");
+    throw std::logic_error("items != 3");
   }
   y = 1.0f - y; // flip vertically
   return V2f(x, y);
@@ -51,7 +51,7 @@ ObjModel::ObjTriangle readFace(const char* buffer) {
       &t.vertex[1], &t.texture[1], &t.normal[1],
       &t.vertex[2], &t.texture[2], &t.normal[2]);
   if (items != 9) {
-    die("readFace(): items != 9\n");
+    throw std::logic_error("items != 9");
   }
   return t;
 }
@@ -62,7 +62,7 @@ ObjModel::ObjTriangle readFace(const char* buffer) {
 void ObjModel::read(const std::string& filename) {
   auto file = fopen(filename.c_str(), "r");
   if (!file) {
-    die("objRead(): can't find file: %s", filename.c_str());
+    throw std::logic_error(std::string("can't find file: ") + filename);
   }
   char buffer[100];
   while (fgets(buffer, 100, file)) {

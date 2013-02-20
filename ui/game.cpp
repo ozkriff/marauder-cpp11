@@ -273,7 +273,7 @@ void Game::drawUnitCircle(const Unit& u) {
   } else if (u.playerID() == 1) {
     glColor3f(0, 0, 1);
   } else {
-    die("drawUnitCircle(): You need more colors!");
+    throw std::logic_error("You need more colors!");
   }
   for (int i = 0; i < 6; i++) {
     appendV3f(&v, V3f(indexToHexVertex(i) * 0.9f, 0.1f));

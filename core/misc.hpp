@@ -23,8 +23,6 @@ T* getNext(const std::list<T*> &list, const T* node) {
   return nullptr;
 }
 
-void die(const char *message, ...);
-
 #define UNUSED(x) ((void)x)
 
 #endif

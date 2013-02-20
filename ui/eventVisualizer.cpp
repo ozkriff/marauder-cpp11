@@ -42,7 +42,6 @@ EventVisualizer* newEventVisualizer(Game& game, const Event& event) {
   case EventTypeID::ATTACK:
     return new EventAttackVisualizer(game, event);
   default:
-    die("default case!");
-    return nullptr;
+    throw std::logic_error("default case!");
   }
 }

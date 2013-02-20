@@ -1,6 +1,7 @@
 // See LICENSE file for copyright and license details.
 
 #include <cassert>
+#include <stdexcept>
 #include "SDL.h"
 #include "SDL_opengl.h"
 #include "SDL_image.h"
@@ -25,10 +26,7 @@ static GLenum getTextureFormat(
       return GL_BGR;
     }
   } else {
-    die("gl.c: loadTexture(): "
-        "the image is not truecolor.."
-        "  this will probably break\n");
-    return 0;
+    throw std::logic_error("the image is not truecolor..");
   }
 }
 
@@ -48,12 +46,10 @@ static bool isPowerOfTwo(int n) {
 int loadTexture(const std::string& filename) {
   SDL_Surface* surface = IMG_Load(filename.c_str());
   if (!surface) {
-    die("gl.c: loadTexture(): Can't load file '%s'\n",
-        filename.c_str());
+    throw std::logic_error(std::string("Can't load image: ") + filename);
   }
   if (!isPowerOfTwo(surface->w) || !isPowerOfTwo(surface->h)) {
-    die("ui/gl.c: loadTexture(): "
-        "image's height or width is not a power of 2\n");
+    throw std::logic_error("image's height or width is not a power of 2");
   }
   GLint nOfColors = surface->format->BytesPerPixel;
   GLenum textureFormat = getTextureFormat(surface, nOfColors);
