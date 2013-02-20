@@ -36,6 +36,7 @@ public:
   EventManager& eventManager();
 
   void setSelectedUnit(Unit& unit);
+  void deselectedAnyUnits();
   void setCurrentPlayer(Player* player);
 
   void calculateFow();

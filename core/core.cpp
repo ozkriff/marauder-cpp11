@@ -77,6 +77,10 @@ void Core::setSelectedUnit(Unit& unit) {
   mSelectedUnit = &unit;
 }
 
+void Core::deselectedAnyUnits() {
+  mSelectedUnit = nullptr;
+}
+
 void Core::setCurrentPlayer(Player* player) {
   mCurrentPlayer = player;
 }
