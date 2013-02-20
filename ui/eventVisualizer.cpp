@@ -1,6 +1,7 @@
 // See LICENSE file for copyright and license details.
 
 #include <cassert>
+#include <stdexcept>
 #include "SDL.h"
 #include "SDL_opengl.h"
 #include "core/v2i.hpp"

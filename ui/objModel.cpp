@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cassert>
+#include <stdexcept>
 #include <GL/gl.h>
 #include "core/dir.hpp"
 #include "core/misc.hpp"

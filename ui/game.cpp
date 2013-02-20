@@ -3,6 +3,7 @@
 #include "ui/game.hpp"
 #include <cmath>
 #include <cassert>
+#include <stdexcept>
 #include "core/jsonHelpers.hpp"
 #include "ui/math.hpp"
 #include "ui/vertexArray.hpp"
