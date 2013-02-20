@@ -6,6 +6,7 @@
 #include "SDL_opengl.h"
 #include "SDL_image.h"
 #include "core/misc.hpp"
+#include "core/math.hpp"
 #include "ui/gl.hpp"
 
 static GLenum getTextureFormat(
@@ -37,10 +38,6 @@ static void setTextureParameters() {
   glTexParameteri(GL_TEXTURE_2D,
       GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-}
-
-static bool isPowerOfTwo(int n) {
-  return ((n & (n - 1)) == 0);
 }
 
 int loadTexture(const std::string& filename) {

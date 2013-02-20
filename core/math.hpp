@@ -7,5 +7,6 @@
 
 int rnd(int min, int max);
 void clampInt(int *n, int min, int max);
+bool isPowerOfTwo(int n);
 
 #endif

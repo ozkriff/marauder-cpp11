@@ -23,3 +23,7 @@ void clampInt(int *n, int min, int max) {
     *n = max;
   }
 }
+
+bool isPowerOfTwo(int n) {
+  return ((n & (n - 1)) == 0);
+}
