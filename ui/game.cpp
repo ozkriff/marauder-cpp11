@@ -151,9 +151,8 @@ V2f Game::v2iToV2f(const V2i& i) const {
 }
 
 V2f Game::indexToHexVertex(int i) {
-  return V2f(
-      mHexEx * std::cos(M_PI_2 + 2 * M_PI * i / 6),
-      mHexEx * std::sin(M_PI_2 + 2 * M_PI * i / 6));
+  float n = M_PI_2 + 2 * M_PI * i / 6;
+  return V2f(mHexEx * std::cos(n), mHexEx * std::sin(n));
 }
 
 float Game::aspectRatio() const {
