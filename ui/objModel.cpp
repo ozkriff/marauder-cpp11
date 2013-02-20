@@ -14,6 +14,50 @@ ObjModel::ObjModel(const std::string& filename) {
   read(filename);
 }
 
+namespace {
+
+V3f readVertexCoord(const char* buffer) {
+  float x, y, z;
+  int items = sscanf(buffer, "v %f %f %f", &x, &y, &z);
+  if (items != 3) {
+    die("readVertexCoord(): items != 3\n");
+  }
+  return V3f(x, y, z);
+}
+
+V3f readVertexNormal(const char* buffer) {
+  float x, y, z;
+  int items = sscanf(buffer, "vn %f %f %f", &x, &y, &z);
+  if (items != 3) {
+    die("readVertexNormal(): items != 3\n");
+  }
+  return V3f(x, y, z);
+}
+
+V2f readTextureCoords(const char* buffer) {
+  float x, y;
+  int items = sscanf(buffer, "vt %f %f", &x, &y);
+  if (items != 2) {
+    die("readVertexNormal(): items != 3\n");
+  }
+  y = 1.0f - y; // flip vertically
+  return V2f(x, y);
+}
+
+ObjModel::ObjTriangle readFace(const char* buffer) {
+  ObjModel::ObjTriangle t;
+  int items = sscanf(buffer, "f %d/%d/%d %d/%d/%d %d/%d/%d",
+      &t.vertex[0], &t.texture[0], &t.normal[0],
+      &t.vertex[1], &t.texture[1], &t.normal[1],
+      &t.vertex[2], &t.texture[2], &t.normal[2]);
+  if (items != 9) {
+    die("readFace(): items != 9\n");
+  }
+  return t;
+}
+
+} // namespace
+
 // TODO "usemtl filename"
 void ObjModel::read(const std::string& filename) {
   auto file = fopen(filename.c_str(), "r");
@@ -23,43 +67,13 @@ void ObjModel::read(const std::string& filename) {
   char buffer[100];
   while (fgets(buffer, 100, file)) {
     if (buffer[0] == 'v' && buffer[1] == ' ') {
-      // Vertex coords
-      float x, y, z;
-      int items = sscanf(buffer, "v %f %f %f",
-          &x, &y, &z);
-      if (items != 3) {
-        die("objRead(): vertex coords: items != 3\n");
-      }
-      mVertices.push_back({x, y, z});
+      mVertices.push_back(readVertexCoord(buffer));
     } else if (buffer[0] == 'v' && buffer[1] == 'n') {
-      // Vertex normals
-      float x, y, z;
-      int items = sscanf(buffer, "vn %f %f %f",
-          &x, &y, &z);
-      if (items != 3) {
-        die("objRead(): vertex normals: items != 3\n");
-      }
-      mNormals.push_back({x, y, z});
+      mVertices.push_back(readVertexNormal(buffer));
     } else if (buffer[0] == 'v' && buffer[1] == 't') {
-      // Texture coords
-      float x, y;
-      int items = sscanf(buffer, "vt %f %f", &x, &y);
-      y = 1.0f - y; // flip vertically
-      if (items != 2) {
-        die("objRead(): texture coords: items != 2\n");
-      }
-      mTextureCoords.push_back(V2f(x, y));
-    } else if (buffer[0] == 'f' && buffer [1] == ' ') {
-      // Faces
-      ObjTriangle t;
-      int items = sscanf(buffer, "f %d/%d/%d %d/%d/%d %d/%d/%d",
-          &t.vertex[0], &t.texture[0], &t.normal[0],
-          &t.vertex[1], &t.texture[1], &t.normal[1],
-          &t.vertex[2], &t.texture[2], &t.normal[2]);
-      if (items != 9) {
-        die("objRead(): faces: items != 9\n");
-      }
-      mFaces.push_back(t);
+      mTextureCoords.push_back(readTextureCoords(buffer));
+    } else if (buffer[0] == 'f' && buffer[1] == ' ') {
+      mFaces.push_back(readFace(buffer));
     }
   }
   fclose(file);

@@ -10,12 +10,6 @@
 
 class ObjModel {
 public:
-  ObjModel(const std::string& filename);
-
-  VertexArray build();
-  void debugPrint();
-
-private:
   // indices
   class ObjTriangle {
   public:
@@ -24,6 +18,12 @@ private:
     int normal[3];
   };
 
+  ObjModel(const std::string& filename);
+
+  VertexArray build();
+  void debugPrint();
+
+private:
   std::vector<V3f> mVertices;
   std::vector<V3f> mNormals;
   std::vector<V2f> mTextureCoords;
