@@ -90,6 +90,7 @@ private:
   void drawMap();
   void drawUnit(const Unit& u);
   void drawUnits();
+  void drawSelectedunitMarker();
   void draw();
   void screenScenarioMainEvents();
   void logic();

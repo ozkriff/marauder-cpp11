@@ -311,6 +311,22 @@ void Game::drawUnits() {
   }
 }
 
+void Game::drawSelectedunitMarker() {
+  const Unit& u = core().selectedUnit();
+  V2f p = v2iToV2f(u.position());
+  std::vector<float> v;
+  float sn = std::sin(SDL_GetTicks() / 100.0f) * 2;
+  appendV3f(&v, V3f(p, sn + tileSize()));
+  appendV3f(&v, V3f(p, sn + tileSize() * 1.5f));
+  glLineWidth(2);
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertexPointer(3, GL_FLOAT, 0, v.data());
+  glDrawArrays(GL_LINES, 0, v.size() / 3);
+  glDisableClientState(GL_VERTEX_ARRAY);
+  glLineWidth(1);
+}
+
 void Game::draw() {
   glClearColor(1.0, 1.0, 1.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -326,6 +342,9 @@ void Game::draw() {
       setUiMode(UIMode::NORMAL);
       mEventVisualizer->end();
     }
+  }
+  if (core().isAnyUnitSelected()) {
+    drawSelectedunitMarker();
   }
   SDL_GL_SwapBuffers();
 }
