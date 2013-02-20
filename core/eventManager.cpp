@@ -63,7 +63,7 @@ void EventManager::undoUnshownEvents() {
     if (event->id() == mCore.currentPlayer().lastSeenEventID) {
       break;
     }
-    undoEvent(*event);
+    event->undo(mCore);
     --i;
   }
 }
@@ -109,10 +109,6 @@ void EventManager::applyInvisibleEvents() {
 
 bool EventManager::isEventVisible(const Event& e) const {
   return e.isVisible(mCore);
-}
-
-void EventManager::undoEvent(const Event& e) {
-  e.undo(mCore);
 }
 
 const Event* EventManager::getLastSeenEventNode() {

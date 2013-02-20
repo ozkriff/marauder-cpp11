@@ -32,7 +32,6 @@ private:
   void applyEvent(const Event& e);
   void applyInvisibleEvents();
   bool isEventVisible(const Event& e) const;
-  void undoEvent(const Event& e);
   const Event* getLastSeenEventNode();
   void event2log(const Event& e);
   void sendEvent(const Event& e);
