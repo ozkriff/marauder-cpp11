@@ -9,7 +9,9 @@
 #include "core/math.hpp"
 #include "ui/gl.hpp"
 
-static GLenum getTextureFormat(
+namespace {
+
+GLenum getTextureFormat(
     const SDL_Surface* surface, int bytesPerPixel)
 {
   if (bytesPerPixel == 4) {
@@ -31,7 +33,7 @@ static GLenum getTextureFormat(
   }
 }
 
-static void setTextureParameters() {
+void setTextureParameters() {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -39,6 +41,8 @@ static void setTextureParameters() {
       GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
+
+} // namespace
 
 int loadTexture(const std::string& filename) {
   SDL_Surface* surface = IMG_Load(filename.c_str());

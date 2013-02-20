@@ -5,7 +5,9 @@
 #include <cstdlib>
 #include "math.hpp"
 
-static V2i dirToPosDiff[2][6] = {
+namespace {
+
+V2i dirToPosDiff[2][6] = {
   {
     {1, -1},
     {1, 0},
@@ -23,6 +25,8 @@ static V2i dirToPosDiff[2][6] = {
     {-1, -1},
   }
 };
+
+} // namespace
 
 Dir::Dir()
   : mValue(DirID::NONE)
