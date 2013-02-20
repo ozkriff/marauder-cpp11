@@ -10,16 +10,16 @@
 #include "ui/gl.hpp"
 
 static GLenum getTextureFormat(
-    const SDL_Surface* surface, int nOfColors)
+    const SDL_Surface* surface, int bytesPerPixel)
 {
-  if (nOfColors == 4) {
+  if (bytesPerPixel == 4) {
     // contains an alpha channel
     if (surface->format->Rmask == 0xff) {
       return GL_RGBA;
     } else {
       return GL_BGRA;
     }
-  } else if (nOfColors == 3) {
+  } else if (bytesPerPixel == 3) {
     // no alpha channel
     if (surface->format->Rmask == 0xff) {
       return GL_RGB;
@@ -48,15 +48,15 @@ int loadTexture(const std::string& filename) {
   if (!isPowerOfTwo(surface->w) || !isPowerOfTwo(surface->h)) {
     throw std::logic_error("image's height or width is not a power of 2");
   }
-  GLint nOfColors = surface->format->BytesPerPixel;
-  GLenum textureFormat = getTextureFormat(surface, nOfColors);
+  GLint bytesPerPixel = surface->format->BytesPerPixel;
+  GLenum textureFormat = getTextureFormat(surface, bytesPerPixel);
   GLuint id;
   glGenTextures(1, &id);
   glBindTexture(GL_TEXTURE_2D, id);
   setTextureParameters();
   GLenum target = GL_TEXTURE_2D;
   GLint level = 0;
-  GLint internalFormat = nOfColors;
+  GLint internalFormat = bytesPerPixel;
   GLint border = 0;
   GLenum type = GL_UNSIGNED_BYTE;
   glTexImage2D(target, level, internalFormat,
