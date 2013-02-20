@@ -51,6 +51,7 @@ void EventAttackVisualizer::draw() {
 void EventAttackVisualizer::end() {
   if (game().core().isAnyUnitSelected()) {
     game().rebuildWalkableMapArray();
+    game().rebuildMapArray();
   }
 }
 
