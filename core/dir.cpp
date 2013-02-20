@@ -65,7 +65,7 @@ int Dir::toInt() const {
 
 float Dir::toAngle() const {
   assert(toInt() < 6);
-  return (360 / 6) * toInt();
+  return (360 / 6) * toInt() + 30;
 }
 
 Dir Dir::opposite() const {

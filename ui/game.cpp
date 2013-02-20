@@ -291,7 +291,7 @@ void Game::drawUnit(const Unit& u) {
   glColor3f(1, 0, 0);
   glPushMatrix();
   glTranslatef(f.x(), f.y(), 0);
-  glRotatef(u.direction().toAngle() + 120.0f, 0, 0, 1);
+  glRotatef(u.direction().toAngle() + 90.0f, 0, 0, 1);
   drawUnitModel(u);
   drawUnitCircle(u);
   glPopMatrix();

@@ -39,7 +39,7 @@ void EventAttackVisualizer::draw() {
   V3f pos(posTmp, -mFallingDownSpeed * mFrame);
   glPushMatrix();
   glTranslatef(pos.x(), pos.y(), 0.0f);
-  glRotatef(mVictim.direction().toAngle() + 120.0f, 0, 0, 1); // TODO: Remove '+ 120'! Rotate obj files!
+  glRotatef(mVictim.direction().toAngle() + 90.0f, 0, 0, 1); // TODO: Remove '+ 90'! Rotate obj files!
   game().drawUnitCircle(mVictim);
   glTranslatef(0.0f, 0.0f, pos.z());
   game().drawUnitModel(mVictim);
