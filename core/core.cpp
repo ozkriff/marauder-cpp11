@@ -221,7 +221,7 @@ void Core::initUnits() {
 
 void Core::initObstacles() {
   map().forEachTile([](Tile& tile) {
-    tile.obstacle = ((rand() % 100) > 85);
+    tile.obstacle = (rnd(0, 100) > 85);
   });
 }
 
