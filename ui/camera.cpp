@@ -38,7 +38,7 @@ void Camera::move(float angle) {
 }
 
 float Camera::speed() {
-  return mZoom / 20.0f;
+  return mZoom / 40.0f;
 }
 
 void Camera::clampPosition() {

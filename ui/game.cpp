@@ -15,7 +15,7 @@
 Game::Game()
   : mConfig(parseConfig("confUI.json")),
     mPathToData(mConfig["pathToData"].asString()),
-    mTileSize(6.0f),
+    mTileSize(1.0f),
     mHexEx(tileSize() / 2.0f),
     mHexIn(std::sqrt(std::pow(mHexEx, 2) - std::pow(mHexEx / 2.0f, 2))),
     mUiMode(UIMode::NORMAL),
@@ -212,8 +212,8 @@ VertexArray Game::buildWalkableArray() {
       if (core().map().isInboard(to)) {
         V2f fromF = v2iToV2f(p);
         V2f toF = v2iToV2f(to);
-        appendV3f(&v.vertices, V3f(fromF, 0.1f));
-        appendV3f(&v.vertices, V3f(toF, 0.1f));
+        appendV3f(&v.vertices, V3f(fromF, 0.01f));
+        appendV3f(&v.vertices, V3f(toF, 0.01f));
       }
     }
   });
@@ -235,7 +235,7 @@ void Game::drawMap() {
 
   glColor3f(0.4f, 0.1f, 0.0f);
   glPushMatrix();
-  glTranslatef(0.0f, 0.0f, 0.1f);
+  glTranslatef(0.0f, 0.0f, 0.01f);
   glTexCoordPointer(2, GL_FLOAT, 0, mVaObstacles.textureCoordinates.data());
   glVertexPointer(2, GL_FLOAT, 0, mVaObstacles.vertices.data());
   glDrawArrays(GL_TRIANGLES, 0, mVaObstacles.vertices.size() / 2);
@@ -276,7 +276,7 @@ void Game::drawUnitCircle(const Unit& u) {
     throw std::logic_error("You need more colors!");
   }
   for (int i = 0; i < 6; i++) {
-    appendV3f(&v, V3f(indexToHexVertex(i) * 0.9f, 0.1f));
+    appendV3f(&v, V3f(indexToHexVertex(i) * 0.9f, 0.01f));
   }
   glLineWidth(2);
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -291,9 +291,9 @@ void Game::drawUnit(const Unit& u) {
   glColor3f(1, 0, 0);
   glPushMatrix();
   glTranslatef(f.x(), f.y(), 0);
-  glRotatef(u.direction().toAngle() + 90.0f, 0, 0, 1);
-  drawUnitModel(u);
   drawUnitCircle(u);
+  glRotatef(u.direction().toAngle(), 0, 0, 1);
+  drawUnitModel(u);
   glPopMatrix();
 }
 
@@ -315,7 +315,7 @@ void Game::drawSelectedunitMarker() {
   const Unit& u = core().selectedUnit();
   V2f p = v2iToV2f(u.position());
   std::vector<float> v;
-  float sn = std::sin(SDL_GetTicks() / 100.0f) * 2;
+  float sn = std::sin(SDL_GetTicks() / 100.0f) / 4.0f;
   appendV3f(&v, V3f(p, sn + tileSize()));
   appendV3f(&v, V3f(p, sn + tileSize() * 1.5f));
   glLineWidth(2);
@@ -482,9 +482,9 @@ void Game::processSDLEventButtonUp(const SDL_MouseButtonEvent& e) {
     setIsRotatingCamera(false);
   }
   if (e.button == SDL_BUTTON_WHEELUP) {
-    camera().zoomIn(5);
+    camera().zoomIn(1);
   } else if (e.button == SDL_BUTTON_WHEELDOWN) {
-    camera().zoomOut(5);
+    camera().zoomOut(1);
   }
 }
 
@@ -653,9 +653,9 @@ void Game::initCamera() {
   camera().setZAxisAngle(45.0f);
   camera().setMaxPos(v2iToV2f(core().map().size() - 1));
   camera().setPos(V2f(0.0f, 0.0f));
-  camera().setMaxZoom(200.0f);
-  camera().setMinZoom(30.0f);
-  camera().setZoom(100.0f);
+  camera().setMaxZoom(50.0f);
+  camera().setMinZoom(3.0f);
+  camera().setZoom(20.0f);
 }
 
 void Game::initVertexArrays() {

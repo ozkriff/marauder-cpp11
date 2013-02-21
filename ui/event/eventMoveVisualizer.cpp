@@ -79,8 +79,7 @@ void EventMoveVisualizer::end() {
 }
 
 float EventMoveVisualizer::currentAngle() {
-  // TODO: Remove '+ 90.0f'! Rotate models in obj files instead!
-  return Dir(currentTile(), nextTile()).toAngle() + 90.0f;
+  return Dir(currentTile(), nextTile()).toAngle();
 }
 
 V2f EventMoveVisualizer::currentPos() {

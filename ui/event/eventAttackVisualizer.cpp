@@ -15,7 +15,7 @@ EventAttackVisualizer::EventAttackVisualizer(Game& game, const Event& event)
     mEventAttack(dynamic_cast<const EventAttack&>(event)),
     mFrame(0),
     mLastFrame(60),
-    mFallingDownSpeed(0.1f),
+    mFallingDownSpeed(0.005f),
     mAttacker(game.core().id2unit(mEventAttack.attackerID())),
     mVictim(game.core().id2unit(mEventAttack.victimID()))
 {
@@ -39,7 +39,7 @@ void EventAttackVisualizer::draw() {
   V3f pos(posTmp, -mFallingDownSpeed * mFrame);
   glPushMatrix();
   glTranslatef(pos.x(), pos.y(), 0.0f);
-  glRotatef(mVictim.direction().toAngle() + 90.0f, 0, 0, 1); // TODO: Remove '+ 90'! Rotate obj files!
+  glRotatef(mVictim.direction().toAngle(), 0, 0, 1);
   game().drawUnitCircle(mVictim);
   glTranslatef(0.0f, 0.0f, pos.z());
   game().drawUnitModel(mVictim);
@@ -61,10 +61,8 @@ void EventAttackVisualizer::drawLineOfFire() {
   V2f from = game().v2iToV2f(mAttacker.position());
   V2f to = game().v2iToV2f(mVictim.position());
   std::vector<float> v;
-  appendV3f(&v, V3f(from, 1.0f));
-  appendV3f(&v, V3f(
-      to + rnd(-20, 20) / 10.0f,
-      (rnd(0, 20) / 10.0f)));
+  appendV3f(&v, V3f(from, 0.2f));
+  appendV3f(&v, V3f(to + (rnd(-30, 30) / 100.0f), 0));
   glLineWidth(rnd(1, 30) / 10.0f);
   glEnableClientState(GL_VERTEX_ARRAY);
   glColor3f(1.0f, 0.0f, 0.0f);
