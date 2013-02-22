@@ -14,19 +14,8 @@ configure_file(unitTypes.json . COPYONLY)
 configure_file(confUI.json . COPYONLY)
 configure_file(unitResources.json . COPYONLY)
 include_directories(${SDL_INCLUDE_DIR})
-add_library(marauderLib
-  ui/game.cpp
-  ui/objModel.cpp
-  ui/vertexArray.cpp
-  ui/v2f.cpp
-  ui/v3f.cpp
-  ui/gl.cpp
-  ui/camera.cpp
-  ui/eventVisualizer.cpp
-  ui/math.cpp
-  ui/event/eventAttackVisualizer.cpp
-  ui/event/eventMoveVisualizer.cpp
-  ui/event/eventEndTurnVisualizer.cpp
+
+add_library(marauderCore
   core/misc.cpp
   core/v2i.cpp
   core/pathfinder.cpp
@@ -44,21 +33,40 @@ add_library(marauderLib
   core/event/eventEndTurn.cpp
   core/jsonHelpers.cpp
 )
-add_executable(marauder ui/main.cpp)
-set(LIBS
+target_link_libraries(marauderCore
   jsoncpp # TODO: fix
+)
+
+add_library(marauderUi
+  ui/game.cpp
+  ui/objModel.cpp
+  ui/vertexArray.cpp
+  ui/v2f.cpp
+  ui/v3f.cpp
+  ui/gl.cpp
+  ui/camera.cpp
+  ui/eventVisualizer.cpp
+  ui/math.cpp
+  ui/event/eventAttackVisualizer.cpp
+  ui/event/eventMoveVisualizer.cpp
+  ui/event/eventEndTurnVisualizer.cpp
+)
+target_link_libraries(marauderUi
+  marauderCore
   ${OPENGL_LIBRARIES}
   ${SDL_LIBRARY}
   ${SDLIMAGE_LIBRARY}
 )
-target_link_libraries(marauder marauderLib ${LIBS})
+
+add_executable(marauder ui/main.cpp)
+target_link_libraries(marauder marauderUi)
 
 add_executable(testMarauder
   tests/runner.cpp
   tests/testCoreDir.cpp
   tests/testCoreLos.cpp
 )
-target_link_libraries(testMarauder unittest++ marauderLib ${LIBS}) # TODO: fix
+target_link_libraries(testMarauder unittest++ marauderUi) # TODO: fix
 enable_testing()
 add_test(testMarauder testMarauder)
 add_custom_target(runUnitTests ALL COMMAND testMarauder)
