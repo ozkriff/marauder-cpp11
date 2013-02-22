@@ -2,7 +2,7 @@
 
 #include "ui/event/eventEndTurnVisualizer.hpp"
 #include <cassert>
-#include <SDL/SDL_opengl.h>
+#include "SDL_opengl.h"
 #include "core/misc.hpp"
 #include "core/v2i.hpp"
 #include "core/dir.hpp"

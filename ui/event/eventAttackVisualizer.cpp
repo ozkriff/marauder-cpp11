@@ -2,7 +2,7 @@
 
 #include "ui/event/eventAttackVisualizer.hpp"
 #include <cassert>
-#include <SDL/SDL_opengl.h>
+#include "SDL_opengl.h"
 #include "core/core.hpp"
 #include "core/misc.hpp"
 #include "ui/v2f.hpp"

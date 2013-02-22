@@ -4,7 +4,7 @@
 #define UI__VERTEX_ARRAY_HPP
 
 #include <vector>
-#include <SDL/SDL_opengl.h>
+#include "SDL_opengl.h"
 #include "ui/v2f.hpp"
 #include "ui/v3f.hpp"
 

@@ -2,7 +2,7 @@
 
 #include <cassert>
 #include <cmath>
-#include <SDL/SDL_opengl.h>
+#include "SDL_opengl.h"
 #include "core/dir.hpp"
 #include "ui/math.hpp"
 #include "ui/camera.hpp"
