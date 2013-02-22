@@ -463,7 +463,7 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
     camera().move(90);
     break;
   default:
-    printf("processKeyDownEvent(): "
+    std::printf("processKeyDownEvent(): "
         "Unknown key (%d, 0x%x) was pressed.\n",
         e.keysym.sym, e.keysym.sym);
     break;
