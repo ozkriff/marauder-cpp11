@@ -51,8 +51,11 @@ public:
   void addUnit(const V2i& p, int playerID);
   void refreshUnits(int playerID);
 
+  const UnitType& getUnitType(const std::string& name);
+
 private:
   Json::Value mConfig;
+  std::map<std::string, UnitType> mUnitTypes;
   std::list<Player*> mPlayers;
   Player* mCurrentPlayer;
   Unit* mSelectedUnit;
@@ -64,6 +67,8 @@ private:
   int mInitialUnitsPerPlayerCount;
   int mPlayersCount;
 
+  void initUnitTypes();
+  UnitType parseUnitTypeInfo(const Json::Value& unitTypeInfo);
   int getNewUnitID();
   void createLocalHuman(int id);
   void initLocalPlayers(std::vector<int> unitIDs);

@@ -124,6 +124,11 @@ void Core::refreshUnits(int playerID) {
   }
 }
 
+const UnitType& Core::getUnitType(const std::string& name) {
+  assert(mUnitTypes.count(name) != 0);
+  return mUnitTypes[name];
+}
+
 bool Core::isLosClear(const V2i& from, const V2i& to) {
   Los los(from, to);
   for (V2i p = los.getNext(); !los.isFinished(); p = los.getNext()) {
@@ -190,6 +195,22 @@ Unit& Core::id2unit(int id) {
     }
   }
   throw std::logic_error("No unit with this ID!");
+}
+
+void Core::initUnitTypes() {
+  Json::Value config = parseConfig("unitTypes.json");
+  for (const std::string& unitTypeName : config.getMemberNames()) {
+    UnitType unitType = parseUnitTypeInfo(config[unitTypeName]);
+    mUnitTypes[unitTypeName] = unitType;
+  }
+}
+
+UnitType Core::parseUnitTypeInfo(const Json::Value& unitTypeInfo) {
+  UnitType unitType;
+  unitType.rangeOfVision = unitTypeInfo["rangeOfVision"].asInt();
+  unitType.actionPoints = unitTypeInfo["actionPoints"].asInt();
+  unitType.id = mUnitTypes.size();
+  return unitType;
 }
 
 int Core::getNewUnitID() {

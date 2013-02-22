@@ -22,7 +22,6 @@ add_library(marauderCore
   core/dir.cpp
   core/los.cpp
   core/unit.cpp
-  core/unitType.cpp
   core/event.cpp
   core/core.cpp
   core/math.cpp

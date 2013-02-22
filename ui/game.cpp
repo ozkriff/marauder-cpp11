@@ -667,7 +667,7 @@ void Game::initVertexArrays() {
 void Game::loadUnitResources() {
   Json::Value resources = parseConfig("unitResources.json");
   for (const std::string& key : resources.getMemberNames()) {
-    unsigned int id = getUnitType(key).id;
+    unsigned int id = core().getUnitType(key).id;
     const Json::Value& unitInfo = resources[key];
     std::string texturePath = mPathToData + unitInfo["textureName"].asString();
     std::string objModelPath = mPathToData + unitInfo["objModelName"].asString();

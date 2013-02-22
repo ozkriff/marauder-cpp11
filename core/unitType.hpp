@@ -11,7 +11,4 @@ public:
   int actionPoints;
 };
 
-const UnitType& getUnitType(const std::string& name);
-void initUnitTypes();
-
 #endif
