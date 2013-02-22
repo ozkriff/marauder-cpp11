@@ -1,0 +1,19 @@
+{
+  "name": "test map",
+  "mapSize": {
+    "x": 10,
+    "y": 10
+  },
+  "tiles": [
+    ["clear", "obstacle", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
+    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
+    ["clear", "obstacle", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
+    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
+    ["clear", "obstacle", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
+    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
+    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
+    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
+    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
+    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"]
+  ]
+}

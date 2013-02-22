@@ -1,22 +1,7 @@
 {
   "name": "test scenario",
   "playersCount": 2,
-  "mapSize": {
-    "x": 10,
-    "y": 10
-  },
-  "map": [
-    ["clear", "obstacle", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
-    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
-    ["clear", "obstacle", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
-    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
-    ["clear", "obstacle", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
-    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
-    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
-    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
-    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"],
-    ["clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear"]
-  ],
+  "map": "map.json",
   "units": [
     [
       {
