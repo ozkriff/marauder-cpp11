@@ -39,8 +39,8 @@ void EventAttackVisualizer::draw() {
   V3f pos(posTmp, -mFallingDownSpeed * mFrame);
   glPushMatrix();
   glTranslatef(pos.x(), pos.y(), 0.0f);
-  glRotatef(mVictim.direction().toAngle(), 0, 0, 1);
   game().drawUnitCircle(mVictim);
+  glRotatef(mVictim.direction().toAngle(), 0, 0, 1);
   glTranslatef(0.0f, 0.0f, pos.z());
   game().drawUnitModel(mVictim);
   glPopMatrix();

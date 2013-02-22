@@ -41,9 +41,9 @@ void EventMoveVisualizer::draw() {
   V2f pos = currentPos();
   glPushMatrix();
   glTranslatef(pos.x(), pos.y(), 0.0f);
+  game().drawUnitCircle(unit);
   glRotatef(currentAngle(), 0, 0, 1);
   game().drawUnitModel(unit);
-  game().drawUnitCircle(unit);
   glPopMatrix();
   mCurrentMoveIndex++;
 }
