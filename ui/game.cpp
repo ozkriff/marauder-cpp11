@@ -337,11 +337,6 @@ void Game::draw() {
   if (uiMode() == UIMode::SHOW_EVENT) {
     assert(mEventVisualizer);
     mEventVisualizer->draw();
-    if (mEventVisualizer->isFinished()) {
-      core().eventManager().applyCurrentEvent();
-      setUiMode(UIMode::NORMAL);
-      mEventVisualizer->end();
-    }
   }
   if (core().isAnyUnitSelected()) {
     drawSelectedunitMarker();
@@ -513,6 +508,13 @@ void Game::screenScenarioMainEvents() {
 void Game::logic() {
   while (uiMode() == UIMode::NORMAL && core().eventManager().unshownEventsLeft()) {
     screenScenarioMainEvents();
+  }
+  if (uiMode() == UIMode::SHOW_EVENT) {
+    if (mEventVisualizer->isFinished()) {
+      core().eventManager().applyCurrentEvent();
+      setUiMode(UIMode::NORMAL);
+      mEventVisualizer->end();
+    }
   }
 }
 
