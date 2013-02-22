@@ -6,12 +6,14 @@
 #include "core/dir.hpp"
 #include "core/v2i.hpp"
 
+class UnitType;
+
 class Unit {
 public:
-  Unit(int id, int playerID, int typeID);
+  Unit(int id, int playerID, const UnitType& type);
   ~Unit();
 
-  int typeID() const;
+  const UnitType& type() const;
   int id() const;
   int playerID() const;
   const Dir& direction() const;
@@ -24,7 +26,7 @@ public:
   void setPosition(const V2i& position);
 
 private:
-  int mTypeID;
+  const UnitType& mType;
   int mID;
   int mPlayerID;
   Dir mDirection;

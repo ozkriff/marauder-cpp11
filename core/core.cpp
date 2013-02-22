@@ -119,7 +119,7 @@ void Core::initLocalPlayers(std::vector<int> unitIDs) {
 void Core::refreshUnits(int playerID) {
   for (auto u : units()) {
     if (u->playerID() == playerID) {
-      u->setActionPoints(getUnitType(u->typeID()).actionPoints);
+      u->setActionPoints(u->type().actionPoints);
     }
   }
 }
@@ -150,7 +150,7 @@ void Core::calculateFow() {
   assert(mCurrentPlayer);
   map().forEachPos([this](const V2i& p) {
     for (auto u : mUnits) {
-      int maxDist = getUnitType(u->typeID()).rangeOfVision;
+      int maxDist = u->type().rangeOfVision;
       bool isPlayerOk = (u->playerID() == mCurrentPlayer->id);
       bool isDistanceOk = (p.distance(u->position()) < maxDist);
       bool isLosOk = isLosClear(p, u->position());
@@ -204,11 +204,12 @@ int Core::getNewUnitID() {
 void Core::addUnit(const V2i& p, int playerID) {
   assert(map().isInboard(p));
   assert(playerID >= 0 && playerID < 16);
-  int typeID = rnd(0, static_cast<int>(UnitTypeID::COUNT) - 1);
-  auto u = new Unit(getNewUnitID(), playerID, typeID);
+  const UnitType& unitType = getUnitType(
+      (rnd(0, 1) == 0 ? "tank" : "truck"));
+  auto* u = new Unit(getNewUnitID(), playerID, unitType);
   u->setPosition(p);
   u->setDirection(Dir(rnd(0, 6 - 1)));
-  u->setActionPoints(getUnitType(u->typeID()).actionPoints);
+  u->setActionPoints(u->type().actionPoints);
   mUnits.push_back(u);
   calculateFow();
 }

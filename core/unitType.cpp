@@ -1,32 +1,35 @@
 // See LICENSE file for copyright and license details.
 
 #include <cassert>
+#include <string>
+#include <map>
+#include "json/json.h"
 #include "core/unitType.hpp"
+#include "core/jsonHelpers.hpp"
 
 namespace {
 
-UnitType unitTypes[static_cast<int>(UnitTypeID::COUNT)];
+static std::map<std::string, UnitType> unitTypes;
 
-void initTank(UnitType* t) {
-  assert(t);
-  t->rangeOfVision = 4;
-  t->actionPoints = 4;
-}
-
-void initTruck(UnitType* t) {
-  assert(t);
-  t->rangeOfVision = 5;
-  t->actionPoints = 6;
+UnitType parseUnitTypeInfo(const Json::Value& unitTypeInfo) {
+  UnitType unitType;
+  unitType.rangeOfVision = unitTypeInfo["rangeOfVision"].asInt();
+  unitType.actionPoints = unitTypeInfo["actionPoints"].asInt();
+  unitType.id = unitTypes.size();
+  return unitType;
 }
 
 } // namespace
 
-const UnitType& getUnitType(int id) {
-  assert(id >= 0 && id < static_cast<int>(UnitTypeID::COUNT));
-  return unitTypes[id];
+const UnitType& getUnitType(const std::string& name) {
+  assert(unitTypes.count(name) != 0);
+  return unitTypes[name];
 }
 
 void initUnitTypes() {
-  initTank(unitTypes + static_cast<int>(UnitTypeID::TANK));
-  initTruck(unitTypes + static_cast<int>(UnitTypeID::TRUCK));
+  Json::Value config = parseConfig("unitTypes.json");
+  for (const std::string& unitTypeName : config.getMemberNames()) {
+    UnitType unitType = parseUnitTypeInfo(config[unitTypeName]);
+    unitTypes[unitTypeName] = unitType;
+  }
 }

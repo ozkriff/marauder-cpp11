@@ -58,8 +58,8 @@ private:
   VertexArray mVaMap;
   VertexArray mVaObstacles;
   VertexArray mVaPick;
-  VertexArray mVaUnits[static_cast<int>(UnitTypeID::COUNT)];
-  GLuint mUnitTextureIDs[static_cast<int>(UnitTypeID::COUNT)];
+  std::map<int, VertexArray> mVaUnits;
+  std::map<int, GLuint> mUnitTextureIDs;
   EventVisualizer* mEventVisualizer;
 
   void processSDLEvent(const SDL_MouseMotionEvent& e);

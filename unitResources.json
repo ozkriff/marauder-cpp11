@@ -1,0 +1,10 @@
+{
+  "tank": {
+    "textureName": "tank.png",
+    "objModelName": "tank.obj"
+  },
+  "truck": {
+    "textureName": "truck.png",
+    "objModelName": "truck.obj"
+  }
+}

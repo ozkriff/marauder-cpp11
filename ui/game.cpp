@@ -256,11 +256,11 @@ void Game::drawUnitModel(const Unit& u) {
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glBindTexture(GL_TEXTURE_2D, mUnitTextureIDs[u.typeID()]);
+  glBindTexture(GL_TEXTURE_2D, mUnitTextureIDs[u.type().id]);
   glColor3f(1, 1, 1);
-  glTexCoordPointer(2, GL_FLOAT, 0, mVaUnits[u.typeID()].textureCoordinates.data());
-  glVertexPointer(3, GL_FLOAT, 0, mVaUnits[u.typeID()].vertices.data());
-  glDrawArrays(GL_TRIANGLES, 0, mVaUnits[u.typeID()].vertices.size() / 3);
+  glTexCoordPointer(2, GL_FLOAT, 0, mVaUnits[u.type().id].textureCoordinates.data());
+  glVertexPointer(3, GL_FLOAT, 0, mVaUnits[u.type().id].vertices.data());
+  glDrawArrays(GL_TRIANGLES, 0, mVaUnits[u.type().id].vertices.size() / 3);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_TEXTURE_2D);
@@ -665,10 +665,13 @@ void Game::initVertexArrays() {
 }
 
 void Game::loadUnitResources() {
-  int tankID = static_cast<int>(UnitTypeID::TANK);
-  int truckID = static_cast<int>(UnitTypeID::TRUCK);
-  mUnitTextureIDs[tankID] = loadTexture(mPathToData + "tank.png");
-  mUnitTextureIDs[truckID] = loadTexture(mPathToData + "truck.png");
-  mVaUnits[tankID] = ObjModel(mPathToData + "tank.obj").build();
-  mVaUnits[truckID] = ObjModel(mPathToData + "truck.obj").build();
+  Json::Value resources = parseConfig("unitResources.json");
+  for (const std::string& key : resources.getMemberNames()) {
+    unsigned int id = getUnitType(key).id;
+    const Json::Value& unitInfo = resources[key];
+    std::string texturePath = mPathToData + unitInfo["textureName"].asString();
+    std::string objModelPath = mPathToData + unitInfo["objModelName"].asString();
+    mUnitTextureIDs[id] = loadTexture(texturePath);
+    mVaUnits[id] = ObjModel(objModelPath).build();
+  }
 }

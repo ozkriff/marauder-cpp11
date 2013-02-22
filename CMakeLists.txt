@@ -12,7 +12,9 @@ if(UNIX)
 endif()
 include_directories("/usr/include/jsoncpp") # TODO: fix
 configure_file(confCore.json . COPYONLY)
+configure_file(unitTypes.json . COPYONLY)
 configure_file(confUI.json . COPYONLY)
+configure_file(unitResources.json . COPYONLY)
 include_directories(${SDL_INCLUDE_DIR})
 add_library(SOURCES
   ui/game.cpp

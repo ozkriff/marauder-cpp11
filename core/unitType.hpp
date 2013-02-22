@@ -3,19 +3,15 @@
 #ifndef CORE__UNIT_TYPE_HPP
 #define CORE__UNIT_TYPE_HPP
 
-enum class UnitTypeID {
-  TANK,
-  TRUCK,
-  COUNT
-};
-
+// TODO: private fields? getters?
 class UnitType {
 public:
+  int id;
   int rangeOfVision;
   int actionPoints;
 };
 
-const UnitType& getUnitType(int id);
+const UnitType& getUnitType(const std::string& name);
 void initUnitTypes();
 
 #endif

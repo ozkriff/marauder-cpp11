@@ -3,8 +3,8 @@
 #include "core/unit.hpp"
 #include <cassert>
 
-Unit::Unit(int id, int playerID, int typeID)
-  : mTypeID(typeID),
+Unit::Unit(int id, int playerID, const UnitType &type)
+  : mType(type),
     mID(id),
     mPlayerID(playerID),
     mDirection(DirID::NONE),
@@ -16,8 +16,8 @@ Unit::Unit(int id, int playerID, int typeID)
 Unit::~Unit() {
 }
 
-int Unit::typeID() const {
-  return mTypeID;
+const UnitType& Unit::type() const {
+  return mType;
 }
 
 int Unit::id() const {
