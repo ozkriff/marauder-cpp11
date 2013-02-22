@@ -48,7 +48,11 @@ public:
   Unit& unitAt(const V2i& pos);
   bool isUnitAt(const V2i& pos) const;
   Unit& id2unit(int id);
-  void addUnit(const V2i& p, int playerID);
+  void addUnit(
+      const V2i& p,
+      int playerID,
+      const UnitType& unitType,
+      const Dir& dir);
   void refreshUnits(int playerID);
 
   const UnitType& getUnitType(const std::string& name) const;
@@ -64,18 +68,13 @@ private:
   Pathfinder mPathfinder;
   Map mMap;
   EventManager mEventManager;
-  int mInitialUnitsPerPlayerCount;
-  int mPlayersCount;
 
   void initUnitTypes();
   UnitType parseUnitTypeInfo(const Json::Value& unitTypeInfo) const;
   int getNewUnitID() const;
   void createLocalHuman(int id);
   void initLocalPlayers(std::vector<int> unitIDs);
-  V2i findFreePosition() const;
-  void initUnits();
-  void initPlayers();
-  void initObstacles();
+  void loadScenario();
 };
 
 #endif

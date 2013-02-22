@@ -1,8 +1,2 @@
 {
-  "mapSize": {
-    "x": 10,
-    "y": 20
-  },
-  "playersCount": 2,
-  "initialUnitsPerPlayerCount": 4
 }

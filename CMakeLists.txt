@@ -40,6 +40,7 @@ target_link_libraries(marauderCore
 
 configure_file(confCore.json . COPYONLY)
 configure_file(unitTypes.json . COPYONLY)
+configure_file(scenario.json . COPYONLY)
 
 
 # ---------------------------------  UI  --------------------------------------

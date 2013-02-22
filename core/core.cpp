@@ -12,18 +12,12 @@ Core::Core()
     mCurrentPlayer(nullptr),
     mSelectedUnit(nullptr),
     mPathfinder(*this),
-    mMap(JsonValueToV2i(mConfig["mapSize"])),
-    mEventManager(*this),
-    mInitialUnitsPerPlayerCount(mConfig["initialUnitsPerPlayerCount"].asInt()),
-    mPlayersCount(mConfig["playersCount"].asInt())
+    mMap(V2i(0, 0)),
+    mEventManager(*this)
 {
   srand(std::time(nullptr));
   initUnitTypes();
-  cleanFow();
-  initPlayers();
-  initObstacles();
-  initUnits();
-  calculateFow();
+  loadScenario();
 }
 
 Core::~Core() {
@@ -222,50 +216,64 @@ int Core::getNewUnitID() const {
   }
 }
 
-void Core::addUnit(const V2i& p, int playerID) {
+void Core::addUnit(
+    const V2i& p,
+    int playerID,
+    const UnitType& unitType,
+    const Dir& dir)
+{
   assert(map().isInboard(p));
-  assert(playerID >= 0 && playerID < 16);
-  const UnitType& unitType = getUnitType(
-      (rnd(0, 1) == 0 ? "tank" : "truck"));
   auto* u = new Unit(getNewUnitID(), playerID, unitType);
   u->setPosition(p);
-  u->setDirection(Dir(rnd(0, 6 - 1)));
+  u->setDirection(dir);
   u->setActionPoints(u->type().actionPoints);
   mUnits.push_back(u);
   calculateFow();
 }
 
-V2i Core::findFreePosition() const {
-  for (int counter = 0; counter < 1000; counter++) {
-    V2i p(
-        rnd(0, map().size().x() - 1),
-        rnd(0, map().size().y() - 1));
-    if (!map().tile(p).obstacle && !isUnitAt(p)) {
-      return p;
+void Core::loadScenario() {
+  Json::Value scenario = parseConfig("scenario.json");
+  // players
+  {
+    int playersCount = scenario["playersCount"].asInt();
+    std::vector<int> playerIDs;
+    for (int i = 0; i < playersCount; i++) {
+      playerIDs.push_back(i);
+    }
+    initLocalPlayers(playerIDs);
+  }
+  // map
+  {
+    mMap = Map(JsonValueToV2i(scenario["mapSize"]));
+  }
+  // obstacles
+  {
+    Json::Value mapData = scenario["map"];
+    int y = 0;
+    for (const Json::Value& row : mapData) {
+      int x = 0;
+      for (const Json::Value& tile : row) {
+        V2i p(x, y);
+        bool isObstacle = (tile.asString() == "obstacle");
+        map().tile(p).obstacle = isObstacle;
+        x++;
+      }
+      y++;
     }
   }
-  throw std::runtime_error("Can't find free position!");
-}
-
-void Core::initUnits() {
-  for (auto* player : players()) {
-    for (int i = 0; i < mInitialUnitsPerPlayerCount; i++) {
-      V2i p = findFreePosition();
-      addUnit(p, player->id);
+  // units
+  {
+    Json::Value unitsData = scenario["units"];
+    int playerID = 0;
+    for (const Json::Value& playerUnitData : unitsData) {
+      for (const Json::Value& unitInfo : playerUnitData) {
+        V2i position = JsonValueToV2i(unitInfo["position"]);
+        std::string typeName = unitInfo["type"].asString();
+        Dir direction(unitInfo["direction"].asInt());
+        addUnit(position, playerID, getUnitType(typeName), direction);
+      }
+      playerID++;
     }
+    calculateFow();
   }
-}
-
-void Core::initObstacles() {
-  map().forEachTile([](Tile& tile) {
-    tile.obstacle = (rnd(0, 100) > 85);
-  });
-}
-
-void Core::initPlayers() {
-  std::vector<int> playerIDs;
-  for (int i = 0; i < mPlayersCount; i++) {
-    playerIDs.push_back(i);
-  }
-  initLocalPlayers(playerIDs);
 }

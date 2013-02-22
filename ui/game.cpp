@@ -411,7 +411,11 @@ void Game::switchActiveTileType() {
 }
 
 void Game::createNewUnitInActiveTile() {
-  core().addUnit(activeTilePos(), core().currentPlayer().id);
+  core().addUnit(
+        activeTilePos(),
+        core().currentPlayer().id,
+        core().getUnitType("truck"),
+        Dir(DirID::NE));
   if (core().isAnyUnitSelected()) {
     core().pathfinder().fillMap(core().selectedUnit());
     mVaWalkableMap = buildWalkableArray();
