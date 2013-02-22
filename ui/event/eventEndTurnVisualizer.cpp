@@ -31,7 +31,7 @@ bool EventEndTurnVisualizer::isUnitVisible(const Unit& u) const {
 }
 
 void EventEndTurnVisualizer::draw() {
-  // die("TODO"); // TODO: ...
+  // nothing to draw...
 }
 
 void EventEndTurnVisualizer::end() {
