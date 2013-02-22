@@ -3,14 +3,20 @@ project(marauder)
 
 include_directories(.)
 
-set(CMAKE_BUILD_TYPE Debug) # TODO: remove?
-
 add_definitions(-Wold-style-cast -Wall -Wextra --pedantic)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+option(use_cxx0x "Use '-std=c++0x' flag?")
+option(use_libcxx "Use '-stdlib=libc++' flag?")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+if (use_cxx0x)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+else()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
+
+if (use_libcxx)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+endif()
 
 
 # ---------------------------------  CORE  ------------------------------------
