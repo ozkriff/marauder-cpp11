@@ -10,8 +10,8 @@ public:
   EventVisualizer(Game& game);
   virtual ~EventVisualizer();
 
-  virtual bool isFinished() = 0;
-  virtual bool isUnitVisible(const Unit& u) = 0;
+  virtual bool isFinished() const = 0;
+  virtual bool isUnitVisible(const Unit& u) const = 0;
   virtual void draw() = 0;
   virtual void end() = 0;
 

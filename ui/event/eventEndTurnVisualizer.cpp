@@ -21,11 +21,11 @@ EventEndTurnVisualizer::EventEndTurnVisualizer(Game& game, const Event& event)
 EventEndTurnVisualizer::~EventEndTurnVisualizer() {
 }
 
-bool EventEndTurnVisualizer::isFinished() {
+bool EventEndTurnVisualizer::isFinished() const {
   return true;
 }
 
-bool EventEndTurnVisualizer::isUnitVisible(const Unit& u) {
+bool EventEndTurnVisualizer::isUnitVisible(const Unit& u) const {
   UNUSED(u);
   return false;
 }

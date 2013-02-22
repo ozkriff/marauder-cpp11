@@ -25,11 +25,11 @@ EventAttackVisualizer::EventAttackVisualizer(Game& game, const Event& event)
 EventAttackVisualizer::~EventAttackVisualizer() {
 }
 
-bool EventAttackVisualizer::isFinished() {
+bool EventAttackVisualizer::isFinished() const {
   return mFrame >= mLastFrame;
 }
 
-bool EventAttackVisualizer::isUnitVisible(const Unit& u) {
+bool EventAttackVisualizer::isUnitVisible(const Unit& u) const {
   return u.id() == mEventAttack.victimID();
 }
 

@@ -27,12 +27,12 @@ int EventMoveVisualizer::framesCount() const {
   return (mEventMove.path().size() - 1) * moveSpeed;
 }
 
-bool EventMoveVisualizer::isFinished() {
+bool EventMoveVisualizer::isFinished() const {
   assert(mCurrentMoveIndex <= framesCount());
   return (mCurrentMoveIndex == framesCount());
 }
 
-bool EventMoveVisualizer::isUnitVisible(const Unit& u) {
+bool EventMoveVisualizer::isUnitVisible(const Unit& u) const {
   return u.id() == mEventMove.unitID();
 }
 

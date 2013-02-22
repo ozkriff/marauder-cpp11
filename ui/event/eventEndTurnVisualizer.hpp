@@ -13,8 +13,8 @@ public:
   EventEndTurnVisualizer(Game& game, const Event& event);
   virtual ~EventEndTurnVisualizer();
 
-  virtual bool isFinished();
-  virtual bool isUnitVisible(const Unit& u);
+  virtual bool isFinished() const;
+  virtual bool isUnitVisible(const Unit& u) const;
   virtual void draw();
   virtual void end();
 
