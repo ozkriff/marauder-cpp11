@@ -25,13 +25,13 @@ private:
   int mCurrentMoveIndex;
 
   int currentTileIndex() const;
-  int calculateNodeIndex();
+  int calculateNodeIndex() const;
   void endMovement();
-  const V2i& currentTile();
-  const V2i& nextTile();
-  int framesCount();
-  float currentAngle();
-  V2f currentPos();
+  const V2i& currentTile() const;
+  const V2i& nextTile() const;
+  int framesCount() const;
+  float currentAngle() const;
+  V2f currentPos() const;
 };
 
 #endif

@@ -23,7 +23,7 @@ EventMoveVisualizer::EventMoveVisualizer(Game& game, const Event& event)
 EventMoveVisualizer::~EventMoveVisualizer() {
 }
 
-int EventMoveVisualizer::framesCount() {
+int EventMoveVisualizer::framesCount() const {
   return (mEventMove.path().size() - 1) * moveSpeed;
 }
 
@@ -48,11 +48,11 @@ void EventMoveVisualizer::draw() {
   mCurrentMoveIndex++;
 }
 
-const V2i& EventMoveVisualizer::currentTile() {
+const V2i& EventMoveVisualizer::currentTile() const {
   return mEventMove.path()[currentTileIndex()];
 }
 
-const V2i& EventMoveVisualizer::nextTile() {
+const V2i& EventMoveVisualizer::nextTile() const {
   return mEventMove.path()[currentTileIndex() + 1];
 }
 
@@ -70,7 +70,7 @@ int EventMoveVisualizer::currentTileIndex() const {
   return mCurrentMoveIndex / moveSpeed;
 }
 
-int EventMoveVisualizer::calculateNodeIndex() {
+int EventMoveVisualizer::calculateNodeIndex() const {
   return mCurrentMoveIndex - currentTileIndex() * moveSpeed;
 }
 
@@ -78,11 +78,11 @@ void EventMoveVisualizer::end() {
   endMovement();
 }
 
-float EventMoveVisualizer::currentAngle() {
+float EventMoveVisualizer::currentAngle() const {
   return Dir(currentTile(), nextTile()).toAngle();
 }
 
-V2f EventMoveVisualizer::currentPos() {
+V2f EventMoveVisualizer::currentPos() const {
   V2f from = game().v2iToV2f(currentTile());
   V2f to = game().v2iToV2f(nextTile());
   V2f diff = (to - from) / moveSpeed;

@@ -54,7 +54,7 @@ Unit& Core::selectedUnit() {
   return *mSelectedUnit;
 }
 
-bool Core::isAnyUnitSelected() {
+bool Core::isAnyUnitSelected() const {
   return mSelectedUnit != NULL;
 }
 
@@ -124,9 +124,9 @@ void Core::refreshUnits(int playerID) {
   }
 }
 
-const UnitType& Core::getUnitType(const std::string& name) {
+const UnitType& Core::getUnitType(const std::string& name) const {
   assert(mUnitTypes.count(name) != 0);
-  return mUnitTypes[name];
+  return mUnitTypes.at(name);
 }
 
 bool Core::isLosClear(const V2i& from, const V2i& to) {
@@ -175,7 +175,7 @@ Unit& Core::unitAt(const V2i& pos) {
   throw std::logic_error("No unit at pos!");
 }
 
-bool Core::isUnitAt(const V2i& pos) {
+bool Core::isUnitAt(const V2i& pos) const {
 #if 0
   return (map().tile(pos).unit != NULL);
 #else
@@ -205,7 +205,7 @@ void Core::initUnitTypes() {
   }
 }
 
-UnitType Core::parseUnitTypeInfo(const Json::Value& unitTypeInfo) {
+UnitType Core::parseUnitTypeInfo(const Json::Value& unitTypeInfo) const {
   UnitType unitType;
   unitType.rangeOfVision = unitTypeInfo["rangeOfVision"].asInt();
   unitType.actionPoints = unitTypeInfo["actionPoints"].asInt();
@@ -213,7 +213,7 @@ UnitType Core::parseUnitTypeInfo(const Json::Value& unitTypeInfo) {
   return unitType;
 }
 
-int Core::getNewUnitID() {
+int Core::getNewUnitID() const {
   if (!mUnits.empty()) {
     auto lastUnit = mUnits.back();
     return lastUnit->id() + 1;
@@ -235,7 +235,7 @@ void Core::addUnit(const V2i& p, int playerID) {
   calculateFow();
 }
 
-V2i Core::findFreePosition() {
+V2i Core::findFreePosition() const {
   for (int counter = 0; counter < 1000; counter++) {
     V2i p(
         rnd(0, map().size().x() - 1),

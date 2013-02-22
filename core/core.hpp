@@ -27,7 +27,7 @@ public:
   const Player& currentPlayer() const;
   Player& currentPlayer();
   Unit& selectedUnit();
-  bool isAnyUnitSelected();
+  bool isAnyUnitSelected() const;
   std::list<Unit*>& units();
   std::list<Unit*>& deadUnits();
   Pathfinder& pathfinder();
@@ -46,12 +46,12 @@ public:
   bool isLosClear(const V2i& from, const V2i& to);
 
   Unit& unitAt(const V2i& pos);
-  bool isUnitAt(const V2i& pos);
+  bool isUnitAt(const V2i& pos) const;
   Unit& id2unit(int id);
   void addUnit(const V2i& p, int playerID);
   void refreshUnits(int playerID);
 
-  const UnitType& getUnitType(const std::string& name);
+  const UnitType& getUnitType(const std::string& name) const;
 
 private:
   Json::Value mConfig;
@@ -68,11 +68,11 @@ private:
   int mPlayersCount;
 
   void initUnitTypes();
-  UnitType parseUnitTypeInfo(const Json::Value& unitTypeInfo);
-  int getNewUnitID();
+  UnitType parseUnitTypeInfo(const Json::Value& unitTypeInfo) const;
+  int getNewUnitID() const;
   void createLocalHuman(int id);
   void initLocalPlayers(std::vector<int> unitIDs);
-  V2i findFreePosition();
+  V2i findFreePosition() const;
   void initUnits();
   void initPlayers();
   void initObstacles();
