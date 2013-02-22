@@ -32,6 +32,8 @@ public:
   Dir opposite() const;
   int diff(Dir d1) const;
 
+  bool operator==(const Dir& other) const;
+
   // Get neighbour tile in 'i' direction
   static V2i getNeighbourPos(const V2i& pos, Dir i);
 

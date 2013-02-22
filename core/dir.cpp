@@ -88,6 +88,10 @@ int Dir::diff(Dir d1) const {
   return diff;
 }
 
+bool Dir::operator==(const Dir& other) const {
+  return value() == other.value();
+}
+
 V2i Dir::getNeighbourPos(const V2i& pos, Dir i) {
   assert(i.toInt() < 6);
   V2i difference = dirToPosDiff[pos.y() % 2][i.toInt()];
