@@ -61,7 +61,7 @@ ObjModel::ObjTriangle readFace(const char* buffer) {
 
 // TODO "usemtl filename"
 void ObjModel::read(const std::string& filename) {
-  auto file = std::fopen(filename.c_str(), "r");
+  auto* file = std::fopen(filename.c_str(), "r");
   if (!file) {
     throw std::logic_error(std::string("can't find file: ") + filename);
   }

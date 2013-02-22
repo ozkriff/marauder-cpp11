@@ -12,7 +12,7 @@ EventManager::EventManager(Core& core)
 }
 
 EventManager::~EventManager() {
-  for (auto e : mEvents) {
+  for (auto* e : mEvents) {
     delete e;
   }
 }
@@ -41,7 +41,7 @@ bool EventManager::unshownEventsLeft() {
   if (mEvents.empty()) {
     return false;
   } else {
-    auto e = mEvents.back();
+    auto* e = mEvents.back();
     return e->id() != mCore.currentPlayer().lastSeenEventID;
   }
 }
@@ -84,7 +84,7 @@ Event* EventManager::getNextEvent() {
   if (id == HAVE_NOT_SEEN_ANY_EVENTS) {
     return mEvents.front();
   }
-  for (auto e : mEvents) {
+  for (auto* e : mEvents) {
     if (e->id() == id) {
       return getNext(mEvents, e);
     }
@@ -120,7 +120,7 @@ const Event* EventManager::getLastSeenEventNode() {
     return mEvents.front();
   }
   // find last seen event
-  for (auto e : mEvents) {
+  for (auto* e : mEvents) {
     if (e->id() == id) {
       return getNext(mEvents, e);
     }

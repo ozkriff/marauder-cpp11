@@ -25,7 +25,7 @@ const std::vector<V2i>& EventMove::path() const {
 EventMove* EventMove::generate(
     const Core& core, const Unit& unit, const V2i& destination)
 {
-  auto e = new EventMove(core.eventManager().getNewEventID());
+  auto* e = new EventMove(core.eventManager().getNewEventID());
   e->mInitialDirection = unit.direction();
   e->mPath = core.pathfinder().getPath(destination);
   e->mCost = core.map().tile(destination).cost;

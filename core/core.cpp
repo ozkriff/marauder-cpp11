@@ -103,7 +103,7 @@ void Core::setCurrentPlayer(Player* player) {
 }
 
 void Core::createLocalHuman(int id) {
-  auto p = new Player;
+  auto* p = new Player;
   mPlayers.push_back(p);
   p->id = id;
   p->lastSeenEventID = HAVE_NOT_SEEN_ANY_EVENTS;
@@ -117,7 +117,7 @@ void Core::initLocalPlayers(std::vector<int> unitIDs) {
 }
 
 void Core::refreshUnits(int playerID) {
-  for (auto u : units()) {
+  for (auto* u : units()) {
     if (u->playerID() == playerID) {
       u->setActionPoints(u->type().actionPoints);
     }
@@ -154,7 +154,7 @@ void Core::cleanFow() {
 void Core::calculateFow() {
   assert(mCurrentPlayer);
   map().forEachPos([this](const V2i& p) {
-    for (auto u : mUnits) {
+    for (auto* u : mUnits) {
       int maxDist = u->type().rangeOfVision;
       bool isPlayerOk = (u->playerID() == mCurrentPlayer->id);
       bool isDistanceOk = (p.distance(u->position()) < maxDist);
@@ -167,7 +167,7 @@ void Core::calculateFow() {
 }
 
 Unit& Core::unitAt(const V2i& pos) {
-  for (auto u : mUnits) {
+  for (auto* u : mUnits) {
     if (u->position() == pos) {
       return *u;
     }
@@ -179,7 +179,7 @@ bool Core::isUnitAt(const V2i& pos) const {
 #if 0
   return (map().tile(pos).unit != NULL);
 #else
-  for (auto u : mUnits) {
+  for (auto* u : mUnits) {
     if (u->position() == pos) {
       return true;
     }
@@ -189,7 +189,7 @@ bool Core::isUnitAt(const V2i& pos) const {
 }
 
 Unit& Core::id2unit(int id) {
-  for (auto u : mUnits) {
+  for (auto* u : mUnits) {
     if (u->id() == id) {
       return *u;
     }
@@ -215,7 +215,7 @@ UnitType Core::parseUnitTypeInfo(const Json::Value& unitTypeInfo) const {
 
 int Core::getNewUnitID() const {
   if (!mUnits.empty()) {
-    auto lastUnit = mUnits.back();
+    auto* lastUnit = mUnits.back();
     return lastUnit->id() + 1;
   } else {
     return 0;
@@ -248,7 +248,7 @@ V2i Core::findFreePosition() const {
 }
 
 void Core::initUnits() {
-  for (auto player : players()) {
+  for (auto* player : players()) {
     for (int i = 0; i < mInitialUnitsPerPlayerCount; i++) {
       V2i p = findFreePosition();
       addUnit(p, player->id);

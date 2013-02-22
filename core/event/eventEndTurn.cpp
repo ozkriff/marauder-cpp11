@@ -26,7 +26,7 @@ int EventEndTurn::oldID() const {
 void EventEndTurn::apply(Core& core) const {
   core.deselectedAnyUnits();
   core.cleanFow();
-  for (auto p : core.players()) {
+  for (auto* p : core.players()) {
     if (p->id == newID()) {
       if (core.currentPlayer().id == oldID()) {
         core.setCurrentPlayer(p);
@@ -54,7 +54,7 @@ EventEndTurn* EventEndTurn::generate(const Core& core) {
     newPlayerID = 0;
   }
   int oldPlayerID = core.currentPlayer().id;
-  auto e = new EventEndTurn(
+  auto* e = new EventEndTurn(
       core.eventManager().getNewEventID(), oldPlayerID, newPlayerID);
   return e;
 }

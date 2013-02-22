@@ -298,7 +298,7 @@ void Game::drawUnit(const Unit& u) {
 }
 
 void Game::drawUnits() {
-  for (auto u : core().units()) {
+  for (auto* u : core().units()) {
     if (uiMode() == UIMode::SHOW_EVENT) {
       assert(mEventVisualizer);
       if (mEventVisualizer->isUnitVisible(*u)) {
