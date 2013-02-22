@@ -24,7 +24,7 @@ private:
   const EventMove& mEventMove;
   int mCurrentMoveIndex;
 
-  int currentTileIndex();
+  int currentTileIndex() const;
   int calculateNodeIndex();
   void endMovement();
   const V2i& currentTile();

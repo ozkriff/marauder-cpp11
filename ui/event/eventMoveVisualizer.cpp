@@ -66,7 +66,7 @@ void EventMoveVisualizer::endMovement() {
   }
 }
 
-int EventMoveVisualizer::currentTileIndex() {
+int EventMoveVisualizer::currentTileIndex() const {
   return mCurrentMoveIndex / moveSpeed;
 }
 
