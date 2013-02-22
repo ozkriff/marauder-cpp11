@@ -1,19 +1,21 @@
 cmake_minimum_required(VERSION 2.6)
 project(marauder)
-find_package(OpenGL REQUIRED)
-find_package(SDL REQUIRED)
-find_package(SDL_image REQUIRED)
+
 include_directories(.)
-set(CMAKE_BUILD_TYPE Debug)
+
+set(CMAKE_BUILD_TYPE Debug) # TODO: remove?
+
 add_definitions(-Wold-style-cast -Wall -Wextra --pedantic)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+
+
+# ---------------------------------  CORE  ------------------------------------
+
 include_directories("/usr/include/jsoncpp") # TODO: fix
-configure_file(confCore.json . COPYONLY)
-configure_file(unitTypes.json . COPYONLY)
-configure_file(confUI.json . COPYONLY)
-configure_file(unitResources.json . COPYONLY)
-include_directories(${SDL_INCLUDE_DIR})
 
 add_library(marauderCore
   core/misc.cpp
@@ -36,6 +38,18 @@ target_link_libraries(marauderCore
   jsoncpp # TODO: fix
 )
 
+configure_file(confCore.json . COPYONLY)
+configure_file(unitTypes.json . COPYONLY)
+
+
+# ---------------------------------  UI  --------------------------------------
+
+find_package(OpenGL REQUIRED)
+find_package(SDL REQUIRED)
+find_package(SDL_image REQUIRED)
+
+include_directories(${SDL_INCLUDE_DIR})
+
 add_library(marauderUi
   ui/game.cpp
   ui/objModel.cpp
@@ -57,6 +71,12 @@ target_link_libraries(marauderUi
   ${SDLIMAGE_LIBRARY}
 )
 
+configure_file(confUI.json . COPYONLY)
+configure_file(unitResources.json . COPYONLY)
+
+
+# --------------------------------  TESTS  ------------------------------------
+
 add_executable(marauder ui/main.cpp)
 target_link_libraries(marauder marauderUi)
 
@@ -66,6 +86,8 @@ add_executable(testMarauder
   tests/testCoreLos.cpp
 )
 target_link_libraries(testMarauder unittest++ marauderUi) # TODO: fix
+
 enable_testing()
 add_test(testMarauder testMarauder)
+
 add_custom_target(runUnitTests ALL COMMAND testMarauder)
