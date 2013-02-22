@@ -235,15 +235,23 @@ void Core::addUnit(const V2i& p, int playerID) {
   calculateFow();
 }
 
+V2i Core::findFreePosition() {
+  for (int counter = 0; counter < 1000; counter++) {
+    V2i p(
+        rnd(0, map().size().x() - 1),
+        rnd(0, map().size().y() - 1));
+    if (!map().tile(p).obstacle && !isUnitAt(p)) {
+      return p;
+    }
+  }
+  throw std::runtime_error("Can't find free position!");
+}
+
 void Core::initUnits() {
   for (auto player : players()) {
     for (int i = 0; i < mInitialUnitsPerPlayerCount; i++) {
-      V2i p(rnd(0, map().size().x() - 1), rnd(0, map().size().y() - 1));
-      if (!map().tile(p).obstacle && !isUnitAt(p)) {
-        addUnit(p, player->id);
-      } else {
-        i--;
-      }
+      V2i p = findFreePosition();
+      addUnit(p, player->id);
     }
   }
 }

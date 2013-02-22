@@ -72,6 +72,7 @@ private:
   int getNewUnitID();
   void createLocalHuman(int id);
   void initLocalPlayers(std::vector<int> unitIDs);
+  V2i findFreePosition();
   void initUnits();
   void initPlayers();
   void initObstacles();
