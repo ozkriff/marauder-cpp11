@@ -11,6 +11,7 @@
 #include "ui/v2f.hpp"
 #include "ui/vertexArray.hpp"
 #include "ui/game.hpp"
+#include "ui/math.hpp"
 
 EventMoveVisualizer::EventMoveVisualizer(Game& game, const Event& event)
   : EventVisualizer(game),
@@ -79,7 +80,7 @@ void EventMoveVisualizer::end() {
 }
 
 float EventMoveVisualizer::currentAngle() const {
-  return Dir(currentTile(), nextTile()).toAngle();
+  return dirToAngle(Dir(currentTile(), nextTile()));
 }
 
 V2f EventMoveVisualizer::currentPos() const {

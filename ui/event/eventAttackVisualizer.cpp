@@ -9,6 +9,7 @@
 #include "ui/v3f.hpp"
 #include "ui/vertexArray.hpp"
 #include "ui/game.hpp"
+#include "ui/math.hpp"
 
 EventAttackVisualizer::EventAttackVisualizer(Game& game, const Event& event)
   : EventVisualizer(game),
@@ -40,7 +41,7 @@ void EventAttackVisualizer::draw() {
   glPushMatrix();
   glTranslatef(pos.x(), pos.y(), 0.0f);
   game().drawUnitCircle(mVictim);
-  glRotatef(mVictim.direction().toAngle(), 0, 0, 1);
+  glRotatef(dirToAngle(mVictim.direction()), 0, 0, 1);
   glTranslatef(0.0f, 0.0f, pos.z());
   game().drawUnitModel(mVictim);
   glPopMatrix();

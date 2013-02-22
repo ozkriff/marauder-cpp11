@@ -28,7 +28,6 @@ public:
 
   DirID value() const;
   int toInt() const;
-  float toAngle() const;
   Dir opposite() const;
   int diff(Dir d1) const;
 

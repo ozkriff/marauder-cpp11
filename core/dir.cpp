@@ -67,11 +67,6 @@ int Dir::toInt() const {
   return static_cast<int>(mValue);
 }
 
-float Dir::toAngle() const {
-  assert(toInt() < 6);
-  return (360 / 6) * toInt() + 30;
-}
-
 Dir Dir::opposite() const {
   int directionIndex = toInt() + 3;
   if (directionIndex >= 6) {

@@ -75,3 +75,7 @@ void rotatePointAroundPoint(
   p->setX(cos * dx - sin * dy + o->x());
   p->setY(sin * dx + cos * dy + o->y());
 }
+
+float dirToAngle(const Dir& dir) {
+  return (360.0f / 6.0f) * dir.toInt() + 30.0f;
+}
