@@ -415,6 +415,7 @@ void Game::createNewUnitInActiveTile() {
     core().pathfinder().fillMap(core().selectedUnit());
     mVaWalkableMap = buildWalkableArray();
   }
+  rebuildMapArray();
 }
 
 void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
