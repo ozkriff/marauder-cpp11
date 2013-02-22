@@ -16,7 +16,7 @@ configure_file(unitTypes.json . COPYONLY)
 configure_file(confUI.json . COPYONLY)
 configure_file(unitResources.json . COPYONLY)
 include_directories(${SDL_INCLUDE_DIR})
-add_library(SOURCES
+add_library(marauderLib
   ui/game.cpp
   ui/objModel.cpp
   ui/vertexArray.cpp
@@ -53,14 +53,14 @@ set(LIBS
   ${SDL_LIBRARY}
   ${SDLIMAGE_LIBRARY}
 )
-target_link_libraries(marauder SOURCES ${LIBS})
+target_link_libraries(marauder marauderLib ${LIBS})
 
 add_executable(testMarauder
   tests/runner.cpp
   tests/testCoreDir.cpp
   tests/testCoreLos.cpp
 )
-target_link_libraries(testMarauder unittest++ SOURCES ${LIBS}) # TODO: fix
+target_link_libraries(testMarauder unittest++ marauderLib ${LIBS}) # TODO: fix
 enable_testing()
 add_test(testMarauder testMarauder)
 add_custom_target(runUnitTests ALL COMMAND testMarauder)
