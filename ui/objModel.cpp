@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <cassert>
 #include <stdexcept>
-#include <GL/gl.h>
+#include "SDL_opengl.h"
 #include "core/dir.hpp"
 #include "core/misc.hpp"
 #include "ui/math.hpp"
