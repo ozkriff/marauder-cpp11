@@ -3,6 +3,76 @@
 #include <cassert>
 #include "ui/vertexArray.hpp"
 
+VertexArray::VertexArray(PrimitiveType primitiveType)
+    : vertices(),
+      textureCoordinates(),
+      colors(),
+      mPrimitiveType(primitiveType),
+      mTextureID(0),
+      mColor(1.0f, 1.0f, 1.0f),
+      mHaveColor(false)
+{
+}
+
+VertexArray::VertexArray(const Color& color, PrimitiveType primitiveType)
+    : vertices(),
+      textureCoordinates(),
+      colors(),
+      mPrimitiveType(primitiveType),
+      mTextureID(0),
+      mColor(color),
+      mHaveColor(true)
+{
+}
+
+void VertexArray::draw() {
+  // enable everything
+  {
+    if (!textureCoordinates.empty()) {
+      glEnable(GL_TEXTURE_2D);
+      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+      glBindTexture(GL_TEXTURE_2D, mTextureID);
+      glTexCoordPointer(2, GL_FLOAT, 0, textureCoordinates.data());
+    }
+    if (!vertices.empty()) {
+      glEnableClientState(GL_VERTEX_ARRAY);
+    }
+    if (!colors.empty()) {
+      glEnableClientState(GL_COLOR_ARRAY);
+      glColorPointer(3, GL_UNSIGNED_BYTE, 0, colors.data());
+    }
+    if (mHaveColor) {
+      glColor3f(mColor.red(), mColor.green(), mColor.blue());
+    } else {
+      glColor3f(1.0f, 1.0f, 1.0f);
+    }
+  }
+  // draw
+  {
+    glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+    if (mPrimitiveType == PrimitiveType::Triangles) {
+      glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
+    } else if (mPrimitiveType == PrimitiveType::Lines) {
+      glDrawArrays(GL_LINES, 0, vertices.size() / 3);
+    } else {
+      // TODO: throw ecxeption
+    }
+  }
+  // disable everything
+  {
+    if (!textureCoordinates.empty()) {
+      glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+      glDisable(GL_TEXTURE_2D);
+    }
+    if (!vertices.empty()) {
+      glDisableClientState(GL_VERTEX_ARRAY);
+    }
+    if (!colors.empty()) {
+      glDisableClientState(GL_COLOR_ARRAY);
+    }
+  }
+}
+
 void appendV2f(std::vector<float>* vertices, const V2f& vertex) {
   assert(vertices);
   vertices->push_back(vertex.x());

@@ -164,12 +164,13 @@ float Game::aspectRatio() const {
 
 VertexArray Game::buildMapArray() {
   VertexArray v;
+  v.mTextureID = mFloorTexture;
   core().map().forEachPos([&](const V2i& p) {
     V2f pos = v2iToV2f(p);
     for (int i = 0; i < 6; i++) {
-      appendV2f(&v.vertices, pos + indexToHexVertex(i));
-      appendV2f(&v.vertices, pos + indexToHexVertex(i + 1));
-      appendV2f(&v.vertices, pos);
+      appendV3f(&v.vertices, pos + indexToHexVertex(i));
+      appendV3f(&v.vertices, pos + indexToHexVertex(i + 1));
+      appendV3f(&v.vertices, pos);
       appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
       appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
       appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
@@ -186,14 +187,15 @@ VertexArray Game::buildMapArray() {
 }
 
 VertexArray Game::buildObstaclesArray() {
-  VertexArray v;
+  VertexArray v(Color(0.4f, 0.1f, 0.0f));
+  v.mTextureID = mFloorTexture;
   core().map().forEachPos([&](const V2i& p) {
     if (core().map().tile(p).obstacle) {
       V2f pos = v2iToV2f(p);
       for (int i = 0; i < 6; i++) {
-        appendV2f(&v.vertices, pos + indexToHexVertex(i) * 0.7f);
-        appendV2f(&v.vertices, pos + indexToHexVertex(i + 1) * 0.7f);
-        appendV2f(&v.vertices, pos);
+        appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i) * 0.7f, 0.01f));
+        appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i + 1) * 0.7f, 0.01f));
+        appendV3f(&v.vertices, V3f(pos, 0.01f));
         appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
         appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
         appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
@@ -204,7 +206,7 @@ VertexArray Game::buildObstaclesArray() {
 }
 
 VertexArray Game::buildWalkableArray() {
-  VertexArray v;
+  VertexArray v(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
   core().map().forEachPos([&](const V2i& p) {
     Tile& t = core().map().tile(p);
     if (t.parent.value() != DirID::NONE && t.cost < 50) {
@@ -221,68 +223,32 @@ VertexArray Game::buildWalkableArray() {
 }
 
 void Game::drawMap() {
-  glEnable(GL_TEXTURE_2D);
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glBindTexture(GL_TEXTURE_2D, mFloorTexture);
-
-  glEnableClientState(GL_COLOR_ARRAY);
-  glColorPointer(3, GL_UNSIGNED_BYTE, 0, mVaMap.colors.data());
-  glTexCoordPointer(2, GL_FLOAT, 0, mVaMap.textureCoordinates.data());
-  glVertexPointer(2, GL_FLOAT, 0, mVaMap.vertices.data());
-  glDrawArrays(GL_TRIANGLES, 0, mVaMap.vertices.size() / 2);
-  glDisableClientState(GL_COLOR_ARRAY);
-
-  glColor3f(0.4f, 0.1f, 0.0f);
-  glPushMatrix();
-  glTranslatef(0.0f, 0.0f, 0.01f);
-  glTexCoordPointer(2, GL_FLOAT, 0, mVaObstacles.textureCoordinates.data());
-  glVertexPointer(2, GL_FLOAT, 0, mVaObstacles.vertices.data());
-  glDrawArrays(GL_TRIANGLES, 0, mVaObstacles.vertices.size() / 2);
-  glPopMatrix();
-
-  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-  glDisable(GL_TEXTURE_2D);
-  glDisableClientState(GL_VERTEX_ARRAY);
-
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glColor3f(0.0f, 0.3f, 1.0f);
-  glVertexPointer(3, GL_FLOAT, 0, mVaWalkableMap.vertices.data());
-  glDrawArrays(GL_LINES, 0, mVaWalkableMap.vertices.size() / 3);
-  glDisableClientState(GL_VERTEX_ARRAY);
+  mVaMap.draw();
+  mVaObstacles.draw();
+  mVaWalkableMap.draw();
 }
 
 void Game::drawUnitModel(const Unit& u) {
-  glEnable(GL_TEXTURE_2D);
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glBindTexture(GL_TEXTURE_2D, mUnitTextureIDs[u.type().id]);
-  glColor3f(1, 1, 1);
-  glTexCoordPointer(2, GL_FLOAT, 0, mVaUnits[u.type().id].textureCoordinates.data());
-  glVertexPointer(3, GL_FLOAT, 0, mVaUnits[u.type().id].vertices.data());
-  glDrawArrays(GL_TRIANGLES, 0, mVaUnits[u.type().id].vertices.size() / 3);
-  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-  glDisableClientState(GL_VERTEX_ARRAY);
-  glDisable(GL_TEXTURE_2D);
+  mVaUnits[u.type().id].draw();
 }
 
 void Game::drawUnitCircle(const Unit& u) {
-  std::vector<float> v;
+  VertexArray v(PrimitiveType::Lines);
+  v.mHaveColor = true;
+  // TODO: extruct to other method
   if (u.playerID() == 0) {
-    glColor3f(1, 0, 0);
+    v.mColor = Color(1.0f, 0.0f, 0.0f);
   } else if (u.playerID() == 1) {
-    glColor3f(0, 0, 1);
+    v.mColor = Color(0.0f, 0.0f, 1.0f);
   } else {
     throw std::logic_error("You need more colors!");
   }
   for (int i = 0; i < 6; i++) {
-    appendV3f(&v, V3f(indexToHexVertex(i) * 0.9f, 0.01f));
+    appendV3f(&(v.vertices), V3f(indexToHexVertex(i) * 0.9f, 0.01f));
+    appendV3f(&(v.vertices), V3f(indexToHexVertex(i + 1) * 0.9f, 0.01f));
   }
   glLineWidth(2);
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glVertexPointer(3, GL_FLOAT, 0, v.data());
-  glDrawArrays(GL_LINE_LOOP, 0, v.size() / 3);
-  glDisableClientState(GL_VERTEX_ARRAY);
+  v.draw();
   glLineWidth(1);
 }
 
@@ -314,16 +280,12 @@ void Game::drawUnits() {
 void Game::drawSelectedunitMarker() {
   const Unit& u = core().selectedUnit();
   V2f p = v2iToV2f(u.position());
-  std::vector<float> v;
+  VertexArray v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
   float sn = std::sin(SDL_GetTicks() / 100.0f) / 4.0f;
-  appendV3f(&v, V3f(p, sn + tileSize()));
-  appendV3f(&v, V3f(p, sn + tileSize() * 1.5f));
+  appendV3f(&v.vertices, V3f(p, sn + tileSize()));
+  appendV3f(&v.vertices, V3f(p, sn + tileSize() * 1.5f));
   glLineWidth(2);
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glColor3f(1.0f, 0.0f, 0.0f);
-  glVertexPointer(3, GL_FLOAT, 0, v.data());
-  glDrawArrays(GL_LINES, 0, v.size() / 3);
-  glDisableClientState(GL_VERTEX_ARRAY);
+  v.draw();
   glLineWidth(1);
 }
 
@@ -556,9 +518,9 @@ VertexArray Game::buildPickingTilesArray() {
   core().map().forEachPos([&](const V2i& p) {
     V2f pos = v2iToV2f(p);
     for (int i = 0; i < 6; i++) {
-      appendV2f(&v.vertices, pos + indexToHexVertex(i));
-      appendV2f(&v.vertices, pos + indexToHexVertex(i + 1));
-      appendV2f(&v.vertices, pos);
+      appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i)));
+      appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i + 1)));
+      appendV3f(&v.vertices, V3f(pos));
       appendRGB(&v.colors, p.x(), p.y(), 1);
       appendRGB(&v.colors, p.x(), p.y(), 1);
       appendRGB(&v.colors, p.x(), p.y(), 1);
@@ -581,13 +543,7 @@ V2i Game::pickTile(const V2i& mousePos) {
 void Game::drawForPicking() {
   glLoadIdentity();
   camera().set();
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glEnableClientState(GL_COLOR_ARRAY);
-  glColorPointer(3, GL_UNSIGNED_BYTE, 0, mVaPick.colors.data());
-  glVertexPointer(2, GL_FLOAT, 0, mVaPick.vertices.data());
-  glDrawArrays(GL_TRIANGLES, 0, mVaPick.vertices.size() / 2);
-  glDisableClientState(GL_COLOR_ARRAY);
-  glDisableClientState(GL_VERTEX_ARRAY);
+  mVaPick.draw();
 }
 
 void Game::scrollMap() {
@@ -678,7 +634,7 @@ void Game::loadUnitResources() {
     const Json::Value& unitInfo = resources[key];
     std::string texturePath = mPathToData + unitInfo["textureName"].asString();
     std::string objModelPath = mPathToData + unitInfo["objModelName"].asString();
-    mUnitTextureIDs[id] = loadTexture(texturePath);
     mVaUnits[id] = ObjModel(objModelPath).build();
+    mVaUnits[id].mTextureID = loadTexture(texturePath);
   }
 }

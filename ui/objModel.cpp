@@ -96,7 +96,7 @@ void ObjModel::debugPrint() {
 }
 
 VertexArray ObjModel::build() {
-  VertexArray va;
+  VertexArray va(PrimitiveType::Triangles);
   for (unsigned int i = 0; i < mFaces.size(); i++) {
     auto tri = mFaces[i];
     for (int j = 0; j < 3; j++) {
