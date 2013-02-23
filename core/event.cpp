@@ -5,7 +5,6 @@
 #include <list>
 #include "core/core.hpp"
 #include "core/event.hpp"
-#include "ui/game.hpp"
 
 Event::Event(int id, EventTypeID type)
   : mType(type),
