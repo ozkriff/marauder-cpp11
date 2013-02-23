@@ -59,6 +59,7 @@ find_package(SDL_image REQUIRED)
 include_directories(${SDL_INCLUDE_DIR})
 
 add_library(marauderUi
+  ui/color.cpp
   ui/game.cpp
   ui/objModel.cpp
   ui/vertexArray.cpp
