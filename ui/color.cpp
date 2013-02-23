@@ -9,15 +9,15 @@ Color::Color(float red, float green, float blue)
 {
 }
 
-float Color::red() {
+float Color::red() const {
   return mRed;
 }
 
-float Color::green() {
+float Color::green() const {
   return mGreen;
 }
 
-float Color::blue() {
+float Color::blue() const {
   return mBlue;
 }
 
