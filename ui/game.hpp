@@ -14,13 +14,13 @@
 
 class EventVisualizer;
 
-enum class UIMode {
-  NORMAL,
-  SHOW_EVENT
-};
-
 class Game {
 public:
+  enum class Mode {
+    NORMAL,
+    SHOW_EVENT
+  };
+
   Game();
   ~Game();
 
@@ -43,7 +43,7 @@ private:
   float mHexEx;
   float mHexIn;
   Core mCore;
-  UIMode mUiMode;
+  Mode mMode;
   VertexArray mVaWalkableMap;
   Uint32 mSDLFlags;
   int mBitsPerPixel;
@@ -99,7 +99,7 @@ private:
   float tileSize() const;
   bool done() const;
   SDL_Surface* screen();
-  UIMode uiMode() const;
+  Mode mode() const;
   bool isRotatingCamera() const;
   const V2i& winSize() const;
   const V2i& activeTilePos() const;
@@ -107,7 +107,7 @@ private:
   const V2i& mousePos() const;
 
   void setVaWalkableMap(const VertexArray& va);
-  void setUiMode(UIMode uiMode);
+  void setMode(Mode mode);
   void setDone(bool done);
   void setFloorTexture(int textureID);
   void setWinSize(const V2i& winSize);

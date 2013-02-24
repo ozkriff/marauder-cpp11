@@ -18,7 +18,7 @@ Game::Game()
     mTileSize(1.0f),
     mHexEx(tileSize() / 2.0f),
     mHexIn(std::sqrt(std::pow(mHexEx, 2) - std::pow(mHexEx / 2.0f, 2))),
-    mUiMode(UIMode::NORMAL),
+    mMode(Mode::NORMAL),
     mSDLFlags(SDL_OPENGL | SDL_RESIZABLE),
     mBitsPerPixel(mConfig["bitsPerPixel"].asInt()),
     mWinSize(JsonValueToV2i(mConfig["resolution"])),
@@ -58,8 +58,8 @@ const V2i& Game::winSize() const {
   return mWinSize;
 }
 
-UIMode Game::uiMode() const {
-  return mUiMode;
+Game::Mode Game::mode() const {
+  return mMode;
 }
 
 Camera& Game::camera() {
@@ -106,8 +106,8 @@ void Game::setMousePos(const V2i& mousePos) {
   mMousePos = mousePos;
 }
 
-void Game::setUiMode(UIMode uiMode) {
-  mUiMode = uiMode;
+void Game::setMode(Mode mode) {
+  mMode = mode;
 }
 
 void Game::setIsRotatingCamera(bool isRotatingCamera) {
@@ -265,7 +265,7 @@ void Game::drawUnit(const Unit& u) {
 
 void Game::drawUnits() {
   for (auto* u : core().units()) {
-    if (uiMode() == UIMode::SHOW_EVENT) {
+    if (mode() == Mode::SHOW_EVENT) {
       assert(mEventVisualizer);
       if (mEventVisualizer->isUnitVisible(*u)) {
         continue;
@@ -296,7 +296,7 @@ void Game::draw() {
   camera().set();
   drawMap();
   drawUnits();
-  if (uiMode() == UIMode::SHOW_EVENT) {
+  if (mode() == Mode::SHOW_EVENT) {
     assert(mEventVisualizer);
     mEventVisualizer->draw();
   }
@@ -307,7 +307,7 @@ void Game::draw() {
 }
 
 void Game::processClickOnTile() {
-  if (uiMode() != UIMode::NORMAL) {
+  if (mode() != Mode::NORMAL) {
     return;
   }
   if (core().isUnitAt(activeTilePos())) {
@@ -465,17 +465,17 @@ void Game::screenScenarioMainEvents() {
   }
   mEventVisualizer = newEventVisualizer(*this, core().eventManager().currentEvent());
   assert(mEventVisualizer);
-  setUiMode(UIMode::SHOW_EVENT);
+  setMode(Mode::SHOW_EVENT);
 }
 
 void Game::logic() {
-  while (uiMode() == UIMode::NORMAL && core().eventManager().unshownEventsLeft()) {
+  while (mode() == Mode::NORMAL && core().eventManager().unshownEventsLeft()) {
     screenScenarioMainEvents();
   }
-  if (uiMode() == UIMode::SHOW_EVENT) {
+  if (mode() == Mode::SHOW_EVENT) {
     if (mEventVisualizer->isFinished()) {
       core().eventManager().applyCurrentEvent();
-      setUiMode(UIMode::NORMAL);
+      setMode(Mode::NORMAL);
       mEventVisualizer->end();
     }
   }
