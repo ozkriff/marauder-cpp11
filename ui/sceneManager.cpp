@@ -22,6 +22,10 @@ void SceneManager::deleteNode(int nodeID) {
   mNodes.erase(nodeID);
 }
 
+std::map<int, SceneNode*>& SceneManager::nodes() {
+  return mNodes;
+}
+
 void SceneManager::draw() const {
   for (auto pair: mNodes) {
     SceneNode* sceneNode = pair.second;

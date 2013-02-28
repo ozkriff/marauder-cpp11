@@ -15,6 +15,8 @@ public:
   void deleteNode(int nodeID);
   SceneNode& sceneNode(int nodeID);
 
+  std::map<int, SceneNode*>& nodes();
+
   void draw() const;
 
 private:
