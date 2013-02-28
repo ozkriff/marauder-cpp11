@@ -35,21 +35,14 @@ bool EventAttackVisualizer::isUnitVisible(const Unit& u) const {
 }
 
 void EventAttackVisualizer::draw() {
-  // TODO: animate shooting
-  V2f posTmp = game().v2iToV2f(mVictim.position());
-  V3f pos(posTmp, -mFallingDownSpeed * mFrame);
-  glPushMatrix();
-  glTranslatef(pos.x(), pos.y(), 0.0f);
-  game().drawUnitCircle(mVictim);
-  glRotatef(dirToAngle(mVictim.direction()), 0, 0, 1);
-  glTranslatef(0.0f, 0.0f, pos.z());
-  game().drawUnitModel(mVictim);
-  glPopMatrix();
+  auto& node = game().sceneManager().sceneNode(mVictim.id());
+  node.mPosition.setZ(node.mPosition.z() - mFallingDownSpeed);
   drawLineOfFire();
   mFrame++;
 }
 
 void EventAttackVisualizer::end() {
+  game().sceneManager().deleteNode(mVictim.id());
   if (game().core().isAnyUnitSelected()) {
     game().rebuildWalkableMapArray();
     game().rebuildMapArray();

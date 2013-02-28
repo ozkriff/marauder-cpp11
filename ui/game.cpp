@@ -26,7 +26,8 @@ Game::Game()
     mActiveTilePos(0, 0),
     mIsRotatingCamera(false),
     mDone(false),
-    mEventVisualizer(nullptr)
+    mEventVisualizer(nullptr),
+    mSceneManager()
 {
   SDL_Init(SDL_INIT_EVERYTHING);
   setScreen(SDL_SetVideoMode(winSize().x(), winSize().y(),
@@ -36,6 +37,7 @@ Game::Game()
   initCamera();
   loadUnitResources();
   initVertexArrays();
+  recreateUnitSceneNodes();
 }
 
 Game::~Game() {
@@ -52,6 +54,14 @@ Core& Game::core() {
 
 const Core& Game::core() const {
   return mCore;
+}
+
+SceneManager& Game::sceneManager() {
+  return mSceneManager;
+}
+
+const SceneManager& Game::sceneManager() const {
+  return mSceneManager;
 }
 
 const V2i& Game::winSize() const {
@@ -151,9 +161,13 @@ V2f Game::v2iToV2f(const V2i& i) const {
   return v;
 }
 
-V2f Game::indexToHexVertex(int i) {
-  float n = M_PI_2 + 2 * M_PI * i / 6;
+V2f Game::indexToCircleVertex(int count, int i) {
+  float n = M_PI_2 + 2 * M_PI * i / count;
   return V2f(std::cos(n), std::sin(n)) * mHexEx;
+}
+
+V2f Game::indexToHexVertex(int i) {
+  return indexToCircleVertex(6, i);
 }
 
 float Game::aspectRatio() const {
@@ -252,6 +266,18 @@ void Game::drawUnitCircle(const Unit& u) {
   glLineWidth(1);
 }
 
+void Game::recreateUnitSceneNodes() {
+  for (auto& pair : mSceneManager.nodes()) {
+    SceneNode* node = pair.second;
+    assert(node);
+    delete node;
+  }
+  for (const Unit* pUnit : core().units()) {
+    const Unit& unit = *pUnit;
+    createUnitNode(unit);
+  }
+}
+
 void Game::drawUnit(const Unit& u) {
   V2f f = v2iToV2f(u.position());
   glColor3f(1, 0, 0);
@@ -295,7 +321,7 @@ void Game::draw() {
   glLoadIdentity();
   camera().set();
   drawMap();
-  drawUnits();
+  mSceneManager.draw();
   if (mode() == Mode::SHOW_EVENT) {
     assert(mEventVisualizer);
     mEventVisualizer->draw();
@@ -378,6 +404,7 @@ void Game::createNewUnitInActiveTile() {
     mVaWalkableMap = buildWalkableArray();
   }
   rebuildMapArray();
+  createUnitNode(core().unitAt(activeTilePos()));
 }
 
 void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
@@ -625,6 +652,42 @@ void Game::initVertexArrays() {
   mVaPick = buildPickingTilesArray();
   mVaMap = buildMapArray();
   mVaObstacles = buildObstaclesArray();
+  buildUnitCirclesVertexArrays();
+}
+
+void Game::createUnitNode(const Unit& unit) {
+  auto* node = new SceneNode();
+  node->mVertexArray = &mVaUnits[unit.type().id];
+  node->mPosition = v2iToV2f(unit.position());
+  node->mRotationAngle = dirToAngle(unit.direction());
+  mSceneManager.addNode(unit.id(), node);
+  {
+    auto* node2 = new SceneNode();
+    node2->mVertexArray = &(mVaUnitCircles.at(unit.playerID()));
+    node->mChildrens.push_back(node2);
+  }
+}
+
+void Game::buildUnitCirclesVertexArrays(){
+    std::vector<Color> colors = {
+      Color(1.0f, 0.0f, 0.0f),
+      Color(0.0f, 0.0f, 1.0f)
+    };
+    for (const Color& color : colors) {
+      VertexArray v(PrimitiveType::Lines);
+      v.mHaveColor = true;
+      v.mColor = color;
+      const int verticesCount = 12;
+      for (int i = 0; i < verticesCount; i++) {
+        const float k = mHexIn * 2.0f; // resize koefficient
+        const float h = 0.01f;
+        appendV3f(&v.vertices, V3f(
+            indexToCircleVertex(verticesCount, i) * k, h));
+        appendV3f(&v.vertices, V3f(
+            indexToCircleVertex(verticesCount, i + 1) * k, h));
+      }
+      mVaUnitCircles.push_back(v);
+    }
 }
 
 void Game::loadUnitResources() {

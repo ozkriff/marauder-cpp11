@@ -39,13 +39,9 @@ bool EventMoveVisualizer::isUnitVisible(const Unit& u) const {
 
 void EventMoveVisualizer::draw() {
   const Unit& unit = game().core().id2unit(mEventMove.unitID());
-  V2f pos = currentPos();
-  glPushMatrix();
-  glTranslatef(pos.x(), pos.y(), 0.0f);
-  game().drawUnitCircle(unit);
-  glRotatef(currentAngle(), 0, 0, 1);
-  game().drawUnitModel(unit);
-  glPopMatrix();
+  auto& node = game().sceneManager().sceneNode(unit.id());
+  node.mPosition = currentPos();
+  node.mRotationAngle = currentAngle();
   mCurrentMoveIndex++;
 }
 
@@ -60,7 +56,9 @@ const V2i& EventMoveVisualizer::nextTile() const {
 void EventMoveVisualizer::endMovement() {
   Core& core = game().core();
   Unit& u = core.id2unit(mEventMove.unitID());
-  UNUSED(u);
+  auto& node = game().sceneManager().sceneNode(u.id());
+  node.mPosition = game().v2iToV2f(u.position());
+  node.mRotationAngle = dirToAngle(u.direction());
   if (core.isAnyUnitSelected()) {
     game().rebuildWalkableMapArray();
     game().rebuildMapArray();

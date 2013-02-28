@@ -38,4 +38,5 @@ void EventEndTurnVisualizer::end() {
   game().core().calculateFow();
   game().rebuildMapArray();
   game().cleanWalkableMapArray();
+  game().recreateUnitSceneNodes();
 }

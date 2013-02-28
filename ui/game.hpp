@@ -11,6 +11,7 @@
 #include "ui/v2f.hpp"
 #include "ui/camera.hpp"
 #include "ui/objModel.hpp"
+#include "ui/sceneManager.hpp"
 
 class EventVisualizer;
 
@@ -27,6 +28,9 @@ public:
   Core& core();
   const Core& core() const;
 
+  SceneManager& sceneManager();
+  const SceneManager& sceneManager() const;
+
   void cleanWalkableMapArray();
   void rebuildWalkableMapArray();
   void rebuildMapArray();
@@ -35,6 +39,8 @@ public:
   V2f v2iToV2f(const V2i& i) const;
   void drawUnitModel(const Unit& u);
   void drawUnitCircle(const Unit& u);
+
+  void recreateUnitSceneNodes();
 
 private:
   Json::Value mConfig;
@@ -58,8 +64,10 @@ private:
   VertexArray mVaMap;
   VertexArray mVaObstacles;
   VertexArray mVaPick;
+  std::vector<VertexArray> mVaUnitCircles;
   std::map<int, VertexArray> mVaUnits;
   EventVisualizer* mEventVisualizer;
+  SceneManager mSceneManager;
 
   void processSDLEvent(const SDL_MouseMotionEvent& e);
   void processSDLEvent(const SDL_KeyboardEvent& e);
@@ -85,6 +93,8 @@ private:
   void initOpengl();
   void initCamera();
   void initVertexArrays();
+  void createUnitNode(const Unit& unit);
+  void buildUnitCirclesVertexArrays();
   void loadUnitResources();
   void drawMap();
   void drawUnit(const Unit& u);
@@ -93,6 +103,7 @@ private:
   void draw();
   void screenScenarioMainEvents();
   void logic();
+  V2f indexToCircleVertex(int count, int i);
   V2f indexToHexVertex(int i);
   float aspectRatio() const;
 
