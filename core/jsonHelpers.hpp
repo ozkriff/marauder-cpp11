@@ -9,6 +9,7 @@
 class V2i;
 
 Json::Value parseConfig(const std::string& fileName);
+Json::Value parseConfigFromString(const std::string& config);
 V2i JsonValueToV2i(const Json::Value& value);
 
 #endif
