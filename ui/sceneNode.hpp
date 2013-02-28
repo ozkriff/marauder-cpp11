@@ -5,6 +5,7 @@
 
 #include "ui/vertexArray.hpp"
 #include "ui/color.hpp"
+#include <list>
 
 class SceneNode {
 public:
@@ -17,6 +18,8 @@ public:
   VertexArray* mVertexArray;
   V3f mPosition;
   float mRotationAngle;
+  std::list<SceneNode*> mChildrens;
+
 private:
 };
 

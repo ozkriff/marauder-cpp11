@@ -17,6 +17,11 @@ void SceneNode::draw() const {
   glPushMatrix();
   glTranslatef(mPosition.x(), mPosition.y(), mPosition.z());
   glRotatef(mRotationAngle, 0, 0, 1);
+  for (auto* child : mChildrens) {
+    assert(child != nullptr);
+    child->draw();
+  }
+  assert(mVertexArray);
   mVertexArray->draw();
   glPopMatrix();
 }
