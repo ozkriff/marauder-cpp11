@@ -2,10 +2,11 @@
 
 #include "ui/color.hpp"
 
-Color::Color(float red, float green, float blue)
+Color::Color(float red, float green, float blue, float alpha)
   : mRed(red),
     mGreen(green),
-    mBlue(blue)
+    mBlue(blue),
+    mAlpha(alpha)
 {
 }
 
@@ -21,3 +22,6 @@ float Color::blue() const {
   return mBlue;
 }
 
+float Color::alpha() const {
+  return mAlpha;
+}
