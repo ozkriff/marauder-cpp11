@@ -37,8 +37,6 @@ public:
 
   void run();
   V2f v2iToV2f(const V2i& i) const;
-  void drawUnitModel(const Unit& u);
-  void drawUnitCircle(const Unit& u);
 
   void recreateUnitSceneNodes();
 
@@ -97,8 +95,6 @@ private:
   void buildUnitCirclesVertexArrays();
   void loadUnitResources();
   void drawMap();
-  void drawUnit(const Unit& u);
-  void drawUnits();
   void drawSelectedunitMarker();
   void draw();
   void screenScenarioMainEvents();

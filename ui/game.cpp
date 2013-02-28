@@ -242,30 +242,6 @@ void Game::drawMap() {
   mVaWalkableMap.draw();
 }
 
-void Game::drawUnitModel(const Unit& u) {
-  mVaUnits[u.type().id].draw();
-}
-
-void Game::drawUnitCircle(const Unit& u) {
-  VertexArray v(PrimitiveType::Lines);
-  v.mHaveColor = true;
-  // TODO: extruct to other method
-  if (u.playerID() == 0) {
-    v.mColor = Color(1.0f, 0.0f, 0.0f);
-  } else if (u.playerID() == 1) {
-    v.mColor = Color(0.0f, 0.0f, 1.0f);
-  } else {
-    throw std::logic_error("You need more colors!");
-  }
-  for (int i = 0; i < 6; i++) {
-    appendV3f(&(v.vertices), V3f(indexToHexVertex(i) * 0.9f, 0.01f));
-    appendV3f(&(v.vertices), V3f(indexToHexVertex(i + 1) * 0.9f, 0.01f));
-  }
-  glLineWidth(2);
-  v.draw();
-  glLineWidth(1);
-}
-
 void Game::recreateUnitSceneNodes() {
   for (auto& pair : mSceneManager.nodes()) {
     SceneNode* node = pair.second;
@@ -275,31 +251,6 @@ void Game::recreateUnitSceneNodes() {
   for (const Unit* pUnit : core().units()) {
     const Unit& unit = *pUnit;
     createUnitNode(unit);
-  }
-}
-
-void Game::drawUnit(const Unit& u) {
-  V2f f = v2iToV2f(u.position());
-  glColor3f(1, 0, 0);
-  glPushMatrix();
-  glTranslatef(f.x(), f.y(), 0);
-  drawUnitCircle(u);
-  glRotatef(dirToAngle(u.direction()), 0, 0, 1);
-  drawUnitModel(u);
-  glPopMatrix();
-}
-
-void Game::drawUnits() {
-  for (auto* u : core().units()) {
-    if (mode() == Mode::SHOW_EVENT) {
-      assert(mEventVisualizer);
-      if (mEventVisualizer->isUnitVisible(*u)) {
-        continue;
-      }
-    }
-    if (core().map().tile(u->position()).fow > 0) {
-      drawUnit(*u);
-    }
   }
 }
 
