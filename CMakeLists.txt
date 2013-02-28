@@ -72,6 +72,8 @@ add_library(marauderUi
   ui/event/eventAttackVisualizer.cpp
   ui/event/eventMoveVisualizer.cpp
   ui/event/eventEndTurnVisualizer.cpp
+  ui/sceneManager.cpp
+  ui/sceneNode.cpp
 )
 target_link_libraries(marauderUi
   marauderCore
