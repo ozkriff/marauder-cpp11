@@ -10,6 +10,10 @@ SceneNode::SceneNode()
 }
 
 SceneNode::~SceneNode() {
+  for (auto* child : mChildrens) {
+    assert(child != nullptr);
+    delete child;
+  }
 }
 
 void SceneNode::draw() const {
