@@ -166,7 +166,7 @@ Unit& Core::unitAt(const V2i& pos) {
       return *u;
     }
   }
-  throw std::logic_error("No unit at pos!");
+  throw std::invalid_argument("No unit at pos!");
 }
 
 bool Core::isUnitAt(const V2i& pos) const {
@@ -188,7 +188,7 @@ Unit& Core::id2unit(int id) {
       return *u;
     }
   }
-  throw std::logic_error("No unit with this ID!");
+  throw std::invalid_argument("No unit with this ID!");
 }
 
 void Core::initUnitTypes() {

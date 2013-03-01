@@ -29,7 +29,7 @@ GLenum getTextureFormat(
       return GL_BGR;
     }
   } else {
-    throw std::logic_error("the image is not truecolor..");
+    throw std::runtime_error("the image is not truecolor..");
   }
 }
 
@@ -47,10 +47,10 @@ void setTextureParameters() {
 int loadTexture(const std::string& filename) {
   SDL_Surface* surface = IMG_Load(filename.c_str());
   if (!surface) {
-    throw std::logic_error(std::string("Can't load image: ") + filename);
+    throw std::runtime_error(std::string("Can't load image: ") + filename);
   }
   if (!isPowerOfTwo(surface->w) || !isPowerOfTwo(surface->h)) {
-    throw std::logic_error("image's height or width is not a power of 2");
+    throw std::runtime_error("image's height or width is not a power of 2");
   }
   GLint bytesPerPixel = surface->format->BytesPerPixel;
   GLenum textureFormat = getTextureFormat(surface, bytesPerPixel);
