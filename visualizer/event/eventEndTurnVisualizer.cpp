@@ -1,0 +1,42 @@
+// See LICENSE file for copyright and license details.
+
+#include "visualizer/event/eventEndTurnVisualizer.hpp"
+#include <cassert>
+#include "SDL_opengl.h"
+#include "core/misc.hpp"
+#include "core/v2i.hpp"
+#include "core/dir.hpp"
+#include "core/core.hpp"
+#include "core/pathfinder.hpp"
+#include "visualizer/v2f.hpp"
+#include "visualizer/vertexArray.hpp"
+#include "visualizer/game.hpp"
+
+EventEndTurnVisualizer::EventEndTurnVisualizer(Game& game, const Event& event)
+  : EventVisualizer(game),
+    mEventEndTurn(dynamic_cast<const EventEndTurn&>(event))
+{
+}
+
+EventEndTurnVisualizer::~EventEndTurnVisualizer() {
+}
+
+bool EventEndTurnVisualizer::isFinished() const {
+  return true;
+}
+
+bool EventEndTurnVisualizer::isUnitVisible(const Unit& u) const {
+  UNUSED(u);
+  return false;
+}
+
+void EventEndTurnVisualizer::draw() {
+  // nothing to draw...
+}
+
+void EventEndTurnVisualizer::end() {
+  game().core().calculateFow();
+  game().rebuildMapArray();
+  game().cleanWalkableMapArray();
+  game().recreateUnitSceneNodes();
+}

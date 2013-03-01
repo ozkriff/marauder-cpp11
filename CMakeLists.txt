@@ -50,7 +50,7 @@ configure_file(map.json . COPYONLY)
 configure_file(scenario.json . COPYONLY)
 
 
-# ---------------------------------  UI  --------------------------------------
+# -----------------------------  VISUALIZER  ----------------------------------
 
 find_package(OpenGL REQUIRED)
 find_package(SDL REQUIRED)
@@ -58,45 +58,45 @@ find_package(SDL_image REQUIRED)
 
 include_directories(${SDL_INCLUDE_DIR})
 
-add_library(marauderUi
-  ui/color.cpp
-  ui/game.cpp
-  ui/objModel.cpp
-  ui/vertexArray.cpp
-  ui/v2f.cpp
-  ui/v3f.cpp
-  ui/gl.cpp
-  ui/camera.cpp
-  ui/eventVisualizer.cpp
-  ui/math.cpp
-  ui/event/eventAttackVisualizer.cpp
-  ui/event/eventMoveVisualizer.cpp
-  ui/event/eventEndTurnVisualizer.cpp
-  ui/sceneManager.cpp
-  ui/sceneNode.cpp
+add_library(marauderVisualizer
+  visualizer/color.cpp
+  visualizer/game.cpp
+  visualizer/objModel.cpp
+  visualizer/vertexArray.cpp
+  visualizer/v2f.cpp
+  visualizer/v3f.cpp
+  visualizer/gl.cpp
+  visualizer/camera.cpp
+  visualizer/eventVisualizer.cpp
+  visualizer/math.cpp
+  visualizer/event/eventAttackVisualizer.cpp
+  visualizer/event/eventMoveVisualizer.cpp
+  visualizer/event/eventEndTurnVisualizer.cpp
+  visualizer/sceneManager.cpp
+  visualizer/sceneNode.cpp
 )
-target_link_libraries(marauderUi
+target_link_libraries(marauderVisualizer
   marauderCore
   ${OPENGL_LIBRARIES}
   ${SDL_LIBRARY}
   ${SDLIMAGE_LIBRARY}
 )
 
-configure_file(confUI.json . COPYONLY)
+configure_file(confVisualizer.json . COPYONLY)
 configure_file(unitResources.json . COPYONLY)
 
 
 # --------------------------------  TESTS  ------------------------------------
 
-add_executable(marauder ui/main.cpp)
-target_link_libraries(marauder marauderUi)
+add_executable(marauder visualizer/main.cpp)
+target_link_libraries(marauder marauderVisualizer)
 
 add_executable(testMarauder
   tests/runner.cpp
   tests/testCoreDir.cpp
   tests/testCoreLos.cpp
 )
-target_link_libraries(testMarauder unittest++ marauderUi) # TODO: fix
+target_link_libraries(testMarauder unittest++ marauderVisualizer) # TODO: fix
 
 enable_testing()
 add_test(testMarauder testMarauder)
