@@ -38,7 +38,7 @@ void EventAttackVisualizer::draw() {
   auto& node = game().sceneManager().sceneNode(mVictim.id());
   node.mPosition.setZ(node.mPosition.z() - mFallingDownSpeed);
   drawLineOfFire();
-  mFrame++;
+  ++mFrame;
 }
 
 void EventAttackVisualizer::end() {

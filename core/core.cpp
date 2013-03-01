@@ -154,7 +154,7 @@ void Core::calculateFow() {
       bool isDistanceOk = (p.distance(u->position()) < maxDist);
       bool isLosOk = isLosClear(p, u->position());
       if (isPlayerOk && isDistanceOk && isLosOk) {
-        map().tile(p).fow++;
+        ++(map().tile(p).fow);
       }
     }
   });
@@ -237,7 +237,7 @@ void Core::loadScenario() {
   {
     int playersCount = scenario["playersCount"].asInt();
     std::vector<int> playerIDs;
-    for (int i = 0; i < playersCount; i++) {
+    for (int i = 0; i < playersCount; ++i) {
       playerIDs.push_back(i);
     }
     initLocalPlayers(playerIDs);
@@ -254,9 +254,9 @@ void Core::loadScenario() {
         V2i p(x, y);
         bool isObstacle = (tile.asString() == "obstacle");
         map().tile(p).obstacle = isObstacle;
-        x++;
+        ++x;
       }
-      y++;
+      ++y;
     }
   }
   // units
@@ -270,7 +270,7 @@ void Core::loadScenario() {
         Dir direction(unitInfo["direction"].asInt());
         addUnit(position, playerID, getUnitType(typeName), direction);
       }
-      playerID++;
+      ++playerID;
     }
     calculateFow();
   }

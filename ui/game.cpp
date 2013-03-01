@@ -181,14 +181,14 @@ VertexArray Game::buildMapArray() {
   v.mTextureID = mFloorTexture;
   core().map().forEachPos([&](const V2i& p) {
     V2f pos = v2iToV2f(p);
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; ++i) {
       appendV3f(&v.vertices, pos + indexToHexVertex(i));
       appendV3f(&v.vertices, pos + indexToHexVertex(i + 1));
       appendV3f(&v.vertices, pos);
       appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
       appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
       appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
-      for (int tmp = 0; tmp < 3; tmp++) {
+      for (int tmp = 0; tmp < 3; ++tmp) {
         if (core().map().tile(p).fow == 0) {
           appendRGB(&v.colors, 180, 180, 180);
         } else {
@@ -206,7 +206,7 @@ VertexArray Game::buildObstaclesArray() {
   core().map().forEachPos([&](const V2i& p) {
     if (core().map().tile(p).obstacle) {
       V2f pos = v2iToV2f(p);
-      for (int i = 0; i < 6; i++) {
+      for (int i = 0; i < 6; ++i) {
         appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i) * 0.7f, 0.01f));
         appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i + 1) * 0.7f, 0.01f));
         appendV3f(&v.vertices, V3f(pos, 0.01f));
@@ -495,7 +495,7 @@ VertexArray Game::buildPickingTilesArray() {
   VertexArray v;
   core().map().forEachPos([&](const V2i& p) {
     V2f pos = v2iToV2f(p);
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; ++i) {
       appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i)));
       appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i + 1)));
       appendV3f(&v.vertices, V3f(pos));
@@ -629,7 +629,7 @@ void Game::buildUnitCirclesVertexArrays(){
       v.mHaveColor = true;
       v.mColor = color;
       const int verticesCount = 12;
-      for (int i = 0; i < verticesCount; i++) {
+      for (int i = 0; i < verticesCount; ++i) {
         const float k = mHexIn * 2.0f; // resize koefficient
         const float h = 0.01f;
         appendV3f(&v.vertices, V3f(

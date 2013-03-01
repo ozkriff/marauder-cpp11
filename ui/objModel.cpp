@@ -97,9 +97,9 @@ void ObjModel::debugPrint() {
 
 VertexArray ObjModel::build() {
   VertexArray va(PrimitiveType::Triangles);
-  for (unsigned int i = 0; i < mFaces.size(); i++) {
+  for (unsigned int i = 0; i < mFaces.size(); ++i) {
     auto tri = mFaces[i];
-    for (int j = 0; j < 3; j++) {
+    for (int j = 0; j < 3; ++j) {
       int vertexID = tri.vertex[j] - 1;
       int textureCoordID = tri.texture[j] - 1;
       appendV3f(&va.vertices, mVertices[vertexID]);

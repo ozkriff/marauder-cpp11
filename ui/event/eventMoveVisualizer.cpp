@@ -42,7 +42,7 @@ void EventMoveVisualizer::draw() {
   auto& node = game().sceneManager().sceneNode(unit.id());
   node.mPosition = currentPos();
   node.mRotationAngle = currentAngle();
-  mCurrentMoveIndex++;
+  ++mCurrentMoveIndex;
 }
 
 const V2i& EventMoveVisualizer::currentTile() const {

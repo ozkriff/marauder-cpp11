@@ -7,7 +7,7 @@
 
 int rnd(int min, int max) {
   assert(min < max);
-  max++;
+  ++max;
   if (max != min) {
     return rand() % (max - min) + min;
   } else {

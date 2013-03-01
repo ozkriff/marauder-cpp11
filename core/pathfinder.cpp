@@ -57,7 +57,7 @@ void Pathfinder::cleanMap() {
 
 void Pathfinder::tryToPushNeighbours(const Unit& u, const V2i& m) {
   assert(mCore.map().isInboard(m));
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 6; ++i) {
     V2i neighbourPos = Dir::getNeighbourPos(m, static_cast<DirID>(i));
     if (mCore.map().isInboard(neighbourPos)) {
       processNeighbourPosition(u, m, neighbourPos);

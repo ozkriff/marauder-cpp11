@@ -46,7 +46,7 @@ Dir::Dir(int value)
 Dir::Dir(const V2i& a, const V2i& b) {
   assert(a.distance(b) == 1);
   V2i diff = b - a;
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 6; ++i) {
     if (diff == dirToPosDiff[a.y() % 2][i]) {
       mValue = static_cast<DirID>(i);
       return;
