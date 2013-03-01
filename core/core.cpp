@@ -8,7 +8,7 @@
 #include "core/jsonHelpers.hpp"
 
 Core::Core()
-  : mConfig(parseConfig("confCore.json")),
+  : mConfig(parseJsonFile("confCore.json")),
     mCurrentPlayer(nullptr),
     mSelectedUnit(nullptr),
     mPathfinder(*this),
@@ -192,7 +192,7 @@ Unit& Core::id2unit(int id) {
 }
 
 void Core::initUnitTypes() {
-  Json::Value config = parseConfig("unitTypes.json");
+  Json::Value config = parseJsonFile("unitTypes.json");
   for (const std::string& unitTypeName : config.getMemberNames()) {
     UnitType unitType = parseUnitTypeInfo(config[unitTypeName]);
     mUnitTypes[unitTypeName] = unitType;
@@ -232,7 +232,7 @@ void Core::addUnit(
 }
 
 void Core::loadScenario() {
-  Json::Value scenario = parseConfig("scenario.json");
+  Json::Value scenario = parseJsonFile("scenario.json");
   // players
   {
     int playersCount = scenario["playersCount"].asInt();
@@ -244,7 +244,7 @@ void Core::loadScenario() {
   }
   // map
   {
-    Json::Value mapFile = parseConfig(scenario["map"].asString());
+    Json::Value mapFile = parseJsonFile(scenario["map"].asString());
     mMap = Map(JsonValueToV2i(mapFile["mapSize"]));
     Json::Value tilesData = mapFile["tiles"];
     int y = 0;

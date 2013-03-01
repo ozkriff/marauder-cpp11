@@ -13,7 +13,7 @@
 #include "visualizer/event/eventMoveVisualizer.hpp"
 
 Visualizer::Visualizer()
-  : mConfig(parseConfig("confVisualizer.json")),
+  : mConfig(parseJsonFile("confVisualizer.json")),
     mPathToData(mConfig["pathToData"].asString()),
     mTileSize(1.0f),
     mHexEx(tileSize() / 2.0f),
@@ -642,7 +642,7 @@ void Visualizer::buildUnitCirclesVertexArrays(){
 }
 
 void Visualizer::loadUnitResources() {
-  Json::Value resources = parseConfig("unitResources.json");
+  Json::Value resources = parseJsonFile("unitResources.json");
   for (const std::string& key : resources.getMemberNames()) {
     unsigned int id = core().getUnitType(key).id;
     const Json::Value& unitInfo = resources[key];

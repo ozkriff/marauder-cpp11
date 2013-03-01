@@ -6,7 +6,7 @@
 #include "json/json.h"
 #include "core/v2i.hpp"
 
-Json::Value parseConfig(const std::string& fileName) {
+Json::Value parseJsonFile(const std::string& fileName) {
   Json::Value node;
   Json::Reader reader;
   std::ifstream f(fileName);
@@ -19,7 +19,7 @@ Json::Value parseConfig(const std::string& fileName) {
   return node;
 }
 
-Json::Value parseConfigFromString(const std::string& config) {
+Json::Value parseJsonString(const std::string& config) {
   Json::Value node;
   Json::Reader reader;
   bool isOk = reader.parse(config, node);
