@@ -10,10 +10,10 @@
 #include "core/pathfinder.hpp"
 #include "visualizer/v2f.hpp"
 #include "visualizer/vertexArray.hpp"
-#include "visualizer/game.hpp"
+#include "visualizer/visualizer.hpp"
 
-EventEndTurnVisualizer::EventEndTurnVisualizer(Game& game, const Event& event)
-  : EventVisualizer(game),
+EventEndTurnVisualizer::EventEndTurnVisualizer(Visualizer& visualizer, const Event& event)
+  : EventVisualizer(visualizer),
     mEventEndTurn(dynamic_cast<const EventEndTurn&>(event))
 {
 }
@@ -35,8 +35,8 @@ void EventEndTurnVisualizer::draw() {
 }
 
 void EventEndTurnVisualizer::end() {
-  game().core().calculateFow();
-  game().rebuildMapArray();
-  game().cleanWalkableMapArray();
-  game().recreateUnitSceneNodes();
+  visualizer().core().calculateFow();
+  visualizer().rebuildMapArray();
+  visualizer().cleanWalkableMapArray();
+  visualizer().recreateUnitSceneNodes();
 }

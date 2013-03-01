@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef VISUALIZER__GAME_HPP
-#define VISUALIZER__GAME_HPP
+#ifndef VISUALIZER__VISUALIZER_HPP
+#define VISUALIZER__VISUALIZER_HPP
 
 #include "SDL.h"
 #include "SDL_opengl.h"
@@ -15,15 +15,15 @@
 
 class EventVisualizer;
 
-class Game {
+class Visualizer {
 public:
   enum class Mode {
     NORMAL,
     SHOW_EVENT
   };
 
-  Game();
-  ~Game();
+  Visualizer();
+  ~Visualizer();
 
   Core& core();
   const Core& core() const;

@@ -10,7 +10,7 @@ class Event;
 
 class EventEndTurnVisualizer : public EventVisualizer {
 public:
-  EventEndTurnVisualizer(Game& game, const Event& event);
+  EventEndTurnVisualizer(Visualizer& visualizer, const Event& event);
   virtual ~EventEndTurnVisualizer();
 
   virtual bool isFinished() const;

@@ -60,7 +60,7 @@ include_directories(${SDL_INCLUDE_DIR})
 
 add_library(marauderVisualizer
   visualizer/color.cpp
-  visualizer/game.cpp
+  visualizer/visualizer.cpp
   visualizer/objModel.cpp
   visualizer/vertexArray.cpp
   visualizer/v2f.cpp

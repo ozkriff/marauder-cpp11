@@ -1,6 +1,6 @@
 // See LICENSE file for copyright and license details.
 
-#include "visualizer/game.hpp"
+#include "visualizer/visualizer.hpp"
 #include <cmath>
 #include <cassert>
 #include <stdexcept>
@@ -12,7 +12,7 @@
 #include "visualizer/event/eventAttackVisualizer.hpp"
 #include "visualizer/event/eventMoveVisualizer.hpp"
 
-Game::Game()
+Visualizer::Visualizer()
   : mConfig(parseConfig("confVisualizer.json")),
     mPathToData(mConfig["pathToData"].asString()),
     mTileSize(1.0f),
@@ -40,7 +40,7 @@ Game::Game()
   recreateUnitSceneNodes();
 }
 
-Game::~Game() {
+Visualizer::~Visualizer() {
   if (mEventVisualizer) {
     delete mEventVisualizer;
     mEventVisualizer = nullptr;
@@ -48,111 +48,111 @@ Game::~Game() {
   SDL_Quit();
 }
 
-Core& Game::core() {
+Core& Visualizer::core() {
   return mCore;
 }
 
-const Core& Game::core() const {
+const Core& Visualizer::core() const {
   return mCore;
 }
 
-SceneManager& Game::sceneManager() {
+SceneManager& Visualizer::sceneManager() {
   return mSceneManager;
 }
 
-const SceneManager& Game::sceneManager() const {
+const SceneManager& Visualizer::sceneManager() const {
   return mSceneManager;
 }
 
-const V2i& Game::winSize() const {
+const V2i& Visualizer::winSize() const {
   return mWinSize;
 }
 
-Game::Mode Game::mode() const {
+Visualizer::Mode Visualizer::mode() const {
   return mMode;
 }
 
-Camera& Game::camera() {
+Camera& Visualizer::camera() {
   return mCamera;
 }
 
-const V2i& Game::activeTilePos() const {
+const V2i& Visualizer::activeTilePos() const {
   return mActiveTilePos;
 }
 
-bool Game::isRotatingCamera() const {
+bool Visualizer::isRotatingCamera() const {
   return mIsRotatingCamera;
 }
 
-const V2i& Game::mousePos() const {
+const V2i& Visualizer::mousePos() const {
   return mMousePos;
 }
 
-SDL_Surface* Game::screen() {
+SDL_Surface* Visualizer::screen() {
   return mScreen;
 }
 
-float Game::tileSize() const {
+float Visualizer::tileSize() const {
   return mTileSize;
 }
 
-bool Game::done() const {
+bool Visualizer::done() const {
   return mDone;
 }
 
-void Game::setDone(bool done) {
+void Visualizer::setDone(bool done) {
   mDone = done;
 }
 
-void Game::setWinSize(const V2i& winSize) {
+void Visualizer::setWinSize(const V2i& winSize) {
   mWinSize = winSize;
 }
 
-void Game::setActiveTilePos(const V2i& activeTilePos) {
+void Visualizer::setActiveTilePos(const V2i& activeTilePos) {
   mActiveTilePos = activeTilePos;
 }
 
-void Game::setMousePos(const V2i& mousePos) {
+void Visualizer::setMousePos(const V2i& mousePos) {
   mMousePos = mousePos;
 }
 
-void Game::setMode(Mode mode) {
+void Visualizer::setMode(Mode mode) {
   mMode = mode;
 }
 
-void Game::setIsRotatingCamera(bool isRotatingCamera) {
+void Visualizer::setIsRotatingCamera(bool isRotatingCamera) {
   mIsRotatingCamera = isRotatingCamera;
 }
 
-void Game::setFloorTexture(int textureID) {
+void Visualizer::setFloorTexture(int textureID) {
   mFloorTexture = textureID;
 }
 
-void Game::setScreen(SDL_Surface* screen) {
+void Visualizer::setScreen(SDL_Surface* screen) {
   mScreen = screen;
 }
 
-void Game::setVaWalkableMap(const VertexArray& va) {
+void Visualizer::setVaWalkableMap(const VertexArray& va) {
   mVaWalkableMap = va;
 }
 
-void Game::cleanWalkableMapArray() {
+void Visualizer::cleanWalkableMapArray() {
   setVaWalkableMap(VertexArray());
 }
 
-void Game::rebuildWalkableMapArray() {
+void Visualizer::rebuildWalkableMapArray() {
   setVaWalkableMap(buildWalkableArray());
 }
 
-void Game::rebuildMapArray() {
+void Visualizer::rebuildMapArray() {
   mVaMap = buildMapArray();
 }
 
-void Game::run() {
+void Visualizer::run() {
   mainloop();
 }
 
-V2f Game::v2iToV2f(const V2i& i) const {
+V2f Visualizer::v2iToV2f(const V2i& i) const {
   assert(core().map().isInboard(i));
   V2f v(i.x() * mHexIn * 2, i.y() * mHexEx * 1.5);
   if (i.y() % 2 == 0) {
@@ -161,22 +161,22 @@ V2f Game::v2iToV2f(const V2i& i) const {
   return v;
 }
 
-V2f Game::indexToCircleVertex(int count, int i) {
+V2f Visualizer::indexToCircleVertex(int count, int i) {
   float n = M_PI_2 + 2 * M_PI * i / count;
   return V2f(std::cos(n), std::sin(n)) * mHexEx;
 }
 
-V2f Game::indexToHexVertex(int i) {
+V2f Visualizer::indexToHexVertex(int i) {
   return indexToCircleVertex(6, i);
 }
 
-float Game::aspectRatio() const {
+float Visualizer::aspectRatio() const {
   float x = winSize().x();
   float y = winSize().y();
   return y / x;
 }
 
-VertexArray Game::buildMapArray() {
+VertexArray Visualizer::buildMapArray() {
   VertexArray v;
   v.mTextureID = mFloorTexture;
   core().map().forEachPos([&](const V2i& p) {
@@ -200,7 +200,7 @@ VertexArray Game::buildMapArray() {
   return v;
 }
 
-VertexArray Game::buildObstaclesArray() {
+VertexArray Visualizer::buildObstaclesArray() {
   VertexArray v(Color(0.4f, 0.1f, 0.0f));
   v.mTextureID = mFloorTexture;
   core().map().forEachPos([&](const V2i& p) {
@@ -219,7 +219,7 @@ VertexArray Game::buildObstaclesArray() {
   return v;
 }
 
-VertexArray Game::buildWalkableArray() {
+VertexArray Visualizer::buildWalkableArray() {
   VertexArray v(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
   core().map().forEachPos([&](const V2i& p) {
     Tile& t = core().map().tile(p);
@@ -236,13 +236,13 @@ VertexArray Game::buildWalkableArray() {
   return v;
 }
 
-void Game::drawMap() {
+void Visualizer::drawMap() {
   mVaMap.draw();
   mVaObstacles.draw();
   mVaWalkableMap.draw();
 }
 
-void Game::recreateUnitSceneNodes() {
+void Visualizer::recreateUnitSceneNodes() {
   for (auto& pair : mSceneManager.nodes()) {
     SceneNode* node = pair.second;
     assert(node);
@@ -254,7 +254,7 @@ void Game::recreateUnitSceneNodes() {
   }
 }
 
-void Game::drawSelectedunitMarker() {
+void Visualizer::drawSelectedunitMarker() {
   const Unit& u = core().selectedUnit();
   V2f p = v2iToV2f(u.position());
   VertexArray v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
@@ -266,7 +266,7 @@ void Game::drawSelectedunitMarker() {
   glLineWidth(1);
 }
 
-void Game::draw() {
+void Visualizer::draw() {
   glClearColor(1.0, 1.0, 1.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
@@ -283,7 +283,7 @@ void Game::draw() {
   SDL_GL_SwapBuffers();
 }
 
-void Game::processClickOnTile() {
+void Visualizer::processClickOnTile() {
   if (mode() != Mode::NORMAL) {
     return;
   }
@@ -315,7 +315,7 @@ void Game::processClickOnTile() {
   }
 }
 
-void Game::processSDLEvent(const SDL_MouseMotionEvent& e) {
+void Visualizer::processSDLEvent(const SDL_MouseMotionEvent& e) {
   setMousePos(V2i(static_cast<int>(e.x), static_cast<int>(e.y)));
   if (isRotatingCamera()) {
     camera().rotateAroundZAxis(-e.xrel);
@@ -323,7 +323,7 @@ void Game::processSDLEvent(const SDL_MouseMotionEvent& e) {
   }
 }
 
-void Game::centerCameraOnSelectedUnit() {
+void Visualizer::centerCameraOnSelectedUnit() {
   if (!core().isAnyUnitSelected()) {
     return;
   }
@@ -331,7 +331,7 @@ void Game::centerCameraOnSelectedUnit() {
   camera().setPos(unitPos);
 }
 
-void Game::switchActiveTileType() {
+void Visualizer::switchActiveTileType() {
   Tile& t = core().map().tile(activeTilePos());
   t.obstacle = !t.obstacle;
   mVaMap = buildMapArray();
@@ -344,7 +344,7 @@ void Game::switchActiveTileType() {
   }
 }
 
-void Game::createNewUnitInActiveTile() {
+void Visualizer::createNewUnitInActiveTile() {
   core().addUnit(
         activeTilePos(),
         core().currentPlayer().id,
@@ -358,7 +358,7 @@ void Game::createNewUnitInActiveTile() {
   createUnitNode(core().unitAt(activeTilePos()));
 }
 
-void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
+void Visualizer::processSDLEvent(const SDL_KeyboardEvent& e) {
   switch (e.keysym.sym) {
   case SDLK_ESCAPE:
   case SDLK_q:
@@ -410,14 +410,14 @@ void Game::processSDLEvent(const SDL_KeyboardEvent& e) {
   }
 }
 
-void Game::processSDLEvent(const SDL_ResizeEvent& e) {
+void Visualizer::processSDLEvent(const SDL_ResizeEvent& e) {
   setWinSize(V2i(e.w, e.h));
   setScreen(SDL_SetVideoMode(winSize().x(), winSize().y(),
       mBitsPerPixel, mSDLFlags));
   initOpengl();
 }
 
-void Game::processSDLEventButtonUp(const SDL_MouseButtonEvent& e) {
+void Visualizer::processSDLEventButtonUp(const SDL_MouseButtonEvent& e) {
   if (e.button == SDL_BUTTON_RIGHT) {
     setIsRotatingCamera(false);
   }
@@ -428,7 +428,7 @@ void Game::processSDLEventButtonUp(const SDL_MouseButtonEvent& e) {
   }
 }
 
-void Game::processSDLEventButtonDown(const SDL_MouseButtonEvent& e) {
+void Visualizer::processSDLEventButtonDown(const SDL_MouseButtonEvent& e) {
   if (e.button == SDL_BUTTON_RIGHT) {
     setIsRotatingCamera(true);
   } else if (e.button == SDL_BUTTON_LEFT) {
@@ -436,7 +436,7 @@ void Game::processSDLEventButtonDown(const SDL_MouseButtonEvent& e) {
   }
 }
 
-void Game::screenScenarioMainEvents() {
+void Visualizer::screenScenarioMainEvents() {
   core().eventManager().switchToNextEvent();
   if (mEventVisualizer) {
     delete mEventVisualizer;
@@ -446,7 +446,7 @@ void Game::screenScenarioMainEvents() {
   setMode(Mode::SHOW_EVENT);
 }
 
-void Game::logic() {
+void Visualizer::logic() {
   while (mode() == Mode::NORMAL && core().eventManager().unshownEventsLeft()) {
     screenScenarioMainEvents();
   }
@@ -459,7 +459,7 @@ void Game::logic() {
   }
 }
 
-void Game::processSDLEvent(const SDL_Event& e) {
+void Visualizer::processSDLEvent(const SDL_Event& e) {
   switch (e.type) {
   case SDL_QUIT:
     setDone(true);
@@ -484,14 +484,14 @@ void Game::processSDLEvent(const SDL_Event& e) {
   }
 }
 
-void Game::sdlEvents() {
+void Visualizer::sdlEvents() {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
     processSDLEvent(e);
   }
 }
 
-VertexArray Game::buildPickingTilesArray() {
+VertexArray Visualizer::buildPickingTilesArray() {
   VertexArray v;
   core().map().forEachPos([&](const V2i& p) {
     V2f pos = v2iToV2f(p);
@@ -507,7 +507,7 @@ VertexArray Game::buildPickingTilesArray() {
   return v;
 }
 
-V2i Game::pickTile(const V2i& mousePos) {
+V2i Visualizer::pickTile(const V2i& mousePos) {
   GLint viewport[4];
   GLubyte pixel[3];
   glGetIntegerv(GL_VIEWPORT, viewport);
@@ -518,13 +518,13 @@ V2i Game::pickTile(const V2i& mousePos) {
   return V2i(pixel[0], pixel[1]);
 }
 
-void Game::drawForPicking() {
+void Visualizer::drawForPicking() {
   glLoadIdentity();
   camera().set();
   mVaPick.draw();
 }
 
-void Game::scrollMap() {
+void Visualizer::scrollMap() {
   const V2i& p = mousePos();
   int offset = 15;
   if (p.x() < offset) {
@@ -539,14 +539,14 @@ void Game::scrollMap() {
   }
 }
 
-void Game::pickTile() {
+void Visualizer::pickTile() {
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   drawForPicking();
   setActiveTilePos(pickTile(mMousePos));
 }
 
-void Game::mainloop() {
+void Visualizer::mainloop() {
   while (!done()) {
     sdlEvents();
     logic();
@@ -557,7 +557,7 @@ void Game::mainloop() {
   }
 }
 
-void Game::initOpengl() {
+void Visualizer::initOpengl() {
   SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -587,7 +587,7 @@ void Game::initOpengl() {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void Game::initCamera() {
+void Visualizer::initCamera() {
   camera().setMaxXAxisAngle(50.0f);
   camera().setMinXAxisAngle(0.0f);
   camera().setXAxisAngle(45.0f);
@@ -599,14 +599,14 @@ void Game::initCamera() {
   camera().setZoom(20.0f);
 }
 
-void Game::initVertexArrays() {
+void Visualizer::initVertexArrays() {
   mVaPick = buildPickingTilesArray();
   mVaMap = buildMapArray();
   mVaObstacles = buildObstaclesArray();
   buildUnitCirclesVertexArrays();
 }
 
-void Game::createUnitNode(const Unit& unit) {
+void Visualizer::createUnitNode(const Unit& unit) {
   auto* node = new SceneNode();
   node->mVertexArray = &mVaUnits[unit.type().id];
   node->mPosition = v2iToV2f(unit.position());
@@ -619,7 +619,7 @@ void Game::createUnitNode(const Unit& unit) {
   }
 }
 
-void Game::buildUnitCirclesVertexArrays(){
+void Visualizer::buildUnitCirclesVertexArrays(){
     std::vector<Color> colors = {
       Color(1.0f, 0.0f, 0.0f),
       Color(0.0f, 0.0f, 1.0f)
@@ -641,7 +641,7 @@ void Game::buildUnitCirclesVertexArrays(){
     }
 }
 
-void Game::loadUnitResources() {
+void Visualizer::loadUnitResources() {
   Json::Value resources = parseConfig("unitResources.json");
   for (const std::string& key : resources.getMemberNames()) {
     unsigned int id = core().getUnitType(key).id;

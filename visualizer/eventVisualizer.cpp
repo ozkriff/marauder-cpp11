@@ -18,30 +18,30 @@
 #include "visualizer/event/eventEndTurnVisualizer.hpp"
 #include "visualizer/event/eventAttackVisualizer.hpp"
 
-EventVisualizer::EventVisualizer(Game& game)
-  : mGame(game)
+EventVisualizer::EventVisualizer(Visualizer& visualizer)
+  : mVisualizer(visualizer)
 {
 }
 
 EventVisualizer::~EventVisualizer() {
 }
 
-const Game& EventVisualizer::game() const {
-  return mGame;
+const Visualizer& EventVisualizer::visualizer() const {
+  return mVisualizer;
 }
 
-Game& EventVisualizer::game() {
-  return mGame;
+Visualizer& EventVisualizer::visualizer() {
+  return mVisualizer;
 }
 
-EventVisualizer* newEventVisualizer(Game& game, const Event& event) {
+EventVisualizer* newEventVisualizer(Visualizer& visualizer, const Event& event) {
   switch (event.type()) {
   case EventTypeID::MOVE:
-    return new EventMoveVisualizer(game, event);
+    return new EventMoveVisualizer(visualizer, event);
   case EventTypeID::END_TURN:
-    return new EventEndTurnVisualizer(game, event);
+    return new EventEndTurnVisualizer(visualizer, event);
   case EventTypeID::ATTACK:
-    return new EventAttackVisualizer(game, event);
+    return new EventAttackVisualizer(visualizer, event);
   default:
     throw std::logic_error("default case!");
   }

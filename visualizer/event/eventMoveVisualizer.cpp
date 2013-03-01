@@ -10,15 +10,15 @@
 #include "core/pathfinder.hpp"
 #include "visualizer/v2f.hpp"
 #include "visualizer/vertexArray.hpp"
-#include "visualizer/game.hpp"
+#include "visualizer/visualizer.hpp"
 #include "visualizer/math.hpp"
 
-EventMoveVisualizer::EventMoveVisualizer(Game& game, const Event& event)
-  : EventVisualizer(game),
+EventMoveVisualizer::EventMoveVisualizer(Visualizer& visualizer, const Event& event)
+  : EventVisualizer(visualizer),
     mEventMove(dynamic_cast<const EventMove&>(event)),
     mCurrentMoveIndex(0)
 {
-  game.cleanWalkableMapArray();
+  visualizer.cleanWalkableMapArray();
 }
 
 EventMoveVisualizer::~EventMoveVisualizer() {
@@ -38,8 +38,8 @@ bool EventMoveVisualizer::isUnitVisible(const Unit& u) const {
 }
 
 void EventMoveVisualizer::draw() {
-  const Unit& unit = game().core().id2unit(mEventMove.unitID());
-  auto& node = game().sceneManager().sceneNode(unit.id());
+  const Unit& unit = visualizer().core().id2unit(mEventMove.unitID());
+  auto& node = visualizer().sceneManager().sceneNode(unit.id());
   node.mPosition = currentPos();
   node.mRotationAngle = currentAngle();
   ++mCurrentMoveIndex;
@@ -54,14 +54,14 @@ const V2i& EventMoveVisualizer::nextTile() const {
 }
 
 void EventMoveVisualizer::endMovement() {
-  Core& core = game().core();
+  Core& core = visualizer().core();
   Unit& u = core.id2unit(mEventMove.unitID());
-  auto& node = game().sceneManager().sceneNode(u.id());
-  node.mPosition = game().v2iToV2f(u.position());
+  auto& node = visualizer().sceneManager().sceneNode(u.id());
+  node.mPosition = visualizer().v2iToV2f(u.position());
   node.mRotationAngle = dirToAngle(u.direction());
   if (core.isAnyUnitSelected()) {
-    game().rebuildWalkableMapArray();
-    game().rebuildMapArray();
+    visualizer().rebuildWalkableMapArray();
+    visualizer().rebuildMapArray();
   }
 }
 
@@ -82,8 +82,8 @@ float EventMoveVisualizer::currentAngle() const {
 }
 
 V2f EventMoveVisualizer::currentPos() const {
-  V2f from = game().v2iToV2f(currentTile());
-  V2f to = game().v2iToV2f(nextTile());
+  V2f from = visualizer().v2iToV2f(currentTile());
+  V2f to = visualizer().v2iToV2f(nextTile());
   V2f diff = (to - from) / moveSpeed;
   int nodeIndex = calculateNodeIndex();
   return from + (diff * nodeIndex);

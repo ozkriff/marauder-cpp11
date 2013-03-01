@@ -10,7 +10,7 @@ class Event;
 
 class EventMoveVisualizer : public EventVisualizer {
 public:
-  EventMoveVisualizer(Game& game, const Event& event);
+  EventMoveVisualizer(Visualizer& visualizer, const Event& event);
   virtual ~EventMoveVisualizer();
 
   virtual bool isFinished() const;

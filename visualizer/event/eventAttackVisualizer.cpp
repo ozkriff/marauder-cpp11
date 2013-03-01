@@ -8,19 +8,19 @@
 #include "visualizer/v2f.hpp"
 #include "visualizer/v3f.hpp"
 #include "visualizer/vertexArray.hpp"
-#include "visualizer/game.hpp"
+#include "visualizer/visualizer.hpp"
 #include "visualizer/math.hpp"
 
-EventAttackVisualizer::EventAttackVisualizer(Game& game, const Event& event)
-  : EventVisualizer(game),
+EventAttackVisualizer::EventAttackVisualizer(Visualizer& visualizer, const Event& event)
+  : EventVisualizer(visualizer),
     mEventAttack(dynamic_cast<const EventAttack&>(event)),
     mFrame(0),
     mLastFrame(60),
     mFallingDownSpeed(0.005f),
-    mAttacker(game.core().id2unit(mEventAttack.attackerID())),
-    mVictim(game.core().id2unit(mEventAttack.victimID()))
+    mAttacker(visualizer.core().id2unit(mEventAttack.attackerID())),
+    mVictim(visualizer.core().id2unit(mEventAttack.victimID()))
 {
-  game.cleanWalkableMapArray();
+  visualizer.cleanWalkableMapArray();
 }
 
 EventAttackVisualizer::~EventAttackVisualizer() {
@@ -35,25 +35,25 @@ bool EventAttackVisualizer::isUnitVisible(const Unit& u) const {
 }
 
 void EventAttackVisualizer::draw() {
-  auto& node = game().sceneManager().sceneNode(mVictim.id());
+  auto& node = visualizer().sceneManager().sceneNode(mVictim.id());
   node.mPosition.setZ(node.mPosition.z() - mFallingDownSpeed);
   drawLineOfFire();
   ++mFrame;
 }
 
 void EventAttackVisualizer::end() {
-  game().sceneManager().deleteNode(mVictim.id());
-  if (game().core().isAnyUnitSelected()) {
-    game().rebuildWalkableMapArray();
-    game().rebuildMapArray();
+  visualizer().sceneManager().deleteNode(mVictim.id());
+  if (visualizer().core().isAnyUnitSelected()) {
+    visualizer().rebuildWalkableMapArray();
+    visualizer().rebuildMapArray();
   }
 }
 
 // private:
 
 void EventAttackVisualizer::drawLineOfFire() {
-  V2f from = game().v2iToV2f(mAttacker.position());
-  V2f to = game().v2iToV2f(mVictim.position());
+  V2f from = visualizer().v2iToV2f(mAttacker.position());
+  V2f to = visualizer().v2iToV2f(mVictim.position());
   VertexArray v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
   appendV3f(&v.vertices, V3f(from, 0.2f));
   appendV3f(&v.vertices, V3f(

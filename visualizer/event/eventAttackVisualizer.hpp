@@ -10,7 +10,7 @@ class Event;
 
 class EventAttackVisualizer : public EventVisualizer {
 public:
-  EventAttackVisualizer(Game& game, const Event& event);
+  EventAttackVisualizer(Visualizer& visualizer, const Event& event);
   virtual ~EventAttackVisualizer();
 
   virtual bool isFinished() const;

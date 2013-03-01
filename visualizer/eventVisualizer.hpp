@@ -3,11 +3,11 @@
 #ifndef VISUALIZER__EVENT_VISUALIZER_HPP
 #define VISUALIZER__EVENT_VISUALIZER_HPP
 
-#include "visualizer/game.hpp"
+#include "visualizer/visualizer.hpp"
 
 class EventVisualizer {
 public:
-  EventVisualizer(Game& game);
+  EventVisualizer(Visualizer& visualizer);
   virtual ~EventVisualizer();
 
   virtual bool isFinished() const = 0;
@@ -16,13 +16,13 @@ public:
   virtual void end() = 0;
 
 protected:
-  const Game& game() const;
-  Game& game();
+  const Visualizer& visualizer() const;
+  Visualizer& visualizer();
 
 private:
-  Game& mGame;
+  Visualizer& mVisualizer;
 };
 
-EventVisualizer* newEventVisualizer(Game& game, const Event& event);
+EventVisualizer* newEventVisualizer(Visualizer& visualizer, const Event& event);
 
 #endif
