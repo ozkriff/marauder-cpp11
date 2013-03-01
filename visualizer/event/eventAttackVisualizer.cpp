@@ -30,10 +30,6 @@ bool EventAttackVisualizer::isFinished() const {
   return mFrame >= mLastFrame;
 }
 
-bool EventAttackVisualizer::isUnitVisible(const Unit& u) const {
-  return u.id() == mEventAttack.victimID();
-}
-
 void EventAttackVisualizer::draw() {
   auto& node = visualizer().sceneManager().sceneNode(mVictim.id());
   node.mPosition.setZ(node.mPosition.z() - mFallingDownSpeed);

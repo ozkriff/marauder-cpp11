@@ -11,7 +11,6 @@ public:
   virtual ~EventVisualizer();
 
   virtual bool isFinished() const = 0;
-  virtual bool isUnitVisible(const Unit& u) const = 0;
   virtual void draw() = 0;
   virtual void end() = 0;
 

@@ -25,11 +25,6 @@ bool EventEndTurnVisualizer::isFinished() const {
   return true;
 }
 
-bool EventEndTurnVisualizer::isUnitVisible(const Unit& u) const {
-  UNUSED(u);
-  return false;
-}
-
 void EventEndTurnVisualizer::draw() {
   // nothing to draw...
 }

@@ -14,7 +14,6 @@ public:
   virtual ~EventMoveVisualizer();
 
   virtual bool isFinished() const;
-  virtual bool isUnitVisible(const Unit& u) const;
   virtual void draw();
   virtual void end();
 

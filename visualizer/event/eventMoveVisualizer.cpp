@@ -33,10 +33,6 @@ bool EventMoveVisualizer::isFinished() const {
   return (mCurrentMoveIndex == framesCount());
 }
 
-bool EventMoveVisualizer::isUnitVisible(const Unit& u) const {
-  return u.id() == mEventMove.unitID();
-}
-
 void EventMoveVisualizer::draw() {
   const Unit& unit = visualizer().core().id2unit(mEventMove.unitID());
   auto& node = visualizer().sceneManager().sceneNode(unit.id());
