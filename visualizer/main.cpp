@@ -5,7 +5,8 @@
 int main(int ac, char** av) {
   UNUSED(ac);
   UNUSED(av);
-  Visualizer visualizer;
+  Core core;
+  Visualizer visualizer(core);
   visualizer.run();
   return 0;
 }

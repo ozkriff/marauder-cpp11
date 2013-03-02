@@ -22,7 +22,7 @@ public:
     SHOW_EVENT
   };
 
-  Visualizer();
+  Visualizer(Core& core);
   ~Visualizer();
 
   Core& core();
@@ -41,12 +41,12 @@ public:
   void recreateUnitSceneNodes();
 
 private:
+  Core& mCore;
   Json::Value mConfig;
   std::string mPathToData;
   float mTileSize;
   float mHexEx;
   float mHexIn;
-  Core mCore;
   Mode mMode;
   VertexArray mVaWalkableMap;
   Uint32 mSDLFlags;

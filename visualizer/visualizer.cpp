@@ -12,8 +12,9 @@
 #include "visualizer/event/eventAttackVisualizer.hpp"
 #include "visualizer/event/eventMoveVisualizer.hpp"
 
-Visualizer::Visualizer()
-  : mConfig(parseJsonFile("confVisualizer.json")),
+Visualizer::Visualizer(Core& core)
+  : mCore(core),
+    mConfig(parseJsonFile("confVisualizer.json")),
     mPathToData(mConfig["pathToData"].asString()),
     mTileSize(1.0f),
     mHexEx(tileSize() / 2.0f),
