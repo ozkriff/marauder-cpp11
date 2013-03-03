@@ -20,7 +20,7 @@ Visualizer::Visualizer(Core& core)
     mTileSize(1.0f),
     mHexEx(tileSize() / 2.0f),
     mHexIn(std::sqrt(std::pow(mHexEx, 2) - std::pow(mHexEx / 2.0f, 2))),
-    mMode(Mode::NORMAL),
+    mMode(Mode::Normal),
     mSDLFlags(SDL_OPENGL | SDL_RESIZABLE),
     mBitsPerPixel(mConfig["bitsPerPixel"].asInt()),
     mWinSize(JsonValueToV2i(mConfig["resolution"])),
@@ -275,7 +275,7 @@ void Visualizer::draw() {
   camera().set();
   drawMap();
   mSceneManager.draw();
-  if (mode() == Mode::SHOW_EVENT) {
+  if (mode() == Mode::ShowEvent) {
     assert(mEventVisualizer);
     mEventVisualizer->draw();
   }
@@ -320,7 +320,7 @@ void Visualizer::processClickOnEmptyTile(Tile& tile) {
 }
 
 void Visualizer::processClickOnTile() {
-  if (mode() != Mode::NORMAL) {
+  if (mode() != Mode::Normal) {
     return;
   }
   if (core().isUnitAt(activeTilePos())) {
@@ -458,17 +458,17 @@ void Visualizer::screenScenarioMainEvents() {
   }
   mEventVisualizer = newEventVisualizer(*this, core().eventManager().currentEvent());
   assert(mEventVisualizer);
-  setMode(Mode::SHOW_EVENT);
+  setMode(Mode::ShowEvent);
 }
 
 void Visualizer::logic() {
-  while (mode() == Mode::NORMAL && core().eventManager().unshownEventsLeft()) {
+  while (mode() == Mode::Normal && core().eventManager().unshownEventsLeft()) {
     screenScenarioMainEvents();
   }
-  if (mode() == Mode::SHOW_EVENT) {
+  if (mode() == Mode::ShowEvent) {
     if (mEventVisualizer->isFinished()) {
       core().eventManager().applyCurrentEvent();
-      setMode(Mode::NORMAL);
+      setMode(Mode::Normal);
       mEventVisualizer->end();
     }
   }

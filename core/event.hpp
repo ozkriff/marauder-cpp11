@@ -6,9 +6,9 @@
 class Core;
 
 enum class EventTypeID {
-  MOVE,
-  END_TURN,
-  ATTACK
+  Move,
+  EndTurn,
+  Attack
 };
 
 class Event {

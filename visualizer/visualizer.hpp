@@ -18,8 +18,8 @@ class EventVisualizer;
 class Visualizer {
 public:
   enum class Mode {
-    NORMAL,
-    SHOW_EVENT
+    Normal,
+    ShowEvent
   };
 
   Visualizer(Core& core);

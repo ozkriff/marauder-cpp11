@@ -5,7 +5,7 @@
 #include "core/core.hpp"
 
 EventAttack::EventAttack(int id)
-  : Event(id, EventTypeID::ATTACK)
+  : Event(id, EventTypeID::Attack)
 {
 }
 

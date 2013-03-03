@@ -27,11 +27,11 @@ Visualizer& EventVisualizer::visualizer() {
 
 EventVisualizer* newEventVisualizer(Visualizer& visualizer, const Event& event) {
   switch (event.type()) {
-  case EventTypeID::MOVE:
+  case EventTypeID::Move:
     return new EventMoveVisualizer(visualizer, event);
-  case EventTypeID::END_TURN:
+  case EventTypeID::EndTurn:
     return new EventEndTurnVisualizer(visualizer, event);
-  case EventTypeID::ATTACK:
+  case EventTypeID::Attack:
     return new EventAttackVisualizer(visualizer, event);
   default:
     throw std::logic_error("default case!");

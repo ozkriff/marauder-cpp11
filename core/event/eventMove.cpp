@@ -5,7 +5,7 @@
 #include "core/core.hpp"
 
 EventMove::EventMove(int id)
-  : Event(id, EventTypeID::MOVE),
+  : Event(id, EventTypeID::Move),
     mUnitID(0),
     mCost(0)
 {
