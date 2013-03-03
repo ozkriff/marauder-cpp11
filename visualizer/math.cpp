@@ -1,12 +1,11 @@
 // See LICENSE file for copyright and license details.
 
+#include "visualizer/math.hpp"
 #include <cassert>
 #include <cstdlib>
 #include <cmath>
 #include "core/v2i.hpp"
 #include "core/dir.hpp"
-#include "visualizer/v2f.hpp"
-#include "visualizer/math.hpp"
 
 float getRotAngle(const V2f& a, const V2f& b) {
   V2f diff(std::pow(b.x() - a.x(), 2), std::pow(b.y() - a.y(), 2));
