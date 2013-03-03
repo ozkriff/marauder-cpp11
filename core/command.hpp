@@ -21,6 +21,9 @@ public:
   Command(CommandType type);
   virtual ~Command() {}
 
+  CommandType type() const;
+
+private:
   CommandType mType;
 };
 

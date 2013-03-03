@@ -101,7 +101,7 @@ void Core::setCurrentPlayer(Player* player) {
 }
 
 void Core::doCommand(const Command& cmd) {
-  switch (cmd.mType) {
+  switch (cmd.type()) {
   case CommandType::Move:
     command(dynamic_cast<const CommandMove&>(cmd));
     break;

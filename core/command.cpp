@@ -6,6 +6,10 @@ Command::Command(CommandType type)
   : mType(type)
 {}
 
+CommandType Command::type() const {
+  return mType;
+}
+
 CommandMove::CommandMove(int unitID, V2i destination)
   : Command(CommandType::Move),
     mUnitID(unitID),
