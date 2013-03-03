@@ -1,5 +1,6 @@
 // See LICENSE file for copyright and license details.
 
+#include "visualizer/eventVisualizer.hpp"
 #include <stdexcept>
 #include "core/core.hpp"
 #include "visualizer/math.hpp"

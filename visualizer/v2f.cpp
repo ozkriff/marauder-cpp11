@@ -1,8 +1,8 @@
 // See LICENSE file for copyright and license details.
 
+#include "visualizer/v2f.hpp"
 #include <cassert>
 #include <cmath>
-#include "visualizer/v2f.hpp"
 
 V2f::V2f(float x, float y)
   : mX(x),

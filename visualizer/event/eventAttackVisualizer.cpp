@@ -2,11 +2,7 @@
 
 #include "visualizer/event/eventAttackVisualizer.hpp"
 #include <cassert>
-#include "SDL_opengl.h"
-#include "core/core.hpp"
 #include "core/misc.hpp"
-#include "visualizer/v2f.hpp"
-#include "visualizer/v3f.hpp"
 #include "visualizer/vertexArray.hpp"
 #include "visualizer/visualizer.hpp"
 #include "visualizer/math.hpp"

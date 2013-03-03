@@ -1,15 +1,11 @@
 // See LICENSE file for copyright and license details.
 
+#include "visualizer/objModel.hpp"
 #include <cstdio>
 #include <cstdlib>
 #include <cassert>
 #include <stdexcept>
-#include "SDL_opengl.h"
-#include "core/dir.hpp"
-#include "core/misc.hpp"
 #include "visualizer/math.hpp"
-#include "visualizer/vertexArray.hpp"
-#include "visualizer/objModel.hpp"
 
 ObjModel::ObjModel(const std::string& filename) {
   read(filename);

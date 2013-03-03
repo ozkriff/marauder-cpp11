@@ -7,6 +7,7 @@
 #include <string>
 #include "visualizer/v3f.hpp"
 #include "visualizer/v2f.hpp"
+#include "visualizer/vertexArray.hpp"
 
 class ObjModel {
 public:
