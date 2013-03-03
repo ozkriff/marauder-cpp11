@@ -3,9 +3,9 @@
 #ifndef VISUALIZER__SCENE_NODE_HPP
 #define VISUALIZER__SCENE_NODE_HPP
 
+#include <list>
 #include "visualizer/vertexArray.hpp"
 #include "visualizer/color.hpp"
-#include <list>
 
 class SceneNode {
 public:
