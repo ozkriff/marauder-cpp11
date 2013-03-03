@@ -284,35 +284,51 @@ void Visualizer::draw() {
   SDL_GL_SwapBuffers();
 }
 
+void Visualizer::processClickOnFriendlyUnit(Unit& unit) {
+  core().setSelectedUnit(unit);
+  core().pathfinder().fillMap(core().selectedUnit());
+  setVaWalkableMap(buildWalkableArray());
+}
+
+void Visualizer::processClickOnEnemyUnit(Unit& unit) {
+  const V2i& from = core().selectedUnit().position();
+  const V2i& to = unit.position();
+  bool isLosClear = core().isLosClear(from, to);
+  if (isLosClear) {
+    Event* e = EventAttack::generate(core(), core().selectedUnit(), unit);
+    core().eventManager().addEvent(e);
+  }
+}
+
+void Visualizer::processClickOnUnit(Unit& unit) {
+  if (unit.playerID() == core().currentPlayer().id) {
+    processClickOnFriendlyUnit(unit);
+  } else if (core().isAnyUnitSelected()) {
+    processClickOnEnemyUnit(unit);
+  }
+}
+
+void Visualizer::processClickOnEmptyTile(Tile& tile) {
+  int actionPoints = core().selectedUnit().actionPoints();
+  if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
+    if (core().map().tile(activeTilePos()).cost <= actionPoints) {
+      Event* e = EventMove::generate(
+          core(), core().selectedUnit(), activeTilePos());
+      core().eventManager().addEvent(e);
+    }
+  }
+}
+
 void Visualizer::processClickOnTile() {
   if (mode() != Mode::NORMAL) {
     return;
   }
   if (core().isUnitAt(activeTilePos())) {
     Unit& unit = core().unitAt(activeTilePos());
-    if (unit.playerID() == core().currentPlayer().id) {
-      core().setSelectedUnit(unit);
-      core().pathfinder().fillMap(core().selectedUnit());
-      setVaWalkableMap(buildWalkableArray());
-    } else if (core().isAnyUnitSelected()) {
-      const V2i& from = core().selectedUnit().position();
-      const V2i& to = unit.position();
-      bool isLosClear = core().isLosClear(from, to);
-      if (isLosClear) {
-        Event* e = EventAttack::generate(core(), core().selectedUnit(), unit);
-        core().eventManager().addEvent(e);
-      }
-    }
+    processClickOnUnit(unit);
   } else if (core().isAnyUnitSelected()) {
     Tile& tile = core().map().tile(activeTilePos());
-    int actionPoints = core().selectedUnit().actionPoints();
-    if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
-      if (core().map().tile(activeTilePos()).cost <= actionPoints) {
-        Event* e = EventMove::generate(
-            core(), core().selectedUnit(), activeTilePos());
-        core().eventManager().addEvent(e);
-      }
-    }
+    processClickOnEmptyTile(tile);
   }
 }
 

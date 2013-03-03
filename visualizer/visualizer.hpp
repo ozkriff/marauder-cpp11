@@ -74,6 +74,10 @@ private:
   void processSDLEventButtonDown(const SDL_MouseButtonEvent& e);
 
   void processSDLEvent(const SDL_Event& e);
+  void processClickOnFriendlyUnit(Unit& unit);
+  void processClickOnEnemyUnit(Unit& unit);
+  void processClickOnUnit(Unit& unit);
+  void processClickOnEmptyTile(Tile& tile);
   void processClickOnTile();
   void sdlEvents();
   void centerCameraOnSelectedUnit();
