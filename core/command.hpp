@@ -4,10 +4,7 @@
 #define CORE__COMMAND_HPP
 
 #include <vector>
-
-#include "core/v2i.hpp" // TODO: ?!
-
-class V2i;
+#include "core/v2i.hpp"
 
 enum class CommandType {
   Move,
