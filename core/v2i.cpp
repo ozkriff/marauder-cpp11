@@ -37,7 +37,7 @@ void V2i::setY(int y) {
 }
 
 int V2i::distance(const V2i &b) const {
-  int ax = x() + y() / 2; 
+  int ax = x() + y() / 2;
   int bx = b.x() + b.y() / 2;
   int dx = bx - ax;
   int dy = b.y() - y();
