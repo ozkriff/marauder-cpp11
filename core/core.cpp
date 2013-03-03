@@ -6,6 +6,10 @@
 #include <stdexcept>
 #include "core/core.hpp"
 #include "core/jsonHelpers.hpp"
+#include "core/command.hpp"
+#include "core/event/eventMove.hpp"
+#include "core/event/eventAttack.hpp"
+#include "core/event/eventEndTurn.hpp"
 
 Core::Core()
   : mConfig(parseJsonFile("confCore.json")),
@@ -94,6 +98,49 @@ void Core::deselectedAnyUnits() {
 
 void Core::setCurrentPlayer(Player* player) {
   mCurrentPlayer = player;
+}
+
+void Core::doCommand(const Command& cmd) {
+  switch (cmd.mType) {
+  case CommandType::Move:
+    command(dynamic_cast<const CommandMove&>(cmd));
+    break;
+  case CommandType::EndTurn:
+    command(dynamic_cast<const CommandEndTurn&>(cmd));
+    break;
+  case CommandType::Attack:
+    command(dynamic_cast<const CommandAttack&>(cmd));
+    break;
+  default:
+    throw std::logic_error("default case");
+  }
+}
+
+void Core::command(const CommandAttack& cmd) {
+  const Unit& attacker = id2unit(cmd.mAttackerID);
+  const Unit& victim = id2unit(cmd.mVictimID);
+  if (isLosClear(attacker.position(), victim.position())) {
+    Event* e = EventAttack::generate(*this, attacker, victim);
+    eventManager().addEvent(e);
+  }
+}
+
+void Core::command(const CommandMove& cmd) {
+  const Unit& unit = id2unit(cmd.mUnitID);
+  const Tile& tile = map().tile(cmd.mDestination);
+  int actionPoints = unit.actionPoints();
+  if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
+    if (tile.cost <= actionPoints) {
+      Event* e = EventMove::generate(*this, unit, cmd.mDestination);
+      eventManager().addEvent(e);
+    }
+  }
+}
+
+void Core::command(const CommandEndTurn& cmd) {
+  UNUSED(cmd);
+  Event* e = EventEndTurn::generate(*this);
+  eventManager().addEvent(e);
 }
 
 void Core::createLocalHuman(int id) {

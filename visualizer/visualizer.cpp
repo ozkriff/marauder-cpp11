@@ -5,6 +5,7 @@
 #include <cassert>
 #include <stdexcept>
 #include "core/jsonHelpers.hpp"
+#include "core/command.hpp"
 #include "visualizer/math.hpp"
 #include "visualizer/vertexArray.hpp"
 #include "visualizer/gl.hpp"
@@ -295,8 +296,8 @@ void Visualizer::processClickOnEnemyUnit(Unit& unit) {
   const V2i& to = unit.position();
   bool isLosClear = core().isLosClear(from, to);
   if (isLosClear) {
-    Event* e = EventAttack::generate(core(), core().selectedUnit(), unit);
-    core().eventManager().addEvent(e);
+    CommandAttack cmd(core().selectedUnit().id(), unit.id());
+    core().doCommand(cmd);
   }
 }
 
@@ -312,9 +313,8 @@ void Visualizer::processClickOnEmptyTile(Tile& tile) {
   int actionPoints = core().selectedUnit().actionPoints();
   if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
     if (core().map().tile(activeTilePos()).cost <= actionPoints) {
-      Event* e = EventMove::generate(
-          core(), core().selectedUnit(), activeTilePos());
-      core().eventManager().addEvent(e);
+      CommandMove cmd(core().selectedUnit().id(), activeTilePos());
+      core().doCommand(cmd);
     }
   }
 }
@@ -387,11 +387,9 @@ void Visualizer::processSDLEvent(const SDL_KeyboardEvent& e) {
   case SDLK_t:
     switchActiveTileType();
     break;
-  case SDLK_e: {
-    Event* e = EventEndTurn::generate(core());
-    core().eventManager().addEvent(e);
+  case SDLK_e:
+    core().doCommand(CommandEndTurn());
     break;
-  }
   case SDLK_u:
     createNewUnitInActiveTile();
     break;

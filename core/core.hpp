@@ -18,6 +18,11 @@
 #include "core/player.hpp"
 #include "core/eventManager.hpp"
 
+class Command;
+class CommandAttack;
+class CommandEndTurn;
+class CommandMove;
+
 class Core {
 public:
   Core();
@@ -36,6 +41,8 @@ public:
   Map& map();
   EventManager& eventManager();
   const EventManager& eventManager() const;
+
+  void doCommand(const Command& cmd);
 
   void setSelectedUnit(Unit& unit);
   void deselectedAnyUnits();
@@ -68,6 +75,10 @@ private:
   Pathfinder mPathfinder;
   Map mMap;
   EventManager mEventManager;
+
+  void command(const CommandAttack& cmd);
+  void command(const CommandMove& cmd);
+  void command(const CommandEndTurn& cmd);
 
   void initUnitTypes();
   UnitType parseUnitTypeInfo(const Json::Value& unitTypeInfo) const;

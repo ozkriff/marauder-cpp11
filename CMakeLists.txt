@@ -39,6 +39,7 @@ add_library(marauderCore
   core/event/eventMove.cpp
   core/event/eventEndTurn.cpp
   core/jsonHelpers.cpp
+  core/command.cpp
 )
 target_link_libraries(marauderCore
   jsoncpp # TODO: fix
