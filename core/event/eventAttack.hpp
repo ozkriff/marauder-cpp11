@@ -4,8 +4,6 @@
 #define CORE__EVENT__EVENT_ATTACK_HPP
 
 #include <vector>
-#include "core/v2i.hpp"
-#include "core/dir.hpp"
 #include "core/event.hpp"
 
 class Unit;

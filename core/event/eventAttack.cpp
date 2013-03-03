@@ -3,7 +3,6 @@
 #include <cassert>
 #include "core/event/eventAttack.hpp"
 #include "core/core.hpp"
-#include "core/misc.hpp"
 
 EventAttack::EventAttack(int id)
   : Event(id, EventTypeID::ATTACK)

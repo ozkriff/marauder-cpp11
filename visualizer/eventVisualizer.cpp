@@ -1,19 +1,9 @@
 // See LICENSE file for copyright and license details.
 
-#include <cassert>
 #include <stdexcept>
-#include "SDL.h"
-#include "SDL_opengl.h"
-#include "core/v2i.hpp"
-#include "core/dir.hpp"
 #include "core/core.hpp"
-#include "core/misc.hpp"
-#include "core/event.hpp"
-#include "visualizer/v2f.hpp"
-#include "visualizer/v3f.hpp"
 #include "visualizer/math.hpp"
 #include "visualizer/vertexArray.hpp"
-#include "visualizer/eventVisualizer.hpp"
 #include "visualizer/event/eventMoveVisualizer.hpp"
 #include "visualizer/event/eventEndTurnVisualizer.hpp"
 #include "visualizer/event/eventAttackVisualizer.hpp"
