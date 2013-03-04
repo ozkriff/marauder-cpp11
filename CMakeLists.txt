@@ -31,6 +31,7 @@ add_library(marauderCore
   core/los.cpp
   core/unit.cpp
   core/event.cpp
+  core/eventView.cpp
   core/core.cpp
   core/math.cpp
   core/map.cpp

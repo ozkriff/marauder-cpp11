@@ -10,6 +10,7 @@
 #include "core/command/commandAttack.hpp"
 #include "core/command/commandEndTurn.hpp"
 #include "core/player.hpp"
+#include "core/eventView.hpp"
 #include "visualizer/math.hpp"
 #include "visualizer/vertexArray.hpp"
 #include "visualizer/gl.hpp"
@@ -455,12 +456,34 @@ void Visualizer::processSDLEventButtonDown(const SDL_MouseButtonEvent& e) {
   }
 }
 
+// TODO: delete me!
+namespace {
+
+// tmp func
+EventView* basicConvertEventToEventView(const Event& event) {
+  switch (event.type()) {
+  case EventTypeID::Move:
+    return new EventMoveView(dynamic_cast<const EventMove&>(event));
+  case EventTypeID::EndTurn:
+    return new EventEndTurnView(dynamic_cast<const EventEndTurn&>(event));
+  case EventTypeID::Attack:
+    return new EventAttackView(dynamic_cast<const EventAttack&>(event));
+  default:
+    throw std::logic_error("default case!");
+  }
+}
+
+} // namespace
+
 void Visualizer::screenScenarioMainEvents() {
   core().eventManager().switchToNextEvent();
   if (mEventVisualizer) {
     delete mEventVisualizer;
   }
-  mEventVisualizer = newEventVisualizer(*this, core().eventManager().currentEvent());
+  // TODO: Rewrite this
+  EventView* eventView = basicConvertEventToEventView(
+      core().eventManager().currentEvent());
+  mEventVisualizer = newEventVisualizer(*this, *eventView);
   assert(mEventVisualizer);
   setMode(Mode::ShowEvent);
 }

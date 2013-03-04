@@ -4,13 +4,14 @@
 #include <cassert>
 #include "core/misc.hpp"
 #include "core/math.hpp"
+#include "core/eventView.hpp"
 #include "visualizer/vertexArray.hpp"
 #include "visualizer/visualizer.hpp"
 #include "visualizer/math.hpp"
 
-EventAttackVisualizer::EventAttackVisualizer(Visualizer& visualizer, const Event& event)
+EventAttackVisualizer::EventAttackVisualizer(Visualizer& visualizer, const EventAttackView& event)
   : EventVisualizer(visualizer),
-    mEventAttack(dynamic_cast<const EventAttack&>(event)),
+    mEventAttack(event),
     mFrame(0),
     mLastFrame(60),
     mFallingDownSpeed(0.005f),

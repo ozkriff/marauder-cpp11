@@ -16,6 +16,7 @@ class Command;
 class CommandAttack;
 class CommandEndTurn;
 class CommandMove;
+class EventView;
 
 class Core {
 public:

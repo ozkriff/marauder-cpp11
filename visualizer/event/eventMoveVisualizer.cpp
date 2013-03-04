@@ -3,12 +3,13 @@
 #include "visualizer/event/eventMoveVisualizer.hpp"
 #include <cassert>
 #include "core/core.hpp"
+#include "core/eventView.hpp"
 #include "visualizer/vertexArray.hpp"
 #include "visualizer/math.hpp"
 
-EventMoveVisualizer::EventMoveVisualizer(Visualizer& visualizer, const Event& event)
+EventMoveVisualizer::EventMoveVisualizer(Visualizer& visualizer, const EventMoveView& event)
   : EventVisualizer(visualizer),
-    mEventMove(dynamic_cast<const EventMove&>(event)),
+    mEventMove(event),
     mCurrentMoveIndex(0)
 {
   visualizer.cleanWalkableMapArray();

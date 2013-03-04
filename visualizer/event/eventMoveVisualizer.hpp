@@ -6,11 +6,11 @@
 #include "core/event/eventMove.hpp"
 #include "visualizer/eventVisualizer.hpp"
 
-class Event;
+class EventMoveView;
 
 class EventMoveVisualizer : public EventVisualizer {
 public:
-  EventMoveVisualizer(Visualizer& visualizer, const Event& event);
+  EventMoveVisualizer(Visualizer& visualizer, const EventMoveView& eventView);
   virtual ~EventMoveVisualizer();
 
   virtual bool isFinished() const;
@@ -20,7 +20,7 @@ public:
 private:
   static const int moveSpeed = 10;
 
-  const EventMove& mEventMove;
+  const EventMoveView& mEventMove;
   int mCurrentMoveIndex;
 
   int currentTileIndex() const;

@@ -15,6 +15,7 @@
 #include "core/event/eventEndTurn.hpp"
 #include "core/player.hpp"
 #include "core/los.hpp"
+#include "core/eventView.hpp"
 
 Core::Core()
   : mConfig(parseJsonFile("confCore.json")),

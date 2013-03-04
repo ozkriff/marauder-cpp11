@@ -22,6 +22,7 @@ private:
   Visualizer& mVisualizer;
 };
 
-EventVisualizer* newEventVisualizer(Visualizer& visualizer, const Event& event);
+EventVisualizer* newEventVisualizer(
+    Visualizer& visualizer, const EventView& eventView);
 
 #endif

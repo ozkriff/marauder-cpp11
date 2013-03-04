@@ -6,11 +6,11 @@
 #include "core/event/eventAttack.hpp"
 #include "visualizer/eventVisualizer.hpp"
 
-class Event;
+class EventAttackView;
 
 class EventAttackVisualizer : public EventVisualizer {
 public:
-  EventAttackVisualizer(Visualizer& visualizer, const Event& event);
+  EventAttackVisualizer(Visualizer& visualizer, const EventAttackView& event);
   virtual ~EventAttackVisualizer();
 
   virtual bool isFinished() const;
@@ -18,7 +18,7 @@ public:
   virtual void end();
 
 private:
-  const EventAttack& mEventAttack;
+  const EventAttackView& mEventAttack;
   int mFrame;
   int mLastFrame;
   float mFallingDownSpeed;

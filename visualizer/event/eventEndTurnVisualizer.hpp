@@ -6,11 +6,11 @@
 #include "core/event/eventEndTurn.hpp"
 #include "visualizer/eventVisualizer.hpp"
 
-class Event;
+class EventEndTurnView;
 
 class EventEndTurnVisualizer : public EventVisualizer {
 public:
-  EventEndTurnVisualizer(Visualizer& visualizer, const Event& event);
+  EventEndTurnVisualizer(Visualizer& visualizer, const EventEndTurnView& event);
   virtual ~EventEndTurnVisualizer();
 
   virtual bool isFinished() const;
@@ -18,7 +18,7 @@ public:
   virtual void end();
 
 private:
-  const EventEndTurn& mEventEndTurn;
+  const EventEndTurnView& mEventEndTurn;
 };
 
 #endif

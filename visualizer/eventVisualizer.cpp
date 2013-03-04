@@ -3,6 +3,7 @@
 #include "visualizer/eventVisualizer.hpp"
 #include <stdexcept>
 #include "core/core.hpp"
+#include "core/eventView.hpp"
 #include "visualizer/math.hpp"
 #include "visualizer/vertexArray.hpp"
 #include "visualizer/event/eventMoveVisualizer.hpp"
@@ -25,14 +26,19 @@ Visualizer& EventVisualizer::visualizer() {
   return mVisualizer;
 }
 
-EventVisualizer* newEventVisualizer(Visualizer& visualizer, const Event& event) {
-  switch (event.type()) {
-  case EventTypeID::Move:
-    return new EventMoveVisualizer(visualizer, event);
-  case EventTypeID::EndTurn:
-    return new EventEndTurnVisualizer(visualizer, event);
-  case EventTypeID::Attack:
-    return new EventAttackVisualizer(visualizer, event);
+EventVisualizer* newEventVisualizer(
+    Visualizer& visualizer, const EventView& eventView)
+{
+  switch (eventView.type()) {
+  case EventViewType::Move:
+    return new EventMoveVisualizer(visualizer,
+        dynamic_cast<const EventMoveView&>(eventView));
+  case EventViewType::EndTurn:
+    return new EventEndTurnVisualizer(visualizer,
+        dynamic_cast<const EventEndTurnView&>(eventView));
+  case EventViewType::Attack:
+    return new EventAttackVisualizer(visualizer,
+        dynamic_cast<const EventAttackView&>(eventView));
   default:
     throw std::logic_error("default case!");
   }

@@ -4,9 +4,9 @@
 #include "core/core.hpp"
 #include "visualizer/vertexArray.hpp"
 
-EventEndTurnVisualizer::EventEndTurnVisualizer(Visualizer& visualizer, const Event& event)
+EventEndTurnVisualizer::EventEndTurnVisualizer(Visualizer& visualizer, const EventEndTurnView& event)
   : EventVisualizer(visualizer),
-    mEventEndTurn(dynamic_cast<const EventEndTurn&>(event))
+    mEventEndTurn(event)
 {
 }
 
