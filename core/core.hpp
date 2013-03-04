@@ -5,8 +5,6 @@
 
 #include <list>
 #include "json/json.h"
-#include "core/v2i.hpp"
-#include "core/dir.hpp"
 #include "core/unitType.hpp"
 #include "core/pathfinder.hpp"
 #include "core/map.hpp"
@@ -14,7 +12,6 @@
 #include "core/eventManager.hpp"
 
 class Player;
-
 class Command;
 class CommandAttack;
 class CommandEndTurn;
