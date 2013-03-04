@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cstdio>
 #include "core/core.hpp"
+#include "core/player.hpp"
 
 EventEndTurn::EventEndTurn(int eventID, int oldPlayerID, int newPlayerID)
   : Event(eventID, EventTypeID::EndTurn),

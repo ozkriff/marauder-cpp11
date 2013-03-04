@@ -5,18 +5,15 @@
 
 #include <list>
 #include "json/json.h"
-#include "core/misc.hpp"
 #include "core/v2i.hpp"
-#include "core/math.hpp"
 #include "core/dir.hpp"
-#include "core/los.hpp"
 #include "core/unitType.hpp"
-#include "core/event.hpp"
 #include "core/pathfinder.hpp"
 #include "core/map.hpp"
 #include "core/unit.hpp"
-#include "core/player.hpp"
 #include "core/eventManager.hpp"
+
+class Player;
 
 class Command;
 class CommandAttack;

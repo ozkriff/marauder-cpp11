@@ -2,6 +2,8 @@
 
 #include <cassert>
 #include "core/core.hpp"
+#include "core/player.hpp"
+#include "core/event.hpp"
 
 // public
 

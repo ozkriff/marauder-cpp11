@@ -3,6 +3,7 @@
 #include "visualizer/event/eventAttackVisualizer.hpp"
 #include <cassert>
 #include "core/misc.hpp"
+#include "core/math.hpp"
 #include "visualizer/vertexArray.hpp"
 #include "visualizer/visualizer.hpp"
 #include "visualizer/math.hpp"

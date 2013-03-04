@@ -3,6 +3,7 @@
 #include "core/event/eventMove.hpp"
 #include <cassert>
 #include "core/core.hpp"
+#include "core/player.hpp"
 
 EventMove::EventMove(int id)
   : Event(id, EventTypeID::Move),

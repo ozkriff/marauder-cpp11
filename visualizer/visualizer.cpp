@@ -9,6 +9,7 @@
 #include "core/command/commandMove.hpp"
 #include "core/command/commandAttack.hpp"
 #include "core/command/commandEndTurn.hpp"
+#include "core/player.hpp"
 #include "visualizer/math.hpp"
 #include "visualizer/vertexArray.hpp"
 #include "visualizer/gl.hpp"

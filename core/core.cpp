@@ -13,6 +13,8 @@
 #include "core/event/eventMove.hpp"
 #include "core/event/eventAttack.hpp"
 #include "core/event/eventEndTurn.hpp"
+#include "core/player.hpp"
+#include "core/los.hpp"
 
 Core::Core()
   : mConfig(parseJsonFile("confCore.json")),
