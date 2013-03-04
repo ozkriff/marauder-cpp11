@@ -7,3 +7,11 @@ CommandMove::CommandMove(int unitID, V2i destination)
     mUnitID(unitID),
     mDestination(destination)
 {}
+
+int CommandMove::unitID() const {
+  return mUnitID;
+}
+
+const V2i& CommandMove::destination() const {
+  return mDestination;
+}

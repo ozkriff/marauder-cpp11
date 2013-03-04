@@ -10,6 +10,10 @@ public:
   CommandAttack(int attackerID, int victimID);
   virtual ~CommandAttack() {}
 
+  int attackerID() const;
+  int victimID() const;
+
+private:
   int mAttackerID;
   int mVictimID;
 };

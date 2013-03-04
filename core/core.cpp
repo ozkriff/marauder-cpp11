@@ -120,8 +120,8 @@ void Core::doCommand(const Command& cmd) {
 }
 
 void Core::command(const CommandAttack& cmd) {
-  const Unit& attacker = id2unit(cmd.mAttackerID);
-  const Unit& victim = id2unit(cmd.mVictimID);
+  const Unit& attacker = id2unit(cmd.attackerID());
+  const Unit& victim = id2unit(cmd.victimID());
   if (isLosClear(attacker.position(), victim.position())) {
     Event* e = EventAttack::generate(*this, attacker, victim);
     eventManager().addEvent(e);
@@ -129,12 +129,12 @@ void Core::command(const CommandAttack& cmd) {
 }
 
 void Core::command(const CommandMove& cmd) {
-  const Unit& unit = id2unit(cmd.mUnitID);
-  const Tile& tile = map().tile(cmd.mDestination);
+  const Unit& unit = id2unit(cmd.unitID());
+  const Tile& tile = map().tile(cmd.destination());
   int actionPoints = unit.actionPoints();
   if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
     if (tile.cost <= actionPoints) {
-      Event* e = EventMove::generate(*this, unit, cmd.mDestination);
+      Event* e = EventMove::generate(*this, unit, cmd.destination());
       eventManager().addEvent(e);
     }
   }

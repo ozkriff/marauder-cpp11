@@ -7,3 +7,11 @@ CommandAttack::CommandAttack(int attackerID, int victimID)
     mAttackerID(attackerID),
     mVictimID(victimID)
 {}
+
+int CommandAttack::attackerID() const {
+  return mAttackerID;
+}
+
+int CommandAttack::victimID() const{
+  return mVictimID;
+}

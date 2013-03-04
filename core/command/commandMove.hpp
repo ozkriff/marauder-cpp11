@@ -11,6 +11,10 @@ public:
   CommandMove(int unitID, V2i destination);
   virtual ~CommandMove() {}
 
+  int unitID() const;
+  const V2i& destination() const;
+
+private:
   int mUnitID;
   V2i mDestination;
   // std::vector<V2i> mPath;
