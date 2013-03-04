@@ -50,12 +50,15 @@ void VertexArray::draw() {
   // draw
   {
     glVertexPointer(3, GL_FLOAT, 0, vertices.data());
-    if (mPrimitiveType == PrimitiveType::Triangles) {
+    switch (mPrimitiveType) {
+    case PrimitiveType::Triangles:
       glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
-    } else if (mPrimitiveType == PrimitiveType::Lines) {
+      break;
+    case PrimitiveType::Lines:
       glDrawArrays(GL_LINES, 0, vertices.size() / 3);
-    } else {
-      // TODO: throw ecxeption
+      break;
+    default:
+      throw std::logic_error("default case");
     }
   }
   // disable everything
