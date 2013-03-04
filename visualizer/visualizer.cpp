@@ -6,6 +6,9 @@
 #include <stdexcept>
 #include "core/jsonHelpers.hpp"
 #include "core/command.hpp"
+#include "core/command/commandMove.hpp"
+#include "core/command/commandAttack.hpp"
+#include "core/command/commandEndTurn.hpp"
 #include "visualizer/math.hpp"
 #include "visualizer/vertexArray.hpp"
 #include "visualizer/gl.hpp"

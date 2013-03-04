@@ -24,30 +24,4 @@ private:
   CommandType mType;
 };
 
-class CommandMove : public Command {
-public:
-  // CommandMove(int unitID, const std::vector<V2i>& path);
-  CommandMove(int unitID, V2i destination);
-  virtual ~CommandMove() {}
-
-  int mUnitID;
-  V2i mDestination;
-  // std::vector<V2i> mPath;
-};
-
-class CommandEndTurn : public Command {
-public:
-  CommandEndTurn();
-  virtual ~CommandEndTurn() {}
-};
-
-class CommandAttack : public Command {
-public:
-  CommandAttack(int attackerID, int victimID);
-  virtual ~CommandAttack() {}
-
-  int mAttackerID;
-  int mVictimID;
-};
-
 #endif

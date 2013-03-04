@@ -9,19 +9,3 @@ Command::Command(CommandType type)
 CommandType Command::type() const {
   return mType;
 }
-
-CommandMove::CommandMove(int unitID, V2i destination)
-  : Command(CommandType::Move),
-    mUnitID(unitID),
-    mDestination(destination)
-{}
-
-CommandEndTurn::CommandEndTurn()
-  : Command(CommandType::EndTurn)
-{}
-
-CommandAttack::CommandAttack(int attackerID, int victimID)
-  : Command(CommandType::Attack),
-    mAttackerID(attackerID),
-    mVictimID(victimID)
-{}
