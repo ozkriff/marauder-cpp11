@@ -8,6 +8,9 @@ CommandMove::CommandMove(int unitID, V2i destination)
     mDestination(destination)
 {}
 
+CommandMove::~CommandMove() {
+}
+
 int CommandMove::unitID() const {
   return mUnitID;
 }

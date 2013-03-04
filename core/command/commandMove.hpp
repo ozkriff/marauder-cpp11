@@ -9,7 +9,7 @@ class CommandMove : public Command {
 public:
   // CommandMove(int unitID, const std::vector<V2i>& path);
   CommandMove(int unitID, V2i destination);
-  virtual ~CommandMove() {}
+  virtual ~CommandMove();
 
   int unitID() const;
   const V2i& destination() const;

@@ -14,9 +14,8 @@ enum class CommandType {
 
 class Command {
 public:
-  // TODO: ...
   Command(CommandType type);
-  virtual ~Command() {}
+  virtual ~Command();
 
   CommandType type() const;
 

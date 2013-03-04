@@ -8,7 +8,7 @@
 class CommandEndTurn : public Command {
 public:
   CommandEndTurn();
-  virtual ~CommandEndTurn() {}
+  virtual ~CommandEndTurn();
 };
 
 #endif

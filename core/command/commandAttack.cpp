@@ -8,6 +8,9 @@ CommandAttack::CommandAttack(int attackerID, int victimID)
     mVictimID(victimID)
 {}
 
+CommandAttack::~CommandAttack() {
+}
+
 int CommandAttack::attackerID() const {
   return mAttackerID;
 }

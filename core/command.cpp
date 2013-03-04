@@ -6,6 +6,9 @@ Command::Command(CommandType type)
   : mType(type)
 {}
 
+Command::~Command() {
+}
+
 CommandType Command::type() const {
   return mType;
 }

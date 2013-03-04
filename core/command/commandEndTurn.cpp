@@ -5,3 +5,6 @@
 CommandEndTurn::CommandEndTurn()
   : Command(CommandType::EndTurn)
 {}
+
+CommandEndTurn::~CommandEndTurn() {
+}

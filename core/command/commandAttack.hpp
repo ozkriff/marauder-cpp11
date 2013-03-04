@@ -8,7 +8,7 @@
 class CommandAttack : public Command {
 public:
   CommandAttack(int attackerID, int victimID);
-  virtual ~CommandAttack() {}
+  virtual ~CommandAttack();
 
   int attackerID() const;
   int victimID() const;
