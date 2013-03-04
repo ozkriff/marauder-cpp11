@@ -1,6 +1,7 @@
 // See LICENSE file for copyright and license details.
 
 #include <cassert>
+#include <stdexcept>
 #include "visualizer/vertexArray.hpp"
 
 VertexArray::VertexArray(PrimitiveType primitiveType)
