@@ -342,7 +342,7 @@ VertexArray Visualizer::buildPickingTilesArray() {
 
 VertexArray Visualizer::buildMapArray() {
   VertexArray v;
-  v.mTextureID = mFloorTexture;
+  v.setTextureID(mFloorTexture);
   core().map().forEachPos([&](const V2i& p) {
     V2f pos = v2iToV2f(p);
     for (int i = 0; i < 6; ++i) {
@@ -366,7 +366,7 @@ VertexArray Visualizer::buildMapArray() {
 
 VertexArray Visualizer::buildObstaclesArray() {
   VertexArray v(Color(0.4f, 0.1f, 0.0f));
-  v.mTextureID = mFloorTexture;
+  v.setTextureID(mFloorTexture);
   core().map().forEachPos([&](const V2i& p) {
     if (core().map().tile(p).obstacle) {
       V2f pos = v2iToV2f(p);
@@ -544,7 +544,7 @@ void Visualizer::loadUnitResources() {
     std::string texturePath = mPathToData + unitInfo["textureName"].asString();
     std::string objModelPath = mPathToData + unitInfo["objModelName"].asString();
     mVaUnits[id] = ObjModel(objModelPath).build();
-    mVaUnits[id].mTextureID = loadTexture(texturePath);
+    mVaUnits[id].setTextureID(loadTexture(texturePath));
   }
 }
 

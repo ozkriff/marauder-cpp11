@@ -19,6 +19,8 @@ public:
   VertexArray(PrimitiveType type = PrimitiveType::Triangles);
   VertexArray(const Color& color, PrimitiveType type = PrimitiveType::Triangles);
 
+  void setTextureID(GLuint textureID);
+
   void draw();
 
   // TODO: make private
@@ -26,9 +28,8 @@ public:
   std::vector<float> textureCoordinates;
   std::vector<GLubyte> colors;
 
-  GLuint mTextureID;
-
 private:
+  GLuint mTextureID;
   PrimitiveType mPrimitiveType;
   Color mColor;
   bool mHaveColor;

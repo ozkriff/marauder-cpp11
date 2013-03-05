@@ -26,6 +26,10 @@ VertexArray::VertexArray(const Color& color, PrimitiveType primitiveType)
 {
 }
 
+void VertexArray::setTextureID(GLuint textureID) {
+  mTextureID = textureID;
+}
+
 void VertexArray::draw() {
   // enable everything
   {
