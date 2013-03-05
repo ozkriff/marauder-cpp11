@@ -198,6 +198,7 @@ void Visualizer::recreateUnitSceneNodes() {
     assert(node);
     delete node;
   }
+  mSceneManager.nodes().clear();
   for (const Unit* pUnit : core().units()) {
     const Unit& unit = *pUnit;
     createUnitNode(unit);
