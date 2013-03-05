@@ -332,9 +332,9 @@ VertexArray Visualizer::buildPickingTilesArray() {
       v.addCoord(V3f(pos + indexToHexVertex(i)));
       v.addCoord(V3f(pos + indexToHexVertex(i + 1)));
       v.addCoord(V3f(pos));
-      v.addColorRGB(p.x(), p.y(), 1);
-      v.addColorRGB(p.x(), p.y(), 1);
-      v.addColorRGB(p.x(), p.y(), 1);
+      v.addColor(Color3u(p.x(), p.y(), 1));
+      v.addColor(Color3u(p.x(), p.y(), 1));
+      v.addColor(Color3u(p.x(), p.y(), 1));
     }
   });
   return v;
@@ -354,9 +354,9 @@ VertexArray Visualizer::buildMapArray() {
       v.addTextureCoord(V2f(0.5f, 0.5f));
       for (int tmp = 0; tmp < 3; ++tmp) {
         if (core().map().tile(p).fow == 0) {
-          v.addColorRGB(180, 180, 180);
+          v.addColor(Color3u(180, 180, 180));
         } else {
-          v.addColorRGB(255, 255, 255);
+          v.addColor(Color3u(255, 255, 255));
         }
       }
     }

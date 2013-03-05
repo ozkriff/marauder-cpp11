@@ -8,6 +8,7 @@
 #include "visualizer/v2f.hpp"
 #include "visualizer/v3f.hpp"
 #include "visualizer/color.hpp"
+#include "visualizer/color3u.hpp"
 
 enum class PrimitiveType {
   Triangles,
@@ -21,8 +22,7 @@ public:
 
   void setTextureID(GLuint textureID);
 
-  void addColorRGB(int r, int g, int b);
-  void addColorRGB(GLubyte r, GLubyte g, GLubyte b);
+  void addColor(const Color3u& color);
   void addTextureCoord(const V2f& vertex);
   void addCoord(const V3f& vertex);
 

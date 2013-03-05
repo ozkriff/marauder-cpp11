@@ -30,20 +30,10 @@ void VertexArray::setTextureID(GLuint textureID) {
   mTextureID = textureID;
 }
 
-void VertexArray::addColorRGB(int r, int g, int b) {
-  assert(r >= 0 && r < 256);
-  assert(g >= 0 && g < 256);
-  assert(b >= 0 && b < 256);
-  addColorRGB(
-      static_cast<GLubyte>(r),
-      static_cast<GLubyte>(g),
-      static_cast<GLubyte>(b));
-}
-
-void VertexArray::addColorRGB(GLubyte r, GLubyte g, GLubyte b) {
-  mColors.push_back(r);
-  mColors.push_back(g);
-  mColors.push_back(b);
+void VertexArray::addColor(const Color3u &color) {
+  mColors.push_back(color.red());
+  mColors.push_back(color.green());
+  mColors.push_back(color.blue());
 }
 
 void VertexArray::addTextureCoord(const V2f& vertex) {
