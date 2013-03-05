@@ -109,6 +109,7 @@ private:
 
   float tileSize() const;
   Camera& camera();
+  EventVisualizer& currentEventVisualizer();
 };
 
 #endif

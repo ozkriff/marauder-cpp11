@@ -75,6 +75,13 @@ Camera& Visualizer::camera() {
   return mCamera;
 }
 
+EventVisualizer& Visualizer::currentEventVisualizer() {
+  if (!mCurrentEventVisualizer) {
+    throw std::logic_error("no current event visualizer");
+  }
+  return *mCurrentEventVisualizer;
+}
+
 float Visualizer::tileSize() const {
   return mTileSize;
 }
@@ -217,8 +224,7 @@ void Visualizer::draw() {
   drawMap();
   mSceneManager.draw();
   if (mMode == Mode::ShowEvent) {
-    assert(mCurrentEventVisualizer);
-    mCurrentEventVisualizer->draw();
+    currentEventVisualizer().draw();
   }
   if (core().isAnyUnitSelected()) {
     drawSelectedunitMarker();
@@ -429,10 +435,10 @@ void Visualizer::logic() {
     screenScenarioMainEvents();
   }
   if (mMode == Mode::ShowEvent) {
-    if (mCurrentEventVisualizer->isFinished()) {
+    if (currentEventVisualizer().isFinished()) {
       core().eventManager().applyCurrentEvent();
       mMode = Mode::Normal;
-      mCurrentEventVisualizer->end();
+      currentEventVisualizer().end();
     }
   }
 }
