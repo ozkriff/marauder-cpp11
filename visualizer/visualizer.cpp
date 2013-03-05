@@ -18,6 +18,8 @@
 #include "visualizer/event/eventAttackVisualizer.hpp"
 #include "visualizer/event/eventMoveVisualizer.hpp"
 
+// public:
+
 Visualizer::Visualizer(Core& core)
   : mCore(core),
     mConfig(parseJsonFile("confVisualizer.json")),
@@ -71,21 +73,6 @@ const SceneManager& Visualizer::sceneManager() const {
   return mSceneManager;
 }
 
-Camera& Visualizer::camera() {
-  return mCamera;
-}
-
-EventVisualizer& Visualizer::currentEventVisualizer() {
-  if (!mCurrentEventVisualizer) {
-    throw std::logic_error("no current event visualizer");
-  }
-  return *mCurrentEventVisualizer;
-}
-
-float Visualizer::tileSize() const {
-  return mTileSize;
-}
-
 void Visualizer::cleanWalkableMapArray() {
   mVaWalkableMap = VertexArray();
 }
@@ -120,76 +107,8 @@ V2f Visualizer::indexToHexVertex(int i) const {
   return indexToCircleVertex(6, i);
 }
 
-float Visualizer::aspectRatio() const {
-  float x = mWinSize.x();
-  float y = mWinSize.y();
-  return y / x;
-}
-
-VertexArray Visualizer::buildMapArray() {
-  VertexArray v;
-  v.mTextureID = mFloorTexture;
-  core().map().forEachPos([&](const V2i& p) {
-    V2f pos = v2iToV2f(p);
-    for (int i = 0; i < 6; ++i) {
-      appendV3f(&v.vertices, pos + indexToHexVertex(i));
-      appendV3f(&v.vertices, pos + indexToHexVertex(i + 1));
-      appendV3f(&v.vertices, pos);
-      appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
-      appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
-      appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
-      for (int tmp = 0; tmp < 3; ++tmp) {
-        if (core().map().tile(p).fow == 0) {
-          appendRGB(&v.colors, 180, 180, 180);
-        } else {
-          appendRGB(&v.colors, 255, 255, 255);
-        }
-      }
-    }
-  });
-  return v;
-}
-
-VertexArray Visualizer::buildObstaclesArray() {
-  VertexArray v(Color(0.4f, 0.1f, 0.0f));
-  v.mTextureID = mFloorTexture;
-  core().map().forEachPos([&](const V2i& p) {
-    if (core().map().tile(p).obstacle) {
-      V2f pos = v2iToV2f(p);
-      for (int i = 0; i < 6; ++i) {
-        appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i) * 0.7f, 0.01f));
-        appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i + 1) * 0.7f, 0.01f));
-        appendV3f(&v.vertices, V3f(pos, 0.01f));
-        appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
-        appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
-        appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
-      }
-    }
-  });
-  return v;
-}
-
-VertexArray Visualizer::buildWalkableArray() {
-  VertexArray v(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
-  core().map().forEachPos([&](const V2i& p) {
-    Tile& t = core().map().tile(p);
-    if (t.parent.value() != DirID::NONE && t.cost < 50) {
-      V2i to = Dir::getNeighbourPos(p, t.parent);
-      if (core().map().isInboard(to)) {
-        V2f fromF = v2iToV2f(p);
-        V2f toF = v2iToV2f(to);
-        appendV3f(&v.vertices, V3f(fromF, 0.01f));
-        appendV3f(&v.vertices, V3f(toF, 0.01f));
-      }
-    }
-  });
-  return v;
-}
-
-void Visualizer::drawMap() {
-  mVaMap.draw();
-  mVaObstacles.draw();
-  mVaWalkableMap.draw();
+float Visualizer::tileSize() const {
+  return mTileSize;
 }
 
 void Visualizer::recreateUnitSceneNodes() {
@@ -205,80 +124,7 @@ void Visualizer::recreateUnitSceneNodes() {
   }
 }
 
-void Visualizer::drawSelectedunitMarker() {
-  const Unit& u = core().selectedUnit();
-  V2f p = v2iToV2f(u.position());
-  VertexArray v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
-  float sn = std::sin(SDL_GetTicks() / 100.0f) / 4.0f;
-  appendV3f(&v.vertices, V3f(p, sn + tileSize()));
-  appendV3f(&v.vertices, V3f(p, sn + tileSize() * 1.5f));
-  glLineWidth(2);
-  v.draw();
-  glLineWidth(1);
-}
-
-void Visualizer::draw() {
-  glClearColor(1.0, 1.0, 1.0, 1.0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glLoadIdentity();
-  camera().set();
-  drawMap();
-  mSceneManager.draw();
-  if (mMode == Mode::ShowEvent) {
-    currentEventVisualizer().draw();
-  }
-  if (core().isAnyUnitSelected()) {
-    drawSelectedunitMarker();
-  }
-  SDL_GL_SwapBuffers();
-}
-
-void Visualizer::processClickOnFriendlyUnit(Unit& unit) {
-  core().setSelectedUnit(unit);
-  core().pathfinder().fillMap(core().selectedUnit());
-  mVaWalkableMap = buildWalkableArray();
-}
-
-void Visualizer::processClickOnEnemyUnit(Unit& unit) {
-  const V2i& from = core().selectedUnit().position();
-  const V2i& to = unit.position();
-  bool isLosClear = core().isLosClear(from, to);
-  if (isLosClear) {
-    CommandAttack cmd(core().selectedUnit().id(), unit.id());
-    core().doCommand(cmd);
-  }
-}
-
-void Visualizer::processClickOnUnit(Unit& unit) {
-  if (unit.playerID() == core().currentPlayer().id) {
-    processClickOnFriendlyUnit(unit);
-  } else if (core().isAnyUnitSelected()) {
-    processClickOnEnemyUnit(unit);
-  }
-}
-
-void Visualizer::processClickOnEmptyTile(Tile& tile) {
-  int actionPoints = core().selectedUnit().actionPoints();
-  if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
-    if (core().map().tile(mActiveTilePos).cost <= actionPoints) {
-      CommandMove cmd(core().selectedUnit().id(), mActiveTilePos);
-      core().doCommand(cmd);
-    }
-  }
-}
-
-void Visualizer::processClickOnTile() {
-  if (mMode != Mode::Normal) {
-    return;
-  }
-  if (core().isUnitAt(mActiveTilePos)) {
-    Unit& unit = core().unitAt(mActiveTilePos);
-    processClickOnUnit(unit);
-  } else if (core().isAnyUnitSelected()) {
-    Tile& tile = core().map().tile(mActiveTilePos);
-    processClickOnEmptyTile(tile);
-  }
-}
+// private:
 
 void Visualizer::processSDLEvent(const SDL_MouseMotionEvent& e) {
   mMousePos = V2i(static_cast<int>(e.x), static_cast<int>(e.y));
@@ -286,41 +132,6 @@ void Visualizer::processSDLEvent(const SDL_MouseMotionEvent& e) {
     camera().rotateAroundZAxis(-e.xrel);
     camera().rotateAroundXAxis(-e.yrel);
   }
-}
-
-void Visualizer::centerCameraOnSelectedUnit() {
-  if (!core().isAnyUnitSelected()) {
-    return;
-  }
-  V2f unitPos = v2iToV2f(core().selectedUnit().position());
-  camera().setPos(unitPos);
-}
-
-void Visualizer::switchActiveTileType() {
-  Tile& t = core().map().tile(mActiveTilePos);
-  t.obstacle = !t.obstacle;
-  mVaMap = buildMapArray();
-  mVaObstacles = buildObstaclesArray();
-  core().calculateFow();
-  rebuildMapArray();
-  if (core().isAnyUnitSelected()) {
-    core().pathfinder().fillMap(core().selectedUnit());
-    mVaWalkableMap = buildWalkableArray();
-  }
-}
-
-void Visualizer::createNewUnitInActiveTile() {
-  core().addUnit(
-        mActiveTilePos,
-        core().currentPlayer().id,
-        core().unitType("truck"),
-        Dir(DirID::NE));
-  if (core().isAnyUnitSelected()) {
-    core().pathfinder().fillMap(core().selectedUnit());
-    mVaWalkableMap = buildWalkableArray();
-  }
-  rebuildMapArray();
-  createUnitNode(core().unitAt(mActiveTilePos));
 }
 
 void Visualizer::processSDLEvent(const SDL_KeyboardEvent& e) {
@@ -399,47 +210,6 @@ void Visualizer::processSDLEventButtonDown(const SDL_MouseButtonEvent& e) {
   }
 }
 
-// tmp func
-// TODO: delete me!
-EventView* Visualizer::basicConvertEventToEventView(const Event& event) const {
-  switch (event.type()) {
-  case EventType::Move:
-    return new EventMoveView(dynamic_cast<const EventMove&>(event));
-  case EventType::EndTurn:
-    return new EventEndTurnView(dynamic_cast<const EventEndTurn&>(event));
-  case EventType::Attack:
-    return new EventAttackView(dynamic_cast<const EventAttack&>(event));
-  default:
-    throw std::logic_error("default case!");
-  }
-}
-
-void Visualizer::screenScenarioMainEvents() {
-  core().eventManager().switchToNextEvent();
-  if (mCurrentEventVisualizer) {
-    delete mCurrentEventVisualizer;
-  }
-  // TODO: Rewrite this
-  EventView* eventView = basicConvertEventToEventView(
-      core().eventManager().currentEvent());
-  mCurrentEventVisualizer = newEventVisualizer(*this, *eventView);
-  assert(mCurrentEventVisualizer);
-  mMode = Mode::ShowEvent;
-}
-
-void Visualizer::logic() {
-  while (mMode == Mode::Normal && core().eventManager().unshownEventsLeft()) {
-    screenScenarioMainEvents();
-  }
-  if (mMode == Mode::ShowEvent) {
-    if (currentEventVisualizer().isFinished()) {
-      core().eventManager().applyCurrentEvent();
-      mMode = Mode::Normal;
-      currentEventVisualizer().end();
-    }
-  }
-}
-
 void Visualizer::processSDLEvent(const SDL_Event& e) {
   switch (e.type) {
   case SDL_QUIT:
@@ -465,11 +235,93 @@ void Visualizer::processSDLEvent(const SDL_Event& e) {
   }
 }
 
+void Visualizer::processClickOnFriendlyUnit(Unit& unit) {
+  core().setSelectedUnit(unit);
+  core().pathfinder().fillMap(core().selectedUnit());
+  mVaWalkableMap = buildWalkableArray();
+}
+
+void Visualizer::processClickOnEnemyUnit(Unit& unit) {
+  const V2i& from = core().selectedUnit().position();
+  const V2i& to = unit.position();
+  bool isLosClear = core().isLosClear(from, to);
+  if (isLosClear) {
+    CommandAttack cmd(core().selectedUnit().id(), unit.id());
+    core().doCommand(cmd);
+  }
+}
+
+void Visualizer::processClickOnUnit(Unit& unit) {
+  if (unit.playerID() == core().currentPlayer().id) {
+    processClickOnFriendlyUnit(unit);
+  } else if (core().isAnyUnitSelected()) {
+    processClickOnEnemyUnit(unit);
+  }
+}
+
+void Visualizer::processClickOnEmptyTile(Tile& tile) {
+  int actionPoints = core().selectedUnit().actionPoints();
+  if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
+    if (core().map().tile(mActiveTilePos).cost <= actionPoints) {
+      CommandMove cmd(core().selectedUnit().id(), mActiveTilePos);
+      core().doCommand(cmd);
+    }
+  }
+}
+
+void Visualizer::processClickOnTile() {
+  if (mMode != Mode::Normal) {
+    return;
+  }
+  if (core().isUnitAt(mActiveTilePos)) {
+    Unit& unit = core().unitAt(mActiveTilePos);
+    processClickOnUnit(unit);
+  } else if (core().isAnyUnitSelected()) {
+    Tile& tile = core().map().tile(mActiveTilePos);
+    processClickOnEmptyTile(tile);
+  }
+}
+
 void Visualizer::sdlEvents() {
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
     processSDLEvent(e);
   }
+}
+
+void Visualizer::centerCameraOnSelectedUnit() {
+  if (!core().isAnyUnitSelected()) {
+    return;
+  }
+  V2f unitPos = v2iToV2f(core().selectedUnit().position());
+  camera().setPos(unitPos);
+}
+
+void Visualizer::switchActiveTileType() {
+  Tile& t = core().map().tile(mActiveTilePos);
+  t.obstacle = !t.obstacle;
+  mVaMap = buildMapArray();
+  mVaObstacles = buildObstaclesArray();
+  core().calculateFow();
+  rebuildMapArray();
+  if (core().isAnyUnitSelected()) {
+    core().pathfinder().fillMap(core().selectedUnit());
+    mVaWalkableMap = buildWalkableArray();
+  }
+}
+
+void Visualizer::createNewUnitInActiveTile() {
+  core().addUnit(
+        mActiveTilePos,
+        core().currentPlayer().id,
+        core().unitType("truck"),
+        Dir(DirID::NE));
+  if (core().isAnyUnitSelected()) {
+    core().pathfinder().fillMap(core().selectedUnit());
+    mVaWalkableMap = buildWalkableArray();
+  }
+  rebuildMapArray();
+  createUnitNode(core().unitAt(mActiveTilePos));
 }
 
 VertexArray Visualizer::buildPickingTilesArray() {
@@ -483,6 +335,66 @@ VertexArray Visualizer::buildPickingTilesArray() {
       appendRGB(&v.colors, p.x(), p.y(), 1);
       appendRGB(&v.colors, p.x(), p.y(), 1);
       appendRGB(&v.colors, p.x(), p.y(), 1);
+    }
+  });
+  return v;
+}
+
+VertexArray Visualizer::buildMapArray() {
+  VertexArray v;
+  v.mTextureID = mFloorTexture;
+  core().map().forEachPos([&](const V2i& p) {
+    V2f pos = v2iToV2f(p);
+    for (int i = 0; i < 6; ++i) {
+      appendV3f(&v.vertices, pos + indexToHexVertex(i));
+      appendV3f(&v.vertices, pos + indexToHexVertex(i + 1));
+      appendV3f(&v.vertices, pos);
+      appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
+      appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
+      appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
+      for (int tmp = 0; tmp < 3; ++tmp) {
+        if (core().map().tile(p).fow == 0) {
+          appendRGB(&v.colors, 180, 180, 180);
+        } else {
+          appendRGB(&v.colors, 255, 255, 255);
+        }
+      }
+    }
+  });
+  return v;
+}
+
+VertexArray Visualizer::buildObstaclesArray() {
+  VertexArray v(Color(0.4f, 0.1f, 0.0f));
+  v.mTextureID = mFloorTexture;
+  core().map().forEachPos([&](const V2i& p) {
+    if (core().map().tile(p).obstacle) {
+      V2f pos = v2iToV2f(p);
+      for (int i = 0; i < 6; ++i) {
+        appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i) * 0.7f, 0.01f));
+        appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i + 1) * 0.7f, 0.01f));
+        appendV3f(&v.vertices, V3f(pos, 0.01f));
+        appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
+        appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
+        appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
+      }
+    }
+  });
+  return v;
+}
+
+VertexArray Visualizer::buildWalkableArray() {
+  VertexArray v(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
+  core().map().forEachPos([&](const V2i& p) {
+    Tile& t = core().map().tile(p);
+    if (t.parent.value() != DirID::NONE && t.cost < 50) {
+      V2i to = Dir::getNeighbourPos(p, t.parent);
+      if (core().map().isInboard(to)) {
+        V2f fromF = v2iToV2f(p);
+        V2f toF = v2iToV2f(to);
+        appendV3f(&v.vertices, V3f(fromF, 0.01f));
+        appendV3f(&v.vertices, V3f(toF, 0.01f));
+      }
     }
   });
   return v;
@@ -636,4 +548,96 @@ void Visualizer::loadUnitResources() {
     mVaUnits[id] = ObjModel(objModelPath).build();
     mVaUnits[id].mTextureID = loadTexture(texturePath);
   }
+}
+
+void Visualizer::drawMap() {
+  mVaMap.draw();
+  mVaObstacles.draw();
+  mVaWalkableMap.draw();
+}
+
+void Visualizer::drawSelectedunitMarker() {
+  const Unit& u = core().selectedUnit();
+  V2f p = v2iToV2f(u.position());
+  VertexArray v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
+  float sn = std::sin(SDL_GetTicks() / 100.0f) / 4.0f;
+  appendV3f(&v.vertices, V3f(p, sn + tileSize()));
+  appendV3f(&v.vertices, V3f(p, sn + tileSize() * 1.5f));
+  glLineWidth(2);
+  v.draw();
+  glLineWidth(1);
+}
+
+void Visualizer::draw() {
+  glClearColor(1.0, 1.0, 1.0, 1.0);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glLoadIdentity();
+  camera().set();
+  drawMap();
+  mSceneManager.draw();
+  if (mMode == Mode::ShowEvent) {
+    currentEventVisualizer().draw();
+  }
+  if (core().isAnyUnitSelected()) {
+    drawSelectedunitMarker();
+  }
+  SDL_GL_SwapBuffers();
+}
+
+// tmp func
+// TODO: delete me!
+EventView* Visualizer::basicConvertEventToEventView(const Event& event) const {
+  switch (event.type()) {
+  case EventType::Move:
+    return new EventMoveView(dynamic_cast<const EventMove&>(event));
+  case EventType::EndTurn:
+    return new EventEndTurnView(dynamic_cast<const EventEndTurn&>(event));
+  case EventType::Attack:
+    return new EventAttackView(dynamic_cast<const EventAttack&>(event));
+  default:
+    throw std::logic_error("default case!");
+  }
+}
+
+void Visualizer::screenScenarioMainEvents() {
+  core().eventManager().switchToNextEvent();
+  if (mCurrentEventVisualizer) {
+    delete mCurrentEventVisualizer;
+  }
+  // TODO: Rewrite this
+  EventView* eventView = basicConvertEventToEventView(
+      core().eventManager().currentEvent());
+  mCurrentEventVisualizer = newEventVisualizer(*this, *eventView);
+  assert(mCurrentEventVisualizer);
+  mMode = Mode::ShowEvent;
+}
+
+void Visualizer::logic() {
+  while (mMode == Mode::Normal && core().eventManager().unshownEventsLeft()) {
+    screenScenarioMainEvents();
+  }
+  if (mMode == Mode::ShowEvent) {
+    if (currentEventVisualizer().isFinished()) {
+      core().eventManager().applyCurrentEvent();
+      mMode = Mode::Normal;
+      currentEventVisualizer().end();
+    }
+  }
+}
+
+float Visualizer::aspectRatio() const {
+  float x = mWinSize.x();
+  float y = mWinSize.y();
+  return y / x;
+}
+
+Camera& Visualizer::camera() {
+  return mCamera;
+}
+
+EventVisualizer& Visualizer::currentEventVisualizer() {
+  if (!mCurrentEventVisualizer) {
+    throw std::logic_error("no current event visualizer");
+  }
+  return *mCurrentEventVisualizer;
 }
