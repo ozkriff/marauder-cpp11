@@ -106,6 +106,7 @@ private:
   void drawMap();
   void drawSelectedunitMarker();
   void draw();
+  EventView* basicConvertEventToEventView(const Event& event) const; // TODO: tmp, delete me
   void screenScenarioMainEvents();
   void logic();
   float aspectRatio() const;

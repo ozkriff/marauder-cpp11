@@ -399,11 +399,9 @@ void Visualizer::processSDLEventButtonDown(const SDL_MouseButtonEvent& e) {
   }
 }
 
-// TODO: delete me!
-namespace {
-
 // tmp func
-EventView* basicConvertEventToEventView(const Event& event) {
+// TODO: delete me!
+EventView* Visualizer::basicConvertEventToEventView(const Event& event) const {
   switch (event.type()) {
   case EventType::Move:
     return new EventMoveView(dynamic_cast<const EventMove&>(event));
@@ -415,8 +413,6 @@ EventView* basicConvertEventToEventView(const Event& event) {
     throw std::logic_error("default case!");
   }
 }
-
-} // namespace
 
 void Visualizer::screenScenarioMainEvents() {
   core().eventManager().switchToNextEvent();
