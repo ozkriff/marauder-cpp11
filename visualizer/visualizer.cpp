@@ -245,7 +245,9 @@ void Visualizer::processClickOnEnemyUnit(Unit& unit) {
   const V2i& from = core().selectedUnit().position();
   const V2i& to = unit.position();
   bool isLosClear = core().isLosClear(from, to);
-  if (isLosClear) {
+  if (isLosClear
+      && core().selectedUnit().actionPoints() >= 3)
+  {
     CommandAttack cmd(core().selectedUnit().id(), unit.id());
     core().doCommand(cmd);
   }

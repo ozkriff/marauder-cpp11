@@ -24,6 +24,8 @@ void EventAttack::apply(Core& core) const {
   Unit& u = core.id2unit(mVictimID);
   core.deadUnits().push_back(&u);
   core.units().remove(&u);
+  Unit& attacker = core.id2unit(attackerID());
+  attacker.setActionPoints(attacker.actionPoints() - 3);
   if (core.isAnyUnitSelected()) {
     core.pathfinder().fillMap(core.selectedUnit());
     core.calculateFow();
@@ -36,6 +38,8 @@ void EventAttack::undo(Core& core) const {
   assert(u);
   core.deadUnits().remove(u);
   core.units().push_back(u);
+  Unit& attacker = core.id2unit(attackerID());
+  attacker.setActionPoints(attacker.actionPoints() + 3);
   if (core.isAnyUnitSelected()) {
     core.pathfinder().fillMap(core.selectedUnit());
     core.calculateFow();

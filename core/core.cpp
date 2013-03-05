@@ -125,9 +125,12 @@ void Core::doCommand(const Command& cmd) {
 void Core::command(const CommandAttack& cmd) {
   const Unit& attacker = id2unit(cmd.attackerID());
   const Unit& victim = id2unit(cmd.victimID());
-  if (isLosClear(attacker.position(), victim.position())) {
+  if (isLosClear(attacker.position(), victim.position())
+    && attacker.actionPoints() >= 3)
+  {
     Event* e = EventAttack::generate(*this, attacker, victim);
     eventManager().addEvent(e);
+
   }
 }
 
