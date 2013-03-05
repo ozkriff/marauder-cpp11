@@ -629,12 +629,10 @@ void Visualizer::logic() {
   while (mMode == Mode::Normal && core().eventManager().unshownEventsLeft()) {
     screenScenarioMainEvents();
   }
-  if (mMode == Mode::ShowEvent) {
-    if (currentEventVisualizer().isFinished()) {
-      core().eventManager().applyCurrentEvent();
-      mMode = Mode::Normal;
-      currentEventVisualizer().end();
-    }
+  if (mMode == Mode::ShowEvent && currentEventVisualizer().isFinished()) {
+    core().eventManager().applyCurrentEvent();
+    mMode = Mode::Normal;
+    currentEventVisualizer().end();
   }
 }
 
