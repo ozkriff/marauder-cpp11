@@ -22,9 +22,13 @@ public:
 
   void setTextureID(GLuint textureID);
 
-  void addColor(const Color3u& color);
-  void addTextureCoord(const V2f& vertex);
-  void addCoord(const V3f& vertex);
+  void addVertex(
+      const V3f& meshCoordinate,
+      const V2f& textureCoordinate,
+      const Color3u& color);
+  void addVertex(const V3f& meshCoordinate, const V2f& textureCoordinate);
+  void addVertex(const V3f& meshCoordinate, const Color3u& color);
+  void addVertex(const V3f& meshCoordinate);
 
   void draw();
 
@@ -36,6 +40,10 @@ private:
   PrimitiveType mPrimitiveType;
   Color mColor;
   bool mHaveColor;
+
+  void addColor(const Color3u& color);
+  void addTextureCoord(const V2f& vertex);
+  void addCoord(const V3f& vertex);
 };
 
 #endif

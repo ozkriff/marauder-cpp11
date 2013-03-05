@@ -329,36 +329,49 @@ VertexArray Visualizer::buildPickingTilesArray() {
   core().map().forEachPos([&](const V2i& p) {
     V2f pos = v2iToV2f(p);
     for (int i = 0; i < 6; ++i) {
-      v.addCoord(V3f(pos + indexToHexVertex(i)));
-      v.addCoord(V3f(pos + indexToHexVertex(i + 1)));
-      v.addCoord(V3f(pos));
-      v.addColor(Color3u(p.x(), p.y(), 1));
-      v.addColor(Color3u(p.x(), p.y(), 1));
-      v.addColor(Color3u(p.x(), p.y(), 1));
+      v.addVertex(
+          V3f(pos + indexToHexVertex(i)),
+          Color3u(p.x(), p.y(), 1));
+      v.addVertex(
+          V3f(pos + indexToHexVertex(i + 1)),
+          Color3u(p.x(), p.y(), 1));
+      v.addVertex(
+          V3f(pos),
+          Color3u(p.x(), p.y(), 1));
     }
   });
   return v;
 }
 
 VertexArray Visualizer::buildMapArray() {
+  // TODO: Move out here
+  auto calcFowColor = [this](const V2i& position) -> Color3u {
+    int n;
+    if (core().map().tile(position).fow == 0) {
+      n = 180; // dark
+    } else {
+      n = 255; // bright
+    }
+    return Color3u(n, n, n);
+  };
   VertexArray v;
   v.setTextureID(mFloorTexture);
   core().map().forEachPos([&](const V2i& p) {
     V2f pos = v2iToV2f(p);
+    Color3u color = calcFowColor(p);
     for (int i = 0; i < 6; ++i) {
-      v.addCoord(pos + indexToHexVertex(i));
-      v.addCoord(pos + indexToHexVertex(i + 1));
-      v.addCoord(pos);
-      v.addTextureCoord(V2f(0.0f, 0.0f));
-      v.addTextureCoord(V2f(1.0f, 0.0f));
-      v.addTextureCoord(V2f(0.5f, 0.5f));
-      for (int tmp = 0; tmp < 3; ++tmp) {
-        if (core().map().tile(p).fow == 0) {
-          v.addColor(Color3u(180, 180, 180));
-        } else {
-          v.addColor(Color3u(255, 255, 255));
-        }
-      }
+      v.addVertex(
+          pos + indexToHexVertex(i),
+          V2f(0.0f, 0.0f),
+          color);
+      v.addVertex(
+          pos + indexToHexVertex(i + 1),
+          V2f(1.0f, 0.0f),
+          color);
+      v.addVertex(
+          pos,
+          V2f(0.5f, 0.5f),
+          color);
     }
   });
   return v;
@@ -371,12 +384,15 @@ VertexArray Visualizer::buildObstaclesArray() {
     if (core().map().tile(p).obstacle) {
       V2f pos = v2iToV2f(p);
       for (int i = 0; i < 6; ++i) {
-        v.addCoord(V3f(pos + indexToHexVertex(i) * 0.7f, 0.01f));
-        v.addCoord(V3f(pos + indexToHexVertex(i + 1) * 0.7f, 0.01f));
-        v.addCoord(V3f(pos, 0.01f));
-        v.addTextureCoord(V2f(0.0f, 0.0f));
-        v.addTextureCoord(V2f(1.0f, 0.0f));
-        v.addTextureCoord(V2f(0.5f, 0.5f));
+        v.addVertex(
+            V3f(pos + indexToHexVertex(i) * 0.7f, 0.01f),
+            V2f(0.0f, 0.0f));
+        v.addVertex(
+            V3f(pos + indexToHexVertex(i + 1) * 0.7f, 0.01f),
+            V2f(1.0f, 0.0f));
+        v.addVertex(
+            V3f(pos, 0.01f),
+            V2f(0.5f, 0.5f));
       }
     }
   });
@@ -392,8 +408,8 @@ VertexArray Visualizer::buildWalkableArray() {
       if (core().map().isInboard(to)) {
         V2f fromF = v2iToV2f(p);
         V2f toF = v2iToV2f(to);
-        v.addCoord(V3f(fromF, 0.01f));
-        v.addCoord(V3f(toF, 0.01f));
+        v.addVertex(V3f(fromF, 0.01f));
+        v.addVertex(V3f(toF, 0.01f));
       }
     }
   });
@@ -518,9 +534,9 @@ VertexArray Visualizer::buildUnitCircleVertexArray(const Color& color) {
   for (int i = 0; i < verticesCount; ++i) {
     const float k = mHexIn * 2.0f; // resize coefficient
     const float h = 0.01f;
-    v.addCoord(V3f(
+    v.addVertex(V3f(
         indexToCircleVertex(verticesCount, i) * k, h));
-    v.addCoord(V3f(
+    v.addVertex(V3f(
         indexToCircleVertex(verticesCount, i + 1) * k, h));
   }
   return v;
@@ -559,8 +575,8 @@ void Visualizer::drawSelectedunitMarker() {
   V2f p = v2iToV2f(u.position());
   VertexArray v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
   float sn = std::sin(SDL_GetTicks() / 100.0f) / 4.0f;
-  v.addCoord(V3f(p, sn + tileSize()));
-  v.addCoord(V3f(p, sn + tileSize() * 1.5f));
+  v.addVertex(V3f(p, sn + tileSize()));
+  v.addVertex(V3f(p, sn + tileSize() * 1.5f));
   glLineWidth(2);
   v.draw();
   glLineWidth(1);

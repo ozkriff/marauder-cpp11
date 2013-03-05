@@ -30,6 +30,32 @@ void VertexArray::setTextureID(GLuint textureID) {
   mTextureID = textureID;
 }
 
+void VertexArray::addVertex(
+    const V3f& meshCoordinate,
+    const V2f& textureCoordinate,
+    const Color3u& color)
+{
+  addCoord(meshCoordinate);
+  addTextureCoord(textureCoordinate);
+  addColor(color);
+}
+
+void VertexArray::addVertex(
+    const V3f& meshCoordinate, const V2f& textureCoordinate)
+{
+  addCoord(meshCoordinate);
+  addTextureCoord(textureCoordinate);
+}
+
+void VertexArray::addVertex(const V3f& meshCoordinate, const Color3u& color) {
+  addCoord(meshCoordinate);
+  addColor(color);
+}
+
+void VertexArray::addVertex(const V3f& meshCoordinate) {
+  addCoord(meshCoordinate);
+}
+
 void VertexArray::addColor(const Color3u &color) {
   mColors.push_back(color.red());
   mColors.push_back(color.green());

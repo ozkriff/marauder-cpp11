@@ -98,8 +98,7 @@ VertexArray ObjModel::build() {
     for (int j = 0; j < 3; ++j) {
       int vertexID = tri.vertex[j] - 1;
       int textureCoordID = tri.texture[j] - 1;
-      va.addCoord(mVertices[vertexID]);
-      va.addTextureCoord(mTextureCoords[textureCoordID]);
+      va.addVertex(mVertices[vertexID], mTextureCoords[textureCoordID]);
     }
   }
   return va;
