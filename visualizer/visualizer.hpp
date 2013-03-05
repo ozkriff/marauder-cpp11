@@ -36,7 +36,11 @@ public:
   void rebuildMapArray();
 
   void run();
+
   V2f v2iToV2f(const V2i& i) const;
+  V2f indexToCircleVertex(int count, int i) const;
+  V2f indexToHexVertex(int i) const;
+  float tileSize() const;
 
   void recreateUnitSceneNodes();
 
@@ -103,11 +107,8 @@ private:
   void draw();
   void screenScenarioMainEvents();
   void logic();
-  V2f indexToCircleVertex(int count, int i) const;
-  V2f indexToHexVertex(int i) const;
   float aspectRatio() const;
 
-  float tileSize() const;
   Camera& camera();
   EventVisualizer& currentEventVisualizer();
 };
