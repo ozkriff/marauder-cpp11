@@ -8,6 +8,7 @@ EventEndTurnVisualizer::EventEndTurnVisualizer(Visualizer& visualizer, const Eve
   : EventVisualizer(visualizer),
     mEventEndTurn(event)
 {
+  UNUSED(mEventEndTurn);
 }
 
 EventEndTurnVisualizer::~EventEndTurnVisualizer() {
