@@ -8,6 +8,12 @@ Color3u::Color3u(GLubyte red, GLubyte green, GLubyte blue)
     mBlue(blue)
 {}
 
+Color3u::Color3u(GLubyte n)
+  : mRed(n),
+    mGreen(n),
+    mBlue(n)
+{}
+
 Color3u::Color3u(int red, int green, int blue)
   : mRed(static_cast<GLubyte>(red)),
     mGreen(static_cast<GLubyte>(green)),

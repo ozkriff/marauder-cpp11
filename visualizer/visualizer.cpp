@@ -344,13 +344,13 @@ VertexArray Visualizer::buildPickingTilesArray() {
 }
 
 Color3u Visualizer::fowColor(const V2i& position) {
-  int n;
+  GLuint n;
   if (core().map().tile(position).fow == 0) {
     n = 180; // dark
   } else {
     n = 255; // bright
   }
-  return Color3u(n, n, n);
+  return Color3u(n);
 }
 
 VertexArray Visualizer::buildMapArray() {

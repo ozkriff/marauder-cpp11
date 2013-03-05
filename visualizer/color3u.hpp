@@ -7,8 +7,9 @@
 
 class Color3u {
 public:
-  Color3u(GLubyte red = 255, GLubyte green = 255, GLubyte blue = 255);
-  Color3u(int red = 255, int green = 255, int blue = 255);
+  Color3u(GLubyte red, GLubyte green, GLubyte blue);
+  Color3u(GLubyte n);
+  Color3u(int red, int green, int blue);
 
   GLubyte red() const;
   GLubyte green() const;
