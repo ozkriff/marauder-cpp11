@@ -299,11 +299,11 @@ void Core::loadScenario() {
   {
     Json::Value mapFile = parseJsonFile(scenario["map"].asString());
     mMap = Map(JsonValueToV2i(mapFile["mapSize"]));
-    Json::Value tilesData = mapFile["tiles"];
+    Json::Value RowsOfTiles = mapFile["tiles"];
     int y = 0;
-    for (const Json::Value& row : tilesData) {
+    for (const Json::Value& rowOfTiles : RowsOfTiles) {
       int x = 0;
-      for (const Json::Value& tile : row) {
+      for (const Json::Value& tile : rowOfTiles) {
         V2i p(x, y);
         bool isObstacle = (tile.asString() == "obstacle");
         map().tile(p).obstacle = isObstacle;
