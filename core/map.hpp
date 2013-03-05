@@ -23,7 +23,7 @@ public:
 
   template <class Func>
   void forEachPos(Func f) {
-    for (V2i p = V2i(0, 0); isInboard(p); p = incV2i(p)) {
+    for (V2i p(0, 0); isInboard(p); p = incV2i(p)) {
       f(p);
     }
   }
