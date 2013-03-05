@@ -343,22 +343,22 @@ VertexArray Visualizer::buildPickingTilesArray() {
   return v;
 }
 
+Color3u Visualizer::fowColor(const V2i& position) {
+  int n;
+  if (core().map().tile(position).fow == 0) {
+    n = 180; // dark
+  } else {
+    n = 255; // bright
+  }
+  return Color3u(n, n, n);
+}
+
 VertexArray Visualizer::buildMapArray() {
-  // TODO: Move out here
-  auto calcFowColor = [this](const V2i& position) -> Color3u {
-    int n;
-    if (core().map().tile(position).fow == 0) {
-      n = 180; // dark
-    } else {
-      n = 255; // bright
-    }
-    return Color3u(n, n, n);
-  };
   VertexArray v;
   v.setTextureID(mFloorTexture);
   core().map().forEachPos([&](const V2i& p) {
     V2f pos = v2iToV2f(p);
-    Color3u color = calcFowColor(p);
+    Color3u color = fowColor(p);
     for (int i = 0; i < 6; ++i) {
       v.addVertex(
           pos + indexToHexVertex(i),

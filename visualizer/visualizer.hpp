@@ -88,6 +88,7 @@ private:
   void switchActiveTileType();
   void createNewUnitInActiveTile();
   VertexArray buildPickingTilesArray();
+  Color3u fowColor(const V2i& position);
   VertexArray buildMapArray();
   VertexArray buildObstaclesArray();
   VertexArray buildWalkableArray();
