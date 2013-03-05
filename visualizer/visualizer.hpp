@@ -103,8 +103,8 @@ private:
   void draw();
   void screenScenarioMainEvents();
   void logic();
-  V2f indexToCircleVertex(int count, int i);
-  V2f indexToHexVertex(int i);
+  V2f indexToCircleVertex(int count, int i) const;
+  V2f indexToHexVertex(int i) const;
   float aspectRatio() const;
 
   float tileSize() const;

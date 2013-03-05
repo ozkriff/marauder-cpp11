@@ -111,12 +111,12 @@ V2f Visualizer::v2iToV2f(const V2i& i) const {
   return v;
 }
 
-V2f Visualizer::indexToCircleVertex(int count, int i) {
+V2f Visualizer::indexToCircleVertex(int count, int i) const {
   float n = M_PI_2 + 2 * M_PI * i / count;
   return V2f(std::cos(n), std::sin(n)) * mHexEx;
 }
 
-V2f Visualizer::indexToHexVertex(int i) {
+V2f Visualizer::indexToHexVertex(int i) const {
   return indexToCircleVertex(6, i);
 }
 
