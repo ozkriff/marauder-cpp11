@@ -159,10 +159,10 @@ void Visualizer::processSDLEvent(const SDL_KeyboardEvent& e) {
     camera().rotateAroundZAxis(-15);
     break;
   case SDLK_w:
-    camera().zoomIn(10);
+    camera().zoomIn(1);
     break;
   case SDLK_s:
-    camera().zoomOut(10);
+    camera().zoomOut(1);
     break;
   case SDLK_UP:
     camera().move(0);
