@@ -194,7 +194,7 @@ void Core::cleanFow() {
 void Core::calculateFow() {
   assert(mCurrentPlayer);
   map().forEachPos([this](const V2i& p) {
-    for (auto* u : mUnits) {
+    for (const auto* u : mUnits) {
       int maxDist = u->type().rangeOfVision;
       bool isPlayerOk = (u->playerID() == mCurrentPlayer->id);
       bool isDistanceOk = (p.distance(u->position()) < maxDist);

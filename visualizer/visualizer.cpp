@@ -403,7 +403,7 @@ VertexArray Visualizer::buildObstaclesArray() {
 VertexArray Visualizer::buildWalkableArray() {
   VertexArray v(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
   core().map().forEachPos([&](const V2i& p) {
-    Tile& t = core().map().tile(p);
+    const Tile& t = core().map().tile(p);
     if (t.parent.value() != DirID::NONE && t.cost < 50) {
       V2i to = Dir::getNeighbourPos(p, t.parent);
       if (core().map().isInboard(to)) {
