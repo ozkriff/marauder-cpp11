@@ -516,16 +516,14 @@ void Visualizer::initVertexArrays() {
 }
 
 void Visualizer::createUnitNode(const Unit& unit) {
-  auto* node = new SceneNode();
-  node->mVertexArray = &mVaUnits[unit.type().id];
-  node->mPosition = v2iToV2f(unit.position());
-  node->mRotationAngle = dirToAngle(unit.direction());
-  mSceneManager.addNode(unit.id(), node);
-  {
-    auto* node2 = new SceneNode();
-    node2->mVertexArray = &(mVaUnitCircles.at(unit.playerID()));
-    node->mChildrens.push_back(node2);
-  }
+  auto* unitNode = new SceneNode();
+  unitNode->mVertexArray = &mVaUnits[unit.type().id];
+  unitNode->mPosition = v2iToV2f(unit.position());
+  unitNode->mRotationAngle = dirToAngle(unit.direction());
+  mSceneManager.addNode(unit.id(), unitNode);
+  auto* circleNode = new SceneNode();
+  circleNode->mVertexArray = &(mVaUnitCircles.at(unit.playerID()));
+  unitNode->mChildrens.push_back(circleNode);
 }
 
 VertexArray Visualizer::buildUnitCircleVertexArray(const Color& color) {
