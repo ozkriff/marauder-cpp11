@@ -33,7 +33,7 @@ Visualizer::Visualizer(Core& core)
     mActiveTilePos(0, 0),
     mIsRotatingCamera(false),
     mDone(false),
-    mEventVisualizer(nullptr),
+    mCurrentEventVisualizer(nullptr),
     mSceneManager()
 {
   SDL_Init(SDL_INIT_EVERYTHING);
@@ -48,9 +48,9 @@ Visualizer::Visualizer(Core& core)
 }
 
 Visualizer::~Visualizer() {
-  if (mEventVisualizer) {
-    delete mEventVisualizer;
-    mEventVisualizer = nullptr;
+  if (mCurrentEventVisualizer) {
+    delete mCurrentEventVisualizer;
+    mCurrentEventVisualizer = nullptr;
   }
   SDL_Quit();
 }
@@ -217,8 +217,8 @@ void Visualizer::draw() {
   drawMap();
   mSceneManager.draw();
   if (mMode == Mode::ShowEvent) {
-    assert(mEventVisualizer);
-    mEventVisualizer->draw();
+    assert(mCurrentEventVisualizer);
+    mCurrentEventVisualizer->draw();
   }
   if (core().isAnyUnitSelected()) {
     drawSelectedunitMarker();
@@ -413,14 +413,14 @@ EventView* basicConvertEventToEventView(const Event& event) {
 
 void Visualizer::screenScenarioMainEvents() {
   core().eventManager().switchToNextEvent();
-  if (mEventVisualizer) {
-    delete mEventVisualizer;
+  if (mCurrentEventVisualizer) {
+    delete mCurrentEventVisualizer;
   }
   // TODO: Rewrite this
   EventView* eventView = basicConvertEventToEventView(
       core().eventManager().currentEvent());
-  mEventVisualizer = newEventVisualizer(*this, *eventView);
-  assert(mEventVisualizer);
+  mCurrentEventVisualizer = newEventVisualizer(*this, *eventView);
+  assert(mCurrentEventVisualizer);
   mMode = Mode::ShowEvent;
 }
 
@@ -429,10 +429,10 @@ void Visualizer::logic() {
     screenScenarioMainEvents();
   }
   if (mMode == Mode::ShowEvent) {
-    if (mEventVisualizer->isFinished()) {
+    if (mCurrentEventVisualizer->isFinished()) {
       core().eventManager().applyCurrentEvent();
       mMode = Mode::Normal;
-      mEventVisualizer->end();
+      mCurrentEventVisualizer->end();
     }
   }
 }

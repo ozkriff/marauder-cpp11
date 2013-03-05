@@ -64,7 +64,7 @@ private:
   VertexArray mVaPick;
   std::vector<VertexArray> mVaUnitCircles;
   std::map<int, VertexArray> mVaUnits;
-  EventVisualizer* mEventVisualizer;
+  EventVisualizer* mCurrentEventVisualizer;
   SceneManager mSceneManager;
 
   void processSDLEvent(const SDL_MouseMotionEvent& e);
