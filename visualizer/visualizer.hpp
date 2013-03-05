@@ -108,24 +108,7 @@ private:
   float aspectRatio() const;
 
   float tileSize() const;
-  bool done() const;
-  SDL_Surface* screen();
-  Mode mode() const;
-  bool isRotatingCamera() const;
-  const V2i& winSize() const;
-  const V2i& activeTilePos() const;
   Camera& camera();
-  const V2i& mousePos() const;
-
-  void setVaWalkableMap(const VertexArray& va);
-  void setMode(Mode mode);
-  void setDone(bool done);
-  void setFloorTexture(int textureID);
-  void setWinSize(const V2i& winSize);
-  void setScreen(SDL_Surface* screen);
-  void setActiveTilePos(const V2i& activeTilePos);
-  void setMousePos(const V2i& mousePos);
-  void setIsRotatingCamera(bool isRotatingCamera);
 };
 
 #endif

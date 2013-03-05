@@ -37,10 +37,10 @@ Visualizer::Visualizer(Core& core)
     mSceneManager()
 {
   SDL_Init(SDL_INIT_EVERYTHING);
-  setScreen(SDL_SetVideoMode(winSize().x(), winSize().y(),
-      mBitsPerPixel, mSDLFlags));
+  mScreen = SDL_SetVideoMode(mWinSize.x(), mWinSize.y(),
+      mBitsPerPixel, mSDLFlags);
   initOpengl();
-  setFloorTexture(loadTexture(mPathToData + "floor.png"));
+  mFloorTexture = loadTexture(mPathToData + "floor.png");
   initCamera();
   loadUnitResources();
   initVertexArrays();
@@ -71,84 +71,20 @@ const SceneManager& Visualizer::sceneManager() const {
   return mSceneManager;
 }
 
-const V2i& Visualizer::winSize() const {
-  return mWinSize;
-}
-
-Visualizer::Mode Visualizer::mode() const {
-  return mMode;
-}
-
 Camera& Visualizer::camera() {
   return mCamera;
-}
-
-const V2i& Visualizer::activeTilePos() const {
-  return mActiveTilePos;
-}
-
-bool Visualizer::isRotatingCamera() const {
-  return mIsRotatingCamera;
-}
-
-const V2i& Visualizer::mousePos() const {
-  return mMousePos;
-}
-
-SDL_Surface* Visualizer::screen() {
-  return mScreen;
 }
 
 float Visualizer::tileSize() const {
   return mTileSize;
 }
 
-bool Visualizer::done() const {
-  return mDone;
-}
-
-void Visualizer::setDone(bool done) {
-  mDone = done;
-}
-
-void Visualizer::setWinSize(const V2i& winSize) {
-  mWinSize = winSize;
-}
-
-void Visualizer::setActiveTilePos(const V2i& activeTilePos) {
-  mActiveTilePos = activeTilePos;
-}
-
-void Visualizer::setMousePos(const V2i& mousePos) {
-  mMousePos = mousePos;
-}
-
-void Visualizer::setMode(Mode mode) {
-  mMode = mode;
-}
-
-void Visualizer::setIsRotatingCamera(bool isRotatingCamera) {
-  mIsRotatingCamera = isRotatingCamera;
-}
-
-void Visualizer::setFloorTexture(int textureID) {
-  mFloorTexture = textureID;
-}
-
-void Visualizer::setScreen(SDL_Surface* screen) {
-  mScreen = screen;
-}
-
-void Visualizer::setVaWalkableMap(const VertexArray& va) {
-  mVaWalkableMap = va;
-}
-
 void Visualizer::cleanWalkableMapArray() {
-  setVaWalkableMap(VertexArray());
+  mVaWalkableMap = VertexArray();
 }
 
 void Visualizer::rebuildWalkableMapArray() {
-  setVaWalkableMap(buildWalkableArray());
+  mVaWalkableMap = buildWalkableArray();
 }
 
 void Visualizer::rebuildMapArray() {
@@ -178,8 +114,8 @@ V2f Visualizer::indexToHexVertex(int i) {
 }
 
 float Visualizer::aspectRatio() const {
-  float x = winSize().x();
-  float y = winSize().y();
+  float x = mWinSize.x();
+  float y = mWinSize.y();
   return y / x;
 }
 
@@ -280,7 +216,7 @@ void Visualizer::draw() {
   camera().set();
   drawMap();
   mSceneManager.draw();
-  if (mode() == Mode::ShowEvent) {
+  if (mMode == Mode::ShowEvent) {
     assert(mEventVisualizer);
     mEventVisualizer->draw();
   }
@@ -293,7 +229,7 @@ void Visualizer::draw() {
 void Visualizer::processClickOnFriendlyUnit(Unit& unit) {
   core().setSelectedUnit(unit);
   core().pathfinder().fillMap(core().selectedUnit());
-  setVaWalkableMap(buildWalkableArray());
+  mVaWalkableMap = buildWalkableArray();
 }
 
 void Visualizer::processClickOnEnemyUnit(Unit& unit) {
@@ -317,29 +253,29 @@ void Visualizer::processClickOnUnit(Unit& unit) {
 void Visualizer::processClickOnEmptyTile(Tile& tile) {
   int actionPoints = core().selectedUnit().actionPoints();
   if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
-    if (core().map().tile(activeTilePos()).cost <= actionPoints) {
-      CommandMove cmd(core().selectedUnit().id(), activeTilePos());
+    if (core().map().tile(mActiveTilePos).cost <= actionPoints) {
+      CommandMove cmd(core().selectedUnit().id(), mActiveTilePos);
       core().doCommand(cmd);
     }
   }
 }
 
 void Visualizer::processClickOnTile() {
-  if (mode() != Mode::Normal) {
+  if (mMode != Mode::Normal) {
     return;
   }
-  if (core().isUnitAt(activeTilePos())) {
-    Unit& unit = core().unitAt(activeTilePos());
+  if (core().isUnitAt(mActiveTilePos)) {
+    Unit& unit = core().unitAt(mActiveTilePos);
     processClickOnUnit(unit);
   } else if (core().isAnyUnitSelected()) {
-    Tile& tile = core().map().tile(activeTilePos());
+    Tile& tile = core().map().tile(mActiveTilePos);
     processClickOnEmptyTile(tile);
   }
 }
 
 void Visualizer::processSDLEvent(const SDL_MouseMotionEvent& e) {
-  setMousePos(V2i(static_cast<int>(e.x), static_cast<int>(e.y)));
-  if (isRotatingCamera()) {
+  mMousePos = V2i(static_cast<int>(e.x), static_cast<int>(e.y));
+  if (mIsRotatingCamera) {
     camera().rotateAroundZAxis(-e.xrel);
     camera().rotateAroundXAxis(-e.yrel);
   }
@@ -354,7 +290,7 @@ void Visualizer::centerCameraOnSelectedUnit() {
 }
 
 void Visualizer::switchActiveTileType() {
-  Tile& t = core().map().tile(activeTilePos());
+  Tile& t = core().map().tile(mActiveTilePos);
   t.obstacle = !t.obstacle;
   mVaMap = buildMapArray();
   mVaObstacles = buildObstaclesArray();
@@ -368,7 +304,7 @@ void Visualizer::switchActiveTileType() {
 
 void Visualizer::createNewUnitInActiveTile() {
   core().addUnit(
-        activeTilePos(),
+        mActiveTilePos,
         core().currentPlayer().id,
         core().getUnitType("truck"),
         Dir(DirID::NE));
@@ -377,14 +313,14 @@ void Visualizer::createNewUnitInActiveTile() {
     mVaWalkableMap = buildWalkableArray();
   }
   rebuildMapArray();
-  createUnitNode(core().unitAt(activeTilePos()));
+  createUnitNode(core().unitAt(mActiveTilePos));
 }
 
 void Visualizer::processSDLEvent(const SDL_KeyboardEvent& e) {
   switch (e.keysym.sym) {
   case SDLK_ESCAPE:
   case SDLK_q:
-    setDone(true);
+    mDone = true;
     break;
   case SDLK_c:
     centerCameraOnSelectedUnit();
@@ -431,15 +367,15 @@ void Visualizer::processSDLEvent(const SDL_KeyboardEvent& e) {
 }
 
 void Visualizer::processSDLEvent(const SDL_ResizeEvent& e) {
-  setWinSize(V2i(e.w, e.h));
-  setScreen(SDL_SetVideoMode(winSize().x(), winSize().y(),
-      mBitsPerPixel, mSDLFlags));
+  mWinSize = V2i(e.w, e.h);
+  mScreen = SDL_SetVideoMode(mWinSize.x(), mWinSize.y(),
+      mBitsPerPixel, mSDLFlags);
   initOpengl();
 }
 
 void Visualizer::processSDLEventButtonUp(const SDL_MouseButtonEvent& e) {
   if (e.button == SDL_BUTTON_RIGHT) {
-    setIsRotatingCamera(false);
+    mIsRotatingCamera = false;
   }
   if (e.button == SDL_BUTTON_WHEELUP) {
     camera().zoomIn(1);
@@ -450,7 +386,7 @@ void Visualizer::processSDLEventButtonUp(const SDL_MouseButtonEvent& e) {
 
 void Visualizer::processSDLEventButtonDown(const SDL_MouseButtonEvent& e) {
   if (e.button == SDL_BUTTON_RIGHT) {
-    setIsRotatingCamera(true);
+    mIsRotatingCamera = true;
   } else if (e.button == SDL_BUTTON_LEFT) {
     processClickOnTile();
   }
@@ -485,17 +421,17 @@ void Visualizer::screenScenarioMainEvents() {
       core().eventManager().currentEvent());
   mEventVisualizer = newEventVisualizer(*this, *eventView);
   assert(mEventVisualizer);
-  setMode(Mode::ShowEvent);
+  mMode = Mode::ShowEvent;
 }
 
 void Visualizer::logic() {
-  while (mode() == Mode::Normal && core().eventManager().unshownEventsLeft()) {
+  while (mMode == Mode::Normal && core().eventManager().unshownEventsLeft()) {
     screenScenarioMainEvents();
   }
-  if (mode() == Mode::ShowEvent) {
+  if (mMode == Mode::ShowEvent) {
     if (mEventVisualizer->isFinished()) {
       core().eventManager().applyCurrentEvent();
-      setMode(Mode::Normal);
+      mMode = Mode::Normal;
       mEventVisualizer->end();
     }
   }
@@ -504,7 +440,7 @@ void Visualizer::logic() {
 void Visualizer::processSDLEvent(const SDL_Event& e) {
   switch (e.type) {
   case SDL_QUIT:
-    setDone(true);
+    mDone = true;
     break;
   case SDL_VIDEORESIZE:
     processSDLEvent(e.resize);
@@ -567,16 +503,16 @@ void Visualizer::drawForPicking() {
 }
 
 void Visualizer::scrollMap() {
-  const V2i& p = mousePos();
+  const V2i& p = mMousePos;
   int offset = 15;
   if (p.x() < offset) {
     camera().move(270);
-  } else if(p.x() > screen()->w - offset) {
+  } else if(p.x() > mScreen->w - offset) {
     camera().move(90);
   }
   if (p.y() < offset) {
     camera().move(0);
-  } else if(p.y() > screen()->h - offset) {
+  } else if(p.y() > mScreen->h - offset) {
     camera().move(180);
   }
 }
@@ -585,11 +521,11 @@ void Visualizer::pickTile() {
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   drawForPicking();
-  setActiveTilePos(pickTile(mMousePos));
+  mActiveTilePos = pickTile(mMousePos);
 }
 
 void Visualizer::mainloop() {
-  while (!done()) {
+  while (!mDone) {
     sdlEvents();
     logic();
     scrollMap();
@@ -605,7 +541,7 @@ void Visualizer::initOpengl() {
   SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  glViewport(0, 0, winSize().x(), winSize().y());
+  glViewport(0, 0, mWinSize.x(), mWinSize.y());
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   GLdouble left = 0.5;
