@@ -171,7 +171,7 @@ void Core::refreshUnits(int playerID) {
   }
 }
 
-const UnitType& Core::getUnitType(const std::string& name) const {
+const UnitType& Core::unitType(const std::string& name) const {
   assert(mUnitTypes.count(name) != 0);
   return mUnitTypes.at(name);
 }
@@ -321,7 +321,7 @@ void Core::loadScenario() {
         V2i position = JsonValueToV2i(unitInfo["position"]);
         std::string typeName = unitInfo["type"].asString();
         Dir direction(unitInfo["direction"].asInt());
-        addUnit(position, playerID, getUnitType(typeName), direction);
+        addUnit(position, playerID, unitType(typeName), direction);
       }
       ++playerID;
     }

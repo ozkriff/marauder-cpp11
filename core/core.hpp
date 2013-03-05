@@ -57,7 +57,7 @@ public:
       const Dir& dir);
   void refreshUnits(int playerID);
 
-  const UnitType& getUnitType(const std::string& name) const;
+  const UnitType& unitType(const std::string& name) const;
 
 private:
   Json::Value mConfig;
