@@ -6,7 +6,7 @@
 #include "core/core.hpp"
 #include "core/event.hpp"
 
-Event::Event(int id, EventTypeID type)
+Event::Event(int id, EventType type)
   : mType(type),
     mID(id)
 {
@@ -15,7 +15,7 @@ Event::Event(int id, EventTypeID type)
 Event::~Event() {
 }
 
-EventTypeID Event::type() const {
+EventType Event::type() const {
   return mType;
 }
 

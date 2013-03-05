@@ -7,7 +7,7 @@
 #include "core/player.hpp"
 
 EventEndTurn::EventEndTurn(int eventID, int oldPlayerID, int newPlayerID)
-  : Event(eventID, EventTypeID::EndTurn),
+  : Event(eventID, EventType::EndTurn),
     mOldID(oldPlayerID),
     mNewID(newPlayerID)
 {

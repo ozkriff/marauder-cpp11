@@ -405,11 +405,11 @@ namespace {
 // tmp func
 EventView* basicConvertEventToEventView(const Event& event) {
   switch (event.type()) {
-  case EventTypeID::Move:
+  case EventType::Move:
     return new EventMoveView(dynamic_cast<const EventMove&>(event));
-  case EventTypeID::EndTurn:
+  case EventType::EndTurn:
     return new EventEndTurnView(dynamic_cast<const EventEndTurn&>(event));
-  case EventTypeID::Attack:
+  case EventType::Attack:
     return new EventAttackView(dynamic_cast<const EventAttack&>(event));
   default:
     throw std::logic_error("default case!");

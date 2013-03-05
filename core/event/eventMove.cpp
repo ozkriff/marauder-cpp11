@@ -6,7 +6,7 @@
 #include "core/player.hpp"
 
 EventMove::EventMove(int id)
-  : Event(id, EventTypeID::Move),
+  : Event(id, EventType::Move),
     mUnitID(0),
     mCost(0)
 {

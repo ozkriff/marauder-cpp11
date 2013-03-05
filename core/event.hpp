@@ -5,7 +5,7 @@
 
 class Core;
 
-enum class EventTypeID {
+enum class EventType {
   Move,
   EndTurn,
   Attack
@@ -13,10 +13,10 @@ enum class EventTypeID {
 
 class Event {
 public:
-  Event(int id, EventTypeID type);
+  Event(int id, EventType type);
   virtual ~Event();
 
-  EventTypeID type() const;
+  EventType type() const;
   int id() const;
 
   virtual void apply(Core& core) const = 0;
@@ -24,7 +24,7 @@ public:
   virtual bool isVisible(const Core& core) const = 0;
 
 private:
-  EventTypeID mType;
+  EventType mType;
   int mID;
 };
 
