@@ -49,8 +49,8 @@ void EventAttackVisualizer::drawLineOfFire() {
   V2f from = visualizer().v2iToV2f(mAttacker.position());
   V2f to = visualizer().v2iToV2f(mVictim.position());
   VertexArray v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
-  appendV3f(&v.vertices, V3f(from, 0.2f));
-  appendV3f(&v.vertices, V3f(
+  v.addCoord(V3f(from, 0.2f));
+  v.addCoord(V3f(
       to.x() + (rnd(-30, 30) / 100.0f),
       to.y() + (rnd(-30, 30) / 100.0f),
       0));

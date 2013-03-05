@@ -21,23 +21,21 @@ public:
 
   void setTextureID(GLuint textureID);
 
+  void addColorRGB(int r, int g, int b);
+  void addColorRGB(GLubyte r, GLubyte g, GLubyte b);
+  void addTextureCoord(const V2f& vertex);
+  void addCoord(const V3f& vertex);
+
   void draw();
 
-  // TODO: make private
-  std::vector<float> vertices;
-  std::vector<float> textureCoordinates;
-  std::vector<GLubyte> colors;
-
 private:
+  std::vector<float> mVertices;
+  std::vector<float> mTextureCoordinates;
+  std::vector<GLubyte> mColors;
   GLuint mTextureID;
   PrimitiveType mPrimitiveType;
   Color mColor;
   bool mHaveColor;
 };
-
-void appendV2f(std::vector<float>* vertices, const V2f& vertex);
-void appendV3f(std::vector<float>* vertices, const V3f& vertex);
-void appendRGB(std::vector<GLubyte>* colors, GLubyte r, GLubyte g, GLubyte b);
-void appendRGB(std::vector<GLubyte>* colors, int r, int g, int b);
 
 #endif

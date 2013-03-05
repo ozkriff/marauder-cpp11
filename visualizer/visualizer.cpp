@@ -329,12 +329,12 @@ VertexArray Visualizer::buildPickingTilesArray() {
   core().map().forEachPos([&](const V2i& p) {
     V2f pos = v2iToV2f(p);
     for (int i = 0; i < 6; ++i) {
-      appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i)));
-      appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i + 1)));
-      appendV3f(&v.vertices, V3f(pos));
-      appendRGB(&v.colors, p.x(), p.y(), 1);
-      appendRGB(&v.colors, p.x(), p.y(), 1);
-      appendRGB(&v.colors, p.x(), p.y(), 1);
+      v.addCoord(V3f(pos + indexToHexVertex(i)));
+      v.addCoord(V3f(pos + indexToHexVertex(i + 1)));
+      v.addCoord(V3f(pos));
+      v.addColorRGB(p.x(), p.y(), 1);
+      v.addColorRGB(p.x(), p.y(), 1);
+      v.addColorRGB(p.x(), p.y(), 1);
     }
   });
   return v;
@@ -346,17 +346,17 @@ VertexArray Visualizer::buildMapArray() {
   core().map().forEachPos([&](const V2i& p) {
     V2f pos = v2iToV2f(p);
     for (int i = 0; i < 6; ++i) {
-      appendV3f(&v.vertices, pos + indexToHexVertex(i));
-      appendV3f(&v.vertices, pos + indexToHexVertex(i + 1));
-      appendV3f(&v.vertices, pos);
-      appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
-      appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
-      appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
+      v.addCoord(pos + indexToHexVertex(i));
+      v.addCoord(pos + indexToHexVertex(i + 1));
+      v.addCoord(pos);
+      v.addTextureCoord(V2f(0.0f, 0.0f));
+      v.addTextureCoord(V2f(1.0f, 0.0f));
+      v.addTextureCoord(V2f(0.5f, 0.5f));
       for (int tmp = 0; tmp < 3; ++tmp) {
         if (core().map().tile(p).fow == 0) {
-          appendRGB(&v.colors, 180, 180, 180);
+          v.addColorRGB(180, 180, 180);
         } else {
-          appendRGB(&v.colors, 255, 255, 255);
+          v.addColorRGB(255, 255, 255);
         }
       }
     }
@@ -371,12 +371,12 @@ VertexArray Visualizer::buildObstaclesArray() {
     if (core().map().tile(p).obstacle) {
       V2f pos = v2iToV2f(p);
       for (int i = 0; i < 6; ++i) {
-        appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i) * 0.7f, 0.01f));
-        appendV3f(&v.vertices, V3f(pos + indexToHexVertex(i + 1) * 0.7f, 0.01f));
-        appendV3f(&v.vertices, V3f(pos, 0.01f));
-        appendV2f(&v.textureCoordinates, V2f(0.0f, 0.0f));
-        appendV2f(&v.textureCoordinates, V2f(1.0f, 0.0f));
-        appendV2f(&v.textureCoordinates, V2f(0.5f, 0.5f));
+        v.addCoord(V3f(pos + indexToHexVertex(i) * 0.7f, 0.01f));
+        v.addCoord(V3f(pos + indexToHexVertex(i + 1) * 0.7f, 0.01f));
+        v.addCoord(V3f(pos, 0.01f));
+        v.addTextureCoord(V2f(0.0f, 0.0f));
+        v.addTextureCoord(V2f(1.0f, 0.0f));
+        v.addTextureCoord(V2f(0.5f, 0.5f));
       }
     }
   });
@@ -392,8 +392,8 @@ VertexArray Visualizer::buildWalkableArray() {
       if (core().map().isInboard(to)) {
         V2f fromF = v2iToV2f(p);
         V2f toF = v2iToV2f(to);
-        appendV3f(&v.vertices, V3f(fromF, 0.01f));
-        appendV3f(&v.vertices, V3f(toF, 0.01f));
+        v.addCoord(V3f(fromF, 0.01f));
+        v.addCoord(V3f(toF, 0.01f));
       }
     }
   });
@@ -518,9 +518,9 @@ VertexArray Visualizer::buildUnitCircleVertexArray(const Color& color) {
   for (int i = 0; i < verticesCount; ++i) {
     const float k = mHexIn * 2.0f; // resize coefficient
     const float h = 0.01f;
-    appendV3f(&v.vertices, V3f(
+    v.addCoord(V3f(
         indexToCircleVertex(verticesCount, i) * k, h));
-    appendV3f(&v.vertices, V3f(
+    v.addCoord(V3f(
         indexToCircleVertex(verticesCount, i + 1) * k, h));
   }
   return v;
@@ -559,8 +559,8 @@ void Visualizer::drawSelectedunitMarker() {
   V2f p = v2iToV2f(u.position());
   VertexArray v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
   float sn = std::sin(SDL_GetTicks() / 100.0f) / 4.0f;
-  appendV3f(&v.vertices, V3f(p, sn + tileSize()));
-  appendV3f(&v.vertices, V3f(p, sn + tileSize() * 1.5f));
+  v.addCoord(V3f(p, sn + tileSize()));
+  v.addCoord(V3f(p, sn + tileSize() * 1.5f));
   glLineWidth(2);
   v.draw();
   glLineWidth(1);
