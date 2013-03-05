@@ -26,8 +26,10 @@ public:
   std::vector<float> textureCoordinates;
   std::vector<GLubyte> colors;
 
-  PrimitiveType mPrimitiveType;
   GLuint mTextureID;
+
+private:
+  PrimitiveType mPrimitiveType;
   Color mColor;
   bool mHaveColor;
 };

@@ -8,8 +8,8 @@ VertexArray::VertexArray(PrimitiveType primitiveType)
     : vertices(),
       textureCoordinates(),
       colors(),
-      mPrimitiveType(primitiveType),
       mTextureID(0),
+      mPrimitiveType(primitiveType),
       mColor(1.0f, 1.0f, 1.0f),
       mHaveColor(false)
 {
@@ -19,8 +19,8 @@ VertexArray::VertexArray(const Color& color, PrimitiveType primitiveType)
     : vertices(),
       textureCoordinates(),
       colors(),
-      mPrimitiveType(primitiveType),
       mTextureID(0),
+      mPrimitiveType(primitiveType),
       mColor(color),
       mHaveColor(true)
 {

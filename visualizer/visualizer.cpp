@@ -513,9 +513,7 @@ void Visualizer::createUnitNode(const Unit& unit) {
 }
 
 VertexArray Visualizer::buildUnitCircleVertexArray(const Color& color) {
-  VertexArray v(PrimitiveType::Lines);
-  v.mHaveColor = true;
-  v.mColor = color;
+  VertexArray v(color, PrimitiveType::Lines);
   const int verticesCount = 12;
   for (int i = 0; i < verticesCount; ++i) {
     const float k = mHexIn * 2.0f; // resize coefficient
