@@ -588,7 +588,7 @@ void Visualizer::initVertexArrays() {
   mVaPick = buildPickingTilesArray();
   mVaMap = buildMapArray();
   mVaObstacles = buildObstaclesArray();
-  buildUnitCirclesVertexArrays();
+  buildUnitCircles();
 }
 
 void Visualizer::createUnitNode(const Unit& unit) {
@@ -604,26 +604,30 @@ void Visualizer::createUnitNode(const Unit& unit) {
   }
 }
 
-void Visualizer::buildUnitCirclesVertexArrays(){
-    std::vector<Color> colors = {
-      Color(1.0f, 0.0f, 0.0f),
-      Color(0.0f, 0.0f, 1.0f)
-    };
-    for (const Color& color : colors) {
-      VertexArray v(PrimitiveType::Lines);
-      v.mHaveColor = true;
-      v.mColor = color;
-      const int verticesCount = 12;
-      for (int i = 0; i < verticesCount; ++i) {
-        const float k = mHexIn * 2.0f; // resize koefficient
-        const float h = 0.01f;
-        appendV3f(&v.vertices, V3f(
-            indexToCircleVertex(verticesCount, i) * k, h));
-        appendV3f(&v.vertices, V3f(
-            indexToCircleVertex(verticesCount, i + 1) * k, h));
-      }
-      mVaUnitCircles.push_back(v);
-    }
+VertexArray Visualizer::buildUnitCircleVertexArray(const Color& color) {
+  VertexArray v(PrimitiveType::Lines);
+  v.mHaveColor = true;
+  v.mColor = color;
+  const int verticesCount = 12;
+  for (int i = 0; i < verticesCount; ++i) {
+    const float k = mHexIn * 2.0f; // resize coefficient
+    const float h = 0.01f;
+    appendV3f(&v.vertices, V3f(
+        indexToCircleVertex(verticesCount, i) * k, h));
+    appendV3f(&v.vertices, V3f(
+        indexToCircleVertex(verticesCount, i + 1) * k, h));
+  }
+  return v;
+}
+
+void Visualizer::buildUnitCircles(){
+  std::vector<Color> colors = {
+    Color(1.0f, 0.0f, 0.0f),
+    Color(0.0f, 0.0f, 1.0f)
+  };
+  for (const Color& color : colors) {
+    mVaUnitCircles.push_back(buildUnitCircleVertexArray(color));
+  }
 }
 
 void Visualizer::loadUnitResources() {

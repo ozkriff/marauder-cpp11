@@ -100,7 +100,8 @@ private:
   void initCamera();
   void initVertexArrays();
   void createUnitNode(const Unit& unit);
-  void buildUnitCirclesVertexArrays();
+  VertexArray buildUnitCircleVertexArray(const Color& color);
+  void buildUnitCircles();
   void loadUnitResources();
   void drawMap();
   void drawSelectedunitMarker();
