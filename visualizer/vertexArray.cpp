@@ -5,24 +5,24 @@
 #include "visualizer/vertexArray.hpp"
 
 VertexArray::VertexArray(PrimitiveType primitiveType)
-    : mVertices(),
-      mTextureCoordinates(),
-      mColors(),
-      mTextureID(0),
-      mPrimitiveType(primitiveType),
-      mColor(1.0f, 1.0f, 1.0f),
-      mHaveColor(false)
+  : mVertices(),
+    mTextureCoordinates(),
+    mColors(),
+    mTextureID(0),
+    mPrimitiveType(primitiveType),
+    mColor(1.0f, 1.0f, 1.0f),
+    mHaveColor(false)
 {
 }
 
 VertexArray::VertexArray(const Color& color, PrimitiveType primitiveType)
-    : mVertices(),
-      mTextureCoordinates(),
-      mColors(),
-      mTextureID(0),
-      mPrimitiveType(primitiveType),
-      mColor(color),
-      mHaveColor(true)
+  : mVertices(),
+    mTextureCoordinates(),
+    mColors(),
+    mTextureID(0),
+    mPrimitiveType(primitiveType),
+    mColor(color),
+    mHaveColor(true)
 {
 }
 
