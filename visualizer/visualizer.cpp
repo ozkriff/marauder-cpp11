@@ -327,17 +327,18 @@ void Visualizer::createNewUnitInActiveTile() {
 VertexArray Visualizer::buildPickingTilesArray() {
   VertexArray v;
   core().map().forEachPos([&](const V2i& p) {
+    Color3u color(p.x(), p.y(), 1);
     V2f pos = v2iToV2f(p);
     for (int i = 0; i < 6; ++i) {
       v.addVertex(
           V3f(pos + indexToHexVertex(i)),
-          Color3u(p.x(), p.y(), 1));
+          color);
       v.addVertex(
           V3f(pos + indexToHexVertex(i + 1)),
-          Color3u(p.x(), p.y(), 1));
+          color);
       v.addVertex(
           V3f(pos),
-          Color3u(p.x(), p.y(), 1));
+          color);
     }
   });
   return v;
