@@ -123,10 +123,3 @@ void VertexArray::draw() {
     }
   }
 }
-
-void appendV3f(std::vector<float>* vertices, const V3f& vertex) {
-  assert(vertices);
-  vertices->push_back(vertex.x());
-  vertices->push_back(vertex.y());
-  vertices->push_back(vertex.z());
-}
