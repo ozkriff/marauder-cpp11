@@ -17,11 +17,6 @@ class EventVisualizer;
 
 class Visualizer {
 public:
-  enum class Mode {
-    Normal,
-    ShowEvent
-  };
-
   Visualizer(Core& core);
   ~Visualizer();
 
@@ -45,6 +40,11 @@ public:
   void recreateUnitSceneNodes();
 
 private:
+  enum class Mode {
+    Normal,
+    ShowEvent
+  };
+
   Core& mCore;
   Json::Value mConfig;
   std::string mPathToData;
