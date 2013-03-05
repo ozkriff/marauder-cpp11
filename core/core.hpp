@@ -78,8 +78,7 @@ private:
   void initUnitTypes();
   UnitType parseUnitTypeInfo(const Json::Value& unitTypeInfo) const;
   int getNewUnitID() const;
-  void createLocalHuman(int id);
-  void initLocalPlayers(std::vector<int> unitIDs);
+  void createLocalHumanPlayer(int id);
   void loadScenario();
 };
 

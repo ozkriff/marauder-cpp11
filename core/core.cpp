@@ -149,18 +149,11 @@ void Core::command(const CommandEndTurn& cmd) {
   eventManager().addEvent(e);
 }
 
-void Core::createLocalHuman(int id) {
+void Core::createLocalHumanPlayer(int id) {
   auto* p = new Player;
   mPlayers.push_back(p);
   p->id = id;
   p->lastSeenEventID = HAVE_NOT_SEEN_ANY_EVENTS;
-}
-
-void Core::initLocalPlayers(std::vector<int> unitIDs) {
-  for (int id : unitIDs) {
-    createLocalHuman(id);
-  }
-  mCurrentPlayer = mPlayers.back();
 }
 
 void Core::refreshUnits(int playerID) {
@@ -289,11 +282,10 @@ void Core::loadScenario() {
   // players
   {
     int playersCount = scenario["playersCount"].asInt();
-    std::vector<int> playerIDs;
-    for (int i = 0; i < playersCount; ++i) {
-      playerIDs.push_back(i);
+    for (int id = 0; id < playersCount; ++id) {
+      createLocalHumanPlayer(id);
     }
-    initLocalPlayers(playerIDs);
+    mCurrentPlayer = mPlayers.back(); // Important!
   }
   // map
   {
