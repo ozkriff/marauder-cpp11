@@ -43,11 +43,11 @@ EventAttackView::~EventAttackView() {
 }
 
 int EventAttackView::victimID() const {
-  return mAttackerID;
+  return mVictimID;
 }
 
 int EventAttackView::attackerID() const {
-  return mVictimID;
+  return mAttackerID;
 }
 
 EventEndTurnView::EventEndTurnView(const EventEndTurn& event)
