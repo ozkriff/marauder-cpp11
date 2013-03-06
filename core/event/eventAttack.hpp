@@ -5,6 +5,7 @@
 
 #include <vector>
 #include "core/event.hpp"
+#include "core/unit.hpp"
 
 class Unit;
 class Core;
@@ -14,8 +15,8 @@ public:
   EventAttack();
   virtual ~EventAttack();
 
-  int victimID() const;
-  int attackerID() const;
+  UnitID victimID() const;
+  UnitID attackerID() const;
 
   virtual void apply(Core& core) const;
   virtual bool isVisible(const Core& core) const;
@@ -24,8 +25,8 @@ public:
       const Core& core, const Unit& attacker, const Unit& victim);
 
 private:
-  int mAttackerID;
-  int mVictimID;
+  UnitID mAttackerID;
+  UnitID mVictimID;
 };
 
 #endif

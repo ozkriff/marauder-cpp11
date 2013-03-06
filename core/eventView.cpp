@@ -4,6 +4,7 @@
 #include "core/event/eventMove.hpp"
 #include "core/event/eventAttack.hpp"
 #include "core/event/eventEndTurn.hpp"
+#include "core/unit.hpp"
 
 EventView::EventView(EventViewType type)
   : mType(type)

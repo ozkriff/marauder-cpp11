@@ -7,6 +7,7 @@
 #include <vector>
 #include "core/v2i.hpp"
 #include "core/dir.hpp"
+#include "core/unit.hpp"
 
 class EventAttack;
 class EventMove;
@@ -50,11 +51,11 @@ public:
   EventAttackView(const EventAttack& event);
   virtual ~EventAttackView();
 
-  int victimID() const;
-  int attackerID() const;
+  UnitID victimID() const;
+  UnitID attackerID() const;
 
-  int mAttackerID;
-  int mVictimID;
+  UnitID mAttackerID;
+  UnitID mVictimID;
 };
 
 class EventEndTurnView : public EventView {
@@ -77,10 +78,10 @@ public:
   EventMoveView(const EventMove& event);
   virtual ~EventMoveView();
 
-  int unitID() const;
+  UnitID unitID() const;
   const std::vector<V2i>& path() const;
 
-  int mUnitID;
+  UnitID mUnitID;
   std::vector<V2i> mPath;
 };
 

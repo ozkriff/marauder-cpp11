@@ -2,7 +2,7 @@
 
 #include "core/command/commandAttack.hpp"
 
-CommandAttack::CommandAttack(int attackerID, int victimID)
+CommandAttack::CommandAttack(UnitID attackerID, UnitID victimID)
   : Command(CommandType::Attack),
     mAttackerID(attackerID),
     mVictimID(victimID)
@@ -11,10 +11,10 @@ CommandAttack::CommandAttack(int attackerID, int victimID)
 CommandAttack::~CommandAttack() {
 }
 
-int CommandAttack::attackerID() const {
+UnitID CommandAttack::attackerID() const {
   return mAttackerID;
 }
 
-int CommandAttack::victimID() const{
+UnitID CommandAttack::victimID() const{
   return mVictimID;
 }

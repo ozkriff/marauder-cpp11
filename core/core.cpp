@@ -253,7 +253,7 @@ bool Core::isUnitAt(const V2i& pos) const {
 #endif
 }
 
-Unit& Core::id2unit(int id) {
+Unit& Core::id2unit(UnitID id) {
   for (auto* u : mUnits) {
     if (u->id() == id) {
       return *u;
@@ -292,7 +292,7 @@ UnitType Core::parseUnitTypeInfo(const Json::Value& unitTypeInfo) const {
   return unitType;
 }
 
-int Core::getNewUnitID() const {
+UnitID Core::getNewUnitID() const {
   if (!mUnits.empty()) {
     auto* lastUnit = mUnits.back();
     return lastUnit->id() + 1;

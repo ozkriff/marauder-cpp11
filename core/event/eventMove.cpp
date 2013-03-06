@@ -15,7 +15,7 @@ EventMove::EventMove()
 EventMove::~EventMove() {
 }
 
-int EventMove::unitID() const {
+UnitID EventMove::unitID() const {
   return mUnitID;
 }
 

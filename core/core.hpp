@@ -50,7 +50,7 @@ public:
 
   Unit& unitAt(const V2i& pos);
   bool isUnitAt(const V2i& pos) const;
-  Unit& id2unit(int id);
+  Unit& id2unit(UnitID id);
   void addUnit(
       const V2i& p,
       PlayerID playerID,
@@ -83,7 +83,7 @@ private:
   EventView* eventToEventView(const Event& event);
   void initUnitTypes();
   UnitType parseUnitTypeInfo(const Json::Value& unitTypeInfo) const;
-  int getNewUnitID() const;
+  UnitID getNewUnitID() const;
   void createLocalHumanPlayer(int id);
   void loadScenario();
 };

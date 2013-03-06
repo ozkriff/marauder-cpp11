@@ -4,18 +4,19 @@
 #define CORE__COMMAND__COMMAND_ATTACK_HPP
 
 #include "core/command.hpp"
+#include "core/unit.hpp"
 
 class CommandAttack : public Command {
 public:
-  CommandAttack(int attackerID, int victimID);
+  CommandAttack(UnitID attackerID, UnitID victimID);
   virtual ~CommandAttack();
 
-  int attackerID() const;
-  int victimID() const;
+  UnitID attackerID() const;
+  UnitID victimID() const;
 
 private:
-  int mAttackerID;
-  int mVictimID;
+  UnitID mAttackerID;
+  UnitID mVictimID;
 };
 
 #endif

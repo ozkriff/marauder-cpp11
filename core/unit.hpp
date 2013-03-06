@@ -9,13 +9,15 @@
 
 class UnitType;
 
+typedef int UnitID;
+
 class Unit {
 public:
-  Unit(int id, PlayerID playerID, const UnitType& type);
+  Unit(UnitID id, PlayerID playerID, const UnitType& type);
   ~Unit();
 
   const UnitType& type() const;
-  int id() const;
+  UnitID id() const;
   PlayerID playerID() const;
   const Dir& direction() const;
   int actionPoints() const;
@@ -28,7 +30,7 @@ public:
 
 private:
   const UnitType& mType;
-  int mID;
+  UnitID mID;
   PlayerID mPlayerID;
   Dir mDirection;
   int mActionPoints;

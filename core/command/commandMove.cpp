@@ -2,7 +2,7 @@
 
 #include "core/command/commandMove.hpp"
 
-CommandMove::CommandMove(int unitID, V2i destination)
+CommandMove::CommandMove(UnitID unitID, V2i destination)
   : Command(CommandType::Move),
     mUnitID(unitID),
     mDestination(destination)
@@ -11,7 +11,7 @@ CommandMove::CommandMove(int unitID, V2i destination)
 CommandMove::~CommandMove() {
 }
 
-int CommandMove::unitID() const {
+UnitID CommandMove::unitID() const {
   return mUnitID;
 }
 

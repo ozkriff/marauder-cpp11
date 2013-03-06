@@ -7,6 +7,7 @@
 #include "core/v2i.hpp"
 #include "core/dir.hpp"
 #include "core/event.hpp"
+#include "core/unit.hpp"
 
 class Unit;
 class Core;
@@ -16,7 +17,7 @@ public:
   EventMove();
   virtual ~EventMove();
 
-  int unitID() const;
+  UnitID unitID() const;
   const std::vector<V2i>& path() const;
 
   virtual void apply(Core& core) const;
@@ -26,7 +27,7 @@ public:
       const Core& core, const Unit& u, const V2i& destination);
 
 private:
-  int mUnitID;
+  UnitID mUnitID;
   std::vector<V2i> mPath;
   int mCost;
   Dir mInitialDirection;
