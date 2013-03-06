@@ -84,7 +84,7 @@ private:
   void initUnitTypes();
   UnitType parseUnitTypeInfo(const Json::Value& unitTypeInfo) const;
   UnitID getNewUnitID() const;
-  void createLocalHumanPlayer(int id);
+  void createLocalHumanPlayer(PlayerID id);
   void loadScenario();
 };
 

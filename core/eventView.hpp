@@ -63,8 +63,8 @@ public:
   EventEndTurnView(const EventEndTurn& event);
   virtual ~EventEndTurnView();
 
-  int mOldID;
-  int mNewID;
+  PlayerID mOldID;
+  PlayerID mNewID;
 };
 
 class EventBeginTurnView : public EventView {

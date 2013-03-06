@@ -170,7 +170,7 @@ void Core::command(const CommandEndTurn& cmd) {
   eventManager().addEvent(e);
 }
 
-void Core::createLocalHumanPlayer(int id) {
+void Core::createLocalHumanPlayer(PlayerID id) {
   auto* p = new Player;
   mPlayers.push_back(p);
   p->id = id;
@@ -320,7 +320,7 @@ void Core::loadScenario() {
   // players
   {
     int playersCount = scenario["playersCount"].asInt();
-    for (int id = 0; id < playersCount; ++id) {
+    for (PlayerID id = 0; id < playersCount; ++id) {
       createLocalHumanPlayer(id);
     }
     mCurrentPlayer = mPlayers.back(); // Important!

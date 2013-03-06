@@ -600,7 +600,7 @@ void Visualizer::draw() {
 
 void Visualizer::logic() {
   if (mMode == Mode::Normal) {
-    int id = core().currentPlayer().id;
+    PlayerID id = core().currentPlayer().id;
     std::list<EventView*>& eventViewList = core().eventViewList(id);
     if (!eventViewList.empty()) {
       const EventView& eventView = *eventViewList.front(); // TODO: fix memory leak
