@@ -3,26 +3,6 @@
 #ifndef CORE__MISC_HPP
 #define CORE__MISC_HPP
 
-#include <cassert>
-#include <list>
-#include <string>
-
-// TODO: Rewrite :(
-template <class T>
-T* getNext(const std::list<T*> &list, const T* node) {
-  assert(node);
-  for (auto it = list.begin(); it != list.end(); ++it) {
-    if (*it == node) {
-      ++it;
-      if (it != list.end()) {
-        return *it;
-      }
-      return nullptr;
-    }
-  }
-  return nullptr;
-}
-
 #define UNUSED(x) ((void)x)
 
 #endif
