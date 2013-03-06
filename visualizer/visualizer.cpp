@@ -49,12 +49,12 @@ Color3u fowColor(const Map& map, const V2i& position) {
 }
 
 VertexArray buildMapArray(Visualizer& visualizer, GLuint textureID) {
-  Core& core = visualizer.core();
+  Map& map = visualizer.core().map();
   VertexArray v;
   v.setTextureID(textureID);
-  core.map().forEachPos([&](const V2i& p) {
+  map.forEachPos([&](const V2i& p) {
     V2f pos = visualizer.v2iToV2f(p);
-    Color3u color = fowColor(core.map(), p);
+    Color3u color = fowColor(map, p);
     for (int i = 0; i < 6; ++i) {
       v.addVertex(
           pos + visualizer.indexToHexVertex(i),
@@ -74,11 +74,11 @@ VertexArray buildMapArray(Visualizer& visualizer, GLuint textureID) {
 }
 
 VertexArray buildObstaclesArray(Visualizer& visualizer, GLuint textureID) {
-  Core& core = visualizer.core();
+  Map& map = visualizer.core().map();
   VertexArray v(Color(0.4f, 0.1f, 0.0f));
   v.setTextureID(textureID);
-  core.map().forEachPos([&](const V2i& p) {
-    if (core.map().tile(p).obstacle) {
+  map.forEachPos([&](const V2i& p) {
+    if (map.tile(p).obstacle) {
       V2f pos = visualizer.v2iToV2f(p);
       for (int i = 0; i < 6; ++i) {
         v.addVertex(
@@ -113,9 +113,9 @@ VertexArray buildUnitCircleVertexArray(
 }
 
 VertexArray buildPickingTilesArray(Visualizer& visualizer) {
-  Core& core = visualizer.core();
+  Map& map = visualizer.core().map();
   VertexArray v;
-  core.map().forEachPos([&](const V2i& p) {
+  map.forEachPos([&](const V2i& p) {
     Color3u color(p.x(), p.y(), 1);
     V2f pos = visualizer.v2iToV2f(p);
     for (int i = 0; i < 6; ++i) {
