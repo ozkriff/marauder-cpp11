@@ -11,14 +11,13 @@ class Core;
 
 class EventAttack : public Event {
 public:
-  EventAttack(int id);
+  EventAttack();
   virtual ~EventAttack();
 
   int victimID() const;
   int attackerID() const;
 
   virtual void apply(Core& core) const;
-  virtual void undo(Core& core) const;
   virtual bool isVisible(const Core& core) const;
 
   static EventAttack* generate(

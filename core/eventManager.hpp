@@ -13,28 +13,13 @@ public:
   EventManager(Core& core);
   ~EventManager();
 
-  const Event& currentEvent() const;
-
-  void switchToNextEvent();
   void addEvent(Event* e);
 
-  bool unshownEventsLeft();
-  void applyCurrentEvent();
-  void undoUnshownEvents();
-  int getNewEventID() const;
+  bool isEmpty();
+  Event* popEvent();
 
 private:
-  Core& mCore;
-  std::list<Event*> mEvents;
-  Event* mCurrentEvent;
-
-  Event* getNextEvent();
-  void applyEvent(const Event& e);
-  void applyInvisibleEvents();
-  bool isEventVisible(const Event& e) const;
-  const Event* getLastSeenEventNode();
-  void event2log(const Event& e);
-  void sendEvent(const Event& e);
+  std::list<Event*> mNewEvents;
 };
 
 #endif

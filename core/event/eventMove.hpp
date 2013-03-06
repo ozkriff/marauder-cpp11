@@ -13,14 +13,13 @@ class Core;
 
 class EventMove : public Event {
 public:
-  EventMove(int id);
+  EventMove();
   virtual ~EventMove();
 
   int unitID() const;
   const std::vector<V2i>& path() const;
 
   virtual void apply(Core& core) const;
-  virtual void undo(Core& core) const;
   virtual bool isVisible(const Core& core) const;
 
   static EventMove* generate(

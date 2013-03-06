@@ -35,8 +35,7 @@ Visualizer::Visualizer(Core& core)
     mActiveTilePos(0, 0),
     mIsRotatingCamera(false),
     mDone(false),
-    mCurrentEventVisualizer(nullptr),
-    mSceneManager()
+    mCurrentEventVisualizer(nullptr)
 {
   SDL_Init(SDL_INIT_EVERYTHING);
   mScreen = SDL_SetVideoMode(mWinSize.x(), mWinSize.y(),
@@ -46,7 +45,11 @@ Visualizer::Visualizer(Core& core)
   initCamera();
   loadUnitResources();
   initVertexArrays();
-  recreateUnitSceneNodes();
+  // TODO: Move to createSceneManagerForEachPlayer()
+  for (const Player* player : core().players()) {
+    mSceneManagers[player->id] = SceneManager();
+  }
+  createUnitSceneNodes();
 }
 
 Visualizer::~Visualizer() {
@@ -66,11 +69,11 @@ const Core& Visualizer::core() const {
 }
 
 SceneManager& Visualizer::sceneManager() {
-  return mSceneManager;
+  return mSceneManagers.at(core().currentPlayer().id);
 }
 
 const SceneManager& Visualizer::sceneManager() const {
-  return mSceneManager;
+  return mSceneManagers.at(core().currentPlayer().id);
 }
 
 void Visualizer::cleanWalkableMapArray() {
@@ -111,16 +114,9 @@ float Visualizer::tileSize() const {
   return mTileSize;
 }
 
-void Visualizer::recreateUnitSceneNodes() {
-  for (auto& pair : mSceneManager.nodes()) {
-    SceneNode* node = pair.second;
-    assert(node);
-    delete node;
-  }
-  mSceneManager.nodes().clear();
-  for (const Unit* pUnit : core().units()) {
-    const Unit& unit = *pUnit;
-    createUnitNode(unit);
+void Visualizer::createUnitSceneNodes() {
+  for (const Unit* unit : core().units()) {
+    createUnitNode(*unit);
   }
 }
 
@@ -519,14 +515,17 @@ void Visualizer::initVertexArrays() {
 }
 
 void Visualizer::createUnitNode(const Unit& unit) {
-  auto* unitNode = new SceneNode();
-  unitNode->mVertexArray = &mVaUnits[unit.type().id];
-  unitNode->mPosition = v2iToV2f(unit.position());
-  unitNode->mRotationAngle = dirToAngle(unit.direction());
-  mSceneManager.addNode(unit.id(), unitNode);
-  auto* circleNode = new SceneNode();
-  circleNode->mVertexArray = &(mVaUnitCircles.at(unit.playerID()));
-  unitNode->mChildrens.push_back(circleNode);
+  for (const Player* player : core().players()) {
+    auto& sm = mSceneManagers.at(player->id); // shortcut
+    auto* unitNode = new SceneNode();
+    unitNode->mVertexArray = &mVaUnits[unit.type().id];
+    unitNode->mPosition = v2iToV2f(unit.position());
+    unitNode->mRotationAngle = dirToAngle(unit.direction());
+    sm.addNode(unit.id(), unitNode);
+    auto* circleNode = new SceneNode();
+    circleNode->mVertexArray = &(mVaUnitCircles.at(unit.playerID()));
+    unitNode->mChildrens.push_back(circleNode);
+  }
 }
 
 VertexArray Visualizer::buildUnitCircleVertexArray(const Color& color) {
@@ -589,7 +588,7 @@ void Visualizer::draw() {
   glLoadIdentity();
   camera().set();
   drawMap();
-  mSceneManager.draw();
+  sceneManager().draw();
   if (mMode == Mode::ShowEvent) {
     currentEventVisualizer().draw();
   }
@@ -599,42 +598,24 @@ void Visualizer::draw() {
   SDL_GL_SwapBuffers();
 }
 
-// tmp func
-// TODO: delete me!
-EventView* Visualizer::basicConvertEventToEventView(const Event& event) const {
-  switch (event.type()) {
-  case EventType::Move:
-    return new EventMoveView(dynamic_cast<const EventMove&>(event));
-  case EventType::EndTurn:
-    return new EventEndTurnView(dynamic_cast<const EventEndTurn&>(event));
-  case EventType::Attack:
-    return new EventAttackView(dynamic_cast<const EventAttack&>(event));
-  default:
-    throw std::logic_error("default case!");
-  }
-}
-
-void Visualizer::screenScenarioMainEvents() {
-  core().eventManager().switchToNextEvent();
-  if (mCurrentEventVisualizer) {
-    delete mCurrentEventVisualizer;
-  }
-  // TODO: Rewrite this
-  EventView* eventView = basicConvertEventToEventView(
-      core().eventManager().currentEvent());
-  mCurrentEventVisualizer = newEventVisualizer(*this, *eventView);
-  assert(mCurrentEventVisualizer);
-  mMode = Mode::ShowEvent;
-}
-
 void Visualizer::logic() {
-  while (mMode == Mode::Normal && core().eventManager().unshownEventsLeft()) {
-    screenScenarioMainEvents();
+  if (mMode == Mode::Normal) {
+    int id = core().currentPlayer().id;
+    std::list<EventView*>& eventViewList = core().eventViewList(id);
+    if (!eventViewList.empty()) {
+      const EventView& eventView = *eventViewList.front(); // TODO: fix memory leak
+      eventViewList.pop_front();
+      mCurrentEventVisualizer = newEventVisualizer(*this, eventView);
+      assert(mCurrentEventVisualizer);
+      mMode = Mode::ShowEvent;
+    }
   }
   if (mMode == Mode::ShowEvent && currentEventVisualizer().isFinished()) {
-    core().eventManager().applyCurrentEvent();
     mMode = Mode::Normal;
     currentEventVisualizer().end();
+    assert(mCurrentEventVisualizer);
+    delete mCurrentEventVisualizer;
+    mCurrentEventVisualizer = nullptr;
   }
 }
 

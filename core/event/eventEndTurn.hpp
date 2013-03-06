@@ -7,14 +7,13 @@
 
 class EventEndTurn : public Event {
 public:
-  EventEndTurn(int eventID, int oldPlayerID, int newPlayerID);
+  EventEndTurn(int oldPlayerID, int newPlayerID);
   ~EventEndTurn();
 
   int oldID() const;
   int newID() const;
 
   virtual void apply(Core& core) const;
-  virtual void undo(Core& core) const;
   virtual bool isVisible(const Core& core) const;
 
   static EventEndTurn* generate(const Core &core);

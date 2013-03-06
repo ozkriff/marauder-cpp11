@@ -94,6 +94,10 @@ const EventManager& Core::eventManager() const {
   return mEventManager;
 }
 
+std::list<EventView*>& Core::eventViewList(int playerID) {
+  return mEventViewLists.at(playerID);
+}
+
 void Core::setSelectedUnit(Unit& unit) {
   mSelectedUnit = &unit;
 }
@@ -119,6 +123,20 @@ void Core::doCommand(const Command& cmd) {
     break;
   default:
     throw std::logic_error("default case");
+  }
+  processNewEvents();
+}
+
+void Core::processNewEvents() {
+  while (!eventManager().isEmpty()) {
+    Event* pointerToEvent = eventManager().popEvent();
+    const Event& event = *pointerToEvent; // TODO: Fix memory leak
+    event.apply(*this);
+    for (Player* pPlayer : players()) {
+      const Player& player = *pPlayer;
+      EventView* eventView = eventToEventView(event); // TODO: send current player?
+      mEventViewLists.at(player.id).push_back(eventView);
+    }
   }
 }
 
@@ -157,6 +175,10 @@ void Core::createLocalHumanPlayer(int id) {
   mPlayers.push_back(p);
   p->id = id;
   p->lastSeenEventID = HAVE_NOT_SEEN_ANY_EVENTS;
+  {
+    // create empty list object for EventViews
+    mEventViewLists[id] = std::list<EventView*>();
+  }
 }
 
 void Core::refreshUnits(int playerID) {
@@ -238,6 +260,20 @@ Unit& Core::id2unit(int id) {
     }
   }
   throw std::invalid_argument("No unit with this ID!");
+}
+
+// TODO: actually _DO_ something!
+EventView* Core::eventToEventView(const Event& event) {
+  switch (event.type()) {
+  case EventType::Move:
+    return new EventMoveView(dynamic_cast<const EventMove&>(event));
+  case EventType::EndTurn:
+    return new EventEndTurnView(dynamic_cast<const EventEndTurn&>(event));
+  case EventType::Attack:
+    return new EventAttackView(dynamic_cast<const EventAttack&>(event));
+  default:
+    throw std::logic_error("default case!");
+  }
 }
 
 void Core::initUnitTypes() {

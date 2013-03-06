@@ -13,19 +13,16 @@ enum class EventType {
 
 class Event {
 public:
-  Event(int id, EventType type);
+  Event(EventType type);
   virtual ~Event();
 
   EventType type() const;
-  int id() const;
 
   virtual void apply(Core& core) const = 0;
-  virtual void undo(Core& core) const = 0;
   virtual bool isVisible(const Core& core) const = 0;
 
 private:
   EventType mType;
-  int mID;
 };
 
 #endif

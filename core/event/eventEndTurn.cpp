@@ -6,8 +6,8 @@
 #include "core/core.hpp"
 #include "core/player.hpp"
 
-EventEndTurn::EventEndTurn(int eventID, int oldPlayerID, int newPlayerID)
-  : Event(eventID, EventType::EndTurn),
+EventEndTurn::EventEndTurn(int oldPlayerID, int newPlayerID)
+  : Event(EventType::EndTurn),
     mOldID(oldPlayerID),
     mNewID(newPlayerID)
 {
@@ -27,21 +27,15 @@ int EventEndTurn::oldID() const {
 void EventEndTurn::apply(Core& core) const {
   core.deselectedAnyUnits();
   core.cleanFow();
+  core.refreshUnits(newID());
   for (auto* p : core.players()) {
     if (p->id == newID()) {
       if (core.currentPlayer().id == oldID()) {
         core.setCurrentPlayer(p);
-        core.eventManager().undoUnshownEvents();
-      } else {
-        core.refreshUnits(core.currentPlayer().id);
       }
       return;
     }
   }
-}
-
-void EventEndTurn::undo(Core& core) const {
-  UNUSED(core);
 }
 
 bool EventEndTurn::isVisible(const Core& core) const {
@@ -56,6 +50,6 @@ EventEndTurn* EventEndTurn::generate(const Core& core) {
   }
   int oldPlayerID = core.currentPlayer().id;
   auto* e = new EventEndTurn(
-      core.eventManager().getNewEventID(), oldPlayerID, newPlayerID);
+      oldPlayerID, newPlayerID);
   return e;
 }

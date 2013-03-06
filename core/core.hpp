@@ -36,6 +36,7 @@ public:
   Map& map();
   EventManager& eventManager();
   const EventManager& eventManager() const;
+  std::list<EventView*>& eventViewList(int playerID);
 
   void doCommand(const Command& cmd);
 
@@ -71,10 +72,15 @@ private:
   Map mMap;
   EventManager mEventManager;
 
+  // lists of EventViews for each player
+  std::map< int, std::list<EventView*> > mEventViewLists;
+
+  void processNewEvents();
   void command(const CommandAttack& cmd);
   void command(const CommandMove& cmd);
   void command(const CommandEndTurn& cmd);
 
+  EventView* eventToEventView(const Event& event);
   void initUnitTypes();
   UnitType parseUnitTypeInfo(const Json::Value& unitTypeInfo) const;
   int getNewUnitID() const;

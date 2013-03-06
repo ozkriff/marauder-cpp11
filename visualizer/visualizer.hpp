@@ -37,7 +37,7 @@ public:
   V2f indexToHexVertex(int i) const;
   float tileSize() const;
 
-  void recreateUnitSceneNodes();
+  void createUnitSceneNodes();
 
 private:
   enum class Mode {
@@ -69,7 +69,10 @@ private:
   std::vector<VertexArray> mVaUnitCircles;
   std::map<int, VertexArray> mVaUnits;
   EventVisualizer* mCurrentEventVisualizer;
-  SceneManager mSceneManager;
+
+  // TODO: int -> PlayerID
+  // scene manager for each local player
+  std::map<int, SceneManager> mSceneManagers;
 
   void processSDLEvent(const SDL_MouseMotionEvent& e);
   void processSDLEvent(const SDL_KeyboardEvent& e);
@@ -107,8 +110,6 @@ private:
   void drawMap();
   void drawSelectedunitMarker();
   void draw();
-  EventView* basicConvertEventToEventView(const Event& event) const; // TODO: tmp, delete me
-  void screenScenarioMainEvents();
   void logic();
   float aspectRatio() const;
 

@@ -26,5 +26,4 @@ void EventEndTurnVisualizer::end() {
   visualizer().core().calculateFow();
   visualizer().rebuildMapArray();
   visualizer().cleanWalkableMapArray();
-  visualizer().recreateUnitSceneNodes();
 }

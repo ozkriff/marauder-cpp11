@@ -5,8 +5,8 @@
 #include "core/core.hpp"
 #include "core/player.hpp"
 
-EventMove::EventMove(int id)
-  : Event(id, EventType::Move),
+EventMove::EventMove()
+  : Event(EventType::Move),
     mUnitID(0),
     mCost(0)
 {
@@ -26,7 +26,7 @@ const std::vector<V2i>& EventMove::path() const {
 EventMove* EventMove::generate(
     const Core& core, const Unit& unit, const V2i& destination)
 {
-  auto* e = new EventMove(core.eventManager().getNewEventID());
+  auto* e = new EventMove();
   e->mInitialDirection = unit.direction();
   e->mPath = core.pathfinder().getPath(destination);
   e->mCost = core.map().tile(destination).cost;
@@ -50,13 +50,6 @@ void EventMove::apply(Core& core) const {
     core.pathfinder().fillMap(core.selectedUnit());
     core.calculateFow();
   }
-}
-
-void EventMove::undo(Core& core) const {
-  Unit& u = core.id2unit(mUnitID);
-  u.setPosition(mPath[0]);
-  u.setDirection(mInitialDirection);
-  u.setActionPoints(u.actionPoints() + mCost);
 }
 
 bool EventMove::isVisible(const Core &core) const {

@@ -22,8 +22,8 @@ private:
   int mFrame;
   int mLastFrame;
   float mFallingDownSpeed;
-  const Unit& mAttacker;
-  const Unit& mVictim;
+  V3f mInitialAttackerPosition;
+  V3f mInitialVictimPosition;
 
   void drawLineOfFire();
 };
