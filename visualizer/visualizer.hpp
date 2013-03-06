@@ -89,11 +89,6 @@ private:
   void centerCameraOnSelectedUnit();
   void switchActiveTileType();
   void createNewUnitInActiveTile();
-  VertexArray buildPickingTilesArray();
-  Color3u fowColor(const V2i& position);
-  VertexArray buildMapArray();
-  VertexArray buildObstaclesArray();
-  VertexArray buildWalkableArray();
   V2i pickTile(const V2i& mousePos);
   void drawForPicking();
   void scrollMap();
@@ -103,7 +98,6 @@ private:
   void initCamera();
   void initVertexArrays();
   void createUnitNode(const Unit& unit);
-  VertexArray buildUnitCircleVertexArray(const Color& color);
   void buildUnitCircles();
   void loadUnitResources();
   void drawMap();

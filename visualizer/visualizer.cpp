@@ -18,6 +18,123 @@
 #include "visualizer/event/eventAttackVisualizer.hpp"
 #include "visualizer/event/eventMoveVisualizer.hpp"
 
+namespace {
+
+VertexArray buildWalkableArray(Visualizer& visualizer) {
+  Core& core = visualizer.core();
+  VertexArray v(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
+  core.map().forEachPos([&](const V2i& p) {
+    const Tile& t = core.map().tile(p);
+    if (t.parent.value() != DirID::NONE && t.cost < 50) {
+      V2i to = Dir::getNeighbourPos(p, t.parent);
+      if (core.map().isInboard(to)) {
+        V2f fromF = visualizer.v2iToV2f(p);
+        V2f toF = visualizer.v2iToV2f(to);
+        v.addVertex(V3f(fromF, 0.01f));
+        v.addVertex(V3f(toF, 0.01f));
+      }
+    }
+  });
+  return v;
+}
+
+Color3u fowColor(const Map& map, const V2i& position) {
+  GLuint n;
+  if (map.tile(position).fow == 0) {
+    n = 180; // dark
+  } else {
+    n = 255; // bright
+  }
+  return Color3u(n);
+}
+
+VertexArray buildMapArray(Visualizer& visualizer, GLuint textureID) {
+  Core& core = visualizer.core();
+  VertexArray v;
+  v.setTextureID(textureID);
+  core.map().forEachPos([&](const V2i& p) {
+    V2f pos = visualizer.v2iToV2f(p);
+    Color3u color = fowColor(core.map(), p);
+    for (int i = 0; i < 6; ++i) {
+      v.addVertex(
+          pos + visualizer.indexToHexVertex(i),
+          V2f(0.0f, 0.0f),
+          color);
+      v.addVertex(
+          pos + visualizer.indexToHexVertex(i + 1),
+          V2f(1.0f, 0.0f),
+          color);
+      v.addVertex(
+          pos,
+          V2f(0.5f, 0.5f),
+          color);
+    }
+  });
+  return v;
+}
+
+VertexArray buildObstaclesArray(Visualizer& visualizer, GLuint textureID) {
+  Core& core = visualizer.core();
+  VertexArray v(Color(0.4f, 0.1f, 0.0f));
+  v.setTextureID(textureID);
+  core.map().forEachPos([&](const V2i& p) {
+    if (core.map().tile(p).obstacle) {
+      V2f pos = visualizer.v2iToV2f(p);
+      for (int i = 0; i < 6; ++i) {
+        v.addVertex(
+            V3f(pos + visualizer.indexToHexVertex(i) * 0.7f, 0.01f),
+            V2f(0.0f, 0.0f));
+        v.addVertex(
+            V3f(pos + visualizer.indexToHexVertex(i + 1) * 0.7f, 0.01f),
+            V2f(1.0f, 0.0f));
+        v.addVertex(
+            V3f(pos, 0.01f),
+            V2f(0.5f, 0.5f));
+      }
+    }
+  });
+  return v;
+}
+
+VertexArray buildUnitCircleVertexArray(
+    Visualizer& visualizer, float hexIn, const Color& color)
+{
+  VertexArray v(color, PrimitiveType::Lines);
+  const int verticesCount = 12;
+  for (int i = 0; i < verticesCount; ++i) {
+    const float k = hexIn * 2.0f; // resize coefficient
+    const float h = 0.01f;
+    v.addVertex(V3f(
+        visualizer.indexToCircleVertex(verticesCount, i) * k, h));
+    v.addVertex(V3f(
+        visualizer.indexToCircleVertex(verticesCount, i + 1) * k, h));
+  }
+  return v;
+}
+
+VertexArray buildPickingTilesArray(Visualizer& visualizer) {
+  Core& core = visualizer.core();
+  VertexArray v;
+  core.map().forEachPos([&](const V2i& p) {
+    Color3u color(p.x(), p.y(), 1);
+    V2f pos = visualizer.v2iToV2f(p);
+    for (int i = 0; i < 6; ++i) {
+      v.addVertex(
+          V3f(pos + visualizer.indexToHexVertex(i)),
+          color);
+      v.addVertex(
+          V3f(pos + visualizer.indexToHexVertex(i + 1)),
+          color);
+      v.addVertex(
+          V3f(pos),
+          color);
+    }
+  });
+  return v;
+}
+
+} // namespace
+
 // public:
 
 Visualizer::Visualizer(Core& core)
@@ -81,11 +198,11 @@ void Visualizer::cleanWalkableMapArray() {
 }
 
 void Visualizer::rebuildWalkableMapArray() {
-  mVaWalkableMap = buildWalkableArray();
+  mVaWalkableMap = buildWalkableArray(*this);
 }
 
 void Visualizer::rebuildMapArray() {
-  mVaMap = buildMapArray();
+  mVaMap = buildMapArray(*this, mFloorTexture);
 }
 
 void Visualizer::run() {
@@ -234,7 +351,7 @@ void Visualizer::processSDLEvent(const SDL_Event& e) {
 void Visualizer::processClickOnFriendlyUnit(Unit& unit) {
   core().setSelectedUnit(unit);
   core().pathfinder().fillMap(core().selectedUnit());
-  mVaWalkableMap = buildWalkableArray();
+  rebuildWalkableMapArray();
 }
 
 void Visualizer::processClickOnEnemyUnit(Unit& unit) {
@@ -298,13 +415,13 @@ void Visualizer::centerCameraOnSelectedUnit() {
 void Visualizer::switchActiveTileType() {
   Tile& t = core().map().tile(mActiveTilePos);
   t.obstacle = !t.obstacle;
-  mVaMap = buildMapArray();
-  mVaObstacles = buildObstaclesArray();
+  rebuildMapArray();
+  mVaObstacles = buildObstaclesArray(*this, mFloorTexture);
   core().calculateFow();
   rebuildMapArray();
   if (core().isAnyUnitSelected()) {
     core().pathfinder().fillMap(core().selectedUnit());
-    mVaWalkableMap = buildWalkableArray();
+    rebuildWalkableMapArray();
   }
 }
 
@@ -316,103 +433,10 @@ void Visualizer::createNewUnitInActiveTile() {
         Dir(DirID::NE));
   if (core().isAnyUnitSelected()) {
     core().pathfinder().fillMap(core().selectedUnit());
-    mVaWalkableMap = buildWalkableArray();
+    rebuildWalkableMapArray();
   }
   rebuildMapArray();
   createUnitNode(core().unitAt(mActiveTilePos));
-}
-
-VertexArray Visualizer::buildPickingTilesArray() {
-  VertexArray v;
-  core().map().forEachPos([&](const V2i& p) {
-    Color3u color(p.x(), p.y(), 1);
-    V2f pos = v2iToV2f(p);
-    for (int i = 0; i < 6; ++i) {
-      v.addVertex(
-          V3f(pos + indexToHexVertex(i)),
-          color);
-      v.addVertex(
-          V3f(pos + indexToHexVertex(i + 1)),
-          color);
-      v.addVertex(
-          V3f(pos),
-          color);
-    }
-  });
-  return v;
-}
-
-Color3u Visualizer::fowColor(const V2i& position) {
-  GLuint n;
-  if (core().map().tile(position).fow == 0) {
-    n = 180; // dark
-  } else {
-    n = 255; // bright
-  }
-  return Color3u(n);
-}
-
-VertexArray Visualizer::buildMapArray() {
-  VertexArray v;
-  v.setTextureID(mFloorTexture);
-  core().map().forEachPos([&](const V2i& p) {
-    V2f pos = v2iToV2f(p);
-    Color3u color = fowColor(p);
-    for (int i = 0; i < 6; ++i) {
-      v.addVertex(
-          pos + indexToHexVertex(i),
-          V2f(0.0f, 0.0f),
-          color);
-      v.addVertex(
-          pos + indexToHexVertex(i + 1),
-          V2f(1.0f, 0.0f),
-          color);
-      v.addVertex(
-          pos,
-          V2f(0.5f, 0.5f),
-          color);
-    }
-  });
-  return v;
-}
-
-VertexArray Visualizer::buildObstaclesArray() {
-  VertexArray v(Color(0.4f, 0.1f, 0.0f));
-  v.setTextureID(mFloorTexture);
-  core().map().forEachPos([&](const V2i& p) {
-    if (core().map().tile(p).obstacle) {
-      V2f pos = v2iToV2f(p);
-      for (int i = 0; i < 6; ++i) {
-        v.addVertex(
-            V3f(pos + indexToHexVertex(i) * 0.7f, 0.01f),
-            V2f(0.0f, 0.0f));
-        v.addVertex(
-            V3f(pos + indexToHexVertex(i + 1) * 0.7f, 0.01f),
-            V2f(1.0f, 0.0f));
-        v.addVertex(
-            V3f(pos, 0.01f),
-            V2f(0.5f, 0.5f));
-      }
-    }
-  });
-  return v;
-}
-
-VertexArray Visualizer::buildWalkableArray() {
-  VertexArray v(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
-  core().map().forEachPos([&](const V2i& p) {
-    const Tile& t = core().map().tile(p);
-    if (t.parent.value() != DirID::NONE && t.cost < 50) {
-      V2i to = Dir::getNeighbourPos(p, t.parent);
-      if (core().map().isInboard(to)) {
-        V2f fromF = v2iToV2f(p);
-        V2f toF = v2iToV2f(to);
-        v.addVertex(V3f(fromF, 0.01f));
-        v.addVertex(V3f(toF, 0.01f));
-      }
-    }
-  });
-  return v;
 }
 
 V2i Visualizer::pickTile(const V2i& mousePos) {
@@ -508,9 +532,9 @@ void Visualizer::initCamera() {
 }
 
 void Visualizer::initVertexArrays() {
-  mVaPick = buildPickingTilesArray();
-  mVaMap = buildMapArray();
-  mVaObstacles = buildObstaclesArray();
+  mVaPick = buildPickingTilesArray(*this);
+  rebuildMapArray();
+  mVaObstacles = buildObstaclesArray(*this, mFloorTexture);
   buildUnitCircles();
 }
 
@@ -528,27 +552,14 @@ void Visualizer::createUnitNode(const Unit& unit) {
   }
 }
 
-VertexArray Visualizer::buildUnitCircleVertexArray(const Color& color) {
-  VertexArray v(color, PrimitiveType::Lines);
-  const int verticesCount = 12;
-  for (int i = 0; i < verticesCount; ++i) {
-    const float k = mHexIn * 2.0f; // resize coefficient
-    const float h = 0.01f;
-    v.addVertex(V3f(
-        indexToCircleVertex(verticesCount, i) * k, h));
-    v.addVertex(V3f(
-        indexToCircleVertex(verticesCount, i + 1) * k, h));
-  }
-  return v;
-}
-
 void Visualizer::buildUnitCircles(){
   std::vector<Color> colors = {
     Color(1.0f, 0.0f, 0.0f),
     Color(0.0f, 0.0f, 1.0f)
   };
   for (const Color& color : colors) {
-    mVaUnitCircles.push_back(buildUnitCircleVertexArray(color));
+    mVaUnitCircles.push_back(
+        buildUnitCircleVertexArray(*this, mHexIn, color));
   }
 }
 
