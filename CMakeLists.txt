@@ -75,6 +75,7 @@ add_library(marauderVisualizer
   visualizer/camera.cpp
   visualizer/eventVisualizer.cpp
   visualizer/math.cpp
+  visualizer/meshBuilders.cpp
   visualizer/event/eventAttackVisualizer.cpp
   visualizer/event/eventMoveVisualizer.cpp
   visualizer/event/eventEndTurnVisualizer.cpp
