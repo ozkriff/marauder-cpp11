@@ -46,7 +46,7 @@ Visualizer::Visualizer(Core& core)
   loadUnitResources();
   initVertexArrays();
   // TODO: Move to createSceneManagerForEachPlayer()
-  for (const Player* player : core().players()) {
+  for (const Player* player : mCore.players()) {
     mSceneManagers[player->id] = SceneManager();
   }
   createUnitSceneNodes();
