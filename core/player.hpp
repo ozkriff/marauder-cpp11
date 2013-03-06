@@ -5,9 +5,11 @@
 
 #define HAVE_NOT_SEEN_ANY_EVENTS (-1)
 
+typedef int PlayerID;
+
 class Player {
 public: // TODO: make private
-  int id;
+  PlayerID id;
   int lastSeenEventID;
 };
 

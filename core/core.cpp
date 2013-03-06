@@ -94,7 +94,7 @@ const EventManager& Core::eventManager() const {
   return mEventManager;
 }
 
-std::list<EventView*>& Core::eventViewList(int playerID) {
+std::list<EventView*>& Core::eventViewList(PlayerID playerID) {
   return mEventViewLists.at(playerID);
 }
 
@@ -181,7 +181,7 @@ void Core::createLocalHumanPlayer(int id) {
   }
 }
 
-void Core::refreshUnits(int playerID) {
+void Core::refreshUnits(PlayerID playerID) {
   for (auto* u : units()) {
     if (u->playerID() == playerID) {
       u->setActionPoints(u->type().actionPoints);
@@ -303,7 +303,7 @@ int Core::getNewUnitID() const {
 
 void Core::addUnit(
     const V2i& p,
-    int playerID,
+    PlayerID playerID,
     const UnitType& unitType,
     const Dir& dir)
 {
@@ -346,7 +346,7 @@ void Core::loadScenario() {
   // units
   {
     Json::Value unitsData = scenario["units"];
-    int playerID = 0;
+    PlayerID playerID = 0;
     for (const Json::Value& playerUnitData : unitsData) {
       for (const Json::Value& unitInfo : playerUnitData) {
         V2i position = JsonValueToV2i(unitInfo["position"]);

@@ -3,7 +3,7 @@
 #include "core/unit.hpp"
 #include <cassert>
 
-Unit::Unit(int id, int playerID, const UnitType &type)
+Unit::Unit(int id, PlayerID playerID, const UnitType &type)
   : mType(type),
     mID(id),
     mPlayerID(playerID),
@@ -24,7 +24,7 @@ int Unit::id() const {
   return mID;
 }
 
-int Unit::playerID() const {
+PlayerID Unit::playerID() const {
   return mPlayerID;
 }
 

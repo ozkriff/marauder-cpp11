@@ -6,7 +6,7 @@
 #include "core/core.hpp"
 #include "core/player.hpp"
 
-EventEndTurn::EventEndTurn(int oldPlayerID, int newPlayerID)
+EventEndTurn::EventEndTurn(PlayerID oldPlayerID, PlayerID newPlayerID)
   : Event(EventType::EndTurn),
     mOldID(oldPlayerID),
     mNewID(newPlayerID)
@@ -16,11 +16,11 @@ EventEndTurn::EventEndTurn(int oldPlayerID, int newPlayerID)
 EventEndTurn::~EventEndTurn() {
 }
 
-int EventEndTurn::newID() const {
+PlayerID EventEndTurn::newID() const {
   return mNewID;
 }
 
-int EventEndTurn::oldID() const {
+PlayerID EventEndTurn::oldID() const {
   return mOldID;
 }
 
@@ -44,12 +44,11 @@ bool EventEndTurn::isVisible(const Core& core) const {
 }
 
 EventEndTurn* EventEndTurn::generate(const Core& core) {
-  unsigned int newPlayerID = core.currentPlayer().id + 1;
-  if (newPlayerID == core.players().size()) {
+  PlayerID newPlayerID = core.currentPlayer().id + 1;
+  if (newPlayerID == static_cast<PlayerID>(core.players().size())) {
     newPlayerID = 0;
   }
-  int oldPlayerID = core.currentPlayer().id;
-  auto* e = new EventEndTurn(
-      oldPlayerID, newPlayerID);
+  PlayerID oldPlayerID = core.currentPlayer().id;
+  auto* e = new EventEndTurn(oldPlayerID, newPlayerID);
   return e;
 }

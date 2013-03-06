@@ -70,9 +70,8 @@ private:
   std::map<int, VertexArray> mVaUnits;
   EventVisualizer* mCurrentEventVisualizer;
 
-  // TODO: int -> PlayerID
   // scene manager for each local player
-  std::map<int, SceneManager> mSceneManagers;
+  std::map<PlayerID, SceneManager> mSceneManagers;
 
   void processSDLEvent(const SDL_MouseMotionEvent& e);
   void processSDLEvent(const SDL_KeyboardEvent& e);

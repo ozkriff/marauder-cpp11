@@ -10,8 +10,8 @@
 #include "core/map.hpp"
 #include "core/unit.hpp"
 #include "core/eventManager.hpp"
+#include "core/player.hpp"
 
-class Player;
 class Command;
 class CommandAttack;
 class CommandEndTurn;
@@ -36,7 +36,7 @@ public:
   Map& map();
   EventManager& eventManager();
   const EventManager& eventManager() const;
-  std::list<EventView*>& eventViewList(int playerID);
+  std::list<EventView*>& eventViewList(PlayerID playerID);
 
   void doCommand(const Command& cmd);
 
@@ -53,10 +53,10 @@ public:
   Unit& id2unit(int id);
   void addUnit(
       const V2i& p,
-      int playerID,
+      PlayerID playerID,
       const UnitType& unitType,
       const Dir& dir);
-  void refreshUnits(int playerID);
+  void refreshUnits(PlayerID playerID);
 
   const UnitType& unitType(const std::string& name) const;
 
