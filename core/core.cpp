@@ -174,7 +174,6 @@ void Core::createLocalHumanPlayer(int id) {
   auto* p = new Player;
   mPlayers.push_back(p);
   p->id = id;
-  p->lastSeenEventID = HAVE_NOT_SEEN_ANY_EVENTS;
   {
     // create empty list object for EventViews
     mEventViewLists[id] = std::list<EventView*>();
