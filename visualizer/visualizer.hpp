@@ -90,6 +90,7 @@ private:
   void centerCameraOnSelectedUnit();
   void switchActiveTileType();
   void createNewUnitInActiveTile();
+  void createSceneManagerForEachPlayer();
   void scrollMap();
   void updateActiveTilePosition();
   void mainloop();

@@ -48,10 +48,7 @@ Visualizer::Visualizer(Core& core)
   initCamera();
   loadUnitResources();
   initVertexArrays();
-  // TODO: Move to createSceneManagerForEachPlayer()
-  for (const Player* player : mCore.players()) {
-    mSceneManagers[player->id] = SceneManager();
-  }
+  createSceneManagerForEachPlayer();
   createUnitSceneNodes();
 }
 
@@ -322,6 +319,12 @@ void Visualizer::createNewUnitInActiveTile() {
   }
   rebuildMapArray();
   createUnitNode(core().unitAt(mActiveTilePos));
+}
+
+void Visualizer::createSceneManagerForEachPlayer() {
+  for (const Player* player : mCore.players()) {
+    mSceneManagers[player->id] = SceneManager();
+  }
 }
 
 void Visualizer::scrollMap() {
