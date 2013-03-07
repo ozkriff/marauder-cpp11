@@ -312,6 +312,9 @@ void Core::addUnit(
   u->setDirection(dir);
   u->setActionPoints(u->type().actionPoints);
   mUnits.push_back(u);
+  if (isAnyUnitSelected()) {
+    pathfinder().fillMap(selectedUnit());
+  }
   calculateFow();
 }
 

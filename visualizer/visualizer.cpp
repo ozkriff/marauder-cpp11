@@ -316,7 +316,6 @@ void Visualizer::createNewUnitInActiveTile() {
         core().unitType("truck"),
         Dir(DirID::NE));
   if (core().isAnyUnitSelected()) {
-    core().pathfinder().fillMap(core().selectedUnit());
     rebuildWalkableMapArray();
   }
   rebuildMapArray();
