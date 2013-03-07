@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <cmath>
+#include <stdexcept>
 #include <algorithm>
 #include "core/math.hpp"
 
@@ -21,9 +22,7 @@ Dir Los::getBresDir(int signX, int signY) {
   } else if(signX ==  1 && signY ==  1) {
     return(Dir(DirID::SE));
   }
-  // die("misc: get_bres_dir(): Bad parameters.");
-  assert(false);
-  return Dir(DirID::NONE);
+  throw std::logic_error("bad signs");
 }
 
 Los::Los(const V2i& from, const V2i& to)
