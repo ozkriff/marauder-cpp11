@@ -1,5 +1,8 @@
+// See LICENSE file for copyright and license details.
+
 #include "visualizer/sceneNode.hpp"
 #include <cassert>
+#include "visualizer/vertexArray.hpp"
 
 SceneNode::SceneNode()
   : mColor(1, 1, 1),
