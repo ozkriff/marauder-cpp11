@@ -47,7 +47,7 @@ void EventMoveVisualizer::endMovement() {
   Core& core = visualizer().core();
   Unit& u = core.id2unit(mEventMove.unitID());
   auto& node = visualizer().sceneManager().sceneNode(u.id());
-  node.mPosition = visualizer().v2iToV2f(u.position());
+  node.mPosition = visualizer().v2iToV2f(mEventMove.path().back());
   node.mRotationAngle = dirToAngle(u.direction());
   if (core.isAnyUnitSelected()) {
     visualizer().rebuildWalkableMapArray();
