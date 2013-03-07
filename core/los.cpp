@@ -57,19 +57,23 @@ V2i Los::getNext() {
   if (!mIsSteep) {
     mError += mDelta.y();
     if(mError > abs(mDeltaOld.x())){
-      mCurrentPos = Dir::getNeighbourPos(mCurrentPos, getBresDir(mSign.x(), mSign.y()));
+      mCurrentPos = Dir::getNeighbourPos(
+          mCurrentPos, getBresDir(mSign.x(), mSign.y()));
       mError -= mDelta.x();
     } else {
-      mCurrentPos = Dir::getNeighbourPos(mCurrentPos, getBresDir(0, mSign.x()));
+      mCurrentPos = Dir::getNeighbourPos(
+          mCurrentPos, getBresDir(0, mSign.x()));
       mError += mDelta.y();
     }
   } else {
     mError += mDelta.x();
     if (mError > 0) {
-      mCurrentPos = Dir::getNeighbourPos(mCurrentPos, getBresDir(mSign.x(), mSign.y()));
+      mCurrentPos = Dir::getNeighbourPos(
+          mCurrentPos, getBresDir(mSign.x(), mSign.y()));
       mError -= mDelta.y();
     } else {
-      mCurrentPos = Dir::getNeighbourPos(mCurrentPos, getBresDir(-mSign.x(), mSign.y()));
+      mCurrentPos = Dir::getNeighbourPos(
+          mCurrentPos, getBresDir(-mSign.x(), mSign.y()));
       mError += mDelta.y();
     }
   }
