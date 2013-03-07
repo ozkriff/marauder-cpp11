@@ -14,6 +14,7 @@
 #include "visualizer/sceneManager.hpp"
 
 class EventVisualizer;
+class TilePicker;
 
 class Visualizer {
 public:
@@ -65,10 +66,10 @@ private:
   GLuint mFloorTexture;
   VertexArray mVaMap;
   VertexArray mVaObstacles;
-  VertexArray mVaPick;
   std::vector<VertexArray> mVaUnitCircles;
   std::map<int, VertexArray> mVaUnits;
   EventVisualizer* mCurrentEventVisualizer;
+  TilePicker* mTilePicker;
 
   // scene manager for each local player
   std::map<PlayerID, SceneManager> mSceneManagers;
@@ -89,10 +90,8 @@ private:
   void centerCameraOnSelectedUnit();
   void switchActiveTileType();
   void createNewUnitInActiveTile();
-  V2i pickTile(const V2i& mousePos);
-  void drawForPicking();
   void scrollMap();
-  void pickTile();
+  void updateActiveTilePosition();
   void mainloop();
   void initOpengl();
   void initCamera();

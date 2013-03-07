@@ -19,6 +19,43 @@
 #include "visualizer/event/eventMoveVisualizer.hpp"
 #include "visualizer/meshBuilders.hpp"
 
+class TilePicker {
+public:
+  TilePicker(Visualizer& visualizer, Camera& camera)
+    : mCamera(camera)
+  {
+    mVaPick = buildPickingTilesArray(visualizer);
+  }
+
+  V2i pick(const V2i& mousePos) {
+    drawForPicking();
+    return pickTile(mousePos);
+  }
+
+private:
+  Camera& mCamera;
+  VertexArray mVaPick;
+
+  V2i pickTile(const V2i& mousePos) {
+    GLint viewport[4];
+    GLubyte pixel[3];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    viewport[3] -= 1;
+    void* pixelPointer = &pixel;
+    glReadPixels(mousePos.x(), viewport[3] - mousePos.y(),
+        1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixelPointer);
+    return V2i(pixel[0], pixel[1]);
+  }
+
+  void drawForPicking() {
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    mCamera.set();
+    mVaPick.draw();
+  }
+};
+
 // public:
 
 Visualizer::Visualizer(Core& core)
@@ -36,7 +73,8 @@ Visualizer::Visualizer(Core& core)
     mActiveTilePos(0, 0),
     mIsRotatingCamera(false),
     mDone(false),
-    mCurrentEventVisualizer(nullptr)
+    mCurrentEventVisualizer(nullptr),
+    mTilePicker(new TilePicker(*this, camera())) // TODO: memleak
 {
   SDL_Init(SDL_INIT_EVERYTHING);
   mScreen = SDL_SetVideoMode(mWinSize.x(), mWinSize.y(),
@@ -322,23 +360,6 @@ void Visualizer::createNewUnitInActiveTile() {
   createUnitNode(core().unitAt(mActiveTilePos));
 }
 
-V2i Visualizer::pickTile(const V2i& mousePos) {
-  GLint viewport[4];
-  GLubyte pixel[3];
-  glGetIntegerv(GL_VIEWPORT, viewport);
-  viewport[3] -= 1;
-  void* pixelPointer = &pixel;
-  glReadPixels(mousePos.x(), viewport[3] - mousePos.y(),
-      1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixelPointer);
-  return V2i(pixel[0], pixel[1]);
-}
-
-void Visualizer::drawForPicking() {
-  glLoadIdentity();
-  camera().set();
-  mVaPick.draw();
-}
-
 void Visualizer::scrollMap() {
   const V2i& p = mMousePos;
   int offset = 15;
@@ -354,11 +375,8 @@ void Visualizer::scrollMap() {
   }
 }
 
-void Visualizer::pickTile() {
-  glClearColor(0.0, 0.0, 0.0, 1.0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  drawForPicking();
-  mActiveTilePos = pickTile(mMousePos);
+void Visualizer::updateActiveTilePosition() {
+  mActiveTilePos = mTilePicker->pick(mMousePos);
 }
 
 void Visualizer::mainloop() {
@@ -366,7 +384,7 @@ void Visualizer::mainloop() {
     sdlEvents();
     logic();
     scrollMap();
-    pickTile();
+    updateActiveTilePosition();
     draw();
     // SDLDelay(1000.0f / 24.0f);
   }
@@ -415,7 +433,6 @@ void Visualizer::initCamera() {
 }
 
 void Visualizer::initVertexArrays() {
-  mVaPick = buildPickingTilesArray(*this);
   rebuildMapArray();
   mVaObstacles = buildObstaclesArray(*this, mFloorTexture);
   buildUnitCircles();
