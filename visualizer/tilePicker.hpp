@@ -13,13 +13,13 @@ class TilePicker {
 public:
   TilePicker(Visualizer& visualizer, Camera& camera);
 
-  V2i pick(const V2i& mousePos);
+  V2i pick(const V2i& mousePosition);
 
 private:
   Camera& mCamera;
   VertexArray mVaPick;
 
-  V2i pickTile(const V2i& mousePos);
+  V2i pickTile(const V2i& mousePosition);
   void drawForPicking();
 };
 

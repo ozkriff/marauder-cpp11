@@ -14,7 +14,7 @@ class Pathfinder {
 public:
   Pathfinder(Core& core);
 
-  std::vector<V2i> getPath(const V2i& pos) const;
+  std::vector<V2i> getPath(const V2i& position) const;
   void fillMap(const Unit& u);
   void cleanMap();
 
@@ -25,7 +25,7 @@ private:
   void tryToPushNeighbours(const Unit& u, const V2i& m);
 
   // TODO: rename
-  // p1 - origPos, p2 - neighbour position
+  // p1 - origPosition, p2 - neighbour position
   void processNeighbourPosition(const Unit& u, const V2i& p1, const V2i& p2);
 
   Dir getParentDir(const Unit& u, const V2i& m);

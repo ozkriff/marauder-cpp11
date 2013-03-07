@@ -33,8 +33,8 @@ Visualizer::Visualizer(Core& core)
     mSDLFlags(SDL_OPENGL | SDL_RESIZABLE),
     mBitsPerPixel(mConfig["bitsPerPixel"].asInt()),
     mWinSize(JsonValueToV2i(mConfig["resolution"])),
-    mMousePos(0, 0),
-    mActiveTilePos(0, 0),
+    mMousePosition(0, 0),
+    mActiveTilePosition(0, 0),
     mIsRotatingCamera(false),
     mDone(false),
     mCurrentEventVisualizer(nullptr),
@@ -123,7 +123,7 @@ void Visualizer::createUnitSceneNodes() {
 // private:
 
 void Visualizer::processSDLEvent(const SDL_MouseMotionEvent& e) {
-  mMousePos = V2i(static_cast<int>(e.x), static_cast<int>(e.y));
+  mMousePosition = V2i(static_cast<int>(e.x), static_cast<int>(e.y));
   if (mIsRotatingCamera) {
     camera().rotateAroundZAxis(-e.xrel);
     camera().rotateAroundXAxis(-e.yrel);
@@ -260,8 +260,8 @@ void Visualizer::processClickOnUnit(Unit& unit) {
 void Visualizer::processClickOnEmptyTile(Tile& tile) {
   int actionPoints = core().selectedUnit().actionPoints();
   if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
-    if (core().map().tile(mActiveTilePos).cost <= actionPoints) {
-      CommandMove cmd(core().selectedUnit().id(), mActiveTilePos);
+    if (core().map().tile(mActiveTilePosition).cost <= actionPoints) {
+      CommandMove cmd(core().selectedUnit().id(), mActiveTilePosition);
       core().doCommand(cmd);
     }
   }
@@ -271,11 +271,11 @@ void Visualizer::processClickOnTile() {
   if (mMode != Mode::Normal) {
     return;
   }
-  if (core().isUnitAt(mActiveTilePos)) {
-    Unit& unit = core().unitAt(mActiveTilePos);
+  if (core().isUnitAt(mActiveTilePosition)) {
+    Unit& unit = core().unitAt(mActiveTilePosition);
     processClickOnUnit(unit);
   } else if (core().isAnyUnitSelected()) {
-    Tile& tile = core().map().tile(mActiveTilePos);
+    Tile& tile = core().map().tile(mActiveTilePosition);
     processClickOnEmptyTile(tile);
   }
 }
@@ -291,12 +291,12 @@ void Visualizer::centerCameraOnSelectedUnit() {
   if (!core().isAnyUnitSelected()) {
     return;
   }
-  V2f unitPos = v2iToV2f(core().selectedUnit().position());
-  camera().setPos(unitPos);
+  V2f unitPosition = v2iToV2f(core().selectedUnit().position());
+  camera().setPosition(unitPosition);
 }
 
 void Visualizer::switchActiveTileType() {
-  Tile& t = core().map().tile(mActiveTilePos);
+  Tile& t = core().map().tile(mActiveTilePosition);
   t.obstacle = !t.obstacle;
   rebuildMapArray();
   mVaObstacles = buildObstaclesArray(*this, mFloorTexture);
@@ -310,7 +310,7 @@ void Visualizer::switchActiveTileType() {
 
 void Visualizer::createNewUnitInActiveTile() {
   core().addUnit(
-        mActiveTilePos,
+        mActiveTilePosition,
         core().currentPlayer().id,
         core().unitType("truck"),
         Dir(DirID::NE));
@@ -318,7 +318,7 @@ void Visualizer::createNewUnitInActiveTile() {
     rebuildWalkableMapArray();
   }
   rebuildMapArray();
-  createUnitNode(core().unitAt(mActiveTilePos));
+  createUnitNode(core().unitAt(mActiveTilePosition));
 }
 
 void Visualizer::createSceneManagerForEachPlayer() {
@@ -328,7 +328,7 @@ void Visualizer::createSceneManagerForEachPlayer() {
 }
 
 void Visualizer::scrollMap() {
-  const V2i& p = mMousePos;
+  const V2i& p = mMousePosition;
   int offset = 15;
   if (p.x() < offset) {
     camera().move(270);
@@ -343,7 +343,7 @@ void Visualizer::scrollMap() {
 }
 
 void Visualizer::updateActiveTilePosition() {
-  mActiveTilePos = mTilePicker->pick(mMousePos);
+  mActiveTilePosition = mTilePicker->pick(mMousePosition);
 }
 
 void Visualizer::mainloop() {
@@ -392,8 +392,8 @@ void Visualizer::initCamera() {
   camera().setMinXAxisAngle(0.0f);
   camera().setXAxisAngle(45.0f);
   camera().setZAxisAngle(45.0f);
-  camera().setMaxPos(v2iToV2f(core().map().size() - 1));
-  camera().setPos(V2f(0.0f, 0.0f));
+  camera().setMaxPosition(v2iToV2f(core().map().size() - 1));
+  camera().setPosition(V2f(0.0f, 0.0f));
   camera().setMaxZoom(50.0f);
   camera().setMinZoom(3.0f);
   camera().setZoom(20.0f);

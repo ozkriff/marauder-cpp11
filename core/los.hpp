@@ -20,7 +20,7 @@ private:
   V2i mFrom;
   V2i mTo;
   V2i mDelta;
-  V2i mCurrentPos;
+  V2i mCurrentPosition;
   int mError;
   bool mIsSteep;
   V2i mSign;

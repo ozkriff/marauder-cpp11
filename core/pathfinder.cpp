@@ -58,9 +58,9 @@ void Pathfinder::cleanMap() {
 void Pathfinder::tryToPushNeighbours(const Unit& u, const V2i& m) {
   assert(mCore.map().isInboard(m));
   for (int i = 0; i < 6; ++i) {
-    V2i neighbourPos = Dir::getNeighbourPos(m, static_cast<DirID>(i));
-    if (mCore.map().isInboard(neighbourPos)) {
-      processNeighbourPosition(u, m, neighbourPos);
+    V2i neighbourPosition = Dir::getNeighbourPosition(m, static_cast<DirID>(i));
+    if (mCore.map().isInboard(neighbourPosition)) {
+      processNeighbourPosition(u, m, neighbourPosition);
     }
   }
 }
@@ -81,13 +81,13 @@ void Pathfinder::fillMap(const Unit& u) {
   }
 }
 
-std::vector<V2i> Pathfinder::getPath(const V2i& pos) const {
-  V2i p = pos;
+std::vector<V2i> Pathfinder::getPath(const V2i& position) const {
+  V2i p = position;
   std::vector<V2i> path;
   assert(mCore.map().isInboard(p));
   while (mCore.map().tile(p).cost != 0) {
     path.push_back(p);
-    p = Dir::getNeighbourPos(p, mCore.map().tile(p).parent);
+    p = Dir::getNeighbourPosition(p, mCore.map().tile(p).parent);
     assert(mCore.map().isInboard(p));
   }
   // Add start position

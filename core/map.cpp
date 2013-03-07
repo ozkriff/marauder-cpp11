@@ -18,27 +18,27 @@ const V2i& Map::size() const {
   return mSize;
 }
 
-bool Map::isInboard(const V2i& pos) const {
-  return pos.x() >= 0 && pos.y() >= 0
-      && pos.x() < size().x() && pos.y() < size().y();
+bool Map::isInboard(const V2i& position) const {
+  return position.x() >= 0 && position.y() >= 0
+      && position.x() < size().x() && position.y() < size().y();
 }
 
-Tile& Map::tile(const V2i& pos) {
-  assert(isInboard(pos));
-  return mTiles[pos.y() * mSize.x() + pos.x()];
+Tile& Map::tile(const V2i& position) {
+  assert(isInboard(position));
+  return mTiles[position.y() * mSize.x() + position.x()];
 }
 
-const Tile& Map::tile(const V2i& pos) const {
-  assert(isInboard(pos));
-  return mTiles[pos.y() * mSize.x() + pos.x()];
+const Tile& Map::tile(const V2i& position) const {
+  assert(isInboard(position));
+  return mTiles[position.y() * mSize.x() + position.x()];
 }
 
-V2i Map::incV2i(const V2i& pos) const {
-  assert(isInboard(pos));
-  V2i newPos = pos;
-  newPos.setX(pos.x() + 1);
-  if (newPos.x() == size().x()) {
-    newPos = V2i(0, newPos.y() + 1);
+V2i Map::incV2i(const V2i& position) const {
+  assert(isInboard(position));
+  V2i newPosition = position;
+  newPosition.setX(position.x() + 1);
+  if (newPosition.x() == size().x()) {
+    newPosition = V2i(0, newPosition.y() + 1);
   }
-  return newPos;
+  return newPosition;
 }

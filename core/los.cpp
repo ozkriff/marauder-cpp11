@@ -28,7 +28,7 @@ Dir Los::getBresDir(int signX, int signY) {
 Los::Los(const V2i& from, const V2i& to)
   : mFrom(from),
     mTo(to),
-    mCurrentPos(mFrom),
+    mCurrentPosition(mFrom),
     mError(0)
 {
   mDeltaOld = V2i(
@@ -47,35 +47,35 @@ Los::~Los() {
 }
 
 bool Los::isFinished() const {
-  return mCurrentPos == mTo;
+  return mCurrentPosition == mTo;
 }
 
 V2i Los::getNext() {
   if (isFinished()) {
-    return mCurrentPos;
+    return mCurrentPosition;
   }
   if (!mIsSteep) {
     mError += mDelta.y();
     if(mError > abs(mDeltaOld.x())){
-      mCurrentPos = Dir::getNeighbourPos(
-          mCurrentPos, getBresDir(mSign.x(), mSign.y()));
+      mCurrentPosition = Dir::getNeighbourPosition(
+          mCurrentPosition, getBresDir(mSign.x(), mSign.y()));
       mError -= mDelta.x();
     } else {
-      mCurrentPos = Dir::getNeighbourPos(
-          mCurrentPos, getBresDir(0, mSign.x()));
+      mCurrentPosition = Dir::getNeighbourPosition(
+          mCurrentPosition, getBresDir(0, mSign.x()));
       mError += mDelta.y();
     }
   } else {
     mError += mDelta.x();
     if (mError > 0) {
-      mCurrentPos = Dir::getNeighbourPos(
-          mCurrentPos, getBresDir(mSign.x(), mSign.y()));
+      mCurrentPosition = Dir::getNeighbourPosition(
+          mCurrentPosition, getBresDir(mSign.x(), mSign.y()));
       mError -= mDelta.y();
     } else {
-      mCurrentPos = Dir::getNeighbourPos(
-          mCurrentPos, getBresDir(-mSign.x(), mSign.y()));
+      mCurrentPosition = Dir::getNeighbourPosition(
+          mCurrentPosition, getBresDir(-mSign.x(), mSign.y()));
       mError += mDelta.y();
     }
   }
-  return mCurrentPos;
+  return mCurrentPosition;
 }

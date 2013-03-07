@@ -48,8 +48,8 @@ public:
   void cleanFow();
   bool isLosClear(const V2i& from, const V2i& to);
 
-  Unit& unitAt(const V2i& pos);
-  bool isUnitAt(const V2i& pos) const;
+  Unit& unitAt(const V2i& position);
+  bool isUnitAt(const V2i& position) const;
   Unit& id2unit(UnitID id);
   void addUnit(
       const V2i& p,

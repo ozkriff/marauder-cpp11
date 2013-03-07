@@ -30,7 +30,7 @@ private:
   const V2i& nextTile() const;
   int framesCount() const;
   float currentAngle() const;
-  V2f currentPos() const;
+  V2f currentPosition() const;
 };
 
 #endif

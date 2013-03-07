@@ -7,7 +7,7 @@
 
 namespace {
 
-V2i dirToPosDiff[2][6] = {
+V2i dirToPositionDiff[2][6] = {
   {
     {1, -1},
     {1, 0},
@@ -47,7 +47,7 @@ Dir::Dir(const V2i& a, const V2i& b) {
   assert(a.distance(b) == 1);
   V2i diff = b - a;
   for (int i = 0; i < 6; ++i) {
-    if (diff == dirToPosDiff[a.y() % 2][i]) {
+    if (diff == dirToPositionDiff[a.y() % 2][i]) {
       mValue = static_cast<DirID>(i);
       return;
     }
@@ -87,8 +87,8 @@ bool Dir::operator==(const Dir& other) const {
   return value() == other.value();
 }
 
-V2i Dir::getNeighbourPos(const V2i& pos, Dir i) {
+V2i Dir::getNeighbourPosition(const V2i& position, Dir i) {
   assert(i.toInt() < 6);
-  V2i difference = dirToPosDiff[pos.y() % 2][i.toInt()];
-  return pos + difference;
+  V2i difference = dirToPositionDiff[position.y() % 2][i.toInt()];
+  return position + difference;
 }

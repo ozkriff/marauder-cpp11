@@ -6,10 +6,10 @@
 VertexArray buildWalkableArray(Visualizer& visualizer) {
   Core& core = visualizer.core();
   VertexArray v(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
-  core.map().forEachPos([&](const V2i& p) {
+  core.map().forEachPosition([&](const V2i& p) {
     const Tile& t = core.map().tile(p);
     if (t.parent.value() != DirID::NONE && t.cost < 50) {
-      V2i to = Dir::getNeighbourPos(p, t.parent);
+      V2i to = Dir::getNeighbourPosition(p, t.parent);
       if (core.map().isInboard(to)) {
         V2f fromF = visualizer.v2iToV2f(p);
         V2f toF = visualizer.v2iToV2f(to);
@@ -35,20 +35,20 @@ VertexArray buildMapArray(Visualizer& visualizer, GLuint textureID) {
   Map& map = visualizer.core().map();
   VertexArray v;
   v.setTextureID(textureID);
-  map.forEachPos([&](const V2i& p) {
-    V2f pos = visualizer.v2iToV2f(p);
+  map.forEachPosition([&](const V2i& p) {
+    V2f position = visualizer.v2iToV2f(p);
     Color3u color = fowColor(map, p);
     for (int i = 0; i < 6; ++i) {
       v.addVertex(
-          pos + visualizer.indexToHexVertex(i),
+          position + visualizer.indexToHexVertex(i),
           V2f(0.0f, 0.0f),
           color);
       v.addVertex(
-          pos + visualizer.indexToHexVertex(i + 1),
+          position + visualizer.indexToHexVertex(i + 1),
           V2f(1.0f, 0.0f),
           color);
       v.addVertex(
-          pos,
+          position,
           V2f(0.5f, 0.5f),
           color);
     }
@@ -60,18 +60,18 @@ VertexArray buildObstaclesArray(Visualizer& visualizer, GLuint textureID) {
   Map& map = visualizer.core().map();
   VertexArray v(Color(0.4f, 0.1f, 0.0f));
   v.setTextureID(textureID);
-  map.forEachPos([&](const V2i& p) {
+  map.forEachPosition([&](const V2i& p) {
     if (map.tile(p).obstacle) {
-      V2f pos = visualizer.v2iToV2f(p);
+      V2f position = visualizer.v2iToV2f(p);
       for (int i = 0; i < 6; ++i) {
         v.addVertex(
-            V3f(pos + visualizer.indexToHexVertex(i) * 0.7f, 0.01f),
+            V3f(position + visualizer.indexToHexVertex(i) * 0.7f, 0.01f),
             V2f(0.0f, 0.0f));
         v.addVertex(
-            V3f(pos + visualizer.indexToHexVertex(i + 1) * 0.7f, 0.01f),
+            V3f(position + visualizer.indexToHexVertex(i + 1) * 0.7f, 0.01f),
             V2f(1.0f, 0.0f));
         v.addVertex(
-            V3f(pos, 0.01f),
+            V3f(position, 0.01f),
             V2f(0.5f, 0.5f));
       }
     }
@@ -98,18 +98,18 @@ VertexArray buildUnitCircleVertexArray(
 VertexArray buildPickingTilesArray(Visualizer& visualizer) {
   Map& map = visualizer.core().map();
   VertexArray v;
-  map.forEachPos([&](const V2i& p) {
+  map.forEachPosition([&](const V2i& p) {
     Color3u color(p.x(), p.y(), 1);
-    V2f pos = visualizer.v2iToV2f(p);
+    V2f position = visualizer.v2iToV2f(p);
     for (int i = 0; i < 6; ++i) {
       v.addVertex(
-          V3f(pos + visualizer.indexToHexVertex(i)),
+          V3f(position + visualizer.indexToHexVertex(i)),
           color);
       v.addVertex(
-          V3f(pos + visualizer.indexToHexVertex(i + 1)),
+          V3f(position + visualizer.indexToHexVertex(i + 1)),
           color);
       v.addVertex(
-          V3f(pos),
+          V3f(position),
           color);
     }
   });

@@ -217,7 +217,7 @@ void Core::cleanFow() {
 
 void Core::calculateFow() {
   assert(mCurrentPlayer);
-  map().forEachPos([this](const V2i& p) {
+  map().forEachPosition([this](const V2i& p) {
     for (const auto* u : mUnits) {
       int maxDist = u->type().rangeOfVision;
       bool isPlayerOk = (u->playerID() == mCurrentPlayer->id);
@@ -230,21 +230,21 @@ void Core::calculateFow() {
   });
 }
 
-Unit& Core::unitAt(const V2i& pos) {
+Unit& Core::unitAt(const V2i& position) {
   for (auto* u : mUnits) {
-    if (u->position() == pos) {
+    if (u->position() == position) {
       return *u;
     }
   }
-  throw std::invalid_argument("No unit at pos!");
+  throw std::invalid_argument("No unit at position!");
 }
 
-bool Core::isUnitAt(const V2i& pos) const {
+bool Core::isUnitAt(const V2i& position) const {
 #if 0
-  return (map().tile(pos).unit != NULL);
+  return (map().tile(position).unit != NULL);
 #else
   for (auto* u : mUnits) {
-    if (u->position() == pos) {
+    if (u->position() == position) {
       return true;
     }
   }

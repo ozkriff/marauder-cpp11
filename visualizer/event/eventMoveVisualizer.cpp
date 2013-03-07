@@ -30,7 +30,7 @@ bool EventMoveVisualizer::isFinished() const {
 void EventMoveVisualizer::draw() {
   const Unit& unit = visualizer().core().id2unit(mEventMove.unitID());
   auto& node = visualizer().sceneManager().sceneNode(unit.id());
-  node.mPosition = currentPos();
+  node.mPosition = currentPosition();
   node.mRotationAngle = currentAngle();
   ++mCurrentMoveIndex;
 }
@@ -71,7 +71,7 @@ float EventMoveVisualizer::currentAngle() const {
   return dirToAngle(Dir(currentTile(), nextTile()));
 }
 
-V2f EventMoveVisualizer::currentPos() const {
+V2f EventMoveVisualizer::currentPosition() const {
   V2f from = visualizer().v2iToV2f(currentTile());
   V2f to = visualizer().v2iToV2f(nextTile());
   V2f diff = (to - from) / moveSpeed;

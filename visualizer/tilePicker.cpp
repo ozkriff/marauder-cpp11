@@ -13,20 +13,20 @@ TilePicker::TilePicker(Visualizer& visualizer, Camera& camera)
   mVaPick = buildPickingTilesArray(visualizer);
 }
 
-V2i TilePicker::pick(const V2i& mousePos) {
+V2i TilePicker::pick(const V2i& mousePosition) {
   drawForPicking();
-  return pickTile(mousePos);
+  return pickTile(mousePosition);
 }
 
 // private:
 
-V2i TilePicker::pickTile(const V2i& mousePos) {
+V2i TilePicker::pickTile(const V2i& mousePosition) {
   GLint viewport[4];
   GLubyte pixel[3];
   glGetIntegerv(GL_VIEWPORT, viewport);
   viewport[3] -= 1;
   void* pixelPointer = &pixel;
-  glReadPixels(mousePos.x(), viewport[3] - mousePos.y(),
+  glReadPixels(mousePosition.x(), viewport[3] - mousePosition.y(),
       1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixelPointer);
   return V2i(pixel[0], pixel[1]);
 }

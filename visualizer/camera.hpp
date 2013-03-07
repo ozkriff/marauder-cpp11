@@ -18,8 +18,8 @@ public:
   void setZAxisAngle(float angle);
   void rotateAroundZAxis(float angle);
 
-  void setMaxPos(const V2f& maxPos);
-  void setPos(const V2f& pos);
+  void setMaxPosition(const V2f& maxPosition);
+  void setPosition(const V2f& position);
   void move(float angle);
 
   void setMaxZoom(float n);
@@ -35,8 +35,8 @@ private:
   float mMinXAxisAngle;
   float mXAngle;
   float mZAngle;
-  V2f mMaxPos;
-  V2f mPos;
+  V2f mMaxPosition;
+  V2f mPosition;
   float mMaxZoom;
   float mMinZoom;
   float mZoom;

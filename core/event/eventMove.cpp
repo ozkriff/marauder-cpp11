@@ -53,8 +53,8 @@ void EventMove::apply(Core& core) const {
 }
 
 bool EventMove::isVisible(const Core &core) const {
-  for (const V2i& pos : mPath) {
-    if (core.map().tile(pos).fow > 0) {
+  for (const V2i& position : mPath) {
+    if (core.map().tile(position).fow > 0) {
       return true;
     }
   }

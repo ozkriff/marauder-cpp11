@@ -12,8 +12,8 @@ Camera::Camera()
     mMinXAxisAngle(0.0f),
     mXAngle(45.0f),
     mZAngle(45.0f),
-    mMaxPos(0.0f, 0.0f),
-    mPos(0.0f, 0.0f),
+    mMaxPosition(0.0f, 0.0f),
+    mPosition(0.0f, 0.0f),
     mMaxZoom(200.0f),
     mMinZoom(30.0f),
     mZoom(100.0f)
@@ -27,13 +27,13 @@ void Camera::set() {
   glTranslatef(0, 0, -mZoom);
   glRotatef(mXAngle, -1, 0, 0);
   glRotatef(mZAngle, 0, 0, 1);
-  glTranslatef(-mPos.x(), -mPos.y(), 0);
+  glTranslatef(-mPosition.x(), -mPosition.y(), 0);
 }
 
 void Camera::move(float angle) {
   float speedInRadians = deg2rad(mZAngle - angle);
-  mPos.setX(mPos.x() + sin(speedInRadians) * speed());
-  mPos.setY(mPos.y() + cos(speedInRadians) * speed());
+  mPosition.setX(mPosition.x() + sin(speedInRadians) * speed());
+  mPosition.setY(mPosition.y() + cos(speedInRadians) * speed());
   clampPosition();
 }
 
@@ -42,8 +42,8 @@ float Camera::speed() const {
 }
 
 void Camera::clampPosition() {
-  mPos.setX(clampF(mPos.x(), 0.0f, mMaxPos.x()));
-  mPos.setY(clampF(mPos.y(), 0.0f, mMaxPos.y()));
+  mPosition.setX(clampF(mPosition.x(), 0.0f, mMaxPosition.x()));
+  mPosition.setY(clampF(mPosition.y(), 0.0f, mMaxPosition.y()));
 }
 
 void Camera::setMaxXAxisAngle(float angle) {
@@ -70,12 +70,12 @@ void Camera::rotateAroundZAxis(float angle) {
   setZAxisAngle(mZAngle + angle);
 }
 
-void Camera::setMaxPos(const V2f& maxPos) {
-  mMaxPos = maxPos;
+void Camera::setMaxPosition(const V2f& maxPosition) {
+  mMaxPosition = maxPosition;
 }
 
-void Camera::setPos(const V2f& pos) {
-  mPos = pos;
+void Camera::setPosition(const V2f& position) {
+  mPosition = position;
   clampPosition();
 }
 

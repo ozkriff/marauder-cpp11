@@ -57,8 +57,8 @@ private:
   Uint32 mSDLFlags;
   int mBitsPerPixel;
   V2i mWinSize;
-  V2i mMousePos;
-  V2i mActiveTilePos;
+  V2i mMousePosition;
+  V2i mActiveTilePosition;
   SDL_Surface* mScreen;
   bool mIsRotatingCamera;
   bool mDone;

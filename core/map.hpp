@@ -14,15 +14,15 @@ public:
   void resize(const V2i& size);
   const V2i& size() const;
 
-  bool isInboard(const V2i& pos) const;
+  bool isInboard(const V2i& position) const;
 
-  const Tile& tile(const V2i& pos) const;
-  Tile& tile(const V2i& pos);
+  const Tile& tile(const V2i& position) const;
+  Tile& tile(const V2i& position);
 
-  V2i incV2i(const V2i& pos) const;
+  V2i incV2i(const V2i& position) const;
 
   template <class Func>
-  void forEachPos(Func f) {
+  void forEachPosition(Func f) {
     for (V2i p(0, 0); isInboard(p); p = incV2i(p)) {
       f(p);
     }
