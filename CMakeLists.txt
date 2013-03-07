@@ -81,6 +81,7 @@ add_library(marauderVisualizer
   visualizer/event/eventEndTurnVisualizer.cpp
   visualizer/sceneManager.cpp
   visualizer/sceneNode.cpp
+  visualizer/tilePicker.cpp
 )
 target_link_libraries(marauderVisualizer
   marauderCore

@@ -18,43 +18,7 @@
 #include "visualizer/event/eventAttackVisualizer.hpp"
 #include "visualizer/event/eventMoveVisualizer.hpp"
 #include "visualizer/meshBuilders.hpp"
-
-class TilePicker {
-public:
-  TilePicker(Visualizer& visualizer, Camera& camera)
-    : mCamera(camera)
-  {
-    mVaPick = buildPickingTilesArray(visualizer);
-  }
-
-  V2i pick(const V2i& mousePos) {
-    drawForPicking();
-    return pickTile(mousePos);
-  }
-
-private:
-  Camera& mCamera;
-  VertexArray mVaPick;
-
-  V2i pickTile(const V2i& mousePos) {
-    GLint viewport[4];
-    GLubyte pixel[3];
-    glGetIntegerv(GL_VIEWPORT, viewport);
-    viewport[3] -= 1;
-    void* pixelPointer = &pixel;
-    glReadPixels(mousePos.x(), viewport[3] - mousePos.y(),
-        1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixelPointer);
-    return V2i(pixel[0], pixel[1]);
-  }
-
-  void drawForPicking() {
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
-    mCamera.set();
-    mVaPick.draw();
-  }
-};
+#include "visualizer/tilePicker.hpp"
 
 // public:
 
