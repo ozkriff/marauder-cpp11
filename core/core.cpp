@@ -47,6 +47,7 @@ const std::list<Player*>& Core::players() const {
 }
 
 const Player& Core::currentPlayer() const {
+  assert(mCurrentPlayer);
   return *mCurrentPlayer;
 }
 
@@ -216,11 +217,10 @@ void Core::cleanFow() {
 }
 
 void Core::calculateFow() {
-  assert(mCurrentPlayer);
   map().forEachPosition([this](const V2i& p) {
     for (const auto* u : mUnits) {
       int maxDist = u->type().rangeOfVision;
-      bool isPlayerOk = (u->playerID() == mCurrentPlayer->id);
+      bool isPlayerOk = (u->playerID() == currentPlayer().id);
       bool isDistanceOk = (p.distance(u->position()) < maxDist);
       bool isLosOk = isLosClear(p, u->position());
       if (isPlayerOk && isDistanceOk && isLosOk) {
@@ -326,7 +326,7 @@ void Core::loadScenario() {
     for (PlayerID id = 0; id < playersCount; ++id) {
       createLocalHumanPlayer(id);
     }
-    mCurrentPlayer = mPlayers.back(); // Important!
+    setCurrentPlayer(mPlayers.back()); // Important!
   }
   // map
   {
