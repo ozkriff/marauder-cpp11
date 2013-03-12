@@ -197,12 +197,6 @@ const UnitType& Core::unitType(const std::string& name) const {
 bool Core::isLineOfSightClear(const V2i& from, const V2i& to) {
   LineOfSight los(from, to);
   for (V2i p = los.getNext(); !los.isFinished(); p = los.getNext()) {
-#if 1
-    // TODO: temp hack. fix los, remove this.
-    if (!map().isInboard(p)) {
-      return false;
-    }
-#endif
     if (isUnitAt(p) || map().tile(p).obstacle) {
       return false;
     }
