@@ -21,7 +21,7 @@ VertexArray buildMapArray(Visualizer& visualizer, GLuint textureID);
 VertexArray buildObstaclesArray(Visualizer& visualizer, GLuint textureID);
 
 VertexArray buildUnitCircleVertexArray(
-    Visualizer& visualizer, float hexIn, const Color& color);
+    Visualizer& visualizer, float radius, const Color& color);
 
 VertexArray buildPickingTilesArray(Visualizer& visualizer);
 

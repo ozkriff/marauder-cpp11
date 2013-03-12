@@ -38,20 +38,15 @@ VertexArray buildMapArray(Visualizer& visualizer, GLuint textureID) {
   map.forEachPosition([&](const V2i& p) {
     V2f position = visualizer.v2iToV2f(p);
     Color3u color = fowColor(map, p);
-    for (int i = 0; i < 6; ++i) {
-      v.addVertex(
-          position + visualizer.indexToHexVertex(i),
-          V2f(0.0f, 0.0f),
-          color);
-      v.addVertex(
-          position + visualizer.indexToHexVertex(i + 1),
-          V2f(1.0f, 0.0f),
-          color);
-      v.addVertex(
-          position,
-          V2f(0.5f, 0.5f),
-          color);
-    }
+    float n = 0.5f;
+    // first triangle
+    v.addVertex(position + V2f(-n, -n), V2f(0.0f, 0.0f), color);
+    v.addVertex(position + V2f(-n, n), V2f(0.0f, 1.0f), color);
+    v.addVertex(position + V2f(n, n), V2f(1.0f, 1.0f), color);
+    // second triangle
+    v.addVertex(position + V2f(-n, -n), V2f(0.0f, 0.0f), color);
+    v.addVertex(position + V2f(n, -n), V2f(1.0f, 0.0f), color);
+    v.addVertex(position + V2f(n, n), V2f(1.0f, 1.0f), color);
   });
   return v;
 }
@@ -62,30 +57,28 @@ VertexArray buildObstaclesArray(Visualizer& visualizer, GLuint textureID) {
   v.setTextureID(textureID);
   map.forEachPosition([&](const V2i& p) {
     if (map.tile(p).obstacle) {
-      V2f position = visualizer.v2iToV2f(p);
-      for (int i = 0; i < 6; ++i) {
-        v.addVertex(
-            V3f(position + visualizer.indexToHexVertex(i) * 0.7f, 0.01f),
-            V2f(0.0f, 0.0f));
-        v.addVertex(
-            V3f(position + visualizer.indexToHexVertex(i + 1) * 0.7f, 0.01f),
-            V2f(1.0f, 0.0f));
-        v.addVertex(
-            V3f(position, 0.01f),
-            V2f(0.5f, 0.5f));
-      }
+      V3f position(visualizer.v2iToV2f(p), 0.01f);
+      float n = 0.5f;
+      // first triangle
+      v.addVertex(position + V3f(-n, -n) * 0.7f, V2f(0.0f, 0.0f));
+      v.addVertex(position + V3f(-n, n) * 0.7f, V2f(0.0f, 1.0f));
+      v.addVertex(position + V3f(n, n) * 0.7f, V2f(1.0f, 1.0f));
+      // second triangle
+      v.addVertex(position + V3f(-n, -n) * 0.7f, V2f(0.0f, 0.0f));
+      v.addVertex(position + V3f(n, -n) * 0.7f, V2f(1.0f, 0.0f));
+      v.addVertex(position + V3f(n, n) * 0.7f, V2f(1.0f, 1.0f));
     }
   });
   return v;
 }
 
 VertexArray buildUnitCircleVertexArray(
-    Visualizer& visualizer, float hexIn, const Color& color)
+    Visualizer& visualizer, float radius, const Color& color)
 {
   VertexArray v(color, PrimitiveType::Lines);
   const int verticesCount = 12;
   for (int i = 0; i < verticesCount; ++i) {
-    const float k = hexIn * 2.0f; // resize coefficient
+    const float k = radius * 2.0f; // resize coefficient
     const float h = 0.01f;
     v.addVertex(V3f(
         visualizer.indexToCircleVertex(verticesCount, i) * k, h));
@@ -101,17 +94,15 @@ VertexArray buildPickingTilesArray(Visualizer& visualizer) {
   map.forEachPosition([&](const V2i& p) {
     Color3u color(p.x(), p.y(), 1);
     V2f position = visualizer.v2iToV2f(p);
-    for (int i = 0; i < 6; ++i) {
-      v.addVertex(
-          V3f(position + visualizer.indexToHexVertex(i)),
-          color);
-      v.addVertex(
-          V3f(position + visualizer.indexToHexVertex(i + 1)),
-          color);
-      v.addVertex(
-          V3f(position),
-          color);
-    }
+    float n = 0.5f;
+    // first triangle
+    v.addVertex(position + V2f(-n, -n), color);
+    v.addVertex(position + V2f(-n, n), color);
+    v.addVertex(position + V2f(n, n), color);
+    // second triangle
+    v.addVertex(position + V2f(-n, -n), color);
+    v.addVertex(position + V2f(n, -n), color);
+    v.addVertex(position + V2f(n, n), color);
   });
   return v;
 }

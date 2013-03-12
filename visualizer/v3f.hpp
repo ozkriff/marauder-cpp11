@@ -18,6 +18,9 @@ public:
   void setY(float y);
   void setZ(float z);
 
+  V3f operator+(const V3f& b);
+  V3f operator*(float b);
+
 private:
   float mX;
   float mY;

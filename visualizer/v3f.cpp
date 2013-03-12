@@ -40,3 +40,11 @@ void V3f::setY(float y) {
 void V3f::setZ(float z) {
   mZ = z;
 }
+
+V3f V3f::operator+(const V3f& b) {
+  return V3f(x() + b.x(), y() + b.y(), z() + b.z());
+}
+
+V3f V3f::operator*(float b) {
+  return V3f(x() * b, y() * b, z() * b);
+}

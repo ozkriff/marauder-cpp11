@@ -24,8 +24,8 @@ Dir Pathfinder::getParentDir(const Unit& u, const V2i& m) {
 int Pathfinder::getTileCost(const Unit& u, const V2i& t, const V2i& nb) {
   int diff = Dir(t, nb).diff(getParentDir(u, t));
   int maxAP = u.type().actionPoints - 1;
-  int additionalCost[] = {0, 1, std::min<int>(maxAP, 4), maxAP};
-  assert(diff >= 0 && diff <= 3);
+  int additionalCost[] = {3, 4, 5, maxAP, maxAP};
+  assert(diff >= 0 && diff <= 4);
   return 1 + additionalCost[diff];
 }
 
@@ -57,7 +57,7 @@ void Pathfinder::cleanMap() {
 
 void Pathfinder::tryToPushNeighbours(const Unit& u, const V2i& m) {
   assert(mCore.map().isInboard(m));
-  for (int i = 0; i < 6; ++i) {
+  for (int i = 0; i < 8; ++i) {
     V2i neighbourPosition = Dir::getNeighbourPosition(m, static_cast<DirID>(i));
     if (mCore.map().isInboard(neighbourPosition)) {
       processNeighbourPosition(u, m, neighbourPosition);

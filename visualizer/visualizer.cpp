@@ -27,8 +27,6 @@ Visualizer::Visualizer(Core& core)
     mConfig(parseJsonFile("confVisualizer.json")),
     mPathToData(mConfig["pathToData"].asString()),
     mTileSize(1.0f),
-    mHexEx(tileSize() / 2.0f),
-    mHexIn(std::sqrt(std::pow(mHexEx, 2) - std::pow(mHexEx / 2.0f, 2))),
     mMode(Mode::Normal),
     mSDLFlags(SDL_OPENGL | SDL_RESIZABLE),
     mBitsPerPixel(mConfig["bitsPerPixel"].asInt()),
@@ -94,20 +92,12 @@ void Visualizer::run() {
 
 V2f Visualizer::v2iToV2f(const V2i& i) const {
   assert(core().map().isInboard(i));
-  V2f v(i.x() * mHexIn * 2, i.y() * mHexEx * 1.5);
-  if (i.y() % 2 == 0) {
-    v.setX(v.x() + mHexIn);
-  }
-  return v;
+  return V2f(i.x(), i.y());
 }
 
 V2f Visualizer::indexToCircleVertex(int count, int i) const {
   float n = M_PI_2 + 2 * M_PI * i / count;
-  return V2f(std::cos(n), std::sin(n)) * mHexEx;
-}
-
-V2f Visualizer::indexToHexVertex(int i) const {
-  return indexToCircleVertex(6, i);
+  return V2f(std::cos(n), std::sin(n)) * 0.5f;
 }
 
 float Visualizer::tileSize() const {
@@ -426,7 +416,7 @@ void Visualizer::buildUnitCircles(){
   };
   for (const Color& color : colors) {
     mVaUnitCircles.push_back(
-        buildUnitCircleVertexArray(*this, mHexIn, color));
+        buildUnitCircleVertexArray(*this, 0.5f, color));
   }
 }
 

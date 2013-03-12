@@ -76,5 +76,5 @@ void rotatePointAroundPoint(
 }
 
 float dirToAngle(const Dir& dir) {
-  return (360.0f / 6.0f) * dir.toInt() + 30.0f;
+  return (360.0f / 8.0f) * dir.toInt() + 90; // TODO: ?!
 }

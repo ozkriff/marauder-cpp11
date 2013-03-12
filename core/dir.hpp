@@ -7,9 +7,11 @@
 #include "core/v2i.hpp"
 
 enum class DirID {
+  N,
   NE,
   E,
   SE,
+  S,
   SW,
   W,
   NW,
@@ -28,6 +30,7 @@ public:
 
   DirID value() const;
   int toInt() const;
+  bool isDeiagonal() const;
   Dir opposite() const;
   int diff(Dir d1) const;
 

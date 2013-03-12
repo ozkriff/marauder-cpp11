@@ -35,7 +35,6 @@ public:
 
   V2f v2iToV2f(const V2i& i) const;
   V2f indexToCircleVertex(int count, int i) const;
-  V2f indexToHexVertex(int i) const;
   float tileSize() const;
 
   void createUnitSceneNodes();
@@ -50,8 +49,6 @@ private:
   Json::Value mConfig;
   std::string mPathToData;
   float mTileSize;
-  float mHexEx;
-  float mHexIn;
   Mode mMode;
   VertexArray mVaWalkableMap;
   Uint32 mSDLFlags;

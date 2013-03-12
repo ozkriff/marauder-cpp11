@@ -21,12 +21,9 @@ private:
   V2i mTo;
   V2i mDelta;
   V2i mCurrentPosition;
+  int mStepY;
   int mError;
   bool mIsSteep;
-  V2i mSign;
-  V2i mDeltaOld;
-
-  static Dir getBresDir(int signX, int signY);
 };
 
 #endif

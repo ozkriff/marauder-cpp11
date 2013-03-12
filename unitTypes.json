@@ -1,10 +1,10 @@
 {
   "tank": {
     "rangeOfVision": 4,
-    "actionPoints": 4
+    "actionPoints": 12
   },
   "truck": {
     "rangeOfVision": 5,
-    "actionPoints": 6
+    "actionPoints": 16
   }
 }
