@@ -13,7 +13,7 @@
 #include "core/eventView.hpp"
 #include "visualizer/math.hpp"
 #include "visualizer/mesh.hpp"
-#include "visualizer/gl.hpp"
+#include "visualizer/texture.hpp"
 #include "visualizer/event/eventEndTurnVisualizer.hpp"
 #include "visualizer/event/eventAttackVisualizer.hpp"
 #include "visualizer/event/eventMoveVisualizer.hpp"

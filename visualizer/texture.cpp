@@ -7,7 +7,7 @@
 #include "SDL_image.h"
 #include "core/misc.hpp"
 #include "core/math.hpp"
-#include "visualizer/gl.hpp"
+#include "visualizer/texture.hpp"
 
 namespace {
 

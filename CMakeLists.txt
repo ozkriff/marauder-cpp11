@@ -71,7 +71,7 @@ add_library(marauderVisualizer
   visualizer/mesh.cpp
   visualizer/v2f.cpp
   visualizer/v3f.cpp
-  visualizer/gl.cpp
+  visualizer/texture.cpp
   visualizer/camera.cpp
   visualizer/eventVisualizer.cpp
   visualizer/math.cpp

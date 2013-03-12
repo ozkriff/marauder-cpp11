@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef VISUALIZER__GL_HPP
-#define VISUALIZER__GL_HPP
+#ifndef VISUALIZER__TEXTURE_HPP
+#define VISUALIZER__TEXTURE_HPP
 
 #include <string>
 
