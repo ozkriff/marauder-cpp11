@@ -26,7 +26,6 @@ Visualizer::Visualizer(Core& core)
   : mCore(core),
     mConfig(parseJsonFile("confVisualizer.json")),
     mPathToData(mConfig["pathToData"].asString()),
-    mTileSize(1.0f),
     mMode(Mode::Normal),
     mSDLFlags(SDL_OPENGL | SDL_RESIZABLE),
     mBitsPerPixel(mConfig["bitsPerPixel"].asInt()),
@@ -98,10 +97,6 @@ V2f Visualizer::v2iToV2f(const V2i& i) const {
 V2f Visualizer::indexToCircleVertex(int count, int i) const {
   float n = M_PI_2 + 2 * M_PI * i / count;
   return V2f(std::cos(n), std::sin(n)) * 0.5f;
-}
-
-float Visualizer::tileSize() const {
-  return mTileSize;
 }
 
 void Visualizer::createUnitSceneNodes() {
@@ -443,8 +438,8 @@ void Visualizer::drawSelectedunitMarker() {
   V2f p = v2iToV2f(u.position());
   VertexArray v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
   float sn = std::sin(SDL_GetTicks() / 100.0f) / 4.0f;
-  v.addVertex(V3f(p, sn + tileSize()));
-  v.addVertex(V3f(p, sn + tileSize() * 1.5f));
+  v.addVertex(V3f(p, sn + 1.0f));
+  v.addVertex(V3f(p, sn + 1.5f));
   glLineWidth(2);
   v.draw();
   glLineWidth(1);

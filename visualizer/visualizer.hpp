@@ -35,7 +35,6 @@ public:
 
   V2f v2iToV2f(const V2i& i) const;
   V2f indexToCircleVertex(int count, int i) const;
-  float tileSize() const;
 
   void createUnitSceneNodes();
 
@@ -48,7 +47,6 @@ private:
   Core& mCore;
   Json::Value mConfig;
   std::string mPathToData;
-  float mTileSize;
   Mode mMode;
   VertexArray mVaWalkableMap;
   Uint32 mSDLFlags;
