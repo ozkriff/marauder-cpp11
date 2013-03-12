@@ -30,21 +30,21 @@ int Pathfinder::getTileCost(const Unit& u, const V2i& t, const V2i& nb) {
 }
 
 void Pathfinder::processNeighbourPosition(
-    const Unit& u, const V2i& p1, const V2i& p2)
+    const Unit& u, const V2i& originalPosition, const V2i& neighbourPosition)
 {
-  Tile& t1 = mCore.map().tile(p1);
-  Tile& t2 = mCore.map().tile(p2);
-  if (mCore.isUnitAt(p2) || t2.obstacle) {
+  Tile& t1 = mCore.map().tile(originalPosition);
+  Tile& t2 = mCore.map().tile(neighbourPosition);
+  if (mCore.isUnitAt(neighbourPosition) || t2.obstacle) {
     return;
   }
-  int newcost = t1.cost + getTileCost(u, p1, p2);
+  int newcost = t1.cost + getTileCost(u, originalPosition, neighbourPosition);
   int ap = u.actionPoints();
   if (t2.cost > newcost && newcost <= ap) {
-    mQueue.push(p2);
+    mQueue.push(neighbourPosition);
     // update neighbour tile info
     t2.cost = newcost;
-    t2.direction = Direction(p2, p1);
-    t2.parent = Direction(p2, p1);
+    t2.direction = Direction(neighbourPosition, originalPosition);
+    t2.parent = Direction(neighbourPosition, originalPosition);
   }
 }
 

@@ -24,9 +24,8 @@ private:
 
   void tryToPushNeighbours(const Unit& u, const V2i& m);
 
-  // TODO: rename
-  // p1 - origPosition, p2 - neighbour position
-  void processNeighbourPosition(const Unit& u, const V2i& p1, const V2i& p2);
+  void processNeighbourPosition(
+      const Unit& u, const V2i& originalPosition, const V2i& neighbourPosition);
 
   Direction getParentDirection(const Unit& u, const V2i& m);
   int getTileCost(const Unit& u, const V2i& t, const V2i& nb);
