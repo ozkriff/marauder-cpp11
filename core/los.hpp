@@ -6,8 +6,6 @@
 #include "core/v2i.hpp"
 #include "core/dir.hpp"
 
-// http://zvold.blogspot.com/2010/01/bresenhams-line-drawing-algorithm-on_26.html
-
 class Los {
 public:
   Los(const V2i& from, const V2i& to);
