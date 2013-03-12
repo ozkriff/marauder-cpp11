@@ -46,7 +46,7 @@ public:
 
   void calculateFow();
   void cleanFow();
-  bool isLosClear(const V2i& from, const V2i& to);
+  bool isLineOfSightClear(const V2i& from, const V2i& to);
 
   Unit& unitAt(const V2i& position);
   bool isUnitAt(const V2i& position) const;

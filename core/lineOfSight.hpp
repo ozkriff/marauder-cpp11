@@ -1,15 +1,15 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef CORE__LOS_HPP
-#define CORE__LOS_HPP
+#ifndef CORE__LINE_OF_SIGHT_HPP
+#define CORE__LINE_OF_SIGHT_HPP
 
 #include "core/v2i.hpp"
 #include "core/dir.hpp"
 
-class Los {
+class LineOfSight {
 public:
-  Los(const V2i& from, const V2i& to);
-  ~Los();
+  LineOfSight(const V2i& from, const V2i& to);
+  ~LineOfSight();
 
   bool isFinished() const;
   V2i getNext();

@@ -1,6 +1,6 @@
 // See LICENSE file for copyright and license details.
 
-#include "core/los.hpp"
+#include "core/lineOfSight.hpp"
 #include <cassert>
 #include <cstdlib>
 #include <cmath>
@@ -10,7 +10,7 @@
 
 // Wikipedia: Bresenham's line algorithm
 
-Los::Los(const V2i& from, const V2i& to) {
+LineOfSight::LineOfSight(const V2i& from, const V2i& to) {
   mFrom = from;
   mTo = to;
   mIsSteep = abs(mTo.y() - mFrom.y()) > abs(mTo.x() - mFrom.x());
@@ -28,14 +28,14 @@ Los::Los(const V2i& from, const V2i& to) {
   mStepY = (mFrom.y() < mTo.y()) ? 1 : -1;
 }
 
-Los::~Los() {
+LineOfSight::~LineOfSight() {
 }
 
-bool Los::isFinished() const {
+bool LineOfSight::isFinished() const {
   return mCurrentPosition.x() >= mTo.x();
 }
 
-V2i Los::getNext() {
+V2i LineOfSight::getNext() {
   mError -= mDelta.y();
   if (mError < 0) {
     mCurrentPosition.setY(mCurrentPosition.y() + mStepY);

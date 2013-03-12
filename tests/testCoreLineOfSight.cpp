@@ -1,10 +1,10 @@
 // See LICENSE file for copyright and license details.
 
 #include <unittest++/UnitTest++.h>
-#include "core/los.hpp"
+#include "core/lineOfSight.hpp"
 
-SUITE(coreLos) {
+SUITE(coreLineOfSIght) {
   TEST(ConstructorTest) {
-    Los los(V2i(0, 0), V2i(0, 1));
+    LineOfSight los(V2i(0, 0), V2i(0, 1));
   }
 }

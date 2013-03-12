@@ -14,7 +14,7 @@
 #include "core/event/eventAttack.hpp"
 #include "core/event/eventEndTurn.hpp"
 #include "core/player.hpp"
-#include "core/los.hpp"
+#include "core/lineOfSight.hpp"
 #include "core/eventView.hpp"
 
 Core::Core()
@@ -144,7 +144,7 @@ void Core::processNewEvents() {
 void Core::command(const CommandAttack& cmd) {
   const Unit& attacker = id2unit(cmd.attackerID());
   const Unit& victim = id2unit(cmd.victimID());
-  if (isLosClear(attacker.position(), victim.position())
+  if (isLineOfSightClear(attacker.position(), victim.position())
     && attacker.actionPoints() >= 3)
   {
     Event* e = EventAttack::generate(*this, attacker, victim);
@@ -194,8 +194,8 @@ const UnitType& Core::unitType(const std::string& name) const {
   return mUnitTypes.at(name);
 }
 
-bool Core::isLosClear(const V2i& from, const V2i& to) {
-  Los los(from, to);
+bool Core::isLineOfSightClear(const V2i& from, const V2i& to) {
+  LineOfSight los(from, to);
   for (V2i p = los.getNext(); !los.isFinished(); p = los.getNext()) {
 #if 1
     // TODO: temp hack. fix los, remove this.
@@ -222,8 +222,8 @@ void Core::calculateFow() {
       int maxDist = u->type().rangeOfVision;
       bool isPlayerOk = (u->playerID() == currentPlayer().id);
       bool isDistanceOk = (p.distance(u->position()) < maxDist);
-      bool isLosOk = isLosClear(p, u->position());
-      if (isPlayerOk && isDistanceOk && isLosOk) {
+      bool isLineOfSightOk = isLineOfSightClear(p, u->position());
+      if (isPlayerOk && isDistanceOk && isLineOfSightOk) {
         ++(map().tile(p).fow);
       }
     }

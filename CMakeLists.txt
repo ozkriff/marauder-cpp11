@@ -28,7 +28,7 @@ add_library(marauderCore
   core/v2i.cpp
   core/pathfinder.cpp
   core/dir.cpp
-  core/los.cpp
+  core/lineOfSight.cpp
   core/unit.cpp
   core/event.cpp
   core/eventView.cpp
@@ -102,7 +102,7 @@ target_link_libraries(marauder marauderVisualizer)
 add_executable(testMarauder
   tests/runner.cpp
   tests/testCoreDir.cpp
-  tests/testCoreLos.cpp
+  tests/testCoreLineOfSight.cpp
 )
 target_link_libraries(testMarauder unittest++ marauderVisualizer) # TODO: fix
 
