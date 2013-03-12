@@ -6,7 +6,7 @@
 #include <list>
 #include <vector>
 #include "core/v2i.hpp"
-#include "core/dir.hpp"
+#include "core/direction.hpp"
 #include "core/unit.hpp"
 
 class EventAttack;

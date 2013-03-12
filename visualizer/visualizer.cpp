@@ -244,7 +244,7 @@ void Visualizer::processClickOnUnit(Unit& unit) {
 
 void Visualizer::processClickOnEmptyTile(Tile& tile) {
   int actionPoints = core().selectedUnit().actionPoints();
-  if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
+  if (tile.cost <= actionPoints && tile.parent.value() != DirectionID::NONE) {
     if (core().map().tile(mActiveTilePosition).cost <= actionPoints) {
       CommandMove cmd(core().selectedUnit().id(), mActiveTilePosition);
       core().doCommand(cmd);
@@ -298,7 +298,7 @@ void Visualizer::createNewUnitInActiveTile() {
         mActiveTilePosition,
         core().currentPlayer().id,
         core().unitType("truck"),
-        Dir(DirID::NE));
+        Direction(DirectionID::NE));
   if (core().isAnyUnitSelected()) {
     rebuildWalkableMapArray();
   }

@@ -1,16 +1,16 @@
 // See LICENSE file for copyright and license details.
 
 #include <unittest++/UnitTest++.h>
-#include "core/dir.hpp"
+#include "core/direction.hpp"
 
-SUITE(coreDir) {
+SUITE(coreDirection) {
   TEST(ConstructorTest) {
-    Dir dir;
+    Direction direction;
   }
 
   TEST(ConstructorTest2) {
-    Dir dir(DirID::NE);
-    CHECK(DirID::NE == dir.value());
+    Direction direction(DirectionID::NE);
+    CHECK(DirectionID::NE == direction.value());
   }
 
   TEST(someTest) {

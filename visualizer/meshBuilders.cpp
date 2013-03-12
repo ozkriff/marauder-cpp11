@@ -8,8 +8,8 @@ VertexArray buildWalkableArray(Visualizer& visualizer) {
   VertexArray v(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
   core.map().forEachPosition([&](const V2i& p) {
     const Tile& t = core.map().tile(p);
-    if (t.parent.value() != DirID::NONE && t.cost < 50) {
-      V2i to = Dir::getNeighbourPosition(p, t.parent);
+    if (t.parent.value() != DirectionID::NONE && t.cost < 50) {
+      V2i to = Direction::getNeighbourPosition(p, t.parent);
       if (core.map().isInboard(to)) {
         V2f fromF = visualizer.v2iToV2f(p);
         V2f toF = visualizer.v2iToV2f(to);

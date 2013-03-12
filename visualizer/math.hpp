@@ -6,7 +6,7 @@
 #include "visualizer/v2f.hpp"
 #include "visualizer/v3f.hpp"
 
-class Dir;
+class Direction;
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846264338327
@@ -22,6 +22,6 @@ bool maxF(float a, float b);
 float dist(const V2f& a, const V2f& b);
 void rotatePointAroundPoint(
     V2f *p, float angle, const V2f *o);
-float dirToAngle(const Dir& dir);
+float dirToAngle(const Direction& direction);
 
 #endif

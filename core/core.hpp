@@ -55,7 +55,7 @@ public:
       const V2i& p,
       PlayerID playerID,
       const UnitType& unitType,
-      const Dir& dir);
+      const Direction& direction);
   void refreshUnits(PlayerID playerID);
 
   const UnitType& unitType(const std::string& name) const;

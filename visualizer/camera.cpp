@@ -3,7 +3,7 @@
 #include <cassert>
 #include <cmath>
 #include "SDL_opengl.h"
-#include "core/dir.hpp"
+#include "core/direction.hpp"
 #include "visualizer/math.hpp"
 #include "visualizer/camera.hpp"
 

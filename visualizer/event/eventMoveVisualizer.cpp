@@ -68,7 +68,7 @@ void EventMoveVisualizer::end() {
 }
 
 float EventMoveVisualizer::currentAngle() const {
-  return dirToAngle(Dir(currentTile(), nextTile()));
+  return dirToAngle(Direction(currentTile(), nextTile()));
 }
 
 V2f EventMoveVisualizer::currentPosition() const {

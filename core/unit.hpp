@@ -3,7 +3,7 @@
 #ifndef CORE__UNIT_HPP
 #define CORE__UNIT_HPP
 
-#include "core/dir.hpp"
+#include "core/direction.hpp"
 #include "core/v2i.hpp"
 #include "core/player.hpp"
 
@@ -19,12 +19,12 @@ public:
   const UnitType& type() const;
   UnitID id() const;
   PlayerID playerID() const;
-  const Dir& direction() const;
+  const Direction& direction() const;
   int actionPoints() const;
   const V2i& position() const;
 
   // TODO: remove some of this setters :(
-  void setDirection(const Dir& direction);
+  void setDirection(const Direction& direction);
   void setActionPoints(int actionPoints);
   void setPosition(const V2i& position);
 
@@ -32,7 +32,7 @@ private:
   const UnitType& mType;
   UnitID mID;
   PlayerID mPlayerID;
-  Dir mDirection;
+  Direction mDirection;
   int mActionPoints;
   V2i mPosition;
 };

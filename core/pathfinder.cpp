@@ -12,7 +12,7 @@ Pathfinder::Pathfinder(Core& core)
 }
 
 // If this is first(start) tile - no parent tile
-Dir Pathfinder::getParentDir(const Unit& u, const V2i& m) {
+Direction Pathfinder::getParentDirection(const Unit& u, const V2i& m) {
   Tile& tile = mCore.map().tile(m);
   if (tile.cost == 0) {
     return u.direction();
@@ -22,7 +22,7 @@ Dir Pathfinder::getParentDir(const Unit& u, const V2i& m) {
 }
 
 int Pathfinder::getTileCost(const Unit& u, const V2i& t, const V2i& nb) {
-  int diff = Dir(t, nb).diff(getParentDir(u, t));
+  int diff = Direction(t, nb).diff(getParentDirection(u, t));
   int maxAP = u.type().actionPoints - 1;
   int additionalCost[] = {3, 4, 5, maxAP, maxAP};
   assert(diff >= 0 && diff <= 4);
@@ -43,22 +43,22 @@ void Pathfinder::processNeighbourPosition(
     mQueue.push(p2);
     // update neighbour tile info
     t2.cost = newcost;
-    t2.dir = Dir(p2, p1);
-    t2.parent = Dir(p2, p1);
+    t2.direction = Direction(p2, p1);
+    t2.parent = Direction(p2, p1);
   }
 }
 
 void Pathfinder::cleanMap() {
   mCore.map().forEachTile([](Tile& tile){
     tile.cost = 30000;
-    tile.parent = DirID::NONE;
+    tile.parent = DirectionID::NONE;
   });
 }
 
 void Pathfinder::tryToPushNeighbours(const Unit& u, const V2i& m) {
   assert(mCore.map().isInboard(m));
   for (int i = 0; i < 8; ++i) {
-    V2i neighbourPosition = Dir::getNeighbourPosition(m, static_cast<DirID>(i));
+    V2i neighbourPosition = Direction::getNeighbourPosition(m, static_cast<DirectionID>(i));
     if (mCore.map().isInboard(neighbourPosition)) {
       processNeighbourPosition(u, m, neighbourPosition);
     }
@@ -72,8 +72,8 @@ void Pathfinder::fillMap(const Unit& u) {
   mQueue.push(u.position());
   Tile& t = mCore.map().tile(u.position());
   t.cost = 0;
-  t.parent = DirID::NONE;
-  t.dir = u.direction();
+  t.parent = DirectionID::NONE;
+  t.direction = u.direction();
   while (!mQueue.empty()) {
     V2i p = mQueue.front();
     mQueue.pop();
@@ -87,7 +87,7 @@ std::vector<V2i> Pathfinder::getPath(const V2i& position) const {
   assert(mCore.map().isInboard(p));
   while (mCore.map().tile(p).cost != 0) {
     path.push_back(p);
-    p = Dir::getNeighbourPosition(p, mCore.map().tile(p).parent);
+    p = Direction::getNeighbourPosition(p, mCore.map().tile(p).parent);
     assert(mCore.map().isInboard(p));
   }
   // Add start position

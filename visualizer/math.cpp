@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <cmath>
 #include "core/v2i.hpp"
-#include "core/dir.hpp"
+#include "core/direction.hpp"
 
 float getRotAngle(const V2f& a, const V2f& b) {
   V2f diff(std::pow(b.x() - a.x(), 2), std::pow(b.y() - a.y(), 2));
@@ -75,6 +75,6 @@ void rotatePointAroundPoint(
   p->setY(sin * dx + cos * dy + o->y());
 }
 
-float dirToAngle(const Dir& dir) {
-  return (360.0f / 8.0f) * dir.toInt() + 90; // TODO: ?!
+float dirToAngle(const Direction& direction) {
+  return (360.0f / 8.0f) * direction.toInt() + 90; // TODO: ?!
 }

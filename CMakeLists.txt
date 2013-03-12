@@ -27,7 +27,7 @@ add_library(marauderCore
   core/misc.cpp
   core/v2i.cpp
   core/pathfinder.cpp
-  core/dir.cpp
+  core/direction.cpp
   core/lineOfSight.cpp
   core/unit.cpp
   core/event.cpp

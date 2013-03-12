@@ -3,7 +3,7 @@
 #ifndef CORE__TILE_HPP
 #define CORE__TILE_HPP
 
-#include "core/dir.hpp"
+#include "core/direction.hpp"
 
 class Unit;
 
@@ -13,8 +13,8 @@ public: // TODO: make private
   bool obstacle;
   // TODO: move to pathfinding
   int cost;
-  Dir parent;
-  Dir dir;
+  Direction parent;
+  Direction direction;
   int fow; // how many units see this tile
 };
 

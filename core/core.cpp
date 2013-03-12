@@ -157,7 +157,7 @@ void Core::command(const CommandMove& cmd) {
   const Unit& unit = id2unit(cmd.unitID());
   const Tile& tile = map().tile(cmd.destination());
   int actionPoints = unit.actionPoints();
-  if (tile.cost <= actionPoints && tile.parent.value() != DirID::NONE) {
+  if (tile.cost <= actionPoints && tile.parent.value() != DirectionID::NONE) {
     if (tile.cost <= actionPoints) {
       Event* e = EventMove::generate(*this, unit, cmd.destination());
       eventManager().addEvent(e);
@@ -298,12 +298,12 @@ void Core::addUnit(
     const V2i& p,
     PlayerID playerID,
     const UnitType& unitType,
-    const Dir& dir)
+    const Direction& direction)
 {
   assert(map().isInboard(p));
   auto* u = new Unit(getNewUnitID(), playerID, unitType);
   u->setPosition(p);
-  u->setDirection(dir);
+  u->setDirection(direction);
   u->setActionPoints(u->type().actionPoints);
   mUnits.push_back(u);
   if (isAnyUnitSelected()) {
@@ -347,7 +347,7 @@ void Core::loadScenario() {
       for (const Json::Value& unitInfo : playerUnitData) {
         V2i position = JsonValueToV2i(unitInfo["position"]);
         std::string typeName = unitInfo["type"].asString();
-        Dir direction(unitInfo["direction"].asInt());
+        Direction direction(unitInfo["direction"].asInt());
         addUnit(position, playerID, unitType(typeName), direction);
       }
       ++playerID;

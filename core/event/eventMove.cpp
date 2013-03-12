@@ -44,7 +44,7 @@ void EventMove::apply(Core& core) const {
     }
   }
   u.setPosition(mPath[mPath.size() - 1]);
-  u.setDirection(Dir(mPath[mPath.size() - 2], mPath[mPath.size() - 1]));
+  u.setDirection(Direction(mPath[mPath.size() - 2], mPath[mPath.size() - 1]));
   u.setActionPoints(u.actionPoints() - mCost);
   if (core.isAnyUnitSelected()) {
     core.pathfinder().fillMap(core.selectedUnit());

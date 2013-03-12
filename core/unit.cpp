@@ -7,7 +7,7 @@ Unit::Unit(UnitID id, PlayerID playerID, const UnitType &type)
   : mType(type),
     mID(id),
     mPlayerID(playerID),
-    mDirection(DirID::NONE),
+    mDirection(DirectionID::NONE),
     mActionPoints(0),
     mPosition(0, 0)
 {
@@ -28,7 +28,7 @@ PlayerID Unit::playerID() const {
   return mPlayerID;
 }
 
-const Dir& Unit::direction() const {
+const Direction& Unit::direction() const {
   return mDirection;
 }
 
@@ -40,7 +40,7 @@ const V2i& Unit::position() const {
   return mPosition;
 }
 
-void Unit::setDirection(const Dir& direction) {
+void Unit::setDirection(const Direction& direction) {
   mDirection = direction;
 }
 

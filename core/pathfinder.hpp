@@ -5,7 +5,7 @@
 
 #include <vector>
 #include <queue>
-#include "core/dir.hpp"
+#include "core/direction.hpp"
 
 class Unit;
 class Core;
@@ -28,7 +28,7 @@ private:
   // p1 - origPosition, p2 - neighbour position
   void processNeighbourPosition(const Unit& u, const V2i& p1, const V2i& p2);
 
-  Dir getParentDir(const Unit& u, const V2i& m);
+  Direction getParentDirection(const Unit& u, const V2i& m);
   int getTileCost(const Unit& u, const V2i& t, const V2i& nb);
 };
 

@@ -4,7 +4,7 @@
 #define CORE__LINE_OF_SIGHT_HPP
 
 #include "core/v2i.hpp"
-#include "core/dir.hpp"
+#include "core/direction.hpp"
 
 class LineOfSight {
 public:

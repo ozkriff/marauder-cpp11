@@ -5,7 +5,7 @@
 
 #include <vector>
 #include "core/v2i.hpp"
-#include "core/dir.hpp"
+#include "core/direction.hpp"
 #include "core/event.hpp"
 #include "core/unit.hpp"
 
@@ -30,7 +30,7 @@ private:
   UnitID mUnitID;
   std::vector<V2i> mPath;
   int mCost;
-  Dir mInitialDirection;
+  Direction mInitialDirection;
 };
 
 #endif
