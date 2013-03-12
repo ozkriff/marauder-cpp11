@@ -2,7 +2,7 @@
 
 #include "visualizer/event/eventEndTurnVisualizer.hpp"
 #include "core/core.hpp"
-#include "visualizer/vertexArray.hpp"
+#include "visualizer/mesh.hpp"
 
 EventEndTurnVisualizer::EventEndTurnVisualizer(Visualizer& visualizer, const EventEndTurnView& event)
   : EventVisualizer(visualizer),

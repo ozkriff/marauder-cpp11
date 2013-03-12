@@ -7,7 +7,7 @@
 #include <string>
 #include "visualizer/v3f.hpp"
 #include "visualizer/v2f.hpp"
-#include "visualizer/vertexArray.hpp"
+#include "visualizer/mesh.hpp"
 
 class ObjModel {
 public:
@@ -21,7 +21,7 @@ public:
 
   ObjModel(const std::string& filename);
 
-  VertexArray build();
+  Mesh build();
   void debugPrint();
 
 private:

@@ -3,9 +3,9 @@
 #include "visualizer/meshBuilders.hpp"
 #include "visualizer/visualizer.hpp"
 
-VertexArray buildWalkableArray(Visualizer& visualizer) {
+Mesh buildWalkableArray(Visualizer& visualizer) {
   Core& core = visualizer.core();
-  VertexArray v(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
+  Mesh v(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
   core.map().forEachPosition([&](const V2i& p) {
     const Tile& t = core.map().tile(p);
     if (t.parent.value() != DirectionID::NONE && t.cost < 50) {
@@ -31,9 +31,9 @@ Color3u fowColor(const Map& map, const V2i& position) {
   return Color3u(n);
 }
 
-VertexArray buildMapArray(Visualizer& visualizer, GLuint textureID) {
+Mesh buildMapArray(Visualizer& visualizer, GLuint textureID) {
   Map& map = visualizer.core().map();
-  VertexArray v;
+  Mesh v;
   v.setTextureID(textureID);
   map.forEachPosition([&](const V2i& p) {
     V2f position = visualizer.v2iToV2f(p);
@@ -51,9 +51,9 @@ VertexArray buildMapArray(Visualizer& visualizer, GLuint textureID) {
   return v;
 }
 
-VertexArray buildObstaclesArray(Visualizer& visualizer, GLuint textureID) {
+Mesh buildObstaclesArray(Visualizer& visualizer, GLuint textureID) {
   Map& map = visualizer.core().map();
-  VertexArray v(Color(0.4f, 0.1f, 0.0f));
+  Mesh v(Color(0.4f, 0.1f, 0.0f));
   v.setTextureID(textureID);
   map.forEachPosition([&](const V2i& p) {
     if (map.tile(p).obstacle) {
@@ -72,10 +72,10 @@ VertexArray buildObstaclesArray(Visualizer& visualizer, GLuint textureID) {
   return v;
 }
 
-VertexArray buildUnitCircleVertexArray(
+Mesh buildUnitCircleMesh(
     Visualizer& visualizer, float radius, const Color& color)
 {
-  VertexArray v(color, PrimitiveType::Lines);
+  Mesh v(color, PrimitiveType::Lines);
   const int verticesCount = 12;
   for (int i = 0; i < verticesCount; ++i) {
     const float k = radius * 2.0f; // resize coefficient
@@ -88,9 +88,9 @@ VertexArray buildUnitCircleVertexArray(
   return v;
 }
 
-VertexArray buildPickingTilesArray(Visualizer& visualizer) {
+Mesh buildPickingTilesArray(Visualizer& visualizer) {
   Map& map = visualizer.core().map();
-  VertexArray v;
+  Mesh v;
   map.forEachPosition([&](const V2i& p) {
     Color3u color(p.x(), p.y(), 1);
     V2f position = visualizer.v2iToV2f(p);

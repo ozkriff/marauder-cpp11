@@ -12,7 +12,7 @@
 #include "core/player.hpp"
 #include "core/eventView.hpp"
 #include "visualizer/math.hpp"
-#include "visualizer/vertexArray.hpp"
+#include "visualizer/mesh.hpp"
 #include "visualizer/gl.hpp"
 #include "visualizer/event/eventEndTurnVisualizer.hpp"
 #include "visualizer/event/eventAttackVisualizer.hpp"
@@ -44,7 +44,7 @@ Visualizer::Visualizer(Core& core)
   mFloorTexture = loadTexture(mPathToData + "floor.png");
   initCamera();
   loadUnitResources();
-  initVertexArrays();
+  initMeshs();
   createSceneManagerForEachPlayer();
   createUnitSceneNodes();
 }
@@ -74,15 +74,15 @@ const SceneManager& Visualizer::sceneManager() const {
 }
 
 void Visualizer::cleanWalkableMapArray() {
-  mVaWalkableMap = VertexArray();
+  mWalkableTilesMesh = Mesh();
 }
 
 void Visualizer::rebuildWalkableMapArray() {
-  mVaWalkableMap = buildWalkableArray(*this);
+  mWalkableTilesMesh = buildWalkableArray(*this);
 }
 
 void Visualizer::rebuildMapArray() {
-  mVaMap = buildMapArray(*this, mFloorTexture);
+  mTilesMesh = buildMapArray(*this, mFloorTexture);
 }
 
 void Visualizer::run() {
@@ -284,7 +284,7 @@ void Visualizer::switchActiveTileType() {
   Tile& t = core().map().tile(mActiveTilePosition);
   t.obstacle = !t.obstacle;
   rebuildMapArray();
-  mVaObstacles = buildObstaclesArray(*this, mFloorTexture);
+  mObstaclesMesh = buildObstaclesArray(*this, mFloorTexture);
   core().calculateFow();
   rebuildMapArray();
   if (core().isAnyUnitSelected()) {
@@ -384,9 +384,9 @@ void Visualizer::initCamera() {
   camera().setZoom(20.0f);
 }
 
-void Visualizer::initVertexArrays() {
+void Visualizer::initMeshs() {
   rebuildMapArray();
-  mVaObstacles = buildObstaclesArray(*this, mFloorTexture);
+  mObstaclesMesh = buildObstaclesArray(*this, mFloorTexture);
   buildUnitCircles();
 }
 
@@ -394,12 +394,12 @@ void Visualizer::createUnitNode(const Unit& unit) {
   for (const Player* player : core().players()) {
     auto& sm = mSceneManagers.at(player->id); // shortcut
     auto* unitNode = new SceneNode();
-    unitNode->mVertexArray = &mVaUnits[unit.type().id];
+    unitNode->mMesh = &mUnitMeshes[unit.type().id];
     unitNode->mPosition = v2iToV2f(unit.position());
     unitNode->mRotationAngle = dirToAngle(unit.direction());
     sm.addNode(unit.id(), unitNode);
     auto* circleNode = new SceneNode();
-    circleNode->mVertexArray = &(mVaUnitCircles.at(unit.playerID()));
+    circleNode->mMesh = &(mUnitCircleMeshes.at(unit.playerID()));
     unitNode->mChildrens.push_back(circleNode);
   }
 }
@@ -410,8 +410,8 @@ void Visualizer::buildUnitCircles(){
     Color(0.0f, 0.0f, 1.0f)
   };
   for (const Color& color : colors) {
-    mVaUnitCircles.push_back(
-        buildUnitCircleVertexArray(*this, 0.5f, color));
+    mUnitCircleMeshes.push_back(
+        buildUnitCircleMesh(*this, 0.5f, color));
   }
 }
 
@@ -422,21 +422,21 @@ void Visualizer::loadUnitResources() {
     const Json::Value& unitInfo = resources[key];
     std::string texturePath = mPathToData + unitInfo["textureName"].asString();
     std::string objModelPath = mPathToData + unitInfo["objModelName"].asString();
-    mVaUnits[id] = ObjModel(objModelPath).build();
-    mVaUnits[id].setTextureID(loadTexture(texturePath));
+    mUnitMeshes[id] = ObjModel(objModelPath).build();
+    mUnitMeshes[id].setTextureID(loadTexture(texturePath));
   }
 }
 
 void Visualizer::drawMap() {
-  mVaMap.draw();
-  mVaObstacles.draw();
-  mVaWalkableMap.draw();
+  mTilesMesh.draw();
+  mObstaclesMesh.draw();
+  mWalkableTilesMesh.draw();
 }
 
 void Visualizer::drawSelectedunitMarker() {
   const Unit& u = core().selectedUnit();
   V2f p = v2iToV2f(u.position());
-  VertexArray v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
+  Mesh v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
   float sn = std::sin(SDL_GetTicks() / 100.0f) / 4.0f;
   v.addVertex(V3f(p, sn + 1.0f));
   v.addVertex(V3f(p, sn + 1.5f));

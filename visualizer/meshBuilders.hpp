@@ -5,24 +5,24 @@
 
 #include "SDL_opengl.h"
 
-class VertexArray;
+class Mesh;
 class Visualizer;
 class V2i;
 class Color;
 class Color3u;
 class Map;
 
-VertexArray buildWalkableArray(Visualizer& visualizer);
+Mesh buildWalkableArray(Visualizer& visualizer);
 
 Color3u fowColor(const Map& map, const V2i& position);
 
-VertexArray buildMapArray(Visualizer& visualizer, GLuint textureID);
+Mesh buildMapArray(Visualizer& visualizer, GLuint textureID);
 
-VertexArray buildObstaclesArray(Visualizer& visualizer, GLuint textureID);
+Mesh buildObstaclesArray(Visualizer& visualizer, GLuint textureID);
 
-VertexArray buildUnitCircleVertexArray(
+Mesh buildUnitCircleMesh(
     Visualizer& visualizer, float radius, const Color& color);
 
-VertexArray buildPickingTilesArray(Visualizer& visualizer);
+Mesh buildPickingTilesArray(Visualizer& visualizer);
 
 #endif

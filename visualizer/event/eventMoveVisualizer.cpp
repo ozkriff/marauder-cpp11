@@ -4,7 +4,7 @@
 #include <cassert>
 #include "core/core.hpp"
 #include "core/eventView.hpp"
-#include "visualizer/vertexArray.hpp"
+#include "visualizer/mesh.hpp"
 #include "visualizer/math.hpp"
 
 EventMoveVisualizer::EventMoveVisualizer(Visualizer& visualizer, const EventMoveView& event)

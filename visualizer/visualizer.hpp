@@ -7,7 +7,7 @@
 #include "SDL_opengl.h"
 #include "json/json.h"
 #include "core/core.hpp"
-#include "visualizer/vertexArray.hpp"
+#include "visualizer/mesh.hpp"
 #include "visualizer/v2f.hpp"
 #include "visualizer/camera.hpp"
 #include "visualizer/objModel.hpp"
@@ -48,7 +48,7 @@ private:
   Json::Value mConfig;
   std::string mPathToData;
   Mode mMode;
-  VertexArray mVaWalkableMap;
+  Mesh mWalkableTilesMesh;
   Uint32 mSDLFlags;
   int mBitsPerPixel;
   V2i mWinSize;
@@ -59,10 +59,10 @@ private:
   bool mDone;
   Camera mCamera;
   GLuint mFloorTexture;
-  VertexArray mVaMap;
-  VertexArray mVaObstacles;
-  std::vector<VertexArray> mVaUnitCircles;
-  std::map<int, VertexArray> mVaUnits;
+  Mesh mTilesMesh;
+  Mesh mObstaclesMesh;
+  std::vector<Mesh> mUnitCircleMeshes;
+  std::map<int, Mesh> mUnitMeshes;
   EventVisualizer* mCurrentEventVisualizer;
   TilePicker* mTilePicker;
 
@@ -91,7 +91,7 @@ private:
   void mainloop();
   void initOpengl();
   void initCamera();
-  void initVertexArrays();
+  void initMeshs();
   void createUnitNode(const Unit& unit);
   void buildUnitCircles();
   void loadUnitResources();

@@ -2,11 +2,11 @@
 
 #include "visualizer/sceneNode.hpp"
 #include <cassert>
-#include "visualizer/vertexArray.hpp"
+#include "visualizer/mesh.hpp"
 
 SceneNode::SceneNode()
   : mColor(1, 1, 1),
-    mVertexArray(nullptr),
+    mMesh(nullptr),
     mPosition(0.0f, 0.0f, 0.0f),
     mRotationAngle(0.0f)
 {
@@ -28,7 +28,7 @@ void SceneNode::draw() const {
     assert(child != nullptr);
     child->draw();
   }
-  assert(mVertexArray);
-  mVertexArray->draw();
+  assert(mMesh);
+  mMesh->draw();
   glPopMatrix();
 }

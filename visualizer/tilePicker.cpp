@@ -10,7 +10,7 @@
 TilePicker::TilePicker(Visualizer& visualizer, Camera& camera)
   : mCamera(camera)
 {
-  mVaPick = buildPickingTilesArray(visualizer);
+  mPickMesh = buildPickingTilesArray(visualizer);
 }
 
 V2i TilePicker::pick(const V2i& mousePosition) {
@@ -36,5 +36,5 @@ void TilePicker::drawForPicking() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
   mCamera.set();
-  mVaPick.draw();
+  mPickMesh.draw();
 }

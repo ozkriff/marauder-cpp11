@@ -1,7 +1,7 @@
 // See LICENSE file for copyright and license details.
 
-#ifndef VISUALIZER__VERTEX_ARRAY_HPP
-#define VISUALIZER__VERTEX_ARRAY_HPP
+#ifndef VISUALIZER__MESH_HPP
+#define VISUALIZER__MESH_HPP
 
 #include <vector>
 #include "SDL_opengl.h"
@@ -15,10 +15,10 @@ enum class PrimitiveType {
   Lines
 };
 
-class VertexArray {
+class Mesh {
 public:
-  VertexArray(PrimitiveType type = PrimitiveType::Triangles);
-  VertexArray(const Color& color, PrimitiveType type = PrimitiveType::Triangles);
+  Mesh(PrimitiveType type = PrimitiveType::Triangles);
+  Mesh(const Color& color, PrimitiveType type = PrimitiveType::Triangles);
 
   void setTextureID(GLuint textureID);
 

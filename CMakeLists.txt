@@ -68,7 +68,7 @@ add_library(marauderVisualizer
   visualizer/color3u.cpp
   visualizer/visualizer.cpp
   visualizer/objModel.cpp
-  visualizer/vertexArray.cpp
+  visualizer/mesh.cpp
   visualizer/v2f.cpp
   visualizer/v3f.cpp
   visualizer/gl.cpp

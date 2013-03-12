@@ -5,7 +5,7 @@
 #include "core/core.hpp"
 #include "core/eventView.hpp"
 #include "visualizer/math.hpp"
-#include "visualizer/vertexArray.hpp"
+#include "visualizer/mesh.hpp"
 #include "visualizer/event/eventMoveVisualizer.hpp"
 #include "visualizer/event/eventEndTurnVisualizer.hpp"
 #include "visualizer/event/eventAttackVisualizer.hpp"

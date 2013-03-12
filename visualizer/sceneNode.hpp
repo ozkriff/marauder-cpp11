@@ -7,7 +7,7 @@
 #include "visualizer/color.hpp"
 #include "visualizer/v3f.hpp"
 
-class VertexArray;
+class Mesh;
 
 class SceneNode {
 public:
@@ -17,7 +17,7 @@ public:
   void draw() const;
 
   Color mColor;
-  VertexArray* mVertexArray;
+  Mesh* mMesh;
   V3f mPosition;
   float mRotationAngle;
   std::list<SceneNode*> mChildrens;

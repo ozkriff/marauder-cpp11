@@ -3,7 +3,7 @@
 #ifndef VISUALIZER__TILE_PICKER_HPP
 #define VISUALIZER__TILE_PICKER_HPP
 
-#include "visualizer/vertexArray.hpp"
+#include "visualizer/mesh.hpp"
 
 class Visualizer;
 class Camera;
@@ -17,7 +17,7 @@ public:
 
 private:
   Camera& mCamera;
-  VertexArray mVaPick;
+  Mesh mPickMesh;
 
   V2i pickTile(const V2i& mousePosition);
   void drawForPicking();

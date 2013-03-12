@@ -2,9 +2,9 @@
 
 #include <cassert>
 #include <stdexcept>
-#include "visualizer/vertexArray.hpp"
+#include "visualizer/mesh.hpp"
 
-VertexArray::VertexArray(PrimitiveType primitiveType)
+Mesh::Mesh(PrimitiveType primitiveType)
   : mVertices(),
     mTextureCoordinates(),
     mColors(),
@@ -15,7 +15,7 @@ VertexArray::VertexArray(PrimitiveType primitiveType)
 {
 }
 
-VertexArray::VertexArray(const Color& color, PrimitiveType primitiveType)
+Mesh::Mesh(const Color& color, PrimitiveType primitiveType)
   : mVertices(),
     mTextureCoordinates(),
     mColors(),
@@ -26,11 +26,11 @@ VertexArray::VertexArray(const Color& color, PrimitiveType primitiveType)
 {
 }
 
-void VertexArray::setTextureID(GLuint textureID) {
+void Mesh::setTextureID(GLuint textureID) {
   mTextureID = textureID;
 }
 
-void VertexArray::addVertex(
+void Mesh::addVertex(
     const V3f& meshCoordinate,
     const V2f& textureCoordinate,
     const Color3u& color)
@@ -40,40 +40,40 @@ void VertexArray::addVertex(
   addColor(color);
 }
 
-void VertexArray::addVertex(
+void Mesh::addVertex(
     const V3f& meshCoordinate, const V2f& textureCoordinate)
 {
   addCoord(meshCoordinate);
   addTextureCoord(textureCoordinate);
 }
 
-void VertexArray::addVertex(const V3f& meshCoordinate, const Color3u& color) {
+void Mesh::addVertex(const V3f& meshCoordinate, const Color3u& color) {
   addCoord(meshCoordinate);
   addColor(color);
 }
 
-void VertexArray::addVertex(const V3f& meshCoordinate) {
+void Mesh::addVertex(const V3f& meshCoordinate) {
   addCoord(meshCoordinate);
 }
 
-void VertexArray::addColor(const Color3u &color) {
+void Mesh::addColor(const Color3u &color) {
   mColors.push_back(color.red());
   mColors.push_back(color.green());
   mColors.push_back(color.blue());
 }
 
-void VertexArray::addTextureCoord(const V2f& vertex) {
+void Mesh::addTextureCoord(const V2f& vertex) {
   mTextureCoordinates.push_back(vertex.x());
   mTextureCoordinates.push_back(vertex.y());
 }
 
-void VertexArray::addCoord(const V3f& vertex) {
+void Mesh::addCoord(const V3f& vertex) {
   mVertices.push_back(vertex.x());
   mVertices.push_back(vertex.y());
   mVertices.push_back(vertex.z());
 }
 
-void VertexArray::draw() {
+void Mesh::draw() {
   // enable everything
   {
     if (!mTextureCoordinates.empty()) {

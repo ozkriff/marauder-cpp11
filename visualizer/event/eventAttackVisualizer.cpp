@@ -5,7 +5,7 @@
 #include "core/misc.hpp"
 #include "core/math.hpp"
 #include "core/eventView.hpp"
-#include "visualizer/vertexArray.hpp"
+#include "visualizer/mesh.hpp"
 #include "visualizer/visualizer.hpp"
 #include "visualizer/math.hpp"
 
@@ -51,7 +51,7 @@ void EventAttackVisualizer::end() {
 // private:
 
 void EventAttackVisualizer::drawLineOfFire() {
-  VertexArray v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
+  Mesh v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
   const V3f& from = mInitialAttackerPosition;
   const V3f& to = mInitialVictimPosition;
   float h = 0.2f;
