@@ -20,8 +20,6 @@ float clampAngle(float angle);
 bool minF(float a, float b);
 bool maxF(float a, float b);
 float dist(const V2f& a, const V2f& b);
-void rotatePointAroundPoint(
-    V2f *p, float angle, const V2f *o);
 float dirToAngle(const Direction& direction);
 
 #endif

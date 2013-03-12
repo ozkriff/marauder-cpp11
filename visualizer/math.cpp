@@ -59,22 +59,6 @@ float dist(const V2f& a, const V2f& b) {
   return std::sqrt(std::pow(dx, 2) + std::pow(dy, 2));
 }
 
-void rotatePointAroundPoint(
-    V2f *p, float angle, const V2f *o)
-{
-  assert(p);
-  assert(o);
-  assert(angle >= 0);
-  assert(angle <= 360);
-  V2f old = *p;
-  float sin = std::sin(angle);
-  float cos = std::cos(angle);
-  float dx = old.x() - o->x();
-  float dy = old.y() - o->y();
-  p->setX(cos * dx - sin * dy + o->x());
-  p->setY(sin * dx + cos * dy + o->y());
-}
-
 float dirToAngle(const Direction& direction) {
   return (360.0f / 8.0f) * direction.toInt() + 90; // TODO: ?!
 }

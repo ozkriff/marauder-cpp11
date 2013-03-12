@@ -35,17 +35,6 @@ void V2f::setY(float y) {
   mY = y;
 }
 
-void V2f::rotate(V2f *p, float angle) {
-  assert(p);
-  assert(angle >= 0);
-  assert(angle <= 360);
-  V2f old = *p;
-  float sin = std::sin(angle);
-  float cos = std::cos(angle);
-  p->setX(cos * old.x() - sin * old.y());
-  p->setY(sin * old.x() + cos * old.y());
-}
-
 V2f V2f::operator+(const V2f& b) {
   return V2f(x() + b.x(), y() + b.y());
 }
