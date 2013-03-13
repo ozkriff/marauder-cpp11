@@ -5,7 +5,7 @@
 #include "visualizer/math.hpp"
 
 Mesh buildWalkableArray(Map &map) {
-  Mesh v(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
+  Mesh mesh(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
   map.forEachPosition([&](const V2i& p) {
     const Tile& t = map.tile(p);
     if (t.parent.value() != DirectionID::NONE && t.cost < 50) {
@@ -13,12 +13,12 @@ Mesh buildWalkableArray(Map &map) {
       if (map.isInboard(to)) {
         V2f fromF = v2iToV2f(p);
         V2f toF = v2iToV2f(to);
-        v.addVertex(V3f(fromF, 0.01f));
-        v.addVertex(V3f(toF, 0.01f));
+        mesh.addVertex(V3f(fromF, 0.01f));
+        mesh.addVertex(V3f(toF, 0.01f));
       }
     }
   });
-  return v;
+  return mesh;
 }
 
 Color3u fowColor(const Map& map, const V2i& position) {
@@ -32,67 +32,67 @@ Color3u fowColor(const Map& map, const V2i& position) {
 }
 
 Mesh buildMapArray(Map &map, GLuint textureID) {
-  Mesh v;
-  v.setTextureID(textureID);
+  Mesh mesh;
+  mesh.setTextureID(textureID);
   map.forEachPosition([&](const V2i& p) {
     V2f position = v2iToV2f(p);
     Color3u color = fowColor(map, p);
     for (int i = 0; i < 6; ++i) {
-      v.addVertex(position + indexToHexVertex(i), V2f(0.0f, 0.0f), color);
-      v.addVertex(position + indexToHexVertex(i + 1), V2f(1.0f, 0.0f), color);
-      v.addVertex(position, V2f(0.5f, 0.5f), color);
+      mesh.addVertex(position + indexToHexVertex(i), V2f(0.0f, 0.0f), color);
+      mesh.addVertex(position + indexToHexVertex(i + 1), V2f(1.0f, 0.0f), color);
+      mesh.addVertex(position, V2f(0.5f, 0.5f), color);
     }
   });
-  return v;
+  return mesh;
 }
 
 Mesh buildObstaclesArray(Map& map, GLuint textureID) {
-  Mesh v(Color(0.4f, 0.1f, 0.0f));
-  v.setTextureID(textureID);
+  Mesh mesh(Color(0.4f, 0.1f, 0.0f));
+  mesh.setTextureID(textureID);
   map.forEachPosition([&](const V2i& p) {
     if (map.tile(p).obstacle) {
       V2f position = v2iToV2f(p);
       for (int i = 0; i < 6; ++i) {
-        v.addVertex(
+        mesh.addVertex(
             V3f(position + indexToHexVertex(i) * 0.7f, 0.01f),
             V2f(0.0f, 0.0f));
-        v.addVertex(
+        mesh.addVertex(
             V3f(position + indexToHexVertex(i + 1) * 0.7f, 0.01f),
             V2f(1.0f, 0.0f));
-        v.addVertex(
+        mesh.addVertex(
             V3f(position, 0.01f),
             V2f(0.5f, 0.5f));
       }
     }
   });
-  return v;
+  return mesh;
 }
 
 Mesh buildUnitCircleMesh(float radius, const Color& color)
 {
-  Mesh v(color, PrimitiveType::Lines);
+  Mesh mesh(color, PrimitiveType::Lines);
   const int verticesCount = 12;
   for (int i = 0; i < verticesCount; ++i) {
     const float k = radius * 2.0f; // resize coefficient
     const float h = 0.01f;
-    v.addVertex(V3f(
+    mesh.addVertex(V3f(
         indexToCircleVertex(verticesCount, i) * k, h));
-    v.addVertex(V3f(
+    mesh.addVertex(V3f(
         indexToCircleVertex(verticesCount, i + 1) * k, h));
   }
-  return v;
+  return mesh;
 }
 
 Mesh buildPickingTilesArray(Map& map) {
-  Mesh v;
+  Mesh mesh;
   map.forEachPosition([&](const V2i& p) {
     Color3u color(p.x(), p.y(), 1);
     V2f position = v2iToV2f(p);
     for (int i = 0; i < 6; ++i) {
-      v.addVertex(V3f(position + indexToHexVertex(i)), color);
-      v.addVertex(V3f(position + indexToHexVertex(i + 1)), color);
-      v.addVertex(V3f(position), color);
+      mesh.addVertex(V3f(position + indexToHexVertex(i)), color);
+      mesh.addVertex(V3f(position + indexToHexVertex(i + 1)), color);
+      mesh.addVertex(V3f(position), color);
     }
   });
-  return v;
+  return mesh;
 }

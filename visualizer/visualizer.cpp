@@ -426,12 +426,12 @@ void Visualizer::drawMap() {
 void Visualizer::drawSelectedunitMarker() {
   const Unit& u = core().selectedUnit();
   V2f p = v2iToV2f(u.position());
-  Mesh v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
+  Mesh mesh(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
   float sn = std::sin(SDL_GetTicks() / 100.0f) / 4.0f;
-  v.addVertex(V3f(p, sn + 1.0f));
-  v.addVertex(V3f(p, sn + 1.5f));
+  mesh.addVertex(V3f(p, sn + 1.0f));
+  mesh.addVertex(V3f(p, sn + 1.5f));
   glLineWidth(2);
-  v.draw();
+  mesh.draw();
   glLineWidth(1);
 }
 

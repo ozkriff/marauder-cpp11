@@ -51,15 +51,15 @@ void EventAttackVisualizer::end() {
 // private:
 
 void EventAttackVisualizer::drawLineOfFire() {
-  Mesh v(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
+  Mesh mesh(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
   const V3f& from = mInitialAttackerPosition;
   const V3f& to = mInitialVictimPosition;
   float h = 0.2f;
-  v.addVertex(V3f(from.x(), from.y(), from.z() + h));
-  v.addVertex(V3f(
+  mesh.addVertex(V3f(from.x(), from.y(), from.z() + h));
+  mesh.addVertex(V3f(
       to.x() + (rnd(-30, 30) / 100.0f),
       to.y() + (rnd(-30, 30) / 100.0f)));
   glLineWidth(rnd(1, 30) / 10.0f);
-  v.draw();
+  mesh.draw();
   glLineWidth(1);
 }
