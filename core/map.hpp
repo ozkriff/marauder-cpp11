@@ -19,11 +19,11 @@ public:
   const Tile& tile(const V2i& position) const;
   Tile& tile(const V2i& position);
 
-  V2i incV2i(const V2i& position) const;
+  V2i incrementPosition(const V2i& position) const;
 
   template <class Func>
   void forEachPosition(Func f) const {
-    for (V2i p(0, 0); isInboard(p); p = incV2i(p)) {
+    for (V2i p(0, 0); isInboard(p); p = incrementPosition(p)) {
       f(p);
     }
   }

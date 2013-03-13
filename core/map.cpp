@@ -33,7 +33,7 @@ const Tile& Map::tile(const V2i& position) const {
   return mTiles[position.y() * mSize.x() + position.x()];
 }
 
-V2i Map::incV2i(const V2i& position) const {
+V2i Map::incrementPosition(const V2i& position) const {
   assert(isInboard(position));
   V2i newPosition = position;
   newPosition.setX(position.x() + 1);
