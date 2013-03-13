@@ -68,12 +68,12 @@ Direction LineOfSight::signsToDirection(int signX, int signY) {
     int signY;
     DirectionID directionID;
   } signsToDirectionMap[] = {
-    {-1, -1, DirectionID::NW},
-    {0, -1, DirectionID::W},
-    {1, -1, DirectionID::NE},
-    {-1, 1, DirectionID::SW},
-    {0, 1, DirectionID::E},
-    {1, 1, DirectionID::SE}
+    {-1, -1, DirectionID::NorthWest},
+    {0, -1, DirectionID::West},
+    {1, -1, DirectionID::NorthEast},
+    {-1, 1, DirectionID::SouthWest},
+    {0, 1, DirectionID::East},
+    {1, 1, DirectionID::SouthEast}
   };
   for (const auto& node : signsToDirectionMap) {
     if (node.signX == signX && node.signY == signY) {

@@ -288,7 +288,7 @@ void Visualizer::createNewUnitInActiveTile() {
         mActiveTilePosition,
         core().currentPlayer().id,
         core().unitType("truck"),
-        Direction(DirectionID::NE));
+        Direction(DirectionID::NorthEast));
   if (core().isAnyUnitSelected()) {
     rebuildWalkableMapArray();
   }

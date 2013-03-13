@@ -9,8 +9,8 @@ SUITE(coreDirection) {
   }
 
   TEST(ConstructorTest2) {
-    Direction direction(DirectionID::NE);
-    CHECK(DirectionID::NE == direction.value());
+    Direction direction(DirectionID::NorthEast);
+    CHECK(DirectionID::NorthEast == direction.value());
   }
 
   TEST(someTest) {

@@ -7,12 +7,12 @@
 #include "core/v2i.hpp"
 
 enum class DirectionID {
-  NE,
-  E,
-  SE,
-  SW,
-  W,
-  NW,
+  NorthEast,
+  East,
+  SouthEast,
+  SouthWest,
+  West,
+  NorthWest,
   NONE,
   ERROR,
   COUNT
