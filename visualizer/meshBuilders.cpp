@@ -37,15 +37,11 @@ Mesh buildMapArray(Map &map, GLuint textureID) {
   map.forEachPosition([&](const V2i& p) {
     V2f position = v2iToV2f(p);
     Color3u color = fowColor(map, p);
-    float n = 0.5f;
-    // first triangle
-    v.addVertex(position + V2f(-n, -n), V2f(0.0f, 0.0f), color);
-    v.addVertex(position + V2f(-n, n), V2f(0.0f, 1.0f), color);
-    v.addVertex(position + V2f(n, n), V2f(1.0f, 1.0f), color);
-    // second triangle
-    v.addVertex(position + V2f(-n, -n), V2f(0.0f, 0.0f), color);
-    v.addVertex(position + V2f(n, -n), V2f(1.0f, 0.0f), color);
-    v.addVertex(position + V2f(n, n), V2f(1.0f, 1.0f), color);
+    for (int i = 0; i < 6; ++i) {
+      v.addVertex(position + indexToHexVertex(i), V2f(0.0f, 0.0f), color);
+      v.addVertex(position + indexToHexVertex(i + 1), V2f(1.0f, 0.0f), color);
+      v.addVertex(position, V2f(0.5f, 0.5f), color);
+    }
   });
   return v;
 }
@@ -55,16 +51,18 @@ Mesh buildObstaclesArray(Map& map, GLuint textureID) {
   v.setTextureID(textureID);
   map.forEachPosition([&](const V2i& p) {
     if (map.tile(p).obstacle) {
-      V3f position(v2iToV2f(p), 0.01f);
-      float n = 0.5f;
-      // first triangle
-      v.addVertex(position + V3f(-n, -n) * 0.7f, V2f(0.0f, 0.0f));
-      v.addVertex(position + V3f(-n, n) * 0.7f, V2f(0.0f, 1.0f));
-      v.addVertex(position + V3f(n, n) * 0.7f, V2f(1.0f, 1.0f));
-      // second triangle
-      v.addVertex(position + V3f(-n, -n) * 0.7f, V2f(0.0f, 0.0f));
-      v.addVertex(position + V3f(n, -n) * 0.7f, V2f(1.0f, 0.0f));
-      v.addVertex(position + V3f(n, n) * 0.7f, V2f(1.0f, 1.0f));
+      V2f position = v2iToV2f(p);
+      for (int i = 0; i < 6; ++i) {
+        v.addVertex(
+            V3f(position + indexToHexVertex(i) * 0.7f, 0.01f),
+            V2f(0.0f, 0.0f));
+        v.addVertex(
+            V3f(position + indexToHexVertex(i + 1) * 0.7f, 0.01f),
+            V2f(1.0f, 0.0f));
+        v.addVertex(
+            V3f(position, 0.01f),
+            V2f(0.5f, 0.5f));
+      }
     }
   });
   return v;
@@ -90,15 +88,11 @@ Mesh buildPickingTilesArray(Map& map) {
   map.forEachPosition([&](const V2i& p) {
     Color3u color(p.x(), p.y(), 1);
     V2f position = v2iToV2f(p);
-    float n = 0.5f;
-    // first triangle
-    v.addVertex(position + V2f(-n, -n), color);
-    v.addVertex(position + V2f(-n, n), color);
-    v.addVertex(position + V2f(n, n), color);
-    // second triangle
-    v.addVertex(position + V2f(-n, -n), color);
-    v.addVertex(position + V2f(n, -n), color);
-    v.addVertex(position + V2f(n, n), color);
+    for (int i = 0; i < 6; ++i) {
+      v.addVertex(V3f(position + indexToHexVertex(i)), color);
+      v.addVertex(V3f(position + indexToHexVertex(i + 1)), color);
+      v.addVertex(V3f(position), color);
+    }
   });
   return v;
 }

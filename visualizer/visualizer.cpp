@@ -401,7 +401,7 @@ void Visualizer::buildUnitCircles(){
   };
   for (const Color& color : colors) {
     mUnitCircleMeshes.push_back(
-        buildUnitCircleMesh(0.5f, color));
+        buildUnitCircleMesh(hexInRadius, color));
   }
 }
 

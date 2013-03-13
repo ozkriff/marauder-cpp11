@@ -24,8 +24,8 @@ Direction Pathfinder::getParentDirection(const Unit& u, const V2i& m) {
 int Pathfinder::getTileCost(const Unit& u, const V2i& t, const V2i& nb) {
   int diff = Direction(t, nb).diff(getParentDirection(u, t));
   int maxAP = u.type().actionPoints - 1;
-  int additionalCost[] = {3, 4, 5, maxAP, maxAP};
-  assert(diff >= 0 && diff <= 4);
+  int additionalCost[] = {3, 4, maxAP, maxAP};
+  assert(diff >= 0 && diff <= 3);
   return 1 + additionalCost[diff];
 }
 
@@ -57,7 +57,7 @@ void Pathfinder::cleanMap() {
 
 void Pathfinder::tryToPushNeighbours(const Unit& u, const V2i& m) {
   assert(mCore.map().isInboard(m));
-  for (int i = 0; i < 8; ++i) {
+  for (int i = 0; i < 6; ++i) {
     V2i neighbourPosition = Direction::getNeighbourPosition(m, static_cast<DirectionID>(i));
     if (mCore.map().isInboard(neighbourPosition)) {
       processNeighbourPosition(u, m, neighbourPosition);

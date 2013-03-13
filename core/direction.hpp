@@ -7,11 +7,9 @@
 #include "core/v2i.hpp"
 
 enum class DirectionID {
-  N,
   NE,
   E,
   SE,
-  S,
   SW,
   W,
   NW,
@@ -30,7 +28,6 @@ public:
 
   DirectionID value() const;
   int toInt() const;
-  bool isDeiagonal() const;
   Direction opposite() const;
   int diff(Direction d1) const;
 

@@ -7,6 +7,10 @@
 #include "core/v2i.hpp"
 #include "core/direction.hpp"
 
+const float hexExRadius = 1.0f / 2.0f;
+const float hexInRadius = std::sqrt(
+    std::pow(hexExRadius, 2) - std::pow(hexExRadius / 2.0f, 2));
+
 float getRotAngle(const V2f& a, const V2f& b) {
   V2f diff(std::pow(b.x() - a.x(), 2), std::pow(b.y() - a.y(), 2));
   float distance = std::sqrt(diff.x() + diff.y());
@@ -60,15 +64,26 @@ float dist(const V2f& a, const V2f& b) {
 }
 
 float dirToAngle(const Direction& direction) {
-  return (360.0f / 8.0f) * direction.toInt() + 90; // TODO: ?!
+  float degreesPerSector = 360.0f / 6.0f;
+  return degreesPerSector * direction.toInt() + degreesPerSector / 2.0f;
 }
 
 V2f v2iToV2f(const V2i& i) {
   // assert(core().map().isInboard(i)); // sorry, not here
-  return V2f(i.x(), i.y());
+  V2f v(
+      i.x() * hexInRadius * 2.0f,
+      i.y() * hexExRadius * 1.5f);
+  if (i.y() % 2 == 0) {
+    v.setX(v.x() + hexInRadius);
+  }
+  return v;
 }
 
 V2f indexToCircleVertex(int count, int i) {
   float n = M_PI_2 + 2 * M_PI * i / count;
-  return V2f(std::cos(n), std::sin(n)) * 0.5f;
+  return V2f(std::cos(n), std::sin(n)) * hexExRadius;
+}
+
+V2f indexToHexVertex(int i) {
+  return indexToCircleVertex(6, i);
 }

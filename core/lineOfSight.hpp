@@ -9,7 +9,6 @@
 class LineOfSight {
 public:
   LineOfSight(const V2i& from, const V2i& to);
-  ~LineOfSight();
 
   bool isFinished() const;
   V2i getNext();
@@ -19,9 +18,12 @@ private:
   V2i mTo;
   V2i mDelta;
   V2i mCurrentPosition;
-  int mStepY;
   int mError;
   bool mIsSteep;
+  V2i mSign;
+  V2i mDeltaOld;
+
+  static Direction signsToDirection(int signX, int signY);
 };
 
 #endif
