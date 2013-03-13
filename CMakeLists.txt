@@ -5,14 +5,9 @@ include_directories(.)
 
 add_definitions(-Wold-style-cast -Wall -Wextra --pedantic)
 
-option(use_cxx0x "Use '-std=c++0x' flag?")
 option(use_libcxx "Use '-stdlib=libc++' flag?")
 
-if (use_cxx0x)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-endif()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 if (use_libcxx)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
