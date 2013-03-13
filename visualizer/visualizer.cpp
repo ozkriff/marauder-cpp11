@@ -408,7 +408,7 @@ void Visualizer::buildUnitCircles(){
 void Visualizer::loadUnitResources() {
   Json::Value resources = parseJsonFile("unitResources.json");
   for (const std::string& key : resources.getMemberNames()) {
-    unsigned int id = core().unitType(key).id;
+    int id = core().unitType(key).id;
     const Json::Value& unitInfo = resources[key];
     std::string texturePath = mPathToData + unitInfo["textureName"].asString();
     std::string objModelPath = mPathToData + unitInfo["objModelName"].asString();
