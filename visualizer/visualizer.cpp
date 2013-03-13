@@ -4,6 +4,8 @@
 #include <cmath>
 #include <cassert>
 #include <stdexcept>
+#include "SDL.h"
+#include "SDL_opengl.h"
 #include "core/jsonHelpers.hpp"
 #include "core/command.hpp"
 #include "core/command/commandMove.hpp"

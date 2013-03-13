@@ -1,6 +1,7 @@
 // See LICENSE file for copyright and license details.
 
 #include "visualizer/tilePicker.hpp"
+#include "SDL_opengl.h"
 #include "core/v2i.hpp"
 #include "visualizer/meshBuilders.hpp"
 // #include "visualizer/visualizer.hpp"

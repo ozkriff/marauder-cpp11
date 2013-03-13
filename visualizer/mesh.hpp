@@ -4,7 +4,7 @@
 #define VISUALIZER__MESH_HPP
 
 #include <vector>
-#include "SDL_opengl.h"
+#include "visualizer/texture.hpp"
 #include "visualizer/v2f.hpp"
 #include "visualizer/v3f.hpp"
 #include "visualizer/color.hpp"
@@ -20,7 +20,7 @@ public:
   Mesh(PrimitiveType type = PrimitiveType::Triangles);
   Mesh(const Color& color, PrimitiveType type = PrimitiveType::Triangles);
 
-  void setTextureID(GLuint textureID);
+  void setTextureID(UnsignedInteger textureID);
 
   void addVertex(
       const V3f& meshCoordinate,
@@ -35,8 +35,8 @@ public:
 private:
   std::vector<float> mVertices;
   std::vector<float> mTextureCoordinates;
-  std::vector<GLubyte> mColors;
-  GLuint mTextureID;
+  std::vector<UnsignedByte> mColors;
+  UnsignedInteger mTextureID;
   PrimitiveType mPrimitiveType;
   Color mColor;
   bool mHaveColor;

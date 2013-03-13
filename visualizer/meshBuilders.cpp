@@ -22,7 +22,7 @@ Mesh buildWalkableArray(Map &map) {
 }
 
 Color3u fowColor(const Map& map, const V2i& position) {
-  GLuint n;
+  UnsignedInteger n;
   if (map.tile(position).fow == 0) {
     n = 180; // dark
   } else {
@@ -31,7 +31,7 @@ Color3u fowColor(const Map& map, const V2i& position) {
   return Color3u(n);
 }
 
-Mesh buildMapArray(Map &map, GLuint textureID) {
+Mesh buildMapArray(Map &map, UnsignedInteger textureID) {
   Mesh mesh;
   mesh.setTextureID(textureID);
   map.forEachPosition([&](const V2i& p) {
@@ -46,7 +46,7 @@ Mesh buildMapArray(Map &map, GLuint textureID) {
   return mesh;
 }
 
-Mesh buildObstaclesArray(Map& map, GLuint textureID) {
+Mesh buildObstaclesArray(Map& map, UnsignedInteger textureID) {
   Mesh mesh(Color(0.4f, 0.1f, 0.0f));
   mesh.setTextureID(textureID);
   map.forEachPosition([&](const V2i& p) {

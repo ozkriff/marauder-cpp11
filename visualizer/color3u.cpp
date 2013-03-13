@@ -2,32 +2,32 @@
 
 #include "visualizer/color3u.hpp"
 
-Color3u::Color3u(GLubyte red, GLubyte green, GLubyte blue)
+Color3u::Color3u(UnsignedByte red, UnsignedByte green, UnsignedByte blue)
   : mRed(red),
     mGreen(green),
     mBlue(blue)
 {}
 
-Color3u::Color3u(GLubyte n)
+Color3u::Color3u(UnsignedByte n)
   : mRed(n),
     mGreen(n),
     mBlue(n)
 {}
 
 Color3u::Color3u(int red, int green, int blue)
-  : mRed(static_cast<GLubyte>(red)),
-    mGreen(static_cast<GLubyte>(green)),
-    mBlue(static_cast<GLubyte>(blue))
+  : mRed(static_cast<UnsignedByte>(red)),
+    mGreen(static_cast<UnsignedByte>(green)),
+    mBlue(static_cast<UnsignedByte>(blue))
 {}
 
-GLubyte Color3u::red() const {
+UnsignedByte Color3u::red() const {
   return mRed;
 }
 
-GLubyte Color3u::green() const {
+UnsignedByte Color3u::green() const {
   return mGreen;
 }
 
-GLubyte Color3u::blue() const {
+UnsignedByte Color3u::blue() const {
   return mBlue;
 }

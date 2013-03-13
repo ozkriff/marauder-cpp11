@@ -5,6 +5,8 @@
 
 #include <string>
 
+typedef unsigned int UnsignedInteger;
+
 int loadTexture(const std::string& filename);
 
 #endif

@@ -2,6 +2,7 @@
 
 #include "visualizer/sceneNode.hpp"
 #include <cassert>
+#include "SDL_opengl.h"
 #include "visualizer/mesh.hpp"
 
 SceneNode::SceneNode()

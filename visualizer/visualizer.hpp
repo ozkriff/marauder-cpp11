@@ -3,8 +3,6 @@
 #ifndef VISUALIZER__VISUALIZER_HPP
 #define VISUALIZER__VISUALIZER_HPP
 
-#include "SDL.h"
-#include "SDL_opengl.h"
 #include "json/json.h"
 #include "core/core.hpp"
 #include "visualizer/mesh.hpp"
@@ -13,6 +11,13 @@
 #include "visualizer/objModel.hpp"
 #include "visualizer/sceneManager.hpp"
 
+struct SDL_Surface;
+struct SDL_MouseMotionEvent;
+struct SDL_KeyboardEvent;
+struct SDL_ResizeEvent;
+struct SDL_MouseButtonEvent;
+struct SDL_MouseButtonEvent;
+union SDL_Event;
 class EventVisualizer;
 class TilePicker;
 
@@ -46,7 +51,7 @@ private:
   std::string mPathToData;
   Mode mMode;
   Mesh mWalkableTilesMesh;
-  Uint32 mSDLFlags;
+  UnsignedInteger mSDLFlags;
   int mBitsPerPixel;
   V2i mWinSize;
   V2i mMousePosition;
@@ -55,7 +60,7 @@ private:
   bool mIsRotatingCamera;
   bool mDone;
   Camera mCamera;
-  GLuint mFloorTexture;
+  UnsignedInteger mFloorTexture;
   Mesh mTilesMesh;
   Mesh mObstaclesMesh;
   std::vector<Mesh> mUnitCircleMeshes;

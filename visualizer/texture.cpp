@@ -54,7 +54,7 @@ int loadTexture(const std::string& filename) {
   }
   GLint bytesPerPixel = surface->format->BytesPerPixel;
   GLenum textureFormat = getTextureFormat(surface, bytesPerPixel);
-  GLuint id;
+  UnsignedInteger id;
   glGenTextures(1, &id);
   glBindTexture(GL_TEXTURE_2D, id);
   setTextureParameters();

@@ -3,20 +3,20 @@
 #ifndef VISUALIZER__COLOR3U_HPP
 #define VISUALIZER__COLOR3U_HPP
 
-#include "SDL_opengl.h"
+typedef unsigned char UnsignedByte;
 
 class Color3u {
 public:
-  Color3u(GLubyte red, GLubyte green, GLubyte blue);
-  Color3u(GLubyte n);
+  Color3u(UnsignedByte red, UnsignedByte green, UnsignedByte blue);
+  Color3u(UnsignedByte n);
   Color3u(int red, int green, int blue);
 
-  GLubyte red() const;
-  GLubyte green() const;
-  GLubyte blue() const;
+  UnsignedByte red() const;
+  UnsignedByte green() const;
+  UnsignedByte blue() const;
 
 private:
-  GLubyte mRed, mGreen, mBlue;
+  UnsignedByte mRed, mGreen, mBlue;
 };
 
 #endif

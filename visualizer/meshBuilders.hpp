@@ -3,7 +3,7 @@
 #ifndef CORE__MESH_BUILDERS_HPP
 #define CORE__MESH_BUILDERS_HPP
 
-#include "SDL_opengl.h"
+#include "visualizer/texture.hpp"
 
 class Mesh;
 class Visualizer;
@@ -16,9 +16,9 @@ Mesh buildWalkableArray(Map& map);
 
 Color3u fowColor(const Map& map, const V2i& position);
 
-Mesh buildMapArray(Map &map, GLuint textureID);
+Mesh buildMapArray(Map &map, UnsignedInteger textureID);
 
-Mesh buildObstaclesArray(Map& map, GLuint textureID);
+Mesh buildObstaclesArray(Map& map, UnsignedInteger textureID);
 
 Mesh buildUnitCircleMesh(float radius, const Color& color);
 

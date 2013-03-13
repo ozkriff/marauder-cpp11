@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <stdexcept>
+#include "SDL_opengl.h"
 #include "visualizer/mesh.hpp"
 
 Mesh::Mesh(PrimitiveType primitiveType)
@@ -26,7 +27,7 @@ Mesh::Mesh(const Color& color, PrimitiveType primitiveType)
 {
 }
 
-void Mesh::setTextureID(GLuint textureID) {
+void Mesh::setTextureID(UnsignedInteger textureID) {
   mTextureID = textureID;
 }
 
@@ -74,6 +75,11 @@ void Mesh::addCoord(const V3f& vertex) {
 }
 
 void Mesh::draw() {
+  {
+    assert(sizeof(UnsignedByte) == sizeof(GLubyte));
+    assert(sizeof(UnsignedInteger) == sizeof(GLuint));
+    assert(sizeof(float) == sizeof(GLfloat));
+  }
   // enable everything
   {
     if (!mTextureCoordinates.empty()) {
