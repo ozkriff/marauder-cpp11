@@ -93,7 +93,7 @@ void ObjModel::debugPrint() {
 
 Mesh ObjModel::build() {
   Mesh mesh(PrimitiveType::Triangles);
-  for (unsigned int i = 0; i < mFaces.size(); ++i) {
+  for (size_t i = 0; i < mFaces.size(); ++i) {
     auto tri = mFaces[i];
     for (int j = 0; j < 3; ++j) {
       int vertexID = tri.vertex[j] - 1;
