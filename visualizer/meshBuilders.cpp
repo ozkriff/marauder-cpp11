@@ -4,7 +4,7 @@
 #include "visualizer/visualizer.hpp"
 #include "visualizer/math.hpp"
 
-Mesh buildWalkableArray(Map &map) {
+Mesh buildWalkableMesh(Map &map) {
   Mesh mesh(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
   map.forEachPosition([&](const V2i& p) {
     const Tile& t = map.tile(p);
@@ -31,7 +31,7 @@ Color3u fowColor(const Map& map, const V2i& position) {
   return Color3u(n);
 }
 
-Mesh buildMapArray(Map &map, UnsignedInteger textureID) {
+Mesh buildMapMesh(Map &map, UnsignedInteger textureID) {
   Mesh mesh;
   mesh.setTextureID(textureID);
   map.forEachPosition([&](const V2i& p) {
@@ -46,7 +46,7 @@ Mesh buildMapArray(Map &map, UnsignedInteger textureID) {
   return mesh;
 }
 
-Mesh buildObstaclesArray(Map& map, UnsignedInteger textureID) {
+Mesh buildObstaclesMesh(Map& map, UnsignedInteger textureID) {
   Mesh mesh(Color(0.4f, 0.1f, 0.0f));
   mesh.setTextureID(textureID);
   map.forEachPosition([&](const V2i& p) {
@@ -83,7 +83,7 @@ Mesh buildUnitCircleMesh(float radius, const Color& color)
   return mesh;
 }
 
-Mesh buildPickingTilesArray(Map& map) {
+Mesh buildPickingTilesMesh(Map& map) {
   Mesh mesh;
   map.forEachPosition([&](const V2i& p) {
     Color3u color(p.x(), p.y(), 1);

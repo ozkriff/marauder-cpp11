@@ -11,7 +11,7 @@
 TilePicker::TilePicker(Map& map, Camera& camera)
   : mCamera(camera)
 {
-  mPickMesh = buildPickingTilesArray(map);
+  mPickMesh = buildPickingTilesMesh(map);
 }
 
 V2i TilePicker::pick(const V2i& mousePosition) {

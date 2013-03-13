@@ -32,9 +32,9 @@ public:
   SceneManager& sceneManager();
   const SceneManager& sceneManager() const;
 
-  void cleanWalkableMapArray();
-  void rebuildWalkableMapArray();
-  void rebuildMapArray();
+  void cleanWalkableMapMesh();
+  void rebuildWalkableMapMesh();
+  void rebuildMapMesh();
 
   void run();
 

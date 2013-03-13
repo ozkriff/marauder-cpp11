@@ -24,6 +24,6 @@ void EventEndTurnVisualizer::draw() {
 
 void EventEndTurnVisualizer::end() {
   visualizer().core().calculateFow();
-  visualizer().rebuildMapArray();
-  visualizer().cleanWalkableMapArray();
+  visualizer().rebuildMapMesh();
+  visualizer().cleanWalkableMapMesh();
 }

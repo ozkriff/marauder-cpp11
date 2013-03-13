@@ -17,7 +17,7 @@ EventAttackVisualizer::EventAttackVisualizer(Visualizer& visualizer, const Event
     mLastFrame(60),
     mFallingDownSpeed(0.005f)
 {
-  visualizer.cleanWalkableMapArray();
+  visualizer.cleanWalkableMapMesh();
   {
     auto& sm = visualizer.sceneManager();
     const auto& attackerNode = sm.sceneNode(mEventAttack.attackerID());
@@ -44,8 +44,8 @@ void EventAttackVisualizer::draw() {
 void EventAttackVisualizer::end() {
   visualizer().sceneManager().deleteNode(mEventAttack.victimID());
   if (visualizer().core().isAnyUnitSelected()) {
-    visualizer().rebuildWalkableMapArray();
-    visualizer().rebuildMapArray();
+    visualizer().rebuildWalkableMapMesh();
+    visualizer().rebuildMapMesh();
   }
 }
 

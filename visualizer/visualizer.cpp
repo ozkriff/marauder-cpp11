@@ -75,16 +75,16 @@ const SceneManager& Visualizer::sceneManager() const {
   return mSceneManagers.at(core().currentPlayer().id);
 }
 
-void Visualizer::cleanWalkableMapArray() {
+void Visualizer::cleanWalkableMapMesh() {
   mWalkableTilesMesh = Mesh();
 }
 
-void Visualizer::rebuildWalkableMapArray() {
-  mWalkableTilesMesh = buildWalkableArray(core().map());
+void Visualizer::rebuildWalkableMapMesh() {
+  mWalkableTilesMesh = buildWalkableMesh(core().map());
 }
 
-void Visualizer::rebuildMapArray() {
-  mTilesMesh = buildMapArray(core().map(), mFloorTexture);
+void Visualizer::rebuildMapMesh() {
+  mTilesMesh = buildMapMesh(core().map(), mFloorTexture);
 }
 
 void Visualizer::run() {
@@ -211,7 +211,7 @@ void Visualizer::processSDLEvent(const SDL_Event& e) {
 void Visualizer::processClickOnFriendlyUnit(Unit& unit) {
   core().setSelectedUnit(unit);
   core().pathfinder().fillMap(core().selectedUnit());
-  rebuildWalkableMapArray();
+  rebuildWalkableMapMesh();
 }
 
 void Visualizer::processClickOnEnemyUnit(Unit& unit) {
@@ -275,13 +275,13 @@ void Visualizer::centerCameraOnSelectedUnit() {
 void Visualizer::switchActiveTileType() {
   Tile& t = core().map().tile(mActiveTilePosition);
   t.obstacle = !t.obstacle;
-  rebuildMapArray();
-  mObstaclesMesh = buildObstaclesArray(core().map(), mFloorTexture);
+  rebuildMapMesh();
+  mObstaclesMesh = buildObstaclesMesh(core().map(), mFloorTexture);
   core().calculateFow();
-  rebuildMapArray();
+  rebuildMapMesh();
   if (core().isAnyUnitSelected()) {
     core().pathfinder().fillMap(core().selectedUnit());
-    rebuildWalkableMapArray();
+    rebuildWalkableMapMesh();
   }
 }
 
@@ -292,9 +292,9 @@ void Visualizer::createNewUnitInActiveTile() {
         core().unitType("truck"),
         Direction(DirectionID::NorthEast));
   if (core().isAnyUnitSelected()) {
-    rebuildWalkableMapArray();
+    rebuildWalkableMapMesh();
   }
-  rebuildMapArray();
+  rebuildMapMesh();
   createUnitNode(core().unitAt(mActiveTilePosition));
 }
 
@@ -377,8 +377,8 @@ void Visualizer::initCamera() {
 }
 
 void Visualizer::initMeshs() {
-  rebuildMapArray();
-  mObstaclesMesh = buildObstaclesArray(core().map(), mFloorTexture);
+  rebuildMapMesh();
+  mObstaclesMesh = buildObstaclesMesh(core().map(), mFloorTexture);
   buildUnitCircles();
 }
 

@@ -12,7 +12,7 @@ EventMoveVisualizer::EventMoveVisualizer(Visualizer& visualizer, const EventMove
     mEventMove(event),
     mCurrentMoveIndex(0)
 {
-  visualizer.cleanWalkableMapArray();
+  visualizer.cleanWalkableMapMesh();
 }
 
 EventMoveVisualizer::~EventMoveVisualizer() {
@@ -50,8 +50,8 @@ void EventMoveVisualizer::endMovement() {
   node.mPosition = v2iToV2f(mEventMove.path().back());
   node.mRotationAngle = dirToAngle(u.direction());
   if (core.isAnyUnitSelected()) {
-    visualizer().rebuildWalkableMapArray();
-    visualizer().rebuildMapArray();
+    visualizer().rebuildWalkableMapMesh();
+    visualizer().rebuildMapMesh();
   }
 }
 
