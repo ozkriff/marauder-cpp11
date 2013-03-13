@@ -33,7 +33,6 @@ public:
 
   void run();
 
-  V2f v2iToV2f(const V2i& i) const;
   V2f indexToCircleVertex(int count, int i) const;
 
   void createUnitSceneNodes();

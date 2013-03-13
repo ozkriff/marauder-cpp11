@@ -3,14 +3,14 @@
 #include "visualizer/tilePicker.hpp"
 #include "core/v2i.hpp"
 #include "visualizer/meshBuilders.hpp"
-#include "visualizer/visualizer.hpp"
+// #include "visualizer/visualizer.hpp"
 #include "visualizer/camera.hpp"
 
 // public:
-TilePicker::TilePicker(Visualizer& visualizer, Camera& camera)
+TilePicker::TilePicker(Map& map, Camera& camera)
   : mCamera(camera)
 {
-  mPickMesh = buildPickingTilesArray(visualizer);
+  mPickMesh = buildPickingTilesArray(map);
 }
 
 V2i TilePicker::pick(const V2i& mousePosition) {

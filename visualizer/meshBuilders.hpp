@@ -12,17 +12,17 @@ class Color;
 class Color3u;
 class Map;
 
-Mesh buildWalkableArray(Visualizer& visualizer);
+Mesh buildWalkableArray(Map& map);
 
 Color3u fowColor(const Map& map, const V2i& position);
 
-Mesh buildMapArray(Visualizer& visualizer, GLuint textureID);
+Mesh buildMapArray(Map &map, GLuint textureID);
 
-Mesh buildObstaclesArray(Visualizer& visualizer, GLuint textureID);
+Mesh buildObstaclesArray(Map& map, GLuint textureID);
 
 Mesh buildUnitCircleMesh(
     Visualizer& visualizer, float radius, const Color& color);
 
-Mesh buildPickingTilesArray(Visualizer& visualizer);
+Mesh buildPickingTilesArray(Map& map);
 
 #endif

@@ -5,13 +5,13 @@
 
 #include "visualizer/mesh.hpp"
 
-class Visualizer;
+class Map;
 class Camera;
 class V2i;
 
 class TilePicker {
 public:
-  TilePicker(Visualizer& visualizer, Camera& camera);
+  TilePicker(Map& map, Camera& camera);
 
   V2i pick(const V2i& mousePosition);
 

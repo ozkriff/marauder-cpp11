@@ -35,7 +35,7 @@ Visualizer::Visualizer(Core& core)
     mIsRotatingCamera(false),
     mDone(false),
     mCurrentEventVisualizer(nullptr),
-    mTilePicker(new TilePicker(*this, camera())) // TODO: memleak
+    mTilePicker(new TilePicker(core.map(), camera())) // TODO: memleak
 {
   SDL_Init(SDL_INIT_EVERYTHING);
   mScreen = SDL_SetVideoMode(mWinSize.x(), mWinSize.y(),
@@ -78,20 +78,15 @@ void Visualizer::cleanWalkableMapArray() {
 }
 
 void Visualizer::rebuildWalkableMapArray() {
-  mWalkableTilesMesh = buildWalkableArray(*this);
+  mWalkableTilesMesh = buildWalkableArray(core().map());
 }
 
 void Visualizer::rebuildMapArray() {
-  mTilesMesh = buildMapArray(*this, mFloorTexture);
+  mTilesMesh = buildMapArray(core().map(), mFloorTexture);
 }
 
 void Visualizer::run() {
   mainloop();
-}
-
-V2f Visualizer::v2iToV2f(const V2i& i) const {
-  assert(core().map().isInboard(i));
-  return V2f(i.x(), i.y());
 }
 
 V2f Visualizer::indexToCircleVertex(int count, int i) const {
@@ -284,7 +279,7 @@ void Visualizer::switchActiveTileType() {
   Tile& t = core().map().tile(mActiveTilePosition);
   t.obstacle = !t.obstacle;
   rebuildMapArray();
-  mObstaclesMesh = buildObstaclesArray(*this, mFloorTexture);
+  mObstaclesMesh = buildObstaclesArray(core().map(), mFloorTexture);
   core().calculateFow();
   rebuildMapArray();
   if (core().isAnyUnitSelected()) {
@@ -386,7 +381,7 @@ void Visualizer::initCamera() {
 
 void Visualizer::initMeshs() {
   rebuildMapArray();
-  mObstaclesMesh = buildObstaclesArray(*this, mFloorTexture);
+  mObstaclesMesh = buildObstaclesArray(core().map(), mFloorTexture);
   buildUnitCircles();
 }
 

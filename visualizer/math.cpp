@@ -62,3 +62,8 @@ float dist(const V2f& a, const V2f& b) {
 float dirToAngle(const Direction& direction) {
   return (360.0f / 8.0f) * direction.toInt() + 90; // TODO: ?!
 }
+
+V2f v2iToV2f(const V2i& i) {
+  // assert(core().map().isInboard(i)); // sorry, not here
+  return V2f(i.x(), i.y());
+}
