@@ -22,7 +22,7 @@ public:
   V2i incV2i(const V2i& position) const;
 
   template <class Func>
-  void forEachPosition(Func f) {
+  void forEachPosition(Func f) const {
     for (V2i p(0, 0); isInboard(p); p = incV2i(p)) {
       f(p);
     }

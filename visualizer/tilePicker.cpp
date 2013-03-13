@@ -8,7 +8,7 @@
 #include "visualizer/camera.hpp"
 
 // public:
-TilePicker::TilePicker(Map& map, Camera& camera)
+TilePicker::TilePicker(const Map& map, Camera& camera)
   : mCamera(camera)
 {
   mPickMesh = buildPickingTilesMesh(map);

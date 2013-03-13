@@ -11,7 +11,7 @@ class V2i;
 
 class TilePicker {
 public:
-  TilePicker(Map& map, Camera& camera);
+  TilePicker(const Map& map, Camera& camera);
 
   V2i pick(const V2i& mousePosition);
 
