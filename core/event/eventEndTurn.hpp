@@ -14,8 +14,8 @@ public:
   PlayerID oldID() const;
   PlayerID newID() const;
 
-  virtual void apply(Core& core) const;
-  virtual bool isVisible(const Core& core) const;
+  virtual void apply(Core& core) const override;
+  virtual bool isVisible(const Core& core) const override;
 
   static EventEndTurn* generate(const Core &core);
 

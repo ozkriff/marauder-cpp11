@@ -13,9 +13,9 @@ public:
   EventAttackVisualizer(Visualizer& visualizer, const EventAttackView& event);
   virtual ~EventAttackVisualizer();
 
-  virtual bool isFinished() const;
-  virtual void draw();
-  virtual void end();
+  virtual bool isFinished() const override;
+  virtual void draw() override;
+  virtual void end() override;
 
 private:
   const EventAttackView& mEventAttack;

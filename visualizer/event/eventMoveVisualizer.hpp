@@ -13,9 +13,9 @@ public:
   EventMoveVisualizer(Visualizer& visualizer, const EventMoveView& eventView);
   virtual ~EventMoveVisualizer();
 
-  virtual bool isFinished() const;
-  virtual void draw();
-  virtual void end();
+  virtual bool isFinished() const override;
+  virtual void draw() override;
+  virtual void end() override;
 
 private:
   static const int moveSpeed = 10;

@@ -20,8 +20,8 @@ public:
   UnitID unitID() const;
   const std::vector<V2i>& path() const;
 
-  virtual void apply(Core& core) const;
-  virtual bool isVisible(const Core& core) const;
+  virtual void apply(Core& core) const override;
+  virtual bool isVisible(const Core& core) const override;
 
   static EventMove* generate(
       const Core& core, const Unit& u, const V2i& destination);

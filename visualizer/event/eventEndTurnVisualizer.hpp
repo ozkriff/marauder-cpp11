@@ -13,9 +13,9 @@ public:
   EventEndTurnVisualizer(Visualizer& visualizer, const EventEndTurnView& event);
   virtual ~EventEndTurnVisualizer();
 
-  virtual bool isFinished() const;
-  virtual void draw();
-  virtual void end();
+  virtual bool isFinished() const override;
+  virtual void draw() override;
+  virtual void end() override;
 
 private:
   const EventEndTurnView& mEventEndTurn;

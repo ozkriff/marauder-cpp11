@@ -18,8 +18,8 @@ public:
   UnitID victimID() const;
   UnitID attackerID() const;
 
-  virtual void apply(Core& core) const;
-  virtual bool isVisible(const Core& core) const;
+  virtual void apply(Core& core) const override;
+  virtual bool isVisible(const Core& core) const override;
 
   static EventAttack* generate(
       const Core& core, const Unit& attacker, const Unit& victim);
