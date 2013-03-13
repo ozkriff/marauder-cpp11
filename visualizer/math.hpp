@@ -23,5 +23,6 @@ bool maxF(float a, float b);
 float dist(const V2f& a, const V2f& b);
 float dirToAngle(const Direction& direction);
 V2f v2iToV2f(const V2i& i);
+V2f indexToCircleVertex(int count, int i);
 
 #endif

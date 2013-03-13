@@ -70,8 +70,7 @@ Mesh buildObstaclesArray(Map& map, GLuint textureID) {
   return v;
 }
 
-Mesh buildUnitCircleMesh(
-    Visualizer& visualizer, float radius, const Color& color)
+Mesh buildUnitCircleMesh(float radius, const Color& color)
 {
   Mesh v(color, PrimitiveType::Lines);
   const int verticesCount = 12;
@@ -79,9 +78,9 @@ Mesh buildUnitCircleMesh(
     const float k = radius * 2.0f; // resize coefficient
     const float h = 0.01f;
     v.addVertex(V3f(
-        visualizer.indexToCircleVertex(verticesCount, i) * k, h));
+        indexToCircleVertex(verticesCount, i) * k, h));
     v.addVertex(V3f(
-        visualizer.indexToCircleVertex(verticesCount, i + 1) * k, h));
+        indexToCircleVertex(verticesCount, i + 1) * k, h));
   }
   return v;
 }

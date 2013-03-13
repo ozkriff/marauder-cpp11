@@ -20,8 +20,7 @@ Mesh buildMapArray(Map &map, GLuint textureID);
 
 Mesh buildObstaclesArray(Map& map, GLuint textureID);
 
-Mesh buildUnitCircleMesh(
-    Visualizer& visualizer, float radius, const Color& color);
+Mesh buildUnitCircleMesh(float radius, const Color& color);
 
 Mesh buildPickingTilesArray(Map& map);
 

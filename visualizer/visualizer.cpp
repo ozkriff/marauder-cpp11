@@ -89,11 +89,6 @@ void Visualizer::run() {
   mainloop();
 }
 
-V2f Visualizer::indexToCircleVertex(int count, int i) const {
-  float n = M_PI_2 + 2 * M_PI * i / count;
-  return V2f(std::cos(n), std::sin(n)) * 0.5f;
-}
-
 void Visualizer::createUnitSceneNodes() {
   for (const Unit* unit : core().units()) {
     createUnitNode(*unit);
@@ -406,7 +401,7 @@ void Visualizer::buildUnitCircles(){
   };
   for (const Color& color : colors) {
     mUnitCircleMeshes.push_back(
-        buildUnitCircleMesh(*this, 0.5f, color));
+        buildUnitCircleMesh(0.5f, color));
   }
 }
 

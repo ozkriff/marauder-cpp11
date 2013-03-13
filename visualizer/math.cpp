@@ -67,3 +67,8 @@ V2f v2iToV2f(const V2i& i) {
   // assert(core().map().isInboard(i)); // sorry, not here
   return V2f(i.x(), i.y());
 }
+
+V2f indexToCircleVertex(int count, int i) {
+  float n = M_PI_2 + 2 * M_PI * i / count;
+  return V2f(std::cos(n), std::sin(n)) * 0.5f;
+}
