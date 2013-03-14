@@ -4,7 +4,7 @@
 #define VISUALIZER__SCENE_NODE_HPP
 
 #include <list>
-#include "visualizer/color.hpp"
+#include "visualizer/color4f.hpp"
 #include "visualizer/v3f.hpp"
 
 class Mesh;
@@ -16,7 +16,7 @@ public:
 
   void draw() const;
 
-  Color mColor;
+  Color4f mColor;
   Mesh* mMesh;
   V3f mPosition;
   float mRotationAngle;

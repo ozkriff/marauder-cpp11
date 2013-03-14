@@ -7,7 +7,7 @@
 #include "visualizer/texture.hpp"
 #include "visualizer/v2f.hpp"
 #include "visualizer/v3f.hpp"
-#include "visualizer/color.hpp"
+#include "visualizer/color4f.hpp"
 #include "visualizer/color3u.hpp"
 
 enum class PrimitiveType {
@@ -18,7 +18,7 @@ enum class PrimitiveType {
 class Mesh {
 public:
   Mesh(PrimitiveType type = PrimitiveType::Triangles);
-  Mesh(const Color& color, PrimitiveType type = PrimitiveType::Triangles);
+  Mesh(const Color4f& color, PrimitiveType type = PrimitiveType::Triangles);
 
   void setTextureID(UnsignedInteger textureID);
 
@@ -38,7 +38,7 @@ private:
   std::vector<UnsignedByte> mColors;
   UnsignedInteger mTextureID;
   PrimitiveType mPrimitiveType;
-  Color mColor;
+  Color4f mColor;
   bool mHaveColor;
 
   void addColor(const Color3u& color);

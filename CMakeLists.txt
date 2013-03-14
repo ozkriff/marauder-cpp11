@@ -59,7 +59,7 @@ find_package(SDL_image REQUIRED)
 include_directories(${SDL_INCLUDE_DIR})
 
 add_library(marauderVisualizer
-  visualizer/color.cpp
+  visualizer/color4f.cpp
   visualizer/color3u.cpp
   visualizer/visualizer.cpp
   visualizer/objModel.cpp

@@ -16,7 +16,7 @@ Mesh::Mesh(PrimitiveType primitiveType)
 {
 }
 
-Mesh::Mesh(const Color& color, PrimitiveType primitiveType)
+Mesh::Mesh(const Color4f& color, PrimitiveType primitiveType)
   : mVertices(),
     mTextureCoordinates(),
     mColors(),

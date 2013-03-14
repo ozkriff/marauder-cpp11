@@ -52,7 +52,7 @@ void EventAttackVisualizer::end() {
 // private:
 
 void EventAttackVisualizer::drawLineOfFire() {
-  Mesh mesh(Color(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
+  Mesh mesh(Color4f(1.0f, 0.0f, 0.0f), PrimitiveType::Lines);
   const V3f& from = mInitialAttackerPosition;
   const V3f& to = mInitialVictimPosition;
   float h = 0.2f;

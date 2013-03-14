@@ -5,7 +5,7 @@
 #include "visualizer/math.hpp"
 
 Mesh buildWalkableMesh(const Map &map) {
-  Mesh mesh(Color(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
+  Mesh mesh(Color4f(0.0f, 0.0f, 1.0f), PrimitiveType::Lines);
   map.forEachPosition([&](const V2i& p) {
     const Tile& t = map.tile(p);
     if (t.parent.value() != DirectionID::NONE && t.cost < 50) {
@@ -47,7 +47,7 @@ Mesh buildMapMesh(const Map& map, UnsignedInteger textureID) {
 }
 
 Mesh buildObstaclesMesh(const Map& map, UnsignedInteger textureID) {
-  Mesh mesh(Color(0.4f, 0.1f, 0.0f));
+  Mesh mesh(Color4f(0.4f, 0.1f, 0.0f));
   mesh.setTextureID(textureID);
   map.forEachPosition([&](const V2i& p) {
     if (map.tile(p).obstacle) {
@@ -68,7 +68,7 @@ Mesh buildObstaclesMesh(const Map& map, UnsignedInteger textureID) {
   return mesh;
 }
 
-Mesh buildUnitCircleMesh(float radius, const Color& color)
+Mesh buildUnitCircleMesh(float radius, const Color4f& color)
 {
   Mesh mesh(color, PrimitiveType::Lines);
   const int verticesCount = 12;

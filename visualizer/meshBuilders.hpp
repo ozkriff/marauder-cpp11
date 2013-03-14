@@ -8,7 +8,7 @@
 class Mesh;
 class Visualizer;
 class V2i;
-class Color;
+class Color4f;
 class Color3u;
 class Map;
 
@@ -20,7 +20,7 @@ Mesh buildMapMesh(const Map &map, UnsignedInteger textureID);
 
 Mesh buildObstaclesMesh(const Map& map, UnsignedInteger textureID);
 
-Mesh buildUnitCircleMesh(float radius, const Color& color);
+Mesh buildUnitCircleMesh(float radius, const Color4f& color);
 
 Mesh buildPickingTilesMesh(const Map& map);
 
