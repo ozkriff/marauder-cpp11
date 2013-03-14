@@ -4,10 +4,10 @@
 #include "SDL_opengl.h"
 #include "core/v2i.hpp"
 #include "visualizer/meshBuilders.hpp"
-// #include "visualizer/visualizer.hpp"
 #include "visualizer/camera.hpp"
 
 // public:
+
 TilePicker::TilePicker(const Map& map, Camera& camera)
   : mCamera(camera)
 {
